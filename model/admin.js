@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 const Schema = mongoose.Schema;
-
 const adminSchema = new Schema({
   firstName: {
     type: String,

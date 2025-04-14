@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 const Schema = mongoose.Schema;
 
 const brandSchema = new Schema({
@@ -7,7 +6,15 @@ const brandSchema = new Schema({
     type: String,
     require: true,
   },
+  bannerImage: {
+    type: String,
+    require: true,
+  },
   image: {
+    type: String,
+    require: true,
+  },
+  bgColor: {
     type: String,
     require: true,
   },

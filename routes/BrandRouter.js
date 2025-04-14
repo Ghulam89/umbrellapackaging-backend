@@ -7,7 +7,7 @@ import {
   deleteBrandById,
   updateBrand,
 } from "../controller/BrandController.js";
-const brandRouter = express.Router();
+const  brandRouter = express.Router();
 
 brandRouter.route("/create").post(createBrand);
 brandRouter.route("/getAll").get(getAllBrand);

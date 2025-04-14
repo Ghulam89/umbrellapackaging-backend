@@ -2,6 +2,14 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const ratingSchema = new Schema({
+  name: {
+    type: String,
+    require: true,
+  },
+  email: {
+    type: String,
+    require: true,
+  },
   rating: {
     type: Number,
     require: true,
@@ -10,10 +18,6 @@ const ratingSchema = new Schema({
     type: String,
     require: true,
   },
-  product: {
-    type: Schema.Types.ObjectId,
-    ref: "Products",
-  },
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -21,14 +25,6 @@ const ratingSchema = new Schema({
   date: {
     type: Date,
     default: Date.now,
-  },
-  platform: {
-    type: String,
-    require: true,
-  },
-  recommend: {
-    type: Boolean,
-    require: true,
   },
 });
 

@@ -22,10 +22,6 @@ const blogSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  sellerId: {
-    type: Schema.Types.ObjectId,
-    ref: "Sellers",
-  },
   status: {
     type: String,
     enum: ["pending", "approved"],

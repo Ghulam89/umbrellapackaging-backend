@@ -10,14 +10,6 @@ const productSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "MidCategory",
   },
-  subCategoryId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "SubCategory",
-  },
-  sellerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Sellers",
-  },
   title: {
     type: String,
     require: true,
@@ -30,25 +22,9 @@ const productSchema = new Schema({
     type: String,
     require: true,
   },
-  key: {
-    type: String,
-    default: null,
-  },
-  discountPrice: {
+  size: {
     type: String,
     require: true,
-  },
-  gst: {
-    type: String,
-    require: true,
-  },
-  stock: {
-    type: String,
-    require: true,
-  },
-  minStock: {
-    type: String,
-    default: 0,
   },
   description: {
     type: String,
@@ -63,33 +39,5 @@ const productSchema = new Schema({
     enum: ["pending", "approved"],
     default: "pending",
   },
-  platform: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Platform",
-  },
-  type: {
-    type: String,
-  },
-  region: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Region",
-  },
-  stockStatus: {
-    type: String,
-    enum: ["In Stock", "Out Of Stock"],
-  },
-  likes: {
-    type: Array,
-  },
 });
-
-productSchema.pre("save", function (next) {
-  if (this.stock <= this.minStock) {
-    this.stockStatus = "Out Of Stock";
-  } else {
-    this.stockStatus = "In Stock";
-  }
-  next();
-});
-
 export const Products = mongoose.model("Products", productSchema);

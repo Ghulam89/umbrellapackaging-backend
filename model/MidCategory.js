@@ -10,7 +10,23 @@ const midcategorySchema = new Schema({
     type: String,
     require: true,
   },
+  subTitle: {
+    type: String,
+    require: true,
+  },
+  description: {
+    type: String,
+    require: true,
+  },
+  icon: {
+    type: String,
+    require: true,
+  },
   image: {
+    type: String,
+    require: true,
+  },
+  videoLink: {
     type: String,
     require: true,
   },

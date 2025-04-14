@@ -1,5 +1,4 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
-// import { Category } from "../model/category.js";
 import { MidCategory } from "../model/MidCategory.js";
 import cloudinary from "cloudinary";
 cloudinary.v2.config({
@@ -7,12 +6,12 @@ cloudinary.v2.config({
   api_key: "658491673268817",
   api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
 });
-
-// create category
 export const createCategory = catchAsyncError(async (req, res, next) => {
   let image = req.files.image;
+  let icon = req.files.icon;
   const data = req.body;
   const title = data?.title;
+  
   const findName = await MidCategory.findOne({ title: title });
   if (findName) {
     return res.status(400).json({
@@ -20,17 +19,20 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
       message: "This name already exists!",
     });
   }
+  
   const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
-  const slider = result.url;
+  const iconResult = await cloudinary.v2.uploader.upload(icon.tempFilePath);
+  
   let data1 = {
-    image: slider,
+    image: result.url,
+    icon: iconResult.url,
     title: title,
-    brandId:data?.brandId
+    subTitle: data.subTitle,
+    description: data.description,
+    videoLink: data.videoLink,
+    brandId: data?.brandId
   };
-
-  // console.log(data1);
-  // const data = req.body;
-
+  
   const newCategory = await MidCategory.create(data1);
   res.status(200).json({
     status: "success",
@@ -39,7 +41,6 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// get category by id
 export const getCategoryById = async (req, res, next) => {
   const id = req?.params.id;
   try {
@@ -57,7 +58,7 @@ export const getCategoryById = async (req, res, next) => {
     });
   }
 };
-// update category
+
 export const updateCategory = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   const categoryId = req.params.id;
@@ -76,23 +77,37 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// Get All category
 export const getAllCategory = catchAsyncError(async (req, res, next) => {
+  const page = parseInt(req.query.page, 10) || 1; 
+  const perPage = 5;
+  const skip = (page - 1) * perPage;
+  const searchQuery = req.query.search || '';
   try {
-    const categories = await MidCategory.aggregate([
-      {
-        $lookup: {
-          from: 'subcategories',        
-          localField: '_id',       
-          foreignField: 'categoryId',     
-          as: 'subcategories',     
-        },
-      },
-    ]);
+    const filter = searchQuery
+    ? { 
+        $or: [
+          { title: { $regex: searchQuery, $options: 'i' } },
+        ],
+      }
+    : {};
+    const count = await MidCategory.countDocuments(filter);
+    const categories = await MidCategory.find(filter).populate({
+      path: "brandId",
+      select: "name"
+    }).skip(skip)
+    .limit(perPage)
+    .sort({ updatedAt: -1 });
+  const totalPages = Math.ceil(count / perPage);
 
     res.status(200).json({
       status: "success",
-      data: categories,
+      data:categories,
+        pagination: {
+          page,
+          perPage,
+          totalUsers: count,
+          totalPages,
+        }
     });
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -102,41 +117,6 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
     });
   }
 });
-
-export const getallcategoryByBrandId = catchAsyncError (async (req,res,next)=>{
-  const brandId = req.params.brandId;
-  try {
-      const categories = await MidCategory.find({brandId:brandId})
-  
-      res.status(200).json({
-        status: "success",
-        data: categories,
-      });
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      res.status(500).json({
-        status: "fail",
-        error: "Internal Server Error",
-      });
-    }
-})
-export const getallcategoryforAdmin = catchAsyncError (async (req,res,next)=>{
-    try {
-        const categories = await MidCategory.find().populate('brandId')
-    
-        res.status(200).json({
-          status: "success",
-          data: categories,
-        });
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        res.status(500).json({
-          status: "fail",
-          error: "Internal Server Error",
-        });
-      }
-})
-// delete category
 export const deleteCategoryById = async (req, res, next) => {
   const id = req.params.id;
   try {

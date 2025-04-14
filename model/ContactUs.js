@@ -16,6 +16,14 @@ const ContactUsSchema = new Schema({
     type: String,
     require: true,
   },
+  companyName: {
+    type: String,
+    require: true,
+  },
+  image: {
+    type: String,
+    require: true,
+  },
   message: {
     type: String,
     require: true,

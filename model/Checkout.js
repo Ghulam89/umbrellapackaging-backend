@@ -18,7 +18,15 @@ const checkoutSchema = new Schema({
     type: String,
     require: true,
   },
-  totalPrice: {
+  companyName: {
+    type: String,
+    require: true,
+  },
+  totalBill: {
+    type: String,
+    require: true,
+  },
+  note: {
     type: String,
     require: true,
   },
@@ -27,7 +35,7 @@ const checkoutSchema = new Schema({
     ref: "User",
   },
   delivery: { type: Object, require: true },
-  productIds: [ // Updated field to handle multiple products
+  productIds: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Products",

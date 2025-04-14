@@ -18,7 +18,6 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
     content: data?.content,
     title: data?.title,
     shortDescription: data?.shortDescription,
-    sellerId: data?.sellerId,
   };
   // console.log(data1);
   const newBlog = await Blogs.create(data1);
@@ -49,12 +48,21 @@ export const getBlogById = async (req, res, next) => {
 };
 // update blog
 export const updateBlog = catchAsyncError(async (req, res, next) => {
-  const data = req.body;
   const blogId = req.params.id;
+  const data = req.body;
+  if (req.files && req.files.image) {
+    const image = req.files.image;
+    const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
+    data.image = result.url;
+    const oldBlog = await Blogs.findById(blogId);
+    const publicId = extractPublicIdFromUrl(oldBlog.image);
+    await cloudinary.v2.uploader.destroy(publicId);
+  }
 
   const updatedblog = await Blogs.findByIdAndUpdate(blogId, data, {
     new: true,
   });
+  
   if (!updatedblog) {
     return res.status(404).json({ message: "blog not found" });
   }
@@ -66,32 +74,7 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
   });
 });
 
-// Get All blogs
-// export const getAllBlogs = catchAsyncError(async (req, res, next) => {
-//   try {
-  
-//     const blogs = await Blogs.aggregate([
-//       {
-//         $lookup: {
-//           from: "subcategories",
-//           localField: "_id",
-//           foreignField: "categoryId",
-//           as: "subcategories",
-//         },
-//       },
-//     ]);
-//     res.status(200).json({
-//       status: "success",
-//       data: blogs,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching blogs:", error);
-//     res.status(500).json({
-//       status: "fail",
-//       error: "Internal Server Error",
-//     });
-//   }
-// });
+
 export const getAllBlogs = catchAsyncError(async (req, res, next) => {
   try {
     const page = parseInt(req.query.page, 10) || 1;

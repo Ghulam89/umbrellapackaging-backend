@@ -17,15 +17,9 @@ import http from "http";
 import checkoutRouter from "./routes/CheckoutRouter.js";
 import userRoute from "./routes/userRoute.js";
 import categoryRouter from "./routes/MidCategoryRouter.js";
-import sellerRoute from "./routes/SellerRouter.js";
-import wishlistRoute from "./routes/WishlistRouter.js";
-import flashDealRouter from "./routes/FlashDealRouter.js";
-import upcomingRouter from "./routes/UpcomingRouter.js";
 import ratingRoute from "./routes/RatingRouter.js";
-import regionRoute from "./routes/RegionRouter.js";
-import platformRouter from "./routes/PlatformRouter.js";
 import subscribeRouter from "./routes/SubscribeRouter.js";
-import bundleDealsRouter from "./routes/BundleDealsRouter.js";
+import requestQuoteRouter from "./routes/RequestQuote.js";
 connectDB();
 
 app.use(cors());
@@ -55,15 +49,9 @@ app.use("/subcategory", subcategoryRouter);
 app.use("/sizeGuide", sizeRouter);
 app.use("/products", productRouter);
 app.use("/checkout", checkoutRouter);
-app.use("/seller", sellerRoute);
-app.use("/wishlist", wishlistRoute);
-app.use("/flashDeals", flashDealRouter);
-app.use("/upcoming", upcomingRouter);
 app.use("/rating", ratingRoute);
-app.use("/region", regionRoute);
-app.use("/platform", platformRouter);
 app.use("/subscribe", subscribeRouter);
-app.use("/bundleDeals", bundleDealsRouter);
+app.use("/requestQuote", requestQuoteRouter);
 app.get("/", async (req, res) => {
   res.send("App Is Running");
 });
@@ -74,12 +62,3 @@ app.listen(PORT, () => {
 });
 
 app.use(ErrorMiddleware);
-
-// https://github.com/mubeenayub1/g2a-backend.git
-
-
-
-
-
-
-//  safe browse area
