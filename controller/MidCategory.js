@@ -6,6 +6,8 @@ cloudinary.v2.config({
   api_key: "658491673268817",
   api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
 });
+
+
 export const createCategory = catchAsyncError(async (req, res, next) => {
   let image = req.files.image;
   let icon = req.files.icon;
@@ -62,13 +64,35 @@ export const getCategoryById = async (req, res, next) => {
 export const updateCategory = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   const categoryId = req.params.id;
-
-  const updatedCategory = await MidCategory.findByIdAndUpdate(categoryId, data, {
-    new: true,
-  });
-  if (!updatedCategory) {
-    return res.status(404).json({ message: "blog not found" });
+  const existingCategory = await MidCategory.findById(categoryId);
+  if (!existingCategory) {
+    return res.status(404).json({ message: "Category not found" });
   }
+  let updateData = {
+    title: data.title,
+    subTitle: data.subTitle,
+    description: data.description,
+    videoLink: data.videoLink,
+    brandId: data.brandId
+  };
+
+  if (req.files?.image) {
+    const image = req.files.image;
+    const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
+    updateData.image = result.url;
+    
+  }
+  if (req.files?.icon) {
+    const icon = req.files.icon;
+    const iconResult = await cloudinary.v2.uploader.upload(icon.tempFilePath);
+    updateData.icon = iconResult.url;
+  }
+
+  const updatedCategory = await MidCategory.findByIdAndUpdate(
+    categoryId, 
+    updateData, 
+    { new: true }
+  );
 
   res.status(200).json({
     status: "success",
@@ -117,6 +141,7 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
     });
   }
 });
+
 export const deleteCategoryById = async (req, res, next) => {
   const id = req.params.id;
   try {

@@ -68,10 +68,31 @@ export const getProductsById = async (req, res, next) => {
 export const updateProducts = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   const productsId = req.params.id;
+  if (req.files && req.files.images) {
+    let images = [];
+    if (!Array.isArray(req.files.images)) {
+      images.push(req.files.images);
+    } else {
+      images = req.files.images;
+    }
+
+    let response = [];
+    for (const image of images) {
+      try {
+        const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
+        response.push(result.url);
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Error uploading images" });
+      }
+    }
+    data.images = response;
+  }
 
   const updatedProducts = await Products.findByIdAndUpdate(productsId, data, {
     new: true,
   });
+
   if (!updatedProducts) {
     return res.status(404).json({ message: "Products not found" });
   }
@@ -85,31 +106,64 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
 
 export const getAllProducts = catchAsyncError(async (req, res, next) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 10;
-    const skip = (page - 1) * limit;
+    const page = parseInt(req.query.page, 10) || 1;
+    const perPage = parseInt(req.query.perPage, 10) || 5;
+    const skip = (page - 1) * perPage;
     const sortOption = getSortOption(req.query.sort);
     let filter = {};
-    if (req.query.categoryId) filter.categoryId = req.query.categoryId;
-    if (req.query.brandId) filter.brandId = req.query.brandId;
-    if (req.query.title) filter.title = new RegExp(req.query.title, "i");
+    if (req.query.categoryId) {
+      filter['categoryId'] = req.query.categoryId;
+    } else if (req.query.categoryTitle) {
+      filter['categoryId'] = await Category.findOne({ 
+        title: new RegExp(req.query.categoryTitle, "i") 
+      }).select('_id');
+    }
+    
+    if (req.query.brandId) {
+      filter['brandId'] = req.query.brandId;
+    } else if (req.query.brandName) {
+      filter['brandId'] = await Brand.findOne({ 
+        name: new RegExp(req.query.brandName, "i") 
+      }).select('_id');
+    }
+    
+    if (req.query.name) {
+      filter.name = new RegExp(req.query.name, "i");
+    }
+    if (req.query.minPrice || req.query.maxPrice) {
+      filter.price = {};
+      if (req.query.minPrice) filter.price.$gte = parseFloat(req.query.minPrice);
+      if (req.query.maxPrice) filter.price.$lte = parseFloat(req.query.maxPrice);
+    }
+    
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
+    
     const products = await Products.find(filter)
-      .populate("categoryId")
-      .populate("brandId")
+      .populate({
+        path: "categoryId",
+        select: "title description"
+      })
+      .populate({
+        path: "brandId",
+        select: "name logo" 
+      })
       .sort(sortOption)
       .skip(skip)
-      .limit(limit);
+      .limit(perPage);
+    
     const totalProducts = await Products.countDocuments(filter);
-    const totalPages = Math.ceil(totalProducts / limit);
+    const totalPages = Math.ceil(totalProducts / perPage);
+    
     res.status(200).json({
       status: "success",
       data: products,
       pagination: {
-        total: totalProducts,
+        page,
+        perPage,
         totalPages,
-        currentPage: page,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1,
+        totalItems: totalProducts
       },
     });
   } catch (error) {
@@ -117,6 +171,7 @@ export const getAllProducts = catchAsyncError(async (req, res, next) => {
     res.status(500).json({
       status: "fail",
       error: "Internal Server Error",
+      message: error.message
     });
   }
 });

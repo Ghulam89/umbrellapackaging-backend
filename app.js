@@ -10,7 +10,6 @@ import blogRouter from "./routes/blogRouter.js";
 import FaqRouter from "./routes/FaqRouter.js";
 import adminRoute from "./routes/AdminRouter.js";
 import subcategoryRouter from "./routes/SubCategory.js";
-import sizeRouter from "./routes/SizeGuideRoute.js";
 import productRouter from "./routes/ProductRouter.js";
 import brandRouter from "./routes/BrandRouter.js";
 import http from "http";
@@ -35,8 +34,6 @@ app.use(
   })
 );
 const server = http.createServer(app);
-
-// app routes
 app.use("/brands", brandRouter);
 app.use("/user", userRoute);
 app.use("/slider", sliderRouter);
@@ -46,7 +43,6 @@ app.use("/faq", FaqRouter);
 app.use("/admin", adminRoute);
 app.use("/category", categoryRouter);
 app.use("/subcategory", subcategoryRouter);
-app.use("/sizeGuide", sizeRouter);
 app.use("/products", productRouter);
 app.use("/checkout", checkoutRouter);
 app.use("/rating", ratingRoute);

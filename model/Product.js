@@ -10,7 +10,7 @@ const productSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "MidCategory",
   },
-  title: {
+  name: {
     type: String,
     require: true,
   },
