@@ -1,10 +1,26 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { InstantQuote } from "../model/InstantQuote.js";
 import cloudinary from "cloudinary";
+import nodemailer from 'nodemailer';
+import { adminTemplate, customerTemplate, instantTemplate } from "../utils/emailTemplate.js";
 cloudinary.v2.config({
   cloud_name: "ddu4sybue",
   api_key: "658491673268817",
   api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
+});
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "gm6681328@gmail.com",
+    pass: "ptpatylqsrszlqtq", 
+  },
+  tls: {
+    rejectUnauthorized: false 
+  }
 });
 
 // create blog
@@ -14,14 +30,42 @@ export const createInstantQuote = catchAsyncError(async (req, res, next) => {
   const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
   const url = result.url;
   let data1 = {
-    image:url,
-   
+    image: url,
+    name: data?.name,
+    email: data?.email,
+    phoneNumber: data?.phoneNumber,
+    message: data?.message,
   };
-  // console.log(data1);
+
   const newInstantQuote = await InstantQuote.create(data1);
+
+
+
+  const mailOptions = {
+    from: 'gm6681328@gmail.com',
+    to: data?.email,
+    subject: 'Thank You for Your Quote Request - Umbrella Packaging',
+    html: customerTemplate(data?.name)
+  };
+
+  const adminMailOptions = {
+    from: 'gm6681328@gmail.com',
+    to: data?.email,
+    subject: 'Thank You for Your Quote Request - Umbrella Packaging',
+    html: instantTemplate(data)
+  };  
+  try {
+    await transporter.sendMail(mailOptions);
+
+    await transporter.sendMail(adminMailOptions);
+    console.log('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+
   res.status(200).json({
     status: "success",
-    message: "Instant Quote create successfully!",
+    message: "Request Quote created successfully and confirmation email sent!",
     data: newInstantQuote,
   });
 });
@@ -50,7 +94,7 @@ export const updateInstantQuote = catchAsyncError(async (req, res, next) => {
     const InstantQuoteId = req.params.id;
     const existingInstantQuote = await InstantQuote.findById(InstantQuoteId);
     if (!existingInstantQuote) {
-      return res.status(404).json({ message: "Instant quote not found" });
+      return res.status(404).json({ message: "Request quote not found" });
     }
     if (req.files && req.files.image) {
       const image = req.files.image;
@@ -81,7 +125,7 @@ export const updateInstantQuote = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: updatedInstantQuote,
-      message: "Instant Quote updated successfully!",
+      message: "Request Quote updated successfully!",
     });
   });
 
@@ -128,7 +172,7 @@ export const deleteInstantQuoteById = async (req, res, next) => {
     }
     res.json({
       status: "success",
-      message: "Instant Quote deleted successfully!",
+      message: "Request Quote deleted successfully!",
     });
   } catch (error) {
     console.log(error);

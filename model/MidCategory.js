@@ -30,6 +30,58 @@ const midcategorySchema = new Schema({
     type: String,
     require: true,
   },
+  videoDescription: {
+    type: String,
+    require: true,
+  },
+  bannerTitleFirst: {
+    type: String,
+    require: true,
+  },
+  bannerContentFirst: {
+    type: String,
+    require: true,
+  },
+  bannerImageFirst: {
+    type: String,
+    require: true,
+  },
+  bannerTitleSecond: {
+    type: String,
+    require: true,
+  },
+  bannerContentSecond: {
+    type: String,
+    require: true,
+  },
+  bannerImageSecond: {
+    type: String,
+    require: true,
+  },
+  bannerTitleThird: {
+    type: String,
+    require: true,
+  },
+  bannerContentThird: {
+    type: String,
+    require: true,
+  },
+  bannerImageThird: {
+    type: String,
+    require: true,
+  },
+  bannerTitleFourth: {
+    type: String,
+    require: true,
+  },
+  bannerContentFourth: {
+    type: String,
+    require: true,
+  },
+  bannerImageFourth: {
+    type: String,
+    require: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

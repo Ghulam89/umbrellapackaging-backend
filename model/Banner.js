@@ -3,23 +3,11 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const bannerSchema = new Schema({
-    title: {
+    videoLink: {
         type: String,
         require: true,
     },
     description: {
-        type: String,
-        require: true,
-    },
-    type: {
-        type: String,
-        require: true,
-    },
-    link: {
-        type: String,
-        require: true,
-    },
-    btnText: {
         type: String,
         require: true,
     },
@@ -40,4 +28,4 @@ const bannerSchema = new Schema({
     },
 });
 
-export const HomeSliders = mongoose.model("banner", bannerSchema);
+export const Banner = mongoose.model("Banner", bannerSchema);

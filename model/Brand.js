@@ -14,6 +14,10 @@ const brandSchema = new Schema({
     type: String,
     require: true,
   },
+  content: {
+    type: String,
+    require: true,
+  },
   bgColor: {
     type: String,
     require: true,

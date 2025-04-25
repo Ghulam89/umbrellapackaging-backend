@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
+import { Brands } from "../model/Brand.js";
 import { Products } from "../model/Product.js";
 import cloudinary from "cloudinary";
 
@@ -13,37 +15,148 @@ cloudinary.v2.config({
 
 export const createProducts = catchAsyncError(async (req, res, next) => {
   const data = req.body;
+  
+  if (!data.name || !data.actualPrice || !data.size || !data.description || 
+      !data.bannerTitle || !data.bannerContent) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
   let images = [];
-  if (req.files && req.files.images) {
-    if (!Array.isArray(req.files.images)) {
-      images.push(req.files.images);
-    } else {
-      images = req.files.images;
+  let bannerImageUrl = null;
+
+  if (req.files) {
+    if (req.files.bannerImage) {
+      try {
+        const bannerResult = await cloudinary.v2.uploader.upload(req.files.bannerImage.tempFilePath);
+        bannerImageUrl = bannerResult.secure_url;
+      } catch (error) {
+        console.error("Banner image upload error:", error);
+        return res.status(500).json({ error: "Error uploading banner image" });
+      }
+    }
+
+    if (req.files.images) {
+      const productImages = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
+      
+      try {
+      
+        const uploadPromises = productImages.map(image => 
+          cloudinary.v2.uploader.upload(image.tempFilePath)
+        );
+        
+        const results = await Promise.all(uploadPromises);
+        images = results.map(result => result.secure_url);
+      } catch (error) {
+        console.error("Product images upload error:", error);
+        return res.status(500).json({ error: "Error uploading product images" });
+      }
     }
   }
-  let responce = [];
-  for (const image of images) {
-    try {
-      const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
-      const url = result.url;
-      responce.push(url);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Error uploading images" });
-    }
+
+  if (images.length === 0 || !bannerImageUrl) {
+    return res.status(400).json({ error: "Both product images and banner image are required" });
   }
-  let data1 = {
-    images: responce,
+
+  const productData = {
     ...data,
+    images,
+    bannerImage: bannerImageUrl,
   };
-  const newProducts = await Products.create(data1);
-  res.status(200).json({
-    status: "success",
-    message: "New Product created successfully!",
-    data: newProducts,
-  });
+
+  try {
+    const newProduct = await Products.create(productData);
+    
+    res.status(201).json({
+      status: "success",
+      message: "New Product created successfully!",
+      data: newProduct
+    });
+  } catch (error) {
+    console.error("Product creation error:", error);
+    res.status(500).json({ error: "Error creating product" });
+  }
 });
 
+export const getBrandProductsByCategory = catchAsyncError(async (req, res, next) => {
+  const brandId = req.params.brandId;
+  
+  try {
+    const brand = await Brands.findById(brandId);
+    if (!brand) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Brand not found",
+      });
+    }
+    const productsByCategory = await Products.aggregate([  
+      {
+        $lookup: {
+          from: "midcategories",
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "categoryInfo"
+        }
+      },
+      {
+        $unwind: {
+          path: "$categoryInfo",
+          preserveNullAndEmptyArrays: true 
+        }
+      },
+      {
+        $group: {
+          _id: "$categoryInfo._id",
+          categoryName: { $first: "$categoryInfo.title" },
+          categoryImage: { $first: "$categoryInfo.image" },
+          products: {
+            $push: {
+              _id: "$_id",
+              name: "$name",
+              price: "$price",
+              images: "$images",
+              actualPrice: "$actualPrice",
+              size: "$size",
+              description: "$description",
+           
+            }
+          }
+        }
+      },
+      {
+        $match: {
+          _id: { $ne: null } 
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          categoryName: 1,
+          categoryImage: 1,
+          products: 1,
+          productCount: { $size: "$products" }
+        }
+      },
+      {
+        $sort: { categoryName: 1 } 
+      }
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        brand: {
+          _id: brand._id,
+          name: brand.name,
+          image: brand.image
+        },
+        categories: productsByCategory
+      }
+    });
+
+  } catch (error) {
+    next(error);
+  }
+});
 
 export const getProductsById = async (req, res, next) => {
   const id = req?.params.id;
@@ -68,6 +181,8 @@ export const getProductsById = async (req, res, next) => {
 export const updateProducts = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   const productsId = req.params.id;
+
+  // Handle multiple images upload
   if (req.files && req.files.images) {
     let images = [];
     if (!Array.isArray(req.files.images)) {
@@ -81,12 +196,27 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
       try {
         const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
         response.push(result.url);
+        // Consider removing the temp file after upload
+        // fs.unlinkSync(image.tempFilePath);
       } catch (error) {
         console.log(error);
         return res.status(500).json({ error: "Error uploading images" });
       }
     }
     data.images = response;
+  }
+
+  if (req.files && req.files.bannerImage) {
+    try {
+      const bannerImage = req.files.bannerImage;
+      const result = await cloudinary.v2.uploader.upload(bannerImage.tempFilePath);
+      data.bannerImage = result.url; // Assign to data object
+      // Consider removing the temp file after upload
+      // fs.unlinkSync(bannerImage.tempFilePath);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: "Error uploading banner image" });
+    }
   }
 
   const updatedProducts = await Products.findByIdAndUpdate(productsId, data, {

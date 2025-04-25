@@ -14,6 +14,10 @@ const subcategorySchema = new Schema({
     type: String,
     require: true,
   },
+  banner: {
+    type: Array,
+    require: true,
+  },
 
   createdAt: {
     type: Date,

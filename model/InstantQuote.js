@@ -34,4 +34,4 @@ const instantQuoteSchema = new Schema({
   },
 });
 
-export const RequestQuote = mongoose.model("InstantQuote", instantQuoteSchema);
+export const InstantQuote = mongoose.model("InstantQuote", instantQuoteSchema);

@@ -2,10 +2,10 @@ import { Rating } from "../model/rating.js";
 
 
   export const createRating = async (req, res) => {
-    const { user, product, rating } = req.body;
+    const { user, rating } = req.body;
   const data = req.body;
     try {
-      const existRating = await Rating.findOne({ user, product });
+      const existRating = await Rating.findOne({ user, rating });
   
       if (existRating) {
         return res.status(400).json({

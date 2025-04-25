@@ -30,6 +30,18 @@ const productSchema = new Schema({
     type: String,
     require: true,
   },
+  bannerImage:{
+   type:String,
+   require:true 
+  },
+  bannerTitle:{
+    type:String,
+    require:true 
+   },
+   bannerContent:{
+    type:String,
+    require:true 
+   },
   createdAt: {
     type: Date,
     default: Date.now,

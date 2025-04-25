@@ -7,7 +7,11 @@ cloudinary.v2.config({
   api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
 });
 
+
+
 export const createBrand = catchAsyncError(async (req, res, next) => {
+  console.log(req.body);
+  
   const { name } = req.body;
   const existingBrand = await Brands.findOne({ name });
   if (existingBrand) {
@@ -35,6 +39,7 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
       bannerImage: bannerResult.url,
       name: req.body.name,
       bgColor: req.body.bgColor,
+      content: req.body.content,
     };
 
     const newBrand = await Brands.create(brandData);
@@ -51,6 +56,7 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
     return next(error);
   }
 });
+
 
 export const getBrandById = async (req, res, next) => {
   const id = req?.params.id;
@@ -70,24 +76,70 @@ export const getBrandById = async (req, res, next) => {
   }
 };
 
-export const updateBrand = catchAsyncError(async (req, res, next) => {
-  const data = req.body;
-  const blogId = req.params.id;
 
-  const updatedbrand = await Brands.findByIdAndUpdate(blogId, data, {
+export const updateBrand = catchAsyncError(async (req, res, next) => {
+  const blogId = req.params.id;
+  const { name, bgColor, content } = req.body;
+  
+  const existingBrand = await Brands.findById(blogId);
+  if (!existingBrand) {
+    return res.status(404).json({ message: "Brand not found" });
+  }
+
+  if (name && name !== existingBrand.name) {
+    const nameExists = await Brands.findOne({ name });
+    if (nameExists) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Brand with this name already exists!",
+      });
+    }
+  }
+
+  const updateData = {
+    name: name || existingBrand.name,
+    bgColor: bgColor || existingBrand.bgColor,
+    content: content || existingBrand.content,
+  };
+
+  if (req.files?.image) {
+    try {
+      if (existingBrand.image) {
+        const publicId = existingBrand.image.split('/').pop().split('.')[0];
+        await cloudinary.v2.uploader.destroy(publicId);
+      }
+      
+      const result = await cloudinary.v2.uploader.upload(req.files.image.tempFilePath);
+      updateData.image = result.url;
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  if (req.files?.bannerImage) {
+    try {
+      
+      if (existingBrand.bannerImage) {
+        const publicId = existingBrand.bannerImage.split('/').pop().split('.')[0];
+        await cloudinary.v2.uploader.destroy(publicId);
+      }
+      
+      const bannerResult = await cloudinary.v2.uploader.upload(req.files.bannerImage.tempFilePath);
+      updateData.bannerImage = bannerResult.url;
+    } catch (error) {
+      return next(error);
+    }
+  }
+  const updatedBrand = await Brands.findByIdAndUpdate(blogId, updateData, {
     new: true,
   });
-  if (!updatedbrand) {
-    return res.status(404).json({ message: "category not found" });
-  }
 
   res.status(200).json({
     status: "success",
-    data: updatedbrand,
-    message: "category updated successfully!",
+    data: updatedBrand,
+    message: "Brand updated successfully!",
   });
 });
-
 
 export const getAllBrand = async (req, res, next) => {
   try {
@@ -111,6 +163,9 @@ export const getAllBrand = async (req, res, next) => {
           $project: {
             name: 1,
             image: 1,
+            bannerImage:1,
+            bgColor: 1,
+            content: 1,
             createdAt: 1,
             status: 1,
             midcategories: 1,
@@ -144,6 +199,9 @@ export const getAllBrand = async (req, res, next) => {
         $project: {
           name: 1,
           image: 1,
+          bannerImage: 1,
+          bgColor: 1,
+          content:1,
           createdAt: 1,
           status: 1,
           midcategories: 1,

@@ -4,7 +4,7 @@ const app = express();
 import ErrorMiddleware from "./middleware/Error.js";
 import fileupload from "express-fileupload";
 import cors from "cors";
-import sliderRouter from "./routes/homesliderRoute.js";
+import bannerRouter from "./routes/bannerRoute.js";
 import ContactusRouter from "./routes/contactusrouter.js";
 import blogRouter from "./routes/blogRouter.js";
 import FaqRouter from "./routes/FaqRouter.js";
@@ -19,6 +19,7 @@ import categoryRouter from "./routes/MidCategoryRouter.js";
 import ratingRoute from "./routes/RatingRouter.js";
 import subscribeRouter from "./routes/SubscribeRouter.js";
 import requestQuoteRouter from "./routes/RequestQuote.js";
+import instantQuoteRouter from "./routes/InstantQuote.js";
 connectDB();
 
 app.use(cors());
@@ -36,7 +37,7 @@ app.use(
 const server = http.createServer(app);
 app.use("/brands", brandRouter);
 app.use("/user", userRoute);
-app.use("/slider", sliderRouter);
+app.use("/banner", bannerRouter);
 app.use("/contactus", ContactusRouter);
 app.use("/blog", blogRouter);
 app.use("/faq", FaqRouter);
@@ -48,6 +49,7 @@ app.use("/checkout", checkoutRouter);
 app.use("/rating", ratingRoute);
 app.use("/subscribe", subscribeRouter);
 app.use("/requestQuote", requestQuoteRouter);
+app.use("/instantQuote", instantQuoteRouter);
 app.get("/", async (req, res) => {
   res.send("App Is Running");
 });
