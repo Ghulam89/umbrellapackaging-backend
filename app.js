@@ -318,8 +318,13 @@ app.use(
 
 
 
+app.get("/", async (req, res) => {
+  res.send("App Is Running");
+});
 
-
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API Works!' });
+});
 const server = http.createServer(app);
 app.use("/brands", brandRouter);
 app.use("/user", userRoute);
@@ -336,9 +341,7 @@ app.use("/rating", ratingRoute);
 app.use("/subscribe", subscribeRouter);
 app.use("/requestQuote", requestQuoteRouter);
 app.use("/instantQuote", instantQuoteRouter);
-app.get("/", async (req, res) => {
-  res.send("App Is Running");
-});
+
 //  sdsdsds
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
