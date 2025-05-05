@@ -2,10 +2,7 @@
   "name": "ctm-backend",
   "version": "1.0.0",
   "description": "ctm 360 backend",
-  "main": "index.js",
-  "engines": {
-  "node": "22.x"
-},
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon -L app.js ",
