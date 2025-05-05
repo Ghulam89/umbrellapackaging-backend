@@ -340,9 +340,6 @@ app.get("/", async (req, res) => {
   res.send("App Is Running");
 });
 
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'API Works!' });
-});
 
 //  sdsdsds
 const PORT = process.env.PORT || 5000;

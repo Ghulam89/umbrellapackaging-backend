@@ -3,5 +3,7 @@ dotenv.config();
 export const {
     APP_PORT,
     MONGO_URI,
-    TOKEN_KEY
+    TOKEN_KEY,
+    EMAIL,
+    PASS
 } = process.env;
