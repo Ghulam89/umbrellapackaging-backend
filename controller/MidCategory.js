@@ -2,9 +2,9 @@ import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { MidCategory } from "../model/MidCategory.js";
 import cloudinary from "cloudinary";
 cloudinary.v2.config({
-  cloud_name: "ddu4sybue",
-  api_key: "658491673268817",
-  api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
+  cloud_name: "di4vtp5l3",
+  api_key: "855971682725667",
+  api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
 });
 
 
@@ -112,7 +112,7 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
 export const getCategoryById = async (req, res, next) => {
   const id = req?.params.id;
   try {
-    const data = await MidCategory.findById(id);
+    const data = await MidCategory.findById(id).populate('brandId');
 
     res.json({
       status: "success",

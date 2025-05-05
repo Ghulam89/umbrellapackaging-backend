@@ -45,6 +45,16 @@ const checkoutSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+ 
+  paymentIntentId: {
+    type: String,
+  },
+  paymentStatus: {
+    type: String,
+    enum: ["Pending", "Completed", "Refunded", "Failed"],
+    default: "Pending"
+  },
+
 
   status: {
     type: String,

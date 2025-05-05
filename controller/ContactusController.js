@@ -2,9 +2,9 @@ import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { ContactUs } from "../model/ContactUs.js";
 import cloudinary from "cloudinary";
 cloudinary.v2.config({
-  cloud_name: "ddu4sybue",
-  api_key: "658491673268817",
-  api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
+  cloud_name: "di4vtp5l3",
+  api_key: "855971682725667",
+  api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
 });
 
 // contact us create

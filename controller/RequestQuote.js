@@ -4,9 +4,9 @@ import cloudinary from "cloudinary";
 import nodemailer from 'nodemailer';
 import { adminTemplate, customerTemplate } from "../utils/emailTemplate.js";
 cloudinary.v2.config({
-  cloud_name: "ddu4sybue",
-  api_key: "658491673268817",
-  api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
+  cloud_name: "di4vtp5l3",
+  api_key: "855971682725667",
+  api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
 });
 
 const transporter = nodemailer.createTransport({

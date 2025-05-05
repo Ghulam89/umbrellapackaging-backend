@@ -202,7 +202,6 @@ export const getAllUsers = catchAsyncError(async (req, res, next) => {
 });
 
 
-
 // delete user
 export const deleteCustomerById = async (req, res, next) => {
   const id = req.params.id;

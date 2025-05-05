@@ -3,12 +3,13 @@ import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { Brands } from "../model/Brand.js";
 import { Products } from "../model/Product.js";
 import cloudinary from "cloudinary";
+import { MidCategory } from "../model/MidCategory.js";
 
 
 cloudinary.v2.config({
-  cloud_name: "ddu4sybue",
-  api_key: "658491673268817",
-  api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
+  cloud_name: "di4vtp5l3",
+  api_key: "855971682725667",
+  api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
 });
 
 
@@ -155,6 +156,64 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
 
   } catch (error) {
     next(error);
+  }
+});
+
+
+export const getProductsByCategory = catchAsyncError(async (req, res, next) => {
+  const categoryId = req.params.categoryId;
+  const page = parseInt(req.query.page) || 1;
+  const limit = 12;
+
+  try {
+    
+    const category = await MidCategory.findById(categoryId);
+    
+    if (!category) {
+     
+      return res.status(404).json({
+        status: "fail",
+        message: "Category not found",
+      });
+    }
+
+    console.log('Found category:', category.name);
+  
+    const skip = (page - 1) * limit;
+    
+    const queryConditions = {
+      $or: [
+        { category: categoryId },
+        { midCategory: categoryId }, 
+        { categoryId: categoryId } 
+      ]
+    };
+
+
+    const products = await Products.find(queryConditions)
+      .skip(skip)
+      .limit(limit)
+      .lean(); 
+
+   
+    const totalProducts = await Products.countDocuments(queryConditions);
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    res.status(200).json({
+      status: "success",
+      results: products.length,
+      currentPage: page,
+      totalPages: totalPages,
+      totalProducts: totalProducts,
+      data: products
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+      
+    });
   }
 });
 

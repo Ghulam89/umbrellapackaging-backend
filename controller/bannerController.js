@@ -2,9 +2,9 @@ import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { Banner } from "../model/Banner.js";
 import cloudinary from "cloudinary";
 cloudinary.v2.config({
-    cloud_name: "ddu4sybue",
-    api_key: "658491673268817",
-    api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
+    cloud_name: "di4vtp5l3",
+    api_key: "855971682725667",
+    api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
 });
 
 
@@ -50,6 +50,48 @@ export const getBannerById = async (req, res, next) => {
     }
 };
 
+
+// Update banner by id
+export const updateBanner = catchAsyncError(async (req, res, next) => {
+    const id = req.params.id;
+    try {
+        let updateData = {
+            videoLink: req.body.videoLink,
+            description: req.body.description
+        };
+
+        if (req.files && req.files.image) {
+            const image = req.files.image;
+            const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
+            updateData.image = result.url;
+        }
+
+        const updatedBanner = await Banner.findByIdAndUpdate(
+            id,
+            updateData,
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedBanner) {
+            return res.status(404).json({
+                status: "fail",
+                message: "Banner not found",
+            });
+        }
+
+        res.status(200).json({
+            status: "success",
+            message: "Banner updated successfully!",
+            data: updatedBanner,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: "fail",
+            error: "Internal Server Error",
+        });
+    }
+});
 
 // Get All banners
 export const getAllbanners = catchAsyncError(async (req, res, next) => {

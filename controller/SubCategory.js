@@ -4,9 +4,9 @@ import { Products } from "../model/Product.js";
 
 import cloudinary from "cloudinary";
 cloudinary.v2.config({
-    cloud_name: "ddu4sybue",
-    api_key: "658491673268817",
-    api_secret: "w35Ei6uCvbOcaN4moWBKL3BmW4Q",
+    cloud_name: "di4vtp5l3",
+    api_key: "855971682725667",
+    api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
 });
 
 
@@ -28,8 +28,8 @@ export const createSubCategory = catchAsyncError(async (req, res, next) => {
 export const getSubCategoryById = async (req, res, next) => {
     const id = req?.params.id;
     try {
-        const data = await SubCategory.findById(id);
-
+        const data = await SubCategory.findById(id)
+       
         res.json({
             status: "success",
             data: data,
