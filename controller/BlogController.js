@@ -9,7 +9,7 @@ const processContentImages = (content) => {
   if (!content) return content;
   
   return content.replace(/src="\/temp\/([^"]+)"/g, (match, filename) => {
-    return `src="${process.env.BASEURL}/images/${filename}"`;
+    return `src="${process.env.BASEURL}/var/task/images/${filename}"`;
   });
 };
 
@@ -23,7 +23,7 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
       });
     }
 
-    const imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    const imagePath = `${process.env.BASEURL}/var/task/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     
     const processedContent = processContentImages(req.body.content);
 
@@ -44,7 +44,7 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
 
   } catch (error) {
     if (req.files?.image) {
-      const filePath = path.join(__dirname, 'images', req.files.image[0].filename);
+      const filePath = path.join(__dirname, 'var/task/images', req.files.image[0].filename);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }
@@ -95,13 +95,13 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
 
     if (req.files?.image) {
      
-      const newImagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      const newImagePath = `${process.env.BASEURL}/var/task/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
       updateData.image = newImagePath;
       
     
       if (existingBlog.image) {
         const oldImageName = existingBlog.image.split('/').pop();
-        const oldImagePath = path.join(__dirname, 'images', oldImageName);
+        const oldImagePath = path.join(__dirname, 'var/task/images', oldImageName);
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
@@ -123,7 +123,7 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
   } catch (error) {
     
     if (req.files?.image) {
-      const filePath = path.join(__dirname, '../images', req.files.image[0].filename);
+      const filePath = path.join(__dirname, 'var/task/images', req.files.image[0].filename);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }
