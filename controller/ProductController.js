@@ -331,7 +331,7 @@ export const getAllProducts = catchAsyncError(async (req, res, next) => {
     if (req.query.brandId) {
       filter['brandId'] = req.query.brandId;
     } else if (req.query.brandName) {
-      filter['brandId'] = await Brand.findOne({
+      filter['brandId'] = await Brands.findOne({
         name: new RegExp(req.query.brandName, "i")
       }).select('_id');
     }
