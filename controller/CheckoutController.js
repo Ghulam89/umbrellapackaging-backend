@@ -141,9 +141,21 @@ export const createPaymentIntent = catchAsyncError(async (req, res, next) => {
 
 // get Checkout by id
 export const getCheckoutById = async (req, res, next) => {
-  const id = req?.params.id;
+  const id = req?.params?.id;
+  
   try {
-    const data = await Checkout.findById(id);
+    const data = await Checkout.findById(id).populate({
+      path: 'productIds',
+      model: 'Products',
+      select: 'name images actualPrice size description bannerImage bannerTitle bannerContent'
+    });
+
+    if (!data) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Checkout not found"
+      });
+    }
 
     res.json({
       status: "success",
@@ -154,6 +166,7 @@ export const getCheckoutById = async (req, res, next) => {
     res.status(500).json({
       status: "fail",
       error: "Internal Server Error",
+      message: error.message 
     });
   }
 };

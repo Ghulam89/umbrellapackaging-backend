@@ -1,31 +1,46 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { Banner } from "../model/Banner.js";
-import cloudinary from "cloudinary";
-cloudinary.v2.config({
-    cloud_name: "di4vtp5l3",
-    api_key: "855971682725667",
-    api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
-});
-
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // create banner
 export const createBanner = catchAsyncError(async (req, res, next) => {
-    let image = req.files.image;
-    const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
-    const banner = result.url;
-    let data = {
-       image: banner,
-       videoLink:req.body.videoLink,
-       description:req.body.description
-    };
-    
-    const newBanner = await Banner.create(data);
-    res.status(200).json({
-        status: "success",
-        message: "New banner created successfully!",
-        data: newBanner,
-    });
+    try {
+        if (!req.files?.image) {
+            return res.status(400).json({
+                status: "fail",
+                message: "Banner image is required",
+            });
+        }
 
+        const imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+        
+        const data = {
+            image: imagePath,
+            videoLink: req.body.videoLink,
+            description: req.body.description
+        };
+        
+        const newBanner = await Banner.create(data);
+        
+        res.status(200).json({
+            status: "success",
+            message: "New banner created successfully!",
+            data: newBanner,
+        });
+
+    } catch (error) {
+     
+        if (req.files?.image) {
+            const filePath = path.join(__dirname, 'images', req.files.image[0].filename);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
+        return next(error);
+    }
 });
 
 
@@ -54,16 +69,33 @@ export const getBannerById = async (req, res, next) => {
 // Update banner by id
 export const updateBanner = catchAsyncError(async (req, res, next) => {
     const id = req.params.id;
+    
     try {
+        const existingBanner = await Banner.findById(id);
+        if (!existingBanner) {
+            return res.status(404).json({
+                status: "fail",
+                message: "Banner not found",
+            });
+        }
+
         let updateData = {
-            videoLink: req.body.videoLink,
-            description: req.body.description
+            videoLink: req.body.videoLink || existingBanner.videoLink,
+            description: req.body.description || existingBanner.description
         };
 
-        if (req.files && req.files.image) {
-            const image = req.files.image;
-            const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
-            updateData.image = result.url;
+        if (req.files?.image) {
+          
+            const newImagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+            updateData.image = newImagePath;
+            
+            if (existingBanner.image) {
+                const oldImageName = existingBanner.image.split('/').pop();
+                const oldImagePath = path.join(__dirname, '../images', oldImageName);
+                if (fs.existsSync(oldImagePath)) {
+                    fs.unlinkSync(oldImagePath);
+                }
+            }
         }
 
         const updatedBanner = await Banner.findByIdAndUpdate(
@@ -72,24 +104,21 @@ export const updateBanner = catchAsyncError(async (req, res, next) => {
             { new: true, runValidators: true }
         );
 
-        if (!updatedBanner) {
-            return res.status(404).json({
-                status: "fail",
-                message: "Banner not found",
-            });
-        }
-
         res.status(200).json({
             status: "success",
             message: "Banner updated successfully!",
             data: updatedBanner,
         });
+
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            status: "fail",
-            error: "Internal Server Error",
-        });
+     
+        if (req.files?.image) {
+            const filePath = path.join(__dirname, 'images', req.files.image[0].filename);
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+        }
+        return next(error);
     }
 });
 
@@ -109,6 +138,7 @@ export const getAllbanners = catchAsyncError(async (req, res, next) => {
         });
     }
 });
+
 // delete banners
 export const deleteBannerById = async (req, res, next) => {
     const id = req.params.id;

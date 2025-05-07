@@ -7,10 +7,11 @@ import {
   deleteCategoryById,
   updateCategory
 } from "../controller/MidCategory.js";
+import { uploadCategoryImages } from "../upload/UploadFile.js";
 const categoryRouter = express.Router();
-categoryRouter.route("/create").post(createCategory);
+categoryRouter.route("/create").post(uploadCategoryImages,createCategory);
 categoryRouter.route("/getAll").get(getAllCategory);
-categoryRouter.route("/update/:id").put(updateCategory);
+categoryRouter.route("/update/:id").put(uploadCategoryImages,updateCategory);
 categoryRouter.route("/get/:id").get(getCategoryById);
 categoryRouter.route("/delete/:id").delete(deleteCategoryById);
 

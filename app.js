@@ -2,7 +2,7 @@ import express from "express";
 import { connectDB } from "./config/database.js";
 const app = express();
 import ErrorMiddleware from "./middleware/Error.js";
-import fileupload from "express-fileupload";
+// import fileupload from "express-fileupload";
 import cors from "cors";
 import bannerRouter from "./routes/bannerRoute.js";
 import ContactusRouter from "./routes/contactusrouter.js";
@@ -20,8 +20,17 @@ import ratingRoute from "./routes/RatingRouter.js";
 import subscribeRouter from "./routes/SubscribeRouter.js";
 import requestQuoteRouter from "./routes/RequestQuote.js";
 import instantQuoteRouter from "./routes/InstantQuote.js";
-import { Checkout } from "./model/Checkout.js";
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 connectDB();
+
+app.use(express.static("public"));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(cors());
 app.use(express.json());
 app.use(
@@ -29,11 +38,11 @@ app.use(
     extended: true,
   })
 );
-app.use(
-  fileupload({
-    useTempFiles: true,
-  })
-); 
+// app.use(
+//   fileupload({
+//     useTempFiles: true,
+//   })
+// ); 
 // const stripeApp = express.Router();
 
 // stripeApp.use(express.raw({ type: '*/*' }));

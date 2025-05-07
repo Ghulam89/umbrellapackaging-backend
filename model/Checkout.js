@@ -34,7 +34,35 @@ const checkoutSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  delivery: { type: Object, require: true },
+  delivery: { 
+    type: { 
+      country: {
+        type: String,
+        required: true
+      },
+      city: {
+        type: String,
+        required: true
+      },
+      state: {
+        type: String,
+        required: true
+      },
+      zipCode: {
+        type: String,
+        required: true
+      },
+      addressLine1: {
+        type: String,
+        required: true
+      },
+      addressLine2: {
+        type: String,
+        required: false 
+      },
+    },
+    require: true 
+  },
   productIds: [
     {
       type: mongoose.Schema.Types.ObjectId,

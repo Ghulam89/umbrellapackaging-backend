@@ -6,12 +6,13 @@ import {
   getBrandById,
   deleteBrandById,
   updateBrand,
+  
 } from "../controller/BrandController.js";
+import { uploadBrandImages } from "../upload/UploadFile.js";
 const  brandRouter = express.Router();
-
-brandRouter.route("/create").post(createBrand);
+brandRouter.route("/create").post(uploadBrandImages, createBrand);
 brandRouter.route("/getAll").get(getAllBrand);
-brandRouter.route("/update/:id").put(updateBrand);
+brandRouter.route("/update/:id").put(uploadBrandImages,updateBrand);
 brandRouter.route("/get/:id").get(getBrandById);
 brandRouter.route("/delete/:id").delete(deleteBrandById);
 

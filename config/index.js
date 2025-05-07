@@ -5,5 +5,6 @@ export const {
     MONGO_URI,
     TOKEN_KEY,
     EMAIL,
+    BASEURL,
     PASS
 } = process.env;

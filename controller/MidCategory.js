@@ -1,11 +1,10 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { MidCategory } from "../model/MidCategory.js";
-import cloudinary from "cloudinary";
-cloudinary.v2.config({
-  cloud_name: "di4vtp5l3",
-  api_key: "855971682725667",
-  api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
-});
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 export const createCategory = catchAsyncError(async (req, res, next) => {
@@ -28,6 +27,25 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
 
   const findName = await MidCategory.findOne({ title });
   if (findName) {
+
+    const requiredFiles = [
+      'image', 
+      'icon', 
+      'bannerImageFirst', 
+      'bannerImageSecond', 
+      'bannerImageThird', 
+      'bannerImageFourth'
+    ];
+    
+    requiredFiles.forEach(field => {
+      if (req.files?.[field]) {
+        const filePath = path.join(__dirname, '..', req.files[field][0].path);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      }
+    });
+    
     return res.status(400).json({
       status: "fail",
       message: "This name already exists!",
@@ -44,7 +62,7 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
   ];
 
   const missingFiles = requiredFiles.filter(
-    field => !req.files?.[field] || !req.files[field].tempFilePath
+    field => !req.files?.[field] || !req.files[field][0]
   );
 
   if (missingFiles.length > 0) {
@@ -55,20 +73,6 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
   }
 
   try {
-    // Upload all files to Cloudinary
-    const uploadPromises = requiredFiles.map(field => 
-      cloudinary.v2.uploader.upload(req.files[field].tempFilePath)
-    );
-
-    const [
-      imageResult,
-      iconResult,
-      bannerImageFirstResult,
-      bannerImageSecondResult,
-      bannerImageThirdResult,
-      bannerImageFourthResult
-    ] = await Promise.all(uploadPromises);
-
     const categoryData = {
       title,
       subTitle,
@@ -76,23 +80,22 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
       videoLink,
       videoDescription,
       brandId,
-      icon: iconResult.url,
-      image: imageResult.url,
+      icon: `${process.env.BASEURL}/images/${req.files.icon[0].filename}`.replace(/\\/g, '/'),
+      image: `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/'),
       bannerTitleFirst,
       bannerContentFirst,
-      bannerImageFirst: bannerImageFirstResult.url,
+      bannerImageFirst: `${process.env.BASEURL}/images/${req.files.bannerImageFirst[0].filename}`.replace(/\\/g, '/'),
       bannerTitleSecond,
       bannerContentSecond,
-      bannerImageSecond: bannerImageSecondResult.url,
+      bannerImageSecond: `${process.env.BASEURL}/images/${req.files.bannerImageSecond[0].filename}`.replace(/\\/g, '/'),
       bannerTitleThird,
       bannerContentThird,
-      bannerImageThird: bannerImageThirdResult.url,
+      bannerImageThird: `${process.env.BASEURL}/images/${req.files.bannerImageThird[0].filename}`.replace(/\\/g, '/'),
       bannerTitleFourth,
       bannerContentFourth,
-      bannerImageFourth: bannerImageFourthResult.url,
+      bannerImageFourth: `${process.env.BASEURL}/images/${req.files.bannerImageFourth[0].filename}`.replace(/\\/g, '/'),
     };
 
-    // Create new category
     const newCategory = await MidCategory.create(categoryData);
     
     res.status(200).json({
@@ -101,14 +104,21 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
       data: newCategory,
     });
 
-  } catch (uploadError) {
-    return res.status(500).json({
-      status: "error",
-      message: "Failed to upload one or more files to Cloudinary",
-      error: uploadError.message
+  } catch (error) {
+   
+    requiredFiles.forEach(field => {
+      if (req.files?.[field]) {
+        const filePath = path.join(__dirname, '..', req.files[field][0].path);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      }
     });
+    
+    return next(error);
   }
 });
+
 export const getCategoryById = async (req, res, next) => {
   const id = req?.params.id;
   try {
@@ -129,12 +139,14 @@ export const getCategoryById = async (req, res, next) => {
 
 export const updateCategory = catchAsyncError(async (req, res, next) => {
   const data = req.body;
-  console.log(data);
-  
   const categoryId = req.params.id;
+  
   const existingCategory = await MidCategory.findById(categoryId);
   if (!existingCategory) {
-    return res.status(404).json({ message: "Category not found" });
+    return res.status(404).json({ 
+      status: "fail",
+      message: "Category not found" 
+    });
   }
   let updateData = {
     title: data.title,
@@ -153,51 +165,83 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
     bannerContentFourth: data.bannerContentFourth,
   };
 
-  if (req.files?.image) {
-    const image = req.files.image;
-    const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
-    updateData.image = result.url;
+  const newFiles = [];
+
+  try {
+    if (req.files?.image) {
+      const imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      updateData.image = imagePath;
+      newFiles.push({ field: 'image', path: req.files.image[0].path });
+      
+      if (existingCategory.image) {
+        const oldImagePath = existingCategory.image.replace(process.env.BASEURL, '').replace('/images/', '');
+        const fullOldPath = path.join(__dirname, 'images', oldImagePath);
+        if (fs.existsSync(fullOldPath)) {
+          fs.unlinkSync(fullOldPath);
+        }
+      }
+    }
+
+    if (req.files?.icon) {
+      const iconPath = `${process.env.BASEURL}/images/${req.files.icon[0].filename}`.replace(/\\/g, '/');
+      updateData.icon = iconPath;
+      newFiles.push({ field: 'icon', path: req.files.icon[0].path });
+      
+      if (existingCategory.icon) {
+        const oldIconPath = existingCategory.icon.replace(process.env.BASEURL, '').replace('/images/', '');
+        const fullOldPath = path.join(__dirname, 'images', oldIconPath);
+        if (fs.existsSync(fullOldPath)) {
+          fs.unlinkSync(fullOldPath);
+        }
+      }
+    }
+
+    const bannerFields = [
+      'bannerImageFirst',
+      'bannerImageSecond',
+      'bannerImageThird',
+      'bannerImageFourth'
+    ];
+
+    for (const field of bannerFields) {
+      if (req.files?.[field]) {
+        const filePath = `${process.env.BASEURL}/images/${req.files[field][0].filename}`.replace(/\\/g, '/');
+        updateData[field] = filePath;
+        newFiles.push({ field, path: req.files[field][0].path });
+        
+        if (existingCategory[field]) {
+          const oldPath = existingCategory[field].replace(process.env.BASEURL, '').replace('/images/', '');
+          const fullOldPath = path.join(__dirname, 'images', oldPath);
+          if (fs.existsSync(fullOldPath)) {
+            fs.unlinkSync(fullOldPath);
+          }
+        }
+      }
+    }
+
+    const updatedCategory = await MidCategory.findByIdAndUpdate(
+      categoryId, 
+      updateData, 
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: updatedCategory,
+      message: "Category updated successfully!",
+    });
+
+  } catch (error) {
+  
+    newFiles.forEach(file => {
+      const fullPath = path.join(__dirname, '..', file.path);
+      if (fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+      }
+    });
     
+    return next(error);
   }
-  if (req.files?.icon) {
-    const icon = req.files.icon;
-    const iconResult = await cloudinary.v2.uploader.upload(icon.tempFilePath);
-    updateData.icon = iconResult.url;
-  }
-
-  if (req.files?.bannerImageFirst) {
-    const bannerImageFirst = req.files.bannerImageFirst;
-    const iconResult = await cloudinary.v2.uploader.upload(bannerImageFirst.tempFilePath);
-    updateData.bannerImageFirst = iconResult.url;
-  }
-
-  if (req.files?.bannerImageSecond) {
-    const bannerImageSecond = req.files.bannerImageSecond;
-    const iconResult = await cloudinary.v2.uploader.upload(bannerImageSecond.tempFilePath);
-    updateData.bannerImageSecond = iconResult.url;
-  }
-  if (req.files?.bannerImageThird) {
-    const bannerImageThird = req.files.bannerImageThird;
-    const iconResult = await cloudinary.v2.uploader.upload(bannerImageThird.tempFilePath);
-    updateData.bannerImageThird = iconResult.url;
-  }
-  if (req.files?.bannerImageFourth) {
-    const bannerImageFourth = req.files.bannerImageFourth;
-    const iconResult = await cloudinary.v2.uploader.upload(bannerImageFourth.tempFilePath);
-    updateData.bannerImageFourth = iconResult.url;
-  }
-
-  const updatedCategory = await MidCategory.findByIdAndUpdate(
-    categoryId, 
-    updateData, 
-    { new: true }
-  );
-
-  res.status(200).json({
-    status: "success",
-    data: updatedCategory,
-    message: "Category updated successfully!",
-  });
 });
 
 export const getAllCategory = catchAsyncError(async (req, res, next) => {

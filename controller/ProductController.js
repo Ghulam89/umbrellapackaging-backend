@@ -14,73 +14,110 @@ cloudinary.v2.config({
 
 
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export const createProducts = catchAsyncError(async (req, res, next) => {
-  const data = req.body;
-  
-  if (!data.name || !data.actualPrice || !data.size || !data.description || 
-      !data.bannerTitle || !data.bannerContent) {
-    return res.status(400).json({ error: "Missing required fields" });
+  const {
+    name,
+    actualPrice,
+    size,
+    description,
+    bannerTitle,
+    bannerContent,
+    brandId,
+    categoryId,
+  } = req.body;
+
+
+
+  if (!req.files || !req.files['images'] || !req.files['bannerImage']) {
+    return res.status(400).json({
+      status: "fail",
+      message: "Both product images (field name: 'images') and banner image (field name: 'bannerImage') are required",
+    });
   }
 
-  let images = [];
-  let bannerImageUrl = null;
+  const existingProduct = await Products.findOne({ name });
+  if (existingProduct) {
 
-  if (req.files) {
-    if (req.files.bannerImage) {
-      try {
-        const bannerResult = await cloudinary.v2.uploader.upload(req.files.bannerImage.tempFilePath);
-        bannerImageUrl = bannerResult.secure_url;
-      } catch (error) {
-        console.error("Banner image upload error:", error);
-        return res.status(500).json({ error: "Error uploading banner image" });
+    if (req.files['images']) {
+      req.files['images'].forEach(image => {
+        if (fs.existsSync(image.path)) {
+          fs.unlinkSync(image.path);
+        }
+      });
+    }
+    if (req.files['bannerImage']) {
+      const bannerPath = req.files['bannerImage'][0].path;
+      if (fs.existsSync(bannerPath)) {
+        fs.unlinkSync(bannerPath);
       }
     }
 
-    if (req.files.images) {
-      const productImages = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
-      
-      try {
-      
-        const uploadPromises = productImages.map(image => 
-          cloudinary.v2.uploader.upload(image.tempFilePath)
-        );
-        
-        const results = await Promise.all(uploadPromises);
-        images = results.map(result => result.secure_url);
-      } catch (error) {
-        console.error("Product images upload error:", error);
-        return res.status(500).json({ error: "Error uploading product images" });
-      }
-    }
+    return res.status(409).json({
+      status: "fail",
+      message: "Product with this name already exists",
+    });
   }
-
-  if (images.length === 0 || !bannerImageUrl) {
-    return res.status(400).json({ error: "Both product images and banner image are required" });
-  }
-
-  const productData = {
-    ...data,
-    images,
-    bannerImage: bannerImageUrl,
-  };
 
   try {
+    const productImages = Array.isArray(req.files['images'])
+      ? req.files['images']
+      : [req.files['images']];
+
+    const imagePaths = productImages.map(image =>
+      `${process.env.BASEURL}/images/${image.filename}`.replace(/\\/g, '/')
+    );
+
+    const bannerImageFile = Array.isArray(req.files['bannerImage'])
+      ? req.files['bannerImage'][0]
+      : req.files['bannerImage'];
+
+    const bannerPath = `${process.env.BASEURL}/images/${bannerImageFile.filename}`.replace(/\\/g, '/');
+
+    const productData = {
+      name,
+      actualPrice,
+      size,
+      description,
+      bannerTitle,
+      bannerContent,
+      images: imagePaths,
+      bannerImage: bannerPath,
+      brandId,
+      categoryId,
+    };
+
     const newProduct = await Products.create(productData);
-    
+
     res.status(201).json({
       status: "success",
-      message: "New Product created successfully!",
-      data: newProduct
+      message: "Product created successfully!",
+      data: newProduct,
     });
   } catch (error) {
-    console.error("Product creation error:", error);
-    res.status(500).json({ error: "Error creating product" });
+    if (req.files['images']) {
+      req.files['images'].forEach(image => {
+        fs.unlinkSync(path.join(__dirname, '..', image.path));
+      });
+    }
+    if (req.files['bannerImage']) {
+      const bannerImageFile = Array.isArray(req.files['bannerImage'])
+        ? req.files['bannerImage'][0]
+        : req.files['bannerImage'];
+      fs.unlinkSync(path.join(__dirname, '..', bannerImageFile.path));
+    }
+    return next(error);
   }
 });
 
 export const getBrandProductsByCategory = catchAsyncError(async (req, res, next) => {
   const brandId = req.params.brandId;
-  
+
   try {
     const brand = await Brands.findById(brandId);
     if (!brand) {
@@ -89,7 +126,7 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
         message: "Brand not found",
       });
     }
-    const productsByCategory = await Products.aggregate([  
+    const productsByCategory = await Products.aggregate([
       {
         $lookup: {
           from: "midcategories",
@@ -101,7 +138,7 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
       {
         $unwind: {
           path: "$categoryInfo",
-          preserveNullAndEmptyArrays: true 
+          preserveNullAndEmptyArrays: true
         }
       },
       {
@@ -118,14 +155,14 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
               actualPrice: "$actualPrice",
               size: "$size",
               description: "$description",
-           
+
             }
           }
         }
       },
       {
         $match: {
-          _id: { $ne: null } 
+          _id: { $ne: null }
         }
       },
       {
@@ -138,7 +175,7 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
         }
       },
       {
-        $sort: { categoryName: 1 } 
+        $sort: { categoryName: 1 }
       }
     ]);
 
@@ -159,18 +196,17 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
   }
 });
 
-
 export const getProductsByCategory = catchAsyncError(async (req, res, next) => {
   const categoryId = req.params.categoryId;
   const page = parseInt(req.query.page) || 1;
   const limit = 12;
 
   try {
-    
+
     const category = await MidCategory.findById(categoryId);
-    
+
     if (!category) {
-     
+
       return res.status(404).json({
         status: "fail",
         message: "Category not found",
@@ -178,14 +214,14 @@ export const getProductsByCategory = catchAsyncError(async (req, res, next) => {
     }
 
     console.log('Found category:', category.name);
-  
+
     const skip = (page - 1) * limit;
-    
+
     const queryConditions = {
       $or: [
         { category: categoryId },
-        { midCategory: categoryId }, 
-        { categoryId: categoryId } 
+        { midCategory: categoryId },
+        { categoryId: categoryId }
       ]
     };
 
@@ -193,9 +229,9 @@ export const getProductsByCategory = catchAsyncError(async (req, res, next) => {
     const products = await Products.find(queryConditions)
       .skip(skip)
       .limit(limit)
-      .lean(); 
+      .lean();
 
-   
+
     const totalProducts = await Products.countDocuments(queryConditions);
     const totalPages = Math.ceil(totalProducts / limit);
 
@@ -212,7 +248,7 @@ export const getProductsByCategory = catchAsyncError(async (req, res, next) => {
     res.status(500).json({
       status: "error",
       message: "Internal server error",
-      
+
     });
   }
 });
@@ -241,45 +277,29 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   const productsId = req.params.id;
 
-  // Handle multiple images upload
-  if (req.files && req.files.images) {
-    let images = [];
-    if (!Array.isArray(req.files.images)) {
-      images.push(req.files.images);
-    } else {
-      images = req.files.images;
-    }
+  const updateData = { ...data };
 
-    let response = [];
-    for (const image of images) {
-      try {
-        const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
-        response.push(result.url);
-        // Consider removing the temp file after upload
-        // fs.unlinkSync(image.tempFilePath);
-      } catch (error) {
-        console.log(error);
-        return res.status(500).json({ error: "Error uploading images" });
-      }
-    }
-    data.images = response;
+  if (req.files && req.files['images']) {
+    const productImages = Array.isArray(req.files['images'])
+      ? req.files['images']
+      : [req.files['images']];
+
+    updateData.images = productImages.map(image =>
+      `${process.env.BASEURL}/images/${image.filename}`.replace(/\\/g, '/')
+    );
   }
 
-  if (req.files && req.files.bannerImage) {
-    try {
-      const bannerImage = req.files.bannerImage;
-      const result = await cloudinary.v2.uploader.upload(bannerImage.tempFilePath);
-      data.bannerImage = result.url; // Assign to data object
-      // Consider removing the temp file after upload
-      // fs.unlinkSync(bannerImage.tempFilePath);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ error: "Error uploading banner image" });
-    }
+  if (req.files && req.files['bannerImage']) {
+    const bannerImageFile = Array.isArray(req.files['bannerImage'])
+      ? req.files['bannerImage'][0]
+      : req.files['bannerImage'];
+
+    updateData.bannerImage = `${process.env.BASEURL}/images/${bannerImageFile.filename}`.replace(/\\/g, '/');
   }
 
-  const updatedProducts = await Products.findByIdAndUpdate(productsId, data, {
+  const updatedProducts = await Products.findByIdAndUpdate(productsId, updateData, {
     new: true,
+    runValidators: true
   });
 
   if (!updatedProducts) {
@@ -303,19 +323,19 @@ export const getAllProducts = catchAsyncError(async (req, res, next) => {
     if (req.query.categoryId) {
       filter['categoryId'] = req.query.categoryId;
     } else if (req.query.categoryTitle) {
-      filter['categoryId'] = await Category.findOne({ 
-        title: new RegExp(req.query.categoryTitle, "i") 
+      filter['categoryId'] = await Category.findOne({
+        title: new RegExp(req.query.categoryTitle, "i")
       }).select('_id');
     }
-    
+
     if (req.query.brandId) {
       filter['brandId'] = req.query.brandId;
     } else if (req.query.brandName) {
-      filter['brandId'] = await Brand.findOne({ 
-        name: new RegExp(req.query.brandName, "i") 
+      filter['brandId'] = await Brand.findOne({
+        name: new RegExp(req.query.brandName, "i")
       }).select('_id');
     }
-    
+
     if (req.query.name) {
       filter.name = new RegExp(req.query.name, "i");
     }
@@ -324,11 +344,11 @@ export const getAllProducts = catchAsyncError(async (req, res, next) => {
       if (req.query.minPrice) filter.price.$gte = parseFloat(req.query.minPrice);
       if (req.query.maxPrice) filter.price.$lte = parseFloat(req.query.maxPrice);
     }
-    
+
     if (req.query.status) {
       filter.status = req.query.status;
     }
-    
+
     const products = await Products.find(filter)
       .populate({
         path: "categoryId",
@@ -336,15 +356,15 @@ export const getAllProducts = catchAsyncError(async (req, res, next) => {
       })
       .populate({
         path: "brandId",
-        select: "name logo" 
+        select: "name logo"
       })
       .sort(sortOption)
       .skip(skip)
       .limit(perPage);
-    
+
     const totalProducts = await Products.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / perPage);
-    
+
     res.status(200).json({
       status: "success",
       data: products,
@@ -393,7 +413,7 @@ const getSortOption = (sort) => {
     case "price-asc":
       return { discountPrice: 1 };
     case "price-desc":
-      return { discountPrice: -1 }; 
+      return { discountPrice: -1 };
     default:
       return { createdAt: -1 };
   }
