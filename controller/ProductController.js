@@ -70,14 +70,14 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
       : [req.files['images']];
 
     const imagePaths = productImages.map(image =>
-      `${process.env.BASEURL}/images/${image.filename}`.replace(/\\/g, '/')
+      `${process.env.BASEURL}/public/${image.filename}`.replace(/\\/g, '/')
     );
 
     const bannerImageFile = Array.isArray(req.files['bannerImage'])
       ? req.files['bannerImage'][0]
       : req.files['bannerImage'];
 
-    const bannerPath = `${process.env.BASEURL}/images/${bannerImageFile.filename}`.replace(/\\/g, '/');
+    const bannerPath = `${process.env.BASEURL}/public/${bannerImageFile.filename}`.replace(/\\/g, '/');
 
     const productData = {
       name,
@@ -285,7 +285,7 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
       : [req.files['images']];
 
     updateData.images = productImages.map(image =>
-      `${process.env.BASEURL}/images/${image.filename}`.replace(/\\/g, '/')
+      `${process.env.BASEURL}/public/${image.filename}`.replace(/\\/g, '/')
     );
   }
 
@@ -294,7 +294,7 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
       ? req.files['bannerImage'][0]
       : req.files['bannerImage'];
 
-    updateData.bannerImage = `${process.env.BASEURL}/images/${bannerImageFile.filename}`.replace(/\\/g, '/');
+    updateData.bannerImage = `${process.env.BASEURL}/public/${bannerImageFile.filename}`.replace(/\\/g, '/');
   }
 
   const updatedProducts = await Products.findByIdAndUpdate(productsId, updateData, {
