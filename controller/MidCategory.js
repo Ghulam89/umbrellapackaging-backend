@@ -80,20 +80,20 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
       videoLink,
       videoDescription,
       brandId,
-      icon: `${process.env.BASEURL}/var/task/images/${req.files.icon[0].filename}`.replace(/\\/g, '/'),
-      image: `${process.env.BASEURL}/var/task/images/${req.files.image[0].filename}`.replace(/\\/g, '/'),
+      icon: `${process.env.BASEURL}/images/${req.files.icon[0].filename}`.replace(/\\/g, '/'),
+      image: `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/'),
       bannerTitleFirst,
       bannerContentFirst,
-      bannerImageFirst: `${process.env.BASEURL}/var/task/images/${req.files.bannerImageFirst[0].filename}`.replace(/\\/g, '/'),
+      bannerImageFirst: `${process.env.BASEURL}/images/${req.files.bannerImageFirst[0].filename}`.replace(/\\/g, '/'),
       bannerTitleSecond,
       bannerContentSecond,
-      bannerImageSecond: `${process.env.BASEURL}/var/task/images/${req.files.bannerImageSecond[0].filename}`.replace(/\\/g, '/'),
+      bannerImageSecond: `${process.env.BASEURL}/images/${req.files.bannerImageSecond[0].filename}`.replace(/\\/g, '/'),
       bannerTitleThird,
       bannerContentThird,
-      bannerImageThird: `${process.env.BASEURL}/var/task/images/${req.files.bannerImageThird[0].filename}`.replace(/\\/g, '/'),
+      bannerImageThird: `${process.env.BASEURL}/images/${req.files.bannerImageThird[0].filename}`.replace(/\\/g, '/'),
       bannerTitleFourth,
       bannerContentFourth,
-      bannerImageFourth: `${process.env.BASEURL}/var/task/images/${req.files.bannerImageFourth[0].filename}`.replace(/\\/g, '/'),
+      bannerImageFourth: `${process.env.BASEURL}/images/${req.files.bannerImageFourth[0].filename}`.replace(/\\/g, '/'),
     };
 
     const newCategory = await MidCategory.create(categoryData);
@@ -169,7 +169,7 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
 
   try {
     if (req.files?.image) {
-      const imagePath = `${process.env.BASEURL}/var/task/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      const imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
       updateData.image = imagePath;
       newFiles.push({ field: 'image', path: req.files.image[0].path });
       
@@ -183,13 +183,13 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
     }
 
     if (req.files?.icon) {
-      const iconPath = `${process.env.BASEURL}/var/task/images/${req.files.icon[0].filename}`.replace(/\\/g, '/');
+      const iconPath = `${process.env.BASEURL}/images/${req.files.icon[0].filename}`.replace(/\\/g, '/');
       updateData.icon = iconPath;
       newFiles.push({ field: 'icon', path: req.files.icon[0].path });
       
       if (existingCategory.icon) {
         const oldIconPath = existingCategory.icon.replace(process.env.BASEURL, '').replace('/images/', '');
-        const fullOldPath = path.join(__dirname, 'var/task/images', oldIconPath);
+        const fullOldPath = path.join(__dirname, 'images', oldIconPath);
         if (fs.existsSync(fullOldPath)) {
           fs.unlinkSync(fullOldPath);
         }
@@ -205,13 +205,13 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
 
     for (const field of bannerFields) {
       if (req.files?.[field]) {
-        const filePath = `${process.env.BASEURL}/var/task/images/${req.files[field][0].filename}`.replace(/\\/g, '/');
+        const filePath = `${process.env.BASEURL}/images/${req.files[field][0].filename}`.replace(/\\/g, '/');
         updateData[field] = filePath;
         newFiles.push({ field, path: req.files[field][0].path });
         
         if (existingCategory[field]) {
           const oldPath = existingCategory[field].replace(process.env.BASEURL, '').replace('/images/', '');
-          const fullOldPath = path.join(__dirname, 'var/task/images', oldPath);
+          const fullOldPath = path.join(__dirname, 'images', oldPath);
           if (fs.existsSync(fullOldPath)) {
             fs.unlinkSync(fullOldPath);
           }

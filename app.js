@@ -30,7 +30,7 @@ const __dirname = path.dirname(__filename);
 connectDB();
 
 app.use(express.static("public"));
-app.use('var/task/images', express.static(path.join(__dirname, 'var/task/images')));
+app.use('images', express.static(path.join(__dirname, 'images')));
 app.use(cors());
 app.use(express.json());
 app.use(
