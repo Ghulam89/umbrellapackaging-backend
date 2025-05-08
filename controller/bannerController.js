@@ -15,7 +15,7 @@ export const createBanner = catchAsyncError(async (req, res, next) => {
             });
         }
 
-        const imagePath = `${process.env.BASEURL}/public/${req.files.image[0].filename}`.replace(/\\/g, '/');
+        const imagePath = `${process.env.BASEURL}/var/task/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
         
         const data = {
             image: imagePath,
@@ -34,7 +34,7 @@ export const createBanner = catchAsyncError(async (req, res, next) => {
     } catch (error) {
      
         if (req.files?.image) {
-            const filePath = path.join(__dirname, 'public', req.files.image[0].filename);
+            const filePath = path.join(__dirname, 'var/task/images', req.files.image[0].filename);
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
@@ -86,12 +86,12 @@ export const updateBanner = catchAsyncError(async (req, res, next) => {
 
         if (req.files?.image) {
           
-            const newImagePath = `${process.env.BASEURL}/public/${req.files.image[0].filename}`.replace(/\\/g, '/');
+            const newImagePath = `${process.env.BASEURL}/var/task/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
             updateData.image = newImagePath;
             
             if (existingBanner.image) {
                 const oldImageName = existingBanner.image.split('/').pop();
-                const oldImagePath = path.join(__dirname, 'public', oldImageName);
+                const oldImagePath = path.join(__dirname, 'var/task/images', oldImageName);
                 if (fs.existsSync(oldImagePath)) {
                     fs.unlinkSync(oldImagePath);
                 }
@@ -113,7 +113,7 @@ export const updateBanner = catchAsyncError(async (req, res, next) => {
     } catch (error) {
      
         if (req.files?.image) {
-            const filePath = path.join(__dirname, 'public', req.files.image[0].filename);
+            const filePath = path.join(__dirname, 'var/task/images', req.files.image[0].filename);
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
