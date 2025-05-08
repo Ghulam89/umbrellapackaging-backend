@@ -46,8 +46,8 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
   }
 
   try {
-    const imagePath = `${process.env.BASEURL}/var/task/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
-    const bannerPath = `${process.env.BASEURL}/var/task/images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
+    const imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    const bannerPath = `${process.env.BASEURL}/images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
     
     const brandData = {
       image: imagePath,
@@ -128,11 +128,11 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
 
   try {
     if (req.files?.image) {
-      updateData.image = `${process.env.BASEURL}/var/task/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      updateData.image = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
 
     if (req.files?.bannerImage) {
-      updateData.bannerImage = `${process.env.BASEURL}/var/task/images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
+      updateData.bannerImage = `${process.env.BASEURL}/images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
     }
 
     const updatedBrand = await Brands.findByIdAndUpdate(
@@ -150,10 +150,10 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
   } catch (error) {
    
     if (req.files?.image) {
-      fs.unlinkSync(path.join(__dirname, '..', 'var/task/images', 'var/task/images', req.files.image[0].filename));
+      fs.unlinkSync(path.join(__dirname, '..', 'images', 'images', req.files.image[0].filename));
     }
     if (req.files?.bannerImage) {
-      fs.unlinkSync(path.join(__dirname, '..', 'var/task/images', 'var/task/images', req.files.bannerImage[0].filename));
+      fs.unlinkSync(path.join(__dirname, '..', 'images', 'images', req.files.bannerImage[0].filename));
     }
     return next(error);
   }

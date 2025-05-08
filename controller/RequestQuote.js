@@ -34,7 +34,6 @@ export const createRequestQuote = catchAsyncError(async (req, res, next) => {
     name: data?.name,
     email: data?.email,
     phoneNumber: data?.phoneNumber,
-    companyName: data?.companyName,
     boxStyle: data?.boxStyle,
     length: data?.length,
     width: data?.width,
