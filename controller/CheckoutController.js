@@ -192,13 +192,34 @@ export const updateCheckout = catchAsyncError(async (req, res, next) => {
 // Get All Checkout
 export const getAllCheckout = catchAsyncError(async (req, res, next) => {
   try {
-    const checkout = await Checkout.find();
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit) || 10; // Default 10 items per page
+    const skip = (page - 1) * limit;
+
+    // Get total count of all checkout records
+    const totalCount = await Checkout.countDocuments();
+    
+    const checkout = await Checkout.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+    
+    const totalPages = Math.ceil(totalCount / limit);
+
     res.status(200).json({
       status: "success",
       data: checkout,
+      pagination: {
+        total: totalCount,
+        totalPages,
+        currentPage: page,
+        itemsPerPage: limit,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1
+      }
     });
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Error fetching checkout records:", error);
     res.status(500).json({
       status: "fail",
       error: "Internal Server Error",

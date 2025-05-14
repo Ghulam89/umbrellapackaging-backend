@@ -1,7 +1,5 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { Subscribe } from "../model/subscribe.js";
-import jwt from "jsonwebtoken";
-
 export const subscribeCreation = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   const email = data?.email;

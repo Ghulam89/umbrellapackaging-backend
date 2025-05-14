@@ -19,7 +19,7 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
           <!-- Logo Section -->
           <div style="text-align: center; margin-bottom: 30px;">
               <a href="https://old.umbrellapackaging.com" target="_blank">
-                  <img src="https://99de0d612a.imgdist.com/public/images/users/Integrators/BeeProAgency/1039128_1024229/Umbrella-packaging-final-logo-png.png" alt="Umbrella Packaging" title="Umbrella Packaging" style="width: 200px; max-width: 100%; display: block; margin: 0 auto;">
+                  <img src="https://99de0d612a.imgdist.com/public/users/Integrators/BeeProAgency/1039128_1024229/Umbrella-packaging-final-logo-png.png" alt="Umbrella Packaging" title="Umbrella Packaging" style="width: 200px; max-width: 100%; display: block; margin: 0 auto;">
               </a>
           </div>
   
@@ -58,27 +58,27 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
                   <tr>
                       <td style="padding: 0 10px;">
                           <a href="https://www.facebook.com/Umbrella-Custom-Packaging-102088152747218/" target="_blank">
-                              <img src="https://app-rsrc.getbee.io/public/images/resources/social-networks-icon-sets/t-only-logo-color/facebook@2x.png" alt="Facebook" style="width: 30px; height: 30px;">
+                              <img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-only-logo-color/facebook@2x.png" alt="Facebook" style="width: 30px; height: 30px;">
                           </a>
                       </td>
                       <td style="padding: 0 10px;">
                           <a href="https://twitter.com/umbrellapack" target="_blank">
-                              <img src="https://app-rsrc.getbee.io/public/images/resources/social-networks-icon-sets/t-only-logo-color/twitter@2x.png" alt="Twitter" style="width: 30px; height: 30px;">
+                              <img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-only-logo-color/twitter@2x.png" alt="Twitter" style="width: 30px; height: 30px;">
                           </a>
                       </td>
                       <td style="padding: 0 10px;">
                           <a href="https://www.linkedin.com/in/umbrella-custom-packaging-2a3b60257/" target="_blank">
-                              <img src="https://app-rsrc.getbee.io/public/images/resources/social-networks-icon-sets/t-only-logo-color/linkedin@2x.png" alt="LinkedIn" style="width: 30px; height: 30px;">
+                              <img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-only-logo-color/linkedin@2x.png" alt="LinkedIn" style="width: 30px; height: 30px;">
                           </a>
                       </td>
                       <td style="padding: 0 10px;">
                           <a href="https://www.instagram.com/umbrellacustompackaging/" target="_blank">
-                              <img src="https://app-rsrc.getbee.io/public/images/resources/social-networks-icon-sets/t-only-logo-color/instagram@2x.png" alt="Instagram" style="width: 30px; height: 30px;">
+                              <img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-only-logo-color/instagram@2x.png" alt="Instagram" style="width: 30px; height: 30px;">
                           </a>
                       </td>
                       <td style="padding: 0 10px;">
                           <a href="https://www.pinterest.com/UmbrellaCustomPackaging/" target="_blank">
-                              <img src="https://app-rsrc.getbee.io/public/images/resources/social-networks-icon-sets/t-only-logo-color/pinterest@2x.png" alt="Pinterest" style="width: 30px; height: 30px;">
+                              <img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-only-logo-color/pinterest@2x.png" alt="Pinterest" style="width: 30px; height: 30px;">
                           </a>
                       </td>
                   </tr>

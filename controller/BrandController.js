@@ -12,7 +12,7 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
   if (!name) {
     return res.status(400).json({
       status: "fail",
-      message: "Brand name is required",
+      message: "Category name is required",
     });
   }
   
@@ -40,7 +40,7 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
     
     return res.status(409).json({
       status: "fail",
-      message: "Brand with this name already exists",
+      message: "Category with this name already exists",
     });
 
   }
@@ -61,7 +61,7 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
 
     res.status(201).json({
       status: "success",
-      message: "Brand created successfully!",
+      message: "Category created successfully!",
       data: newBrand,
     });
   } catch (error) {

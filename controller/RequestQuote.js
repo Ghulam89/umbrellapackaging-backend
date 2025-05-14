@@ -1,13 +1,12 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { RequestQuote } from "../model/RequestQuote.js";
-import cloudinary from "cloudinary";
 import nodemailer from 'nodemailer';
 import { adminTemplate, customerTemplate } from "../utils/emailTemplate.js";
-cloudinary.v2.config({
-  cloud_name: "di4vtp5l3",
-  api_key: "855971682725667",
-  api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
-});
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -25,58 +24,69 @@ const transporter = nodemailer.createTransport({
 
 // create blog
 export const createRequestQuote = catchAsyncError(async (req, res, next) => {
-  let image = req.files.image;
   const data = req.body;
-  const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
-  const url = result.url;
-  let data1 = {
-    image: url,
-    name: data?.name,
-    email: data?.email,
-    phoneNumber: data?.phoneNumber,
-    boxStyle: data?.boxStyle,
-    length: data?.length,
-    width: data?.width,
-    depth: data?.depth,
-    unit: data?.unit,
-    quantity: data?.quantity,
-    stock: data?.stock,
-    color: data?.color,
-    addons: data?.addons,
-    message: data?.message,
-  };
+let imagePath = null;
 
-  const newRequestQuote = await RequestQuote.create(data1);
-
-  const mailOptions = {
-    from: 'gm6681328@gmail.com',
-    to: data?.email,
-    subject: 'Thank You for Your Quote Request - Umbrella Packaging',
-    html: customerTemplate(data?.name)
-  };
-
-    console.log(data1);
- 
-  const adminMailOptions = {
-    from: 'gm6681328@gmail.com',
-    to: data?.email,
-    subject: 'Thank You for Your Quote Request - Umbrella Packaging',
-    html: adminTemplate(data1)
-  };  
   try {
-    await transporter.sendMail(mailOptions);
 
-    await transporter.sendMail(adminMailOptions);
-    console.log('Email sent successfully');
+    if(req.files.image){
+        imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    }
+ 
+    
+    const quoteData = {
+      image: imagePath,
+      name: data?.name,
+      email: data?.email,
+      phoneNumber: data?.phoneNumber,
+      companyName: data?.companyName,
+      boxStyle: data?.boxStyle,
+      length: data?.length,
+      width: data?.width,
+      depth: data?.depth,
+      unit: data?.unit,
+      quantity: data?.quantity,
+      stock: data?.stock,
+      color: data?.color,
+      addons: data?.addons,
+      message: data?.message,
+    };
+
+    const newRequestQuote = await RequestQuote.create(quoteData);
+
+    const mailOptions = {
+      from: 'gm6681328@gmail.com',
+      to: data?.email,
+      subject: 'Thank You for Your Quote Request - Umbrella Packaging',
+      html: customerTemplate(data?.name)
+    };
+
+    const adminMailOptions = {
+      from: 'gm6681328@gmail.com',
+      to: process.env.ADMIN_EMAIL || 'admin@example.com', 
+      subject: 'New Quote Request - Umbrella Packaging',
+      html: adminTemplate(quoteData)
+    };  
+    
+    try {
+      await transporter.sendMail(mailOptions);
+      await transporter.sendMail(adminMailOptions);
+    } catch (error) {
+      
+    }
+
+    res.status(201).json({
+      status: "success",
+      message: "Request Quote created successfully and confirmation email sent!",
+      data: newRequestQuote,
+    });
   } catch (error) {
-    console.error('Error sending email:', error);
+    
+    if (req.files?.image) {
+      fs.unlinkSync(path.join(__dirname, '..', req.files.image[0].path));
+    }
+    return next(error);
   }
-
-  res.status(200).json({
-    status: "success",
-    message: "Request Quote created successfully and confirmation email sent!",
-    data: newRequestQuote,
-  });
 });
 
 // get blog by id
@@ -99,44 +109,56 @@ export const getRequestQuoteById = async (req, res, next) => {
 };
 // update blog
 export const updateRequestQuote = catchAsyncError(async (req, res, next) => {
-    const data = req.body;
-    const requestQuoteId = req.params.id;
-    const existingRequestQuote = await RequestQuote.findById(requestQuoteId);
-    if (!existingRequestQuote) {
-      return res.status(404).json({ message: "Request quote not found" });
-    }
-    if (req.files && req.files.image) {
-      const image = req.files.image;
+  const data = req.body;
+  const requestQuoteId = req.params.id;
+  
+  const existingRequestQuote = await RequestQuote.findById(requestQuoteId);
+  if (!existingRequestQuote) {
+    return res.status(404).json({ 
+      status: "fail",
+      message: "Request quote not found" 
+    });
+  }
+
+  try {
+    let updateData = { ...data };
+    if (req.files?.image) {
+     
       if (existingRequestQuote.image) {
-        try {
-          
-          const urlParts = existingRequestQuote.image.split('/');
-          const publicIdWithExtension = urlParts[urlParts.length - 1];
-          const publicId = publicIdWithExtension.split('.')[0];
-          
-          await cloudinary.v2.uploader.destroy(publicId);
-        } catch (error) {
-          console.error("Error deleting old image from Cloudinary:", error);
-          
+        const oldImagePath = path.join(
+          __dirname, 
+          '..', 
+          'public', 
+          existingRequestQuote.image.replace(process.env.BASEURL, '')
+        );
+        
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
         }
       }
-      
-      const result = await cloudinary.v2.uploader.upload(image.tempFilePath);
-      data.image = result.url;
+     
+      updateData.image = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
-  
+
     const updatedRequestQuote = await RequestQuote.findByIdAndUpdate(
       requestQuoteId, 
-      data, 
+      updateData, 
       { new: true }
     );
-  
+
     res.status(200).json({
       status: "success",
       data: updatedRequestQuote,
       message: "Request Quote updated successfully!",
     });
-  });
+  } catch (error) {
+   
+    if (req.files?.image) {
+      fs.unlinkSync(path.join(__dirname, '..', req.files.image[0].path));
+    }
+    return next(error);
+  }
+});
 
 
 export const getAllRequestQuote = catchAsyncError(async (req, res, next) => {
@@ -145,6 +167,7 @@ export const getAllRequestQuote = catchAsyncError(async (req, res, next) => {
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
     const blogs = await RequestQuote.aggregate([
+      { $sort: { createdAt: -1 } },
       { $skip: skip },
       { $limit: limit },
     ]);

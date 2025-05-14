@@ -1,24 +1,39 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { ContactUs } from "../model/ContactUs.js";
-import cloudinary from "cloudinary";
-cloudinary.v2.config({
-  cloud_name: "di4vtp5l3",
-  api_key: "855971682725667",
-  api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
-});
-
 // contact us create
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export const create = catchAsyncError(async (req, res, next) => {
   const data = req.body;
+  
+  try {
+    
+    const imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    const contactData = {
+      image: imagePath,
+      name: data?.name,
+      email: data?.email,
+      phoneNumber: data?.phoneNumber,
+      companyName: data?.companyName,
+      message: data?.message,
+    };
 
-  const newContact = await ContactUs.create(data);
+    const newContact = await ContactUs.create(contactData);
 
-  res.status(200).json({
-    status: "success",
-    message: "Your request send to team successfully",
 
-    data: newContact,
-  });
+    res.status(201).json({
+      status: "success",
+      message: "Your request has been sent to our team successfully",
+      data: newContact,
+    });
+  } catch (error) {
+ 
+  }
 });
 
 

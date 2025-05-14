@@ -1,19 +1,8 @@
-import mongoose from "mongoose";
+
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { Brands } from "../model/Brand.js";
 import { Products } from "../model/Product.js";
-import cloudinary from "cloudinary";
 import { MidCategory } from "../model/MidCategory.js";
-
-
-cloudinary.v2.config({
-  cloud_name: "di4vtp5l3",
-  api_key: "855971682725667",
-  api_secret: "U8n6H8d_rhDzSEBr03oHIqaPF5k",
-});
-
-
-
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -127,6 +116,7 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
       });
     }
     const productsByCategory = await Products.aggregate([
+      
       {
         $lookup: {
           from: "midcategories",
@@ -191,6 +181,43 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
       }
     });
 
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+export const getRelatedProducts = catchAsyncError(async (req, res, next) => {
+  const productId = req.params.productId;
+
+  try {
+    // 1. Find the main product
+    const mainProduct = await Products.findById(productId);
+    if (!mainProduct) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Product not found",
+      });
+    }
+
+    const relatedProducts = await Products.find({
+      _id: { $ne: productId },
+      $or: [
+        { categoryId: mainProduct.categoryId },
+        { brandId: mainProduct.brandId }, 
+        
+      ],
+    })
+      .limit(8) 
+      .sort({ createdAt: -1 }); 
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        
+        relatedProducts,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -368,11 +395,12 @@ export const getAllProducts = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: products,
+      totalProducts: totalProducts,
       pagination: {
         page,
         perPage,
         totalPages,
-        totalItems: totalProducts
+        
       },
     });
   } catch (error) {
@@ -386,15 +414,15 @@ export const getAllProducts = catchAsyncError(async (req, res, next) => {
 });
 
 export const searchProduct = catchAsyncError(async (req, res, next) => {
-  const { title } = req.query;
+  const { name } = req.query;
 
   try {
-    if (!title) {
-      return res.status(400).json({ error: "title is required" });
+    if (!name) {
+      return res.status(400).json({ error: "Name is required" });
     }
 
     const products = await Products.find({
-      title: { $regex: title, $options: "i" },
+      name: { $regex: name, $options: "i" },
     });
 
     res.status(200).json({ data: products, status: "success" });
@@ -402,7 +430,6 @@ export const searchProduct = catchAsyncError(async (req, res, next) => {
     res.status(500).json({ error: "Failed to fetch products" });
   }
 });
-
 
 const getSortOption = (sort) => {
   switch (sort) {
