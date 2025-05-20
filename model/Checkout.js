@@ -47,7 +47,7 @@ const checkoutSchema = new Schema({
       state: {
         type: String,
         required: true
-      },
+      }, 
       zipCode: {
         type: String,
         required: true

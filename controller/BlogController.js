@@ -139,6 +139,7 @@ export const getAllBlogs = catchAsyncError(async (req, res, next) => {
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
     const blogs = await Blogs.aggregate([
+      { $sort: { createdAt: -1 } },
       { $skip: skip },
       { $limit: limit },
     ]);

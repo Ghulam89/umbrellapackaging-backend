@@ -6,6 +6,7 @@ import { MidCategory } from "../model/MidCategory.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from "mongoose";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -116,7 +117,11 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
       });
     }
     const productsByCategory = await Products.aggregate([
-      
+       {
+        $match: {
+          brandId: new mongoose.Types.ObjectId(brandId)
+        }
+      },
       {
         $lookup: {
           from: "midcategories",

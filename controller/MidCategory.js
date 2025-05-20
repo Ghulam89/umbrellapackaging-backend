@@ -121,8 +121,35 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
 
 export const getCategoryById = async (req, res, next) => {
   const id = req?.params.id;
+  const { title, details, ...otherFields } = req.query;
+  
   try {
-    const data = await MidCategory.findById(id).populate('brandId');
+   
+    let query = MidCategory.findById(id);
+    
+    query = query.populate('brandId');
+    
+    const selectFields = [];
+    if (title === 'true') selectFields.push('title');
+    if (details === 'true') selectFields.push('details');
+    if (otherFields) {
+      Object.keys(otherFields).forEach(field => {
+        if (otherFields[field] === 'true') selectFields.push(field);
+      });
+    }
+    
+    if (selectFields.length > 0) {
+      query = query.select(selectFields.join(' '));
+    }
+    
+    const data = await query.exec();
+
+    if (!data) {
+      return res.status(404).json({
+        status: "fail",
+        error: "Category not found",
+      });
+    }
 
     res.json({
       status: "success",
