@@ -23,7 +23,7 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
       });
     }
 
-    const imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    const imagePath = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     
     const processedContent = processContentImages(req.body.content);
 
@@ -95,7 +95,7 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
 
     if (req.files?.image) {
      
-      const newImagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      const newImagePath = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
       updateData.image = newImagePath;
       
     

@@ -80,20 +80,20 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
       videoLink,
       videoDescription,
       brandId,
-      icon: `${process.env.BASEURL}/images/${req.files.icon[0].filename}`.replace(/\\/g, '/'),
-      image: `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/'),
+      icon: `/images/${req.files.icon[0].filename}`.replace(/\\/g, '/'),
+      image: `/images/${req.files.image[0].filename}`.replace(/\\/g, '/'),
       bannerTitleFirst,
       bannerContentFirst,
-      bannerImageFirst: `${process.env.BASEURL}/images/${req.files.bannerImageFirst[0].filename}`.replace(/\\/g, '/'),
+      bannerImageFirst: `/images/${req.files.bannerImageFirst[0].filename}`.replace(/\\/g, '/'),
       bannerTitleSecond,
       bannerContentSecond,
-      bannerImageSecond: `${process.env.BASEURL}/images/${req.files.bannerImageSecond[0].filename}`.replace(/\\/g, '/'),
+      bannerImageSecond: `/images/${req.files.bannerImageSecond[0].filename}`.replace(/\\/g, '/'),
       bannerTitleThird,
       bannerContentThird,
-      bannerImageThird: `${process.env.BASEURL}/images/${req.files.bannerImageThird[0].filename}`.replace(/\\/g, '/'),
+      bannerImageThird: `/images/${req.files.bannerImageThird[0].filename}`.replace(/\\/g, '/'),
       bannerTitleFourth,
       bannerContentFourth,
-      bannerImageFourth: `${process.env.BASEURL}/images/${req.files.bannerImageFourth[0].filename}`.replace(/\\/g, '/'),
+      bannerImageFourth: `/images/${req.files.bannerImageFourth[0].filename}`.replace(/\\/g, '/'),
     };
 
     const newCategory = await MidCategory.create(categoryData);
@@ -196,7 +196,7 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
 
   try {
     if (req.files?.image) {
-      const imagePath = `${process.env.BASEURL}/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      const imagePath = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
       updateData.image = imagePath;
       newFiles.push({ field: 'image', path: req.files.image[0].path });
       
@@ -210,7 +210,7 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
     }
 
     if (req.files?.icon) {
-      const iconPath = `${process.env.BASEURL}/images/${req.files.icon[0].filename}`.replace(/\\/g, '/');
+      const iconPath = `/images/${req.files.icon[0].filename}`.replace(/\\/g, '/');
       updateData.icon = iconPath;
       newFiles.push({ field: 'icon', path: req.files.icon[0].path });
       
@@ -232,7 +232,7 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
 
     for (const field of bannerFields) {
       if (req.files?.[field]) {
-        const filePath = `${process.env.BASEURL}/images/${req.files[field][0].filename}`.replace(/\\/g, '/');
+        const filePath = `/images/${req.files[field][0].filename}`.replace(/\\/g, '/');
         updateData[field] = filePath;
         newFiles.push({ field, path: req.files[field][0].path });
         
