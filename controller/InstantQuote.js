@@ -31,7 +31,7 @@ let imagePath = null;
 
   try {
        if(req.files.image){
-        imagePath = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+        imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
  
     const quoteData = {
@@ -130,7 +130,7 @@ export const updateInstantQuote = catchAsyncError(async (req, res, next) => {
       }
       
       // Add new image path
-      updateData.image = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      updateData.image = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
 
     const updatedInstantQuote = await InstantQuote.findByIdAndUpdate(

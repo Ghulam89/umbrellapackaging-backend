@@ -46,8 +46,8 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
   }
 
   try {
-    const imagePath = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
-    const bannerPath = `/images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
+    const imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    const bannerPath = `images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
     
     const brandData = {
       image: imagePath,
@@ -128,11 +128,11 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
 
   try {
     if (req.files?.image) {
-      updateData.image = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      updateData.image = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
 
     if (req.files?.bannerImage) {
-      updateData.bannerImage = `/images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
+      updateData.bannerImage = `images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
     }
 
     const updatedBrand = await Brands.findByIdAndUpdate(

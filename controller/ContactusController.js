@@ -13,7 +13,7 @@ export const create = catchAsyncError(async (req, res, next) => {
   
   try {
     
-    const imagePath = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    const imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     const contactData = {
       image: imagePath,
       name: data?.name,

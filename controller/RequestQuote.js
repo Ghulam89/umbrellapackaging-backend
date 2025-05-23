@@ -30,7 +30,7 @@ let imagePath = null;
   try {
 
     if(req.files.image){
-        imagePath = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+        imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
  
     
@@ -137,7 +137,7 @@ export const updateRequestQuote = catchAsyncError(async (req, res, next) => {
         }
       }
      
-      updateData.image = `/images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      updateData.image = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
 
     const updatedRequestQuote = await RequestQuote.findByIdAndUpdate(
