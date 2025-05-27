@@ -343,7 +343,7 @@ app.use("/requestQuote", requestQuoteRouter);
 app.use("/instantQuote", instantQuoteRouter);
 
 
-app.get("/", async (req, res) => {
+app.get("/apis", async (req, res) => {
   res.send("App Is Running");
 });
 
