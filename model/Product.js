@@ -14,10 +14,16 @@ const productSchema = new Schema({
     type: String,
     require: true,
   },
-  images: {
-    type: Array,
-    require: true,
-  },
+   images: [{
+    url: {
+      type: String,
+      required: true
+    },
+    altText: {
+      type: String,
+      required: true
+    }
+  }],
   actualPrice: {
     type: String,
     require: true,
@@ -34,6 +40,11 @@ const productSchema = new Schema({
    type:String,
    require:true 
   },
+   bannerImageAltText:{
+     type: String,
+    require: true,
+  },
+  
   bannerTitle:{
     type:String,
     require:true 

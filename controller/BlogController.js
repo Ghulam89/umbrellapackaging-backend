@@ -3,43 +3,85 @@ import { Blogs } from "../model/Blog.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+  import { JSDOM } from 'jsdom';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// create blog
+
 const processContentImages = (content) => {
   if (!content) return content;
   
-  return content.replace(/src="\/temp\/([^"]+)"/g, (match, filename) => {
-    return `src="${process.env.BASEURL}/images/${filename}"`;
-  });
+  try {
+    const dom = new JSDOM(`<!DOCTYPE html><body>${content}</body>`);
+    const document = dom.window.document;
+    
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+      const src = img.getAttribute('src');
+      
+      // Ensure alt attribute exists with proper fallbacks
+      if (!img.hasAttribute('alt')) {
+        let altText = 'Blog image'; // Default fallback
+        
+        if (src) {
+          // Extract filename and clean it up for alt text
+          altText = src.split('/').pop()
+            .replace(/\.[^/.]+$/, "")  // Remove extension
+            .replace(/[-_]/g, ' ')     // Replace special characters with spaces
+            .replace(/\d+/g, '')       // Remove numbers
+            .replace(/\s+/g, ' ')      // Collapse multiple spaces
+            .trim();
+        }
+        
+        img.setAttribute('alt', altText);
+      }
+      
+      // Add loading lazy if missing
+      if (!img.hasAttribute('loading')) {
+        img.setAttribute('loading', 'lazy');
+      }
+    });
+    
+    return document.body.innerHTML;
+  } catch (error) {
+    console.error('Error processing content images:', error);
+    return content;
+  }
 };
 
-// Create blog
+
+
 export const createBlog = catchAsyncError(async (req, res, next) => {
   try {
     if (!req.files?.image) {
       return res.status(400).json({
         status: "fail",
-        message: "Blog image is required",
+        message: "Featured image is required",
       });
     }
 
     const imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+      
+      const processedContent = processContentImages(req.body.content);
     
-    const processedContent = processContentImages(req.body.content);
-
     const blogData = {
       image: imagePath,
-      content: processedContent,
+      content: processedContent, 
+      processedContent: processedContent,
       title: req.body?.title,
       shortDescription: req.body?.shortDescription,
+      imageAltText: req.body.imageAltText || 
+        req.files.image[0].originalname.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ')
     };
 
     const newBlog = await Blogs.create(blogData);
     
     res.status(200).json({
       status: "success",
-      message: "New blog created successfully!",
-      data: newBlog,
+      message: "Blog created successfully!",
+      data: {
+        ...newBlog.toObject(),
+        image: `${imagePath}`
+      }
     });
 
   } catch (error) {
@@ -53,75 +95,121 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
   }
 });
 
-// get blog by id
-export const getBlogById = async (req, res, next) => {
-  const id = req?.params.id;
-  try {
-    const data = await Blogs.findById(id);
 
-    res.json({
-      status: "success",
-      data: data,
+// In your backend routes
+// Enhanced editor image upload
+export const editorImageUpload = catchAsyncError(async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'No image uploaded' 
+      });
+    }
+
+    const imagePath = `images/${req.file.filename}`.replace(/\\/g, '/');
+    const fullUrl = `${process.env.BASEURL}/${imagePath}`;
+    
+    // Generate comprehensive alt text
+    const altText = req.file.originalname
+      .replace(/\.[^/.]+$/, "")  
+      .replace(/[-_]/g, ' ')    
+      .replace(/\s+/g, ' ')    
+      .trim();
+
+    res.status(200).json({
+      success: true,
+      url: fullUrl,
+      alt: altText || 'Blog image'
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      status: "fail",
-      error: "Internal Server Error",
+    console.error('Error uploading editor image:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Image upload failed' 
     });
   }
-};
-// update blog
-// Update blog
-export const updateBlog = catchAsyncError(async (req, res, next) => {
-  const blogId = req.params.id;
-  
+});
+export const getBlogById = catchAsyncError(async (req, res, next) => {
   try {
-    const existingBlog = await Blogs.findById(blogId);
-    if (!existingBlog) {
+    const blog = await Blogs.findById(req.params.id);
+    if (!blog) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Blog not found"
+      });
+    }
+
+    const blogData = blog.toObject();
+    if (blogData.image && !blogData.image.startsWith('http')) {
+      blogData.image = `${blogData.image}`;
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: blogData
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+export const updateBlog = catchAsyncError(async (req, res, next) => {
+  try {
+    const blog = await Blogs.findById(req.params.id);
+    if (!blog) {
       return res.status(404).json({ 
         status: "fail",
         message: "Blog not found" 
       });
     }
-
-    const processedContent = processContentImages(req.body.content);
-
-    let updateData = {
-      content: processedContent || existingBlog.content,
-      title: req.body?.title || existingBlog.title,
-      shortDescription: req.body?.shortDescription || existingBlog.shortDescription,
+    const processedContent = processContentImages(req.body.content || blog.content);
+    
+    const updateData = {
+      content: processedContent, // Use processed content here
+      processedContent: processedContent,
+      title: req.body?.title || blog.title,
+      shortDescription: req.body?.shortDescription || blog.shortDescription,
+      imageAltText: req.body?.imageAltText || blog.imageAltText,
     };
 
     if (req.files?.image) {
-     
       const newImagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
       updateData.image = newImagePath;
       
-    
-      if (existingBlog.image) {
-        const oldImageName = existingBlog.image.split('/').pop();
+      if (blog.image) {
+        const oldImageName = blog.image.split('/').pop();
         const oldImagePath = path.join(__dirname, 'images', oldImageName);
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }
+      
+      if (!updateData.imageAltText) {
+        updateData.imageAltText = req.files.image[0].originalname
+          .replace(/\.[^/.]+$/, "")
+          .replace(/[-_]/g, ' ');
+      }
     }
 
     const updatedBlog = await Blogs.findByIdAndUpdate(
-      blogId,
+      req.params.id,
       updateData,
       { new: true, runValidators: true }
     );
 
+    const responseData = updatedBlog.toObject();
+    if (responseData.image && !responseData.image.startsWith('http')) {
+      responseData.image = `${process.env.BASEURL}/${responseData.image}`;
+    }
+
     res.status(200).json({
       status: "success",
-      data: updatedBlog,
+      data: responseData,
       message: "Blog updated successfully!",
     });
 
   } catch (error) {
-    
     if (req.files?.image) {
       const filePath = path.join(__dirname, 'images', req.files.image[0].filename);
       if (fs.existsSync(filePath)) {
@@ -132,22 +220,31 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
   }
 });
 
-
+// Get all blogs with pagination and URL handling
 export const getAllBlogs = catchAsyncError(async (req, res, next) => {
   try {
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
-    const blogs = await Blogs.aggregate([
-      { $sort: { createdAt: -1 } },
-      { $skip: skip },
-      { $limit: limit },
+
+    const [blogs, totalBlogs] = await Promise.all([
+      Blogs.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Blogs.countDocuments()
     ]);
-    const totalBlogs = await Blogs.countDocuments();
+
+    // Process image URLs
+    const processedBlogs = blogs.map(blog => ({
+      ...blog,
+      image: blog.image.startsWith('http') ? blog.image : `${blog.image}`
+    }));
 
     res.status(200).json({
       status: "success",
-      data: blogs,
+      data: processedBlogs,
       pagination: {
         total: totalBlogs,
         page,
@@ -156,36 +253,35 @@ export const getAllBlogs = catchAsyncError(async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching blogs with pagination:", error);
-    res.status(500).json({
-      status: "fail",
-      error: "Internal Server Error",
-    });
+    next(error);
   }
 });
 
-
-
-// delete blog
-export const deleteBlogById = async (req, res, next) => {
-  const id = req.params.id;
+// Delete blog with image cleanup
+export const deleteBlogById = catchAsyncError(async (req, res, next) => {
   try {
-    const delBlog = await Blogs.findByIdAndDelete(id);
-    if (!delBlog) {
-      return res.json({ status: "fail", message: "Blog not Found" });
+    const blog = await Blogs.findByIdAndDelete(req.params.id);
+    if (!blog) {
+      return res.status(404).json({ 
+        status: "fail", 
+        message: "Blog not found" 
+      });
     }
-    res.json({
+
+    // Delete associated image
+    if (blog.image) {
+      const imageName = blog.image.split('/').pop();
+      const imagePath = path.join(__dirname, 'images', imageName);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    res.status(200).json({
       status: "success",
       message: "Blog deleted successfully!",
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
-};
-
-
-
-
-
-
+});

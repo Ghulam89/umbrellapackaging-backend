@@ -10,8 +10,16 @@ const brandSchema = new Schema({
     type: String,
     require: true,
   },
+  bannerAltText:{
+     type: String,
+    require: true,
+  },
   image: {
-    type: String,
+     type: String,
+    require: true,
+  },
+   imageAltText:{
+     type: String,
     require: true,
   },
   content: {

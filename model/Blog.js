@@ -15,7 +15,14 @@ const blogSchema = new Schema({
     type: String,
     require: true,
   },
+    imageAltText:{
+     type: String,
+    require: true,
+  },
   content: {
+    type: String,
+  },
+   processedContent: {
     type: String,
   },
   createdAt: {

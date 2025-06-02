@@ -23,6 +23,7 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
     bannerContentThird,
     bannerTitleFourth,
     bannerContentFourth,
+    imageAltText,iconAltText,bannerImageFirstAltText,bannerImageSecondAltText,bannerImageThirdAltText,bannerImageFourthAltText
   } = req.body;
 
   const findName = await MidCategory.findOne({ title });
@@ -80,6 +81,12 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
       videoLink,
       videoDescription,
       brandId,
+      imageAltText,
+      iconAltText,
+      bannerImageFirstAltText,
+      bannerImageSecondAltText,
+      bannerImageThirdAltText,
+      bannerImageFourthAltText,
       icon: `images/${req.files.icon[0].filename}`.replace(/\\/g, '/'),
       image: `images/${req.files.image[0].filename}`.replace(/\\/g, '/'),
       bannerTitleFirst,
@@ -190,6 +197,12 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
     bannerContentSecond: data.bannerContentSecond,
     bannerContentThird: data.bannerContentThird,
     bannerContentFourth: data.bannerContentFourth,
+     imageAltText:data.imageAltText,
+      iconAltText:data.iconAltText,
+      bannerImageFirstAltText:data.bannerImageFirstAltText,
+      bannerImageSecondAltText:data.bannerImageSecondAltText,
+      bannerImageThirdAltText:data.bannerImageThirdAltText,
+      bannerImageFourthAltText:data.bannerImageFourthAltText,
   };
 
   const newFiles = [];

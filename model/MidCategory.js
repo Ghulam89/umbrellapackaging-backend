@@ -22,8 +22,16 @@ const midcategorySchema = new Schema({
     type: String,
     require: true,
   },
+   iconAltText:{
+     type: String,
+    require: true,
+  },
   image: {
     type: String,
+    require: true,
+  },
+   imageAltText:{
+     type: String,
     require: true,
   },
   videoLink: {
@@ -46,6 +54,10 @@ const midcategorySchema = new Schema({
     type: String,
     require: true,
   },
+   bannerImageFirstAltText:{
+     type: String,
+    require: true,
+  },
   bannerTitleSecond: {
     type: String,
     require: true,
@@ -56,6 +68,10 @@ const midcategorySchema = new Schema({
   },
   bannerImageSecond: {
     type: String,
+    require: true,
+  },
+   bannerImageSecondAltText:{
+     type: String,
     require: true,
   },
   bannerTitleThird: {
@@ -70,6 +86,10 @@ const midcategorySchema = new Schema({
     type: String,
     require: true,
   },
+   bannerImageThirdAltText:{
+     type: String,
+    require: true,
+  },
   bannerTitleFourth: {
     type: String,
     require: true,
@@ -80,6 +100,10 @@ const midcategorySchema = new Schema({
   },
   bannerImageFourth: {
     type: String,
+    require: true,
+  },
+  bannerImageFourthAltText:{
+     type: String,
     require: true,
   },
   createdAt: {

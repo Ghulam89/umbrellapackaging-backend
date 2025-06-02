@@ -20,7 +20,8 @@ export const createBanner = catchAsyncError(async (req, res, next) => {
         const data = {
             image: imagePath,
             videoLink: req.body.videoLink,
-            description: req.body.description
+            description: req.body.description,
+            imageAltText: req.body.imageAltText
         };
         
         const newBanner = await Banner.create(data);
@@ -81,7 +82,8 @@ export const updateBanner = catchAsyncError(async (req, res, next) => {
 
         let updateData = {
             videoLink: req.body.videoLink || existingBanner.videoLink,
-            description: req.body.description || existingBanner.description
+            description: req.body.description || existingBanner.description,
+            imageAltText: req.body.imageAltText
         };
 
         if (req.files?.image) {

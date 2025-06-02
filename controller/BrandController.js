@@ -8,14 +8,14 @@ const __dirname = path.dirname(__filename);
 
 export const createBrand = catchAsyncError(async (req, res, next) => {
   const { name } = req.body;
-  
+
   if (!name) {
     return res.status(400).json({
       status: "fail",
       message: "Category name is required",
     });
   }
-  
+
   if (!req.files?.image || !req.files?.bannerImage) {
     return res.status(400).json({
       status: "fail",
@@ -37,7 +37,7 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
         fs.unlinkSync(bannerPath);
       }
     }
-    
+
     return res.status(409).json({
       status: "fail",
       message: "Category with this name already exists",
@@ -45,16 +45,21 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
 
   }
 
+  const formatAltText = (filename) => {
+    return filename.replace(/\.[^/.]+$/, "").replace(/-/g, " ");
+  };
   try {
-    const imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
-    const bannerPath = `images/${req.files.bannerImage[0].filename}`.replace(/\\/g, '/');
-    
+
+    const imagePath = `images/${req.files.image[0].originalname}`.replace(/\\/g, '/');
+    const bannerPath = `images/${req.files.bannerImage[0].originalname}`.replace(/\\/g, '/');
     const brandData = {
       image: imagePath,
       bannerImage: bannerPath,
       name: req.body.name,
       bgColor: req.body.bgColor,
       content: req.body.content,
+      bannerAltText: req.body.bannerAltText,
+      imageAltText: req.body.imageAltText,
     };
 
     const newBrand = await Brands.create(brandData);
@@ -96,21 +101,19 @@ export const getBrandById = async (req, res, next) => {
 
 export const updateBrand = catchAsyncError(async (req, res, next) => {
   const brandId = req.params.id;
-  const { name, bgColor, content } = req.body;
+  const { name, bgColor, content, bannerAltText, imageAltText } = req.body;
 
   const existingBrand = await Brands.findById(brandId);
   if (!existingBrand) {
-    return res.status(404).json({ 
+    return res.status(404).json({
       status: "fail",
-      message: "Brand not found" 
+      message: "Brand not found"
     });
   }
   console.log(existingBrand);
-    
-
   if (name && name !== existingBrand.name) {
     const nameExists = await Brands.findOne({ name });
-    
+
     if (nameExists) {
       return res.status(409).json({
         status: "fail",
@@ -121,8 +124,10 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
 
   const updateData = {
     name: name || existingBrand.name,
-    bgColor: bgColor || existingBrand.bgColor,
-    content: content || existingBrand.content,
+    bgColor: bgColor,
+    content: content,
+    bannerAltText: bannerAltText,
+    imageAltText: imageAltText,
   };
 
 
@@ -136,8 +141,8 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
     }
 
     const updatedBrand = await Brands.findByIdAndUpdate(
-      brandId, 
-      updateData, 
+      brandId,
+      updateData,
       { new: true, runValidators: true }
     );
 
@@ -148,7 +153,7 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
     });
 
   } catch (error) {
-   
+
     if (req.files?.image) {
       fs.unlinkSync(path.join(__dirname, '..', 'images', 'images', req.files.image[0].filename));
     }
@@ -181,7 +186,9 @@ export const getAllBrand = async (req, res, next) => {
           $project: {
             name: 1,
             image: 1,
+            imageAltText: 1,
             bannerImage: 1,
+            bannerAltText: 1,
             bgColor: 1,
             content: 1,
             createdAt: 1,
@@ -217,7 +224,9 @@ export const getAllBrand = async (req, res, next) => {
         $project: {
           name: 1,
           image: 1,
-          bannerImage: 1,
+            imageAltText: 1,
+            bannerImage: 1,
+            bannerAltText: 1,
           bgColor: 1,
           content: 1,
           createdAt: 1,

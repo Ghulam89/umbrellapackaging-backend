@@ -9,9 +9,9 @@ const storage = multer.diskStorage({
         cb(null, path.join(__dirname, '../images'));
     },
     filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const ext = path.extname(file.originalname).toLowerCase();
-        cb(null, uniqueSuffix + ext);
+      const ext = path.extname(file.originalname).toLowerCase();
+        // Use the fieldname + original filename
+        cb(null, `${file.originalname}`);
     },
 });
 
@@ -66,3 +66,5 @@ export const uploadInstantQuoteImages = upload.fields([
 export const uploadRequestQuoteImages = upload.fields([
     { name: 'image', maxCount:1},
 ]);
+
+export const uploadEditorImage = upload.single('image');

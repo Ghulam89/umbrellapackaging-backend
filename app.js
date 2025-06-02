@@ -324,7 +324,6 @@ app.use(
 
 
 
-
 const server = http.createServer(app);
 app.use("/brands", brandRouter);
 app.use("/user", userRoute);
