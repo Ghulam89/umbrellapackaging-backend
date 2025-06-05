@@ -347,6 +347,10 @@ app.use("/instantQuote", instantQuoteRouter);
 // });
 
 
+// app.get("/apis", async (req, res) => {
+//   res.send("App Is Running");
+// });
+
 //  sdsdsds
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
