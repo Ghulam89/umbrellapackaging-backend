@@ -10,6 +10,14 @@ const midcategorySchema = new Schema({
     type: String,
     require: true,
   },
+ metaTitle: { type: String },
+  metaDescription: { type: String },
+  keywords: { type: String },
+  robots: { type: String },
+   slug: {
+    type: String,
+    unique: true,
+  },
   subTitle: {
     type: String,
     require: true,

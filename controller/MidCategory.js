@@ -10,6 +10,11 @@ const __dirname = path.dirname(__filename);
 export const createCategory = catchAsyncError(async (req, res, next) => {
   const { 
     title,
+    slug,
+    metaTitle,
+    metaDescription,
+    keywords,
+    robots,
     subTitle,
     description,
     videoLink,
@@ -76,6 +81,11 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
   try {
     const categoryData = {
       title,
+      slug,
+      metaTitle,
+      metaDescription,
+      keywords,
+      robots,
       subTitle,
       description,
       videoLink,
@@ -184,6 +194,11 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
   }
   let updateData = {
     title: data.title,
+    slug: data.slug,
+    metaTitle:data.metaTitle,
+    metaDescription:data.metaDescription,
+    keywords:data.keywords,
+    robots:data.robots,
     subTitle: data.subTitle,
     description: data.description,
     videoLink: data.videoLink,

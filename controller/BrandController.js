@@ -60,6 +60,11 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
       content: req.body.content,
       bannerAltText: req.body.bannerAltText,
       imageAltText: req.body.imageAltText,
+      slug: req.body.slug,
+      metaTitle: req.body.metaTitle,
+      metaDescription: req.body.metaDescription,
+      keywords: req.body.keywords,
+      robots: req.body.robots,
     };
 
     const newBrand = await Brands.create(brandData);
@@ -101,7 +106,10 @@ export const getBrandById = async (req, res, next) => {
 
 export const updateBrand = catchAsyncError(async (req, res, next) => {
   const brandId = req.params.id;
-  const { name, bgColor, content, bannerAltText, imageAltText } = req.body;
+  const { name, bgColor, content, bannerAltText, imageAltText, slug, metaTitle, metaDescription, keywords, robots } = req.body;
+
+  console.log(req.body);
+
 
   const existingBrand = await Brands.findById(brandId);
   if (!existingBrand) {
@@ -128,6 +136,11 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
     content: content,
     bannerAltText: bannerAltText,
     imageAltText: imageAltText,
+    slug: slug,
+    metaTitle: metaTitle,
+    metaDescription: metaDescription,
+    keywords: keywords,
+    robots: robots,
   };
 
 
@@ -190,6 +203,11 @@ export const getAllBrand = async (req, res, next) => {
             bannerImage: 1,
             bannerAltText: 1,
             bgColor: 1,
+            slug: 1,
+            metaTitle: 1,
+            metaDescription: 1,
+            keywords: 1,
+            robots: 1,
             content: 1,
             createdAt: 1,
             status: 1,
@@ -224,12 +242,17 @@ export const getAllBrand = async (req, res, next) => {
         $project: {
           name: 1,
           image: 1,
-            imageAltText: 1,
-            bannerImage: 1,
-            bannerAltText: 1,
+          imageAltText: 1,
+          bannerImage: 1,
+          bannerAltText: 1,
           bgColor: 1,
           content: 1,
           createdAt: 1,
+          slug: 1,
+          metaTitle: 1,
+          metaDescription: 1,
+          keywords: 1,
+          robots: 1,
           status: 1,
           midcategories: 1,
         },

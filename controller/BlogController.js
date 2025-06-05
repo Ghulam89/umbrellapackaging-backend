@@ -18,17 +18,15 @@ const processContentImages = (content) => {
     images.forEach(img => {
       const src = img.getAttribute('src');
       
-      // Ensure alt attribute exists with proper fallbacks
       if (!img.hasAttribute('alt')) {
-        let altText = 'Blog image'; // Default fallback
+        let altText = 'Blog image';
         
         if (src) {
-          // Extract filename and clean it up for alt text
           altText = src.split('/').pop()
-            .replace(/\.[^/.]+$/, "")  // Remove extension
-            .replace(/[-_]/g, ' ')     // Replace special characters with spaces
-            .replace(/\d+/g, '')       // Remove numbers
-            .replace(/\s+/g, ' ')      // Collapse multiple spaces
+            .replace(/\.[^/.]+$/, "") 
+            .replace(/[-_]/g, ' ')   
+            .replace(/\d+/g, '')       
+            .replace(/\s+/g, ' ') 
             .trim();
         }
         
@@ -45,7 +43,7 @@ const processContentImages = (content) => {
   } catch (error) {
     console.error('Error processing content images:', error);
     return content;
-  }
+  } 
 };
 
 
@@ -68,6 +66,11 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
       content: processedContent, 
       processedContent: processedContent,
       title: req.body?.title,
+      slug:req.body?.slug,
+       metaTitle:req.body.metaTitle,
+      metaDescription:req.body.metaDescription,
+      keywords:req.body.keywords,
+      robots:req.body.robots,
       shortDescription: req.body?.shortDescription,
       imageAltText: req.body.imageAltText || 
         req.files.image[0].originalname.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ')
@@ -120,7 +123,7 @@ export const editorImageUpload = catchAsyncError(async (req, res) => {
     res.status(200).json({
       success: true,
       url: fullUrl,
-      alt: altText || 'Blog image'
+      alt: altText
     });
   } catch (error) {
     console.error('Error uploading editor image:', error);
@@ -166,9 +169,14 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
     const processedContent = processContentImages(req.body.content || blog.content);
     
     const updateData = {
-      content: processedContent, // Use processed content here
+      content: processedContent,
       processedContent: processedContent,
-      title: req.body?.title || blog.title,
+      title: req.body?.title || blog.title, 
+      slug: req.body?.slug, 
+       metaTitle:req.body.metaTitle,
+      metaDescription:req.body.metaDescription,
+      keywords:req.body.keywords,
+      robots:req.body.robots,
       shortDescription: req.body?.shortDescription || blog.shortDescription,
       imageAltText: req.body?.imageAltText || blog.imageAltText,
     };

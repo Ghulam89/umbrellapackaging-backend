@@ -10,16 +10,20 @@ const brandSchema = new Schema({
     type: String,
     require: true,
   },
-  bannerAltText:{
-     type: String,
+  slug: {
+    type: String,
+    unique: true,
+  },
+  bannerAltText: {
+    type: String,
     require: true,
   },
   image: {
-     type: String,
+    type: String,
     require: true,
   },
-   imageAltText:{
-     type: String,
+  imageAltText: {
+    type: String,
     require: true,
   },
   content: {
@@ -30,6 +34,10 @@ const brandSchema = new Schema({
     type: String,
     require: true,
   },
+   metaTitle: { type: String },
+  metaDescription: { type: String },
+  keywords: { type: String },
+  robots: { type: String },
   createdAt: {
     type: Date,
     default: Date.now,

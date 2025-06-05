@@ -13,6 +13,11 @@ const __dirname = path.dirname(__filename);
 export const createProducts = catchAsyncError(async (req, res, next) => {
   const {
     name,
+    slug,
+    metaTitle,
+      metaDescription,
+      keywords,
+      robots,
     actualPrice,
     size,
     description,
@@ -70,6 +75,11 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
 
     const productData = {
       name,
+      slug,
+       metaTitle,
+      metaDescription,
+      keywords,
+      robots,
       actualPrice,
       size,
       description,

@@ -7,6 +7,14 @@ const blogSchema = new Schema({
     type: String,
     require: true,
   },
+  metaTitle: { type: String },
+  metaDescription: { type: String },
+  keywords: { type: String },
+  robots: { type: String },
+   slug: {
+    type: String,
+    unique: true,
+  },
   shortDescription: {
     type: String,
     require: true,
