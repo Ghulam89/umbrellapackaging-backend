@@ -342,9 +342,9 @@ app.use("/requestQuote", requestQuoteRouter);
 app.use("/instantQuote", instantQuoteRouter);
 
 
-// app.get("/apis", async (req, res) => {
-//   res.send("App Is Running");
-// });
+app.get("/apis", async (req, res) => {
+  res.send("App Is Running");
+});
 
 
 // app.get("/apis", async (req, res) => {
