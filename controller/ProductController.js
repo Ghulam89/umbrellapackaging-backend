@@ -155,6 +155,7 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
             $push: {
               _id: "$_id",
               name: "$name",
+              slug: "$slug",
               price: "$price",
               images: "$images",
               actualPrice: "$actualPrice",
