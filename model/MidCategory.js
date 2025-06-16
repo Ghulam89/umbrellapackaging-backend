@@ -42,6 +42,14 @@ const midcategorySchema = new Schema({
      type: String,
     require: true,
   },
+  videoUpperHeading:{
+     type: String,
+    require: true,
+  },
+  videoUpperDescription:{
+     type: String,
+    require: true,
+  },
   videoLink: {
     type: String,
     require: true,
