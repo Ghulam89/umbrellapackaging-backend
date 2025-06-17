@@ -10,6 +10,34 @@ import mongoose from "mongoose";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
+   // Improved formatFileName function
+  const formatFileName = (fileName) => {
+    if (!fileName) return '';
+    
+    // Remove file extension
+    let formatted = fileName.replace(/\.[^/.]+$/, '');
+    
+    // Replace all special characters (dashes, underscores) with spaces
+    formatted = formatted.replace(/[_-]/g, ' ');
+    
+    // Remove any remaining special characters except spaces and letters
+    formatted = formatted.replace(/[^\w\s]/gi, '');
+    
+    // Trim whitespace and capitalize each word
+    formatted = formatted
+      .trim()
+      .split(/\s+/)
+      .map(word => 
+        word.length > 0 
+          ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() 
+          : ''
+      )
+      .join(' ');
+    
+    return formatted;
+  };
+
 export const createProducts = catchAsyncError(async (req, res, next) => {
   const {
     name,
@@ -34,6 +62,9 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
       message: "Both product images (field name: 'images') and banner image (field name: 'bannerImage') are required",
     });
   }
+
+
+ 
 
   const existingProduct = await Products.findOne({ name });
   if (existingProduct) {
@@ -64,7 +95,7 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
 
     const images = productImages.map(image => ({
       url: `images/${image.filename}`.replace(/\\/g, '/'),
-      altText: image.originalname
+      altText: formatFileName(image.originalname)
     }));
 
     const bannerImageFile = Array.isArray(req.files['bannerImage'])
@@ -317,57 +348,71 @@ export const getProductsById = async (req, res, next) => {
 };
 
 export const updateProducts = catchAsyncError(async (req, res, next) => {
-  const {
-    // Other fields...
-    imagesAltTexts = [], // Array of updated alt texts for existing images
-    bannerImageAltText,
-    existingImages // Array of existing images with their current URLs
-  } = req.body;
-  
   const productId = req.params.id;
-  const updateData = { ...req.body };
-
+  
   try {
-    // Get the current product to verify existing images
+    // Get the current product
     const currentProduct = await Products.findById(productId);
     if (!currentProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Handle altText updates for existing images
-    if (imagesAltTexts && existingImages) {
-      const existingImagesParsed = JSON.parse(existingImages);
-      
-      // Update only altText for existing images
-      updateData.images = currentProduct.images.map((img, index) => ({
-        url: img.url, // Keep the same URL
-        altText: imagesAltTexts[index] || img.altText // Update altText if provided
+    // Parse the existing images data from the request
+    const existingImages = req.body.existingImages 
+      ? JSON.parse(req.body.existingImages)
+      : currentProduct.images;
+
+    // Initialize update data with non-image fields
+    const updateData = {
+      ...req.body,
+      // Remove image-related fields that we'll handle separately
+      images: undefined,
+      bannerImage: undefined,
+      existingImages: undefined
+    };
+
+    // Handle images - both existing and new
+    let updatedImages = [];
+
+    // 1. Process existing images that should remain
+    if (existingImages && existingImages.length > 0) {
+      updatedImages = existingImages.map(img => ({
+        url: img.url,
+        altText: img.altText || formatFileName(img.originalPath)
       }));
     }
 
-    // Handle new image uploads (if any)
+    // 2. Add new images if any were uploaded
     if (req.files && req.files['images']) {
       const newImages = Array.isArray(req.files['images'])
         ? req.files['images']
         : [req.files['images']];
 
-      const uploadedImages = newImages.map((image, index) => ({
+      const uploadedImages = newImages.map(image => ({
         url: `images/${image.filename}`.replace(/\\/g, '/'),
-        altText: imagesAltTexts[index + (updateData.images?.length || 0)] || image.originalname
+        altText: req.body.imagesAltTexts?.[updatedImages.length] || formatFileName(image.originalname),
+        originalPath: image.originalname
       }));
 
-      updateData.images = [...(updateData.images || currentProduct.images), ...uploadedImages];
+      updatedImages = [...updatedImages, ...uploadedImages];
+    }
+
+    // Only update images if we have changes
+    if (updatedImages.length > 0) {
+      updateData.images = updatedImages;
     }
 
     // Handle banner image updates
     if (req.files && req.files['bannerImage']) {
       const bannerImageFile = req.files['bannerImage'][0] || req.files['bannerImage'];
       updateData.bannerImage = `images/${bannerImageFile.filename}`.replace(/\\/g, '/');
-    }
-    if (bannerImageAltText) {
-      updateData.bannerImageAltText = bannerImageAltText;
+      updateData.bannerImageAltText = req.body.bannerImageAltText || formatFileName(bannerImageFile.originalname);
+    } else if (req.body.bannerImageAltText) {
+      // Only update alt text if banner image wasn't changed
+      updateData.bannerImageAltText = req.body.bannerImageAltText;
     }
 
+    // Perform the update
     const updatedProduct = await Products.findByIdAndUpdate(
       productId, 
       updateData, 
@@ -380,7 +425,7 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
       message: "Product updated successfully!",
     });
   } catch (error) {
-    // Handle file cleanup if error occurs
+    // Clean up any uploaded files if error occurs
     if (req.files) {
       Object.values(req.files).forEach(fileArray => {
         if (Array.isArray(fileArray)) {
