@@ -141,15 +141,26 @@ export const createCategory = catchAsyncError(async (req, res, next) => {
 });
 
 export const getCategoryById = async (req, res, next) => {
-  const id = req?.params.id;
-  const { title, details, ...otherFields } = req.query;
-  
+  const {id, slug, title, details, ...otherFields } = req.query; 
+
+  if (!id && !slug) {
+    return res.status(400).json({
+      status: "fail",
+      error: "Please provide either ID or Slug",
+    });
+  }
+
   try {
-   
-    let query = MidCategory.findById(id);
-    
+    let query;
+    if (id) {
+      query = MidCategory.findById(id);
+    } else if (slug) {
+      query = MidCategory.findOne({ slug });
+    }
+
     query = query.populate('brandId');
-    
+
+    // Dynamic field selection
     const selectFields = [];
     if (title === 'true') selectFields.push('title');
     if (details === 'true') selectFields.push('details');
@@ -158,11 +169,11 @@ export const getCategoryById = async (req, res, next) => {
         if (otherFields[field] === 'true') selectFields.push(field);
       });
     }
-    
+
     if (selectFields.length > 0) {
       query = query.select(selectFields.join(' '));
     }
-    
+
     const data = await query.exec();
 
     if (!data) {
@@ -177,14 +188,13 @@ export const getCategoryById = async (req, res, next) => {
       data: data,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({
       status: "fail",
       error: "Internal Server Error",
     });
   }
 };
-
 export const updateCategory = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   const categoryId = req.params.id;

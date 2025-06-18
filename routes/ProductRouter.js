@@ -18,7 +18,7 @@ productRouter.route("/categoryProducts/:brandId/products-by-category").get(getBr
 productRouter.route("/related-products/:productId").get(getRelatedProducts);
 productRouter.route("/categoryProducts/:categoryId").get(getProductsByCategory);
 productRouter.route("/search").get(searchProduct);
-productRouter.route("/get/:id").get(getProductsById);
+productRouter.route("/get").get(getProductsById);
 productRouter.route("/delete/:id").delete(deleteproductsById);
 productRouter.route("/update/:id").put(uploadProductImages,updateProducts);
 export default productRouter;

@@ -13,7 +13,7 @@ const  brandRouter = express.Router();
 brandRouter.route("/create").post(uploadBrandImages, createBrand);
 brandRouter.route("/getAll").get(getAllBrand);
 brandRouter.route("/update/:id").put(uploadBrandImages,updateBrand);
-brandRouter.route("/get/:id").get(getBrandById);
+brandRouter.route("/get").get(getBrandById);
 brandRouter.route("/delete/:id").delete(deleteBrandById);
 
 export default brandRouter;

@@ -85,17 +85,39 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
   }
 });
 
+
+
 export const getBrandById = async (req, res, next) => {
-  const id = req?.params.id;
+  const { id, slug } = req.query;
+
+  if (!id && !slug) {
+    return res.status(400).json({
+      status: "fail",
+      error: "Please provide either ID or Slug",
+    });
+  }
+
   try {
-    const data = await Brands.findById(id);
+    let brand;
+    if (id) {
+      brand = await Brands.findById(id); 
+    } else if (slug) {
+      brand = await Brands.findOne({ slug });
+    }
+
+    if (!brand) {
+      return res.status(404).json({
+        status: "fail",
+        error: "Brand not found",
+      });
+    }
 
     res.json({
       status: "success",
-      data: data,
+      data: brand,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({
       status: "fail",
       error: "Internal Server Error",

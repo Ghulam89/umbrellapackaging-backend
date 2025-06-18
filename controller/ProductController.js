@@ -328,18 +328,41 @@ export const getProductsByCategory = catchAsyncError(async (req, res, next) => {
 });
 
 export const getProductsById = async (req, res, next) => {
-  const id = req?.params.id;
+  const { id, slug } = req.query;
+
+  if (!id && !slug) {
+    return res.status(400).json({
+      status: "fail",
+      error: "Please provide either ID or Slug",
+    });
+  }
+
   try {
-    const data = await Products.findById(id)
-      .populate("categoryId")
-      .populate("brandId")
+    let query;
+    if (id) {
+      query = Products.findById(id); 
+    } else if (slug) {
+      query = Products.findOne({ slug }); 
+    }
+
+    // Always populate categoryId and brandId
+    query = query.populate("categoryId").populate("brandId");
+
+    const data = await query.exec();
+
+    if (!data) {
+      return res.status(404).json({
+        status: "fail",
+        error: "Product not found",
+      });
+    }
 
     res.json({
       status: "success",
       data: data,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).json({
       status: "fail",
       error: "Internal Server Error",
