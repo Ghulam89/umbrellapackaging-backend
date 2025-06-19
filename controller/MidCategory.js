@@ -316,37 +316,43 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
 });
 
 export const getAllCategory = catchAsyncError(async (req, res, next) => {
-  const page = parseInt(req.query.page, 10) || 1; 
-  const perPage = 5;
+  const page = parseInt(req.query.page, 10) || 1;
+  const perPage = parseInt(req.query.perPage, 10) || 5;
   const skip = (page - 1) * perPage;
   const searchQuery = req.query.search || '';
+
   try {
     const filter = searchQuery
-    ? { 
-        $or: [
-          { title: { $regex: searchQuery, $options: 'i' } },
-        ],
-      }
-    : {};
+      ? { 
+          $or: [
+            { title: { $regex: searchQuery, $options: 'i' } },
+           
+          ],
+        }
+      : {};
+
     const count = await MidCategory.countDocuments(filter);
-    const categories = await MidCategory.find(filter).populate({
-      path: "brandId",
-      select: "name"
-    }).skip(skip)
-    .limit(perPage)
-    .sort({ updatedAt: -1 });
-  const totalPages = Math.ceil(count / perPage);
+    
+    const categories = await MidCategory.find(filter)
+      .populate({
+        path: "brandId",
+        select: "name"
+      })
+      .sort({ createdAt: -1 }) 
+      .skip(skip)
+      .limit(perPage);
+
+    const totalPages = Math.ceil(count / perPage);
 
     res.status(200).json({
       status: "success",
-      data:categories,
-      
-      totalCategory: count,
-        pagination: {
-          page,
-          perPage,
-          totalPages,
-        }
+      data: categories,
+      totalItems: count,
+      pagination: {
+        currentPage: page,
+        itemsPerPage: perPage,
+        totalPages,
+      }
     });
   } catch (error) {
     console.error("Error fetching categories:", error);
