@@ -349,7 +349,7 @@ export const getProductsById = async (req, res, next) => {
     }
 
     // Always populate categoryId and brandId
-    query = query.populate("categoryId","_id name slug").populate("brandId","_id title slug");
+    query = query.populate("categoryId","_id title slug").populate("brandId","_id name slug");
 
     const data = await query.exec();
 
