@@ -224,7 +224,8 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
         brand: {
           _id: brand._id,
           name: brand.name,
-          image: brand.image
+          image: brand.image,
+          slug: brand.slug,
         },
         categories: productsByCategory
       }
