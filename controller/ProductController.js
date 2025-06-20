@@ -182,6 +182,7 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
           _id: "$categoryInfo._id",
           categoryName: { $first: "$categoryInfo.title" },
           categoryImage: { $first: "$categoryInfo.image" },
+          categorySlug: { $first: "$categoryInfo.slug" },
           products: {
             $push: {
               _id: "$_id",
@@ -207,6 +208,7 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
           _id: 1,
           categoryName: 1,
           categoryImage: 1,
+          categorySlug: 1,
           products: 1,
           productCount: { $size: "$products" }
         }
