@@ -346,7 +346,7 @@ export const getProductsById = async (req, res, next) => {
     }
 
     // Always populate categoryId and brandId
-    query = query.populate("categoryId").populate("brandId");
+    query = query.populate("categoryId","_id name slug").populate("brandId","_id title slug");
 
     const data = await query.exec();
 
@@ -505,11 +505,11 @@ export const getAllProducts = catchAsyncError(async (req, res, next) => {
     const products = await Products.find(filter)
       .populate({
         path: "categoryId",
-        select: "title description"
+        select: "title slug"
       })
       .populate({
         path: "brandId",
-        select: "name logo"
+        select: "name slug"
       })
       .sort(sortOption)
       .skip(skip)

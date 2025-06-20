@@ -336,7 +336,7 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
     const categories = await MidCategory.find(filter)
       .populate({
         path: "brandId",
-        select: "name"
+        select: "name slug"
       })
       .sort({ createdAt: -1 }) 
       .skip(skip)
