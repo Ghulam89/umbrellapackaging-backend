@@ -471,8 +471,8 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
 
 export const getAllProducts = catchAsyncError(async (req, res, next) => {
   try {
-    const page = parseInt(req.query.page, 1);
-    const perPage = parseInt(req.query.perPage, 15);
+    const page = parseInt(req.query.page, 10) || 1;
+    const perPage = parseInt(req.query.perPage, 10) || 15;
     const skip = (page - 1) * perPage;
     const sortOption = getSortOption(req.query.sort);
     let filter = {};
