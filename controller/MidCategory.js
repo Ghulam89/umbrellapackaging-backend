@@ -316,8 +316,8 @@ export const updateCategory = catchAsyncError(async (req, res, next) => {
 });
 
 export const getAllCategory = catchAsyncError(async (req, res, next) => {
-  const page = parseInt(req.query.page, 10) || 1;
-  const perPage = parseInt(req.query.perPage, 10) || 5;
+  const page = parseInt(req.query.page, 1);
+  const perPage = parseInt(req.query.perPage, 15);
   const skip = (page - 1) * perPage;
   const searchQuery = req.query.search || '';
 
