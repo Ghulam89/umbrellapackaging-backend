@@ -134,8 +134,23 @@ export const editorImageUpload = catchAsyncError(async (req, res) => {
   }
 });
 export const getBlogById = catchAsyncError(async (req, res, next) => {
+  const { id, slug } = req.query;
+
+  if (!id && !slug) {
+    return res.status(400).json({
+      status: "fail",
+      error: "Please provide either ID or Slug",
+    });
+  }
+
   try {
-    const blog = await Blogs.findById(req.params.id);
+    let blog;
+    if (id) {
+      blog = await Blogs.findById(id);
+    } else if (slug) {
+      blog = await Blogs.findOne({ slug });
+    }
+
     if (!blog) {
       return res.status(404).json({
         status: "fail",
