@@ -13,7 +13,7 @@ blogRouter.route("/create").post(uploadBlogImages,createBlog);
 blogRouter.route("/getAll").get(getAllBlogs);
 blogRouter.route("/update/:id").put(uploadBlogImages,updateBlog);
 blogRouter.route("/upload-editor-image").post(uploadEditorImage,editorImageUpload);
-blogRouter.route("/get/:id").get(getBlogById);
+blogRouter.route("/get").get(getBlogById);
 blogRouter.route("/delete/:id").delete(deleteBlogById);
 
 export default blogRouter;
