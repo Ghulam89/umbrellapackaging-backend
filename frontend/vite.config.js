@@ -16,6 +16,7 @@ export default defineConfig({
   },
    server: {
     historyApiFallback: true,
+    allowedHosts: ['xleatherjacket.com']
   },
    ssr: {
     noExternal: ['react-helmet-async', 'react-dom/server','react-redux', 'redux-persist', '@reduxjs/toolkit',]
