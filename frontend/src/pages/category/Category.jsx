@@ -88,19 +88,19 @@ const Category = ({ serverData }) => {
               {categoryData?.name}
             </h1>
             <div className=" flex   mt-4 gap-2 flex-wrap items-center">
-              <Link to={'/box-by-industry/'} className="">
+              <Link to={'/category/box-by-industry'} className="">
                 <Button
                   label={"Industry"}
                   className=" bg-[#4440E6] opacity-90 border border-[#4440E6] w-32 text-white hover:bg-[#4440E6]  hover:text-white"
                 />
               </Link>
-              <Link to={'/shapes-styles/'}>
+              <Link to={'/category/shapes-styles'}>
                 <Button
                   label={"Style"}
                   className=" bg-white border border-[#4440E6] w-32 text-[#4440E6] hover:bg-[#4440E6]  hover:text-white "
                 />
               </Link>
-              <Link to={'/boxes-by-material/'}>
+              <Link to={'/category/boxes-by-material'}>
                 <Button
                   label={"Material"}
                   className=" bg-white border border-[#4440E6]  w-32 text-[#4440E6] hover:bg-[#4440E6]  hover:text-white "

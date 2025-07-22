@@ -44,8 +44,8 @@ span{
     @apply text-[#333333] text-[14px] 
 }
 
-a{
-  @apply   text-xs  text-[13px]  font-sans 
+a {
+  @apply text-[13px] font-sans;
 }
 
 h1{

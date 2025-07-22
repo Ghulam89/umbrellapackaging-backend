@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server'
 import App from './App'
+
 import { HelmetProvider } from 'react-helmet-async'
 import axios from 'axios'
 import { BaseUrl } from './utils/BaseUrl'
@@ -66,5 +67,6 @@ export async function render(url) {
       link: helmet?.link?.toString() || '',
       script: helmet?.script?.toString() || '',
     },
+    
   };
 }

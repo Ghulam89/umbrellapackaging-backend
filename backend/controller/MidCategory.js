@@ -320,13 +320,29 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
   const perPage = parseInt(req.query.perPage, 10) || 15;
   const skip = (page - 1) * perPage;
   const searchQuery = req.query.search || '';
+  const requestedCategories = req.query.categories?.split(',') || [];
 
   try {
+    if (requestedCategories.length > 0) {
+      const categories = await MidCategory.find({
+        title: { $in: requestedCategories } 
+      })
+      .populate({
+        path: "brandId",
+        select: "name slug"
+      })
+      .sort({ createdAt: -1 });
+
+      return res.status(200).json({
+        status: "success",
+        data: categories,
+      });
+    }
+
     const filter = searchQuery
       ? { 
           $or: [
             { title: { $regex: searchQuery, $options: 'i' } },
-           
           ],
         }
       : {};

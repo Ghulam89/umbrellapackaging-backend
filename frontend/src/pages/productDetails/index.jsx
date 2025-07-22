@@ -522,7 +522,7 @@ const ProductDetails = ({
                       <img
                         onClick={() => openImageViewer(image, i)}
                         src={`${BaseUrl}/${image?.url}`}
-                        alt=""
+                        alt={image?.altText}
                         className="w-full cursor-pointer h-full object-cover"
                       />
 
