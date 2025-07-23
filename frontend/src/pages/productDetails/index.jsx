@@ -513,7 +513,7 @@ const ProductDetails = ({
         <div className='lg:max-w-6xl max-w-[95%] bg-[#F7F7F7] rounded-lg p-2 flex lg:flex-row flex-col gap-4 mx-auto'>
           <div className='lg:w-6/12'>
             <div className=' pb-7 pt-3'>
-              <p className=' flex items-center gap-1'><h5 className='  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </h5>/<h5 className='  text-[#4440E6] capitalize'> <Link className='font-sans' to={`/${product?.brandId?.slug}/`}>{product?.brandId?.name}</Link> </h5> /<h5 className=' text-[#4440E6] capitalize'> <Link className=' font-sans' to={`/${product?.categoryId?.slug}/`}>{product?.categoryId?.title}</Link> </h5> /<span className='  '>{product?.name} </span></p>
+              <p className=' flex items-center gap-1'><h5 className='  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </h5>/<h5 className='  text-[#4440E6] capitalize'> <Link className='font-sans' to={`/category/${product?.brandId?.slug}`}>{product?.brandId?.name}</Link> </h5> /<h5 className=' text-[#4440E6] capitalize'> <Link className=' font-sans' to={`/sub-category/${product?.categoryId?.slug}`}>{product?.categoryId?.title}</Link> </h5> /<span className='  '>{product?.name} </span></p>
             </div>
             <div className='w-full'>
               <div className="overflow-hidden relative">

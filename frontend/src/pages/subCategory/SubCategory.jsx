@@ -202,7 +202,7 @@ const productItems = CategoryProducts?.map((item, index) => ({
                   </Link>
                 </li>
                 <li className=' text-sm text-[#4440E6]  capitalize'>
-                  <Link to={`/${categoryData?.brandId?.slug}/`} >
+                  <Link to={`/category/${categoryData?.brandId?.slug}`} >
                     / {categoryData?.brandId?.name}
 
                   </Link>
