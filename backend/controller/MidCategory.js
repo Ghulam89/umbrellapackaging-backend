@@ -321,6 +321,7 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
   const skip = (page - 1) * perPage;
   const searchQuery = req.query.search || '';
   const requestedCategories = req.query.categories?.split(',') || [];
+  const sortBy = req.query.sortBy || 'createdAt';
 
   try {
     if (requestedCategories.length > 0) {
@@ -331,7 +332,7 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
         path: "brandId",
         select: "name slug"
       })
-      .sort({ createdAt: -1 });
+      .sort({ title: 1 });
 
       return res.status(200).json({
         status: "success",
@@ -349,12 +350,17 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
 
     const count = await MidCategory.countDocuments(filter);
     
+    let sortOption = { createdAt: -1 };
+    if (searchQuery || sortBy === 'title') {
+      sortOption = { title: 1 };
+    }
+
     const categories = await MidCategory.find(filter)
       .populate({
         path: "brandId",
         select: "name slug"
       })
-      .sort({ createdAt: -1 }) 
+      .sort(sortOption)
       .skip(skip)
       .limit(perPage);
 
@@ -368,7 +374,8 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
         currentPage: page,
         itemsPerPage: perPage,
         totalPages,
-      }
+      },
+      sort: sortOption 
     });
   } catch (error) {
     console.error("Error fetching categories:", error);

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-
 import Button from "../../components/common/Button";
 import Container from "../../components/common/Container";
 import { BaseUrl } from "../../utils/BaseUrl";
 import CardSlider from "../../components/common/CardSlider";
 import CustomPackagingProduced from "../../components/CustomPackagingProduced";
 import PageMetadata from "../../components/common/PageMetadata";
-
 
 const Category = ({ serverData }) => {
   const { slug } = useParams();
@@ -40,6 +38,8 @@ const Category = ({ serverData }) => {
     };
   }, [slug]);
 
+  
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -62,7 +62,6 @@ const Category = ({ serverData }) => {
   return (
 
     <>
-
       <PageMetadata
         title={serverData?.metaTitle || categoryData?.metaTitle || "Custom Packaging Solutions"}
         description={serverData?.metaDescription}

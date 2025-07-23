@@ -7,9 +7,9 @@ const CustomPackaging = () => {
 
   const [categories, setCategories] = useState([])
 
-  const fetchData = async() => {
-    const response = await axios.get(`${BaseUrl}/category/getAll?categories=Apparel and Fashion Boxes,Candle Boxes,Bakery Boxes,Cardboard boxes,CBD Boxes
-,Chocolate Boxes,Cosmetics and Beauty Boxes,Custom Display Boxes,Food Boxes,Gift Boxes,Jewelry Boxes,Kraft Packaging,Magnetic Closure Boxes,Mailer Boxes,Pillow Boxes,Retail Boxes,Rigid Boxes,Subscription Boxes​`)
+  const fetchData = async () => {
+    const response = await axios.get(`${BaseUrl}/category/getAll?categories=Rigid Boxes,Retail Boxes	,Subscription Boxes,Custom Display Boxes​,Apparel and Fashion Boxes,Candle Boxes,Bakery Boxes,Cardboard boxes,CBD Boxes
+,Chocolate Boxes,Cosmetics and Beauty Boxes,Food Boxes,Gift Boxes,Jewelry Boxes,Kraft Packaging,Magnetic Closure Boxes,Mailer Boxes,Pillow Boxes, ​`)
 
     setCategories(response?.data?.data)
   }
