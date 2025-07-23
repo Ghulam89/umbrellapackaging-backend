@@ -24,7 +24,8 @@ const ProductDetails = ({
 }) => {
   const {slug} = useParams()
   const dispatch = useDispatch()
-  const [product,setProduct] = useState(null)
+  // Use serverData only for the initial render (SSR/hydration)
+  const [product, setProduct] = useState(serverData || null);
   const [relatedProduct, setRelatedProduct] = useState([])
   const images = [
     "https://umbrellapackaging.com/wp-content/uploads/2024/07/Cardboard-Bags.webp",
@@ -490,20 +491,23 @@ const ProductDetails = ({
 
   return (
     <>
-
- <PageMetadata
-        title={serverData?.metaTitle || product?.metaTitle || "Custom Packaging Solutions"}
-        description={serverData?.metaDescription}
-        keywords={serverData?.keywords}
-        ogUrl={`${BaseUrl}/category/${slug}`}
-        ogImage={`${BaseUrl}/${product?.bannerImage}`}
-        ogImageWidth="1200"
-        ogImageHeight="630"
-        canonicalUrl={`${BaseUrl}/${slug}`}
-        breadcrumbSchema={breadcrumbSchema}
-         productSchema={productSchema}
-        robots={serverData?.robots ? "noindex, nofollow" : "noindex, nofollow"}
-      />
+      {/* Only render PageMetadata when product is available */}
+      {product && (
+        <PageMetadata
+          title={product.metaTitle || "Custom Packaging Solutions"}
+          description={product.metaDescription || ""}
+          keywords={product.keywords || ""}
+          ogUrl={`${BaseUrl}/category/${slug}`}
+          ogImage={`${BaseUrl}/${product.bannerImage || ""}`}
+          ogImageWidth="1200"
+          ogImageHeight="630"
+          canonicalUrl={`${BaseUrl}/${slug}`}
+          breadcrumbSchema={breadcrumbSchema}
+          productSchema={productSchema}
+          // robots={product.robots || "index, follow"}
+          robots={"noindex, nofollow"}
+        />
+      )}
 
       <section className='py-8'>
         <div className='lg:max-w-6xl max-w-[95%] bg-[#F7F7F7] rounded-lg p-2 flex lg:flex-row flex-col gap-4 mx-auto'>

@@ -8,7 +8,8 @@ import { Helmet } from 'react-helmet-async';
 
 function SingleBlog({ serverData }) {
     const { slug } = useParams();
-    const [singleBlog, setSingleBlog] = useState({});
+    // Use serverData only for the initial render (SSR/hydration)
+    const [singleBlog, setSingleBlog] = useState(serverData || {});
     const [blogs, setBlogs] = useState([])
     const fetchBlogs = async () => {
         try {
@@ -31,44 +32,37 @@ function SingleBlog({ serverData }) {
     useEffect(() => {
         fetchBlogs();
         fetchAllBlogs();
-    }, []);
+    }, [slug]);
 
     return (
-
         <>
-
-            <Helmet>
-                <title>{serverData?.metaTitle}</title>
-                <meta
-                    name="description"
-                    content={`${serverData?.metaDescription}`}
-                />
-                <meta
-                    name="keywords"
-                    content={`${serverData?.keywords}`}
-                />
-                <meta name="robots" content="noindex, nofollow" />
-                {/* Canonical URL */}
-                <link rel="canonical" href={`${BaseUrl}/blog/${slug}`} />
-
-                {/* Open Graph / Facebook */}
-                <meta property="og:type" content="website" />
-                <meta property="og:url" content={`${BaseUrl}/${slug}`} />
-                <meta property="og:title" content={serverData?.metaTitle} />
-                <meta property="og:description" content={serverData?.metaDescription} />
-                <meta property="og:image" content={`${BaseUrl}/${serverData?.image}`} />
-                <meta property="og:image:width" content="768" />
-                <meta property="og:image:height" content="499" />
-                <meta property="og:image:type" content="image/webp" />
-                <meta property="og:site_name" content="Umbrella Custom Packaging" />
-                <meta property="og:locale" content="en_US" />
-                <meta property="article:modified_time" content={new Date().toISOString()} />
-                {/* Twitter */}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={serverData?.metaTitle} />
-                <meta name="twitter:description" content={serverData?.metaDescription} />
-                <meta name="twitter:image" content={`${BaseUrl}/${serverData?.image}`} />
-            </Helmet>
+            {/* Only render Helmet meta tags when singleBlog is available */}
+            {singleBlog && singleBlog.metaTitle && (
+                <Helmet>
+                    <title>{singleBlog.metaTitle}</title>
+                    <meta name="description" content={singleBlog.metaDescription || ''} />
+                    <meta name="keywords" content={singleBlog.keywords || ''} />
+                    <meta name="robots" content={singleBlog.robots || 'index, follow'} />
+                    <link rel="canonical" href={`${BaseUrl}/blog/${slug}`} />
+                    {/* Open Graph / Facebook */}
+                    <meta property="og:type" content="website" />
+                    <meta property="og:url" content={`${BaseUrl}/blog/${slug}`} />
+                    <meta property="og:title" content={singleBlog.metaTitle} />
+                    <meta property="og:description" content={singleBlog.metaDescription || ''} />
+                    <meta property="og:image" content={`${BaseUrl}/${singleBlog.image || ''}`} />
+                    <meta property="og:image:width" content="768" />
+                    <meta property="og:image:height" content="499" />
+                    <meta property="og:image:type" content="image/webp" />
+                    <meta property="og:site_name" content="Umbrella Custom Packaging" />
+                    <meta property="og:locale" content="en_US" />
+                    <meta property="article:modified_time" content={new Date().toISOString()} />
+                    {/* Twitter */}
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:title" content={singleBlog.metaTitle} />
+                    <meta name="twitter:description" content={singleBlog.metaDescription || ''} />
+                    <meta name="twitter:image" content={`${BaseUrl}/${singleBlog.image || ''}`} />
+                </Helmet>
+            )}
 
             <div className='max-w-7xl mx-auto py-6 px-4'>
                 <div className='flex gap-8 md:flex-row flex-col'>

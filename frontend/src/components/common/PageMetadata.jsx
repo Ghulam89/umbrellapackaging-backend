@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 const PageMetadata = ({
     title ,
-    description,
+    description='',
     keywords = '',
     author = '',
     ogUrl = '',
@@ -19,9 +19,58 @@ const PageMetadata = ({
     robots
 }) => {
     useEffect(() => {
+        // Update document title
         document.title = title;
-       
-    }, [title]);
+      
+        // Update or create meta description
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+          metaDesc.setAttribute('content', description);
+        } else {
+          metaDesc = document.createElement('meta');
+          metaDesc.name = 'description';
+          metaDesc.content = description;
+          document.head.appendChild(metaDesc);
+        }
+      
+        // Update or create meta keywords (if provided)
+        if (keywords) {
+          let metaKeywords = document.querySelector('meta[name="keywords"]');
+          if (metaKeywords) {
+            metaKeywords.setAttribute('content', keywords);
+          } else {
+            metaKeywords = document.createElement('meta');
+            metaKeywords.name = 'keywords';
+            metaKeywords.content = keywords;
+            document.head.appendChild(metaKeywords);
+          }
+        }
+      
+        if (canonicalUrl) {
+          let linkCanonical = document.querySelector('link[rel="canonical"]');
+          if (linkCanonical) {
+            linkCanonical.setAttribute('href', canonicalUrl);
+          } else {
+            linkCanonical = document.createElement('link');
+            linkCanonical.rel = 'canonical';
+            linkCanonical.href = canonicalUrl;
+            document.head.appendChild(linkCanonical);
+          }
+        }
+
+        if (robots) {
+            let metaRobots = document.querySelector('meta[name="robots"]');
+            if (metaRobots) {
+              metaRobots.setAttribute('content', robots);
+            } else {
+              metaRobots = document.createElement('meta');
+              metaRobots.name = 'robots';
+              metaRobots.content = robots;
+              document.head.appendChild(metaRobots);
+            }
+          }
+
+      }, [title, description, keywords, canonicalUrl,robots]);
 
     return (
         <Helmet>

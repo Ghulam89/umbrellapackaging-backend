@@ -63,16 +63,17 @@ const Category = ({ serverData }) => {
 
     <>
       <PageMetadata
-        title={serverData?.metaTitle || categoryData?.metaTitle || "Custom Packaging Solutions"}
-        description={serverData?.metaDescription}
-        keywords={serverData?.keywords}
+        title={categoryData?.metaTitle || serverData?.metaTitle || "Custom Packaging Solutions"}
+        description={categoryData?.metaDescription || serverData?.metaDescription || ""}
+        keywords={categoryData?.keywords || serverData?.keywords || ""}
         ogUrl={`${BaseUrl}/category/${slug}`}
         ogImage={`${BaseUrl}/${categoryData?.bannerImage}`}
         ogImageWidth="1200"
         ogImageHeight="630"
         canonicalUrl={`${BaseUrl}/category/${slug}`}
         breadcrumbSchema={breadcrumbSchema}
-        robots={serverData?.robots ? "noindex, nofollow" : "noindex, nofollow"}
+        // robots={categoryData?.robots || serverData?.robots || "noindex, nofollow"}
+        robots={"noindex, nofollow"}
       />
 
 
@@ -232,3 +233,4 @@ const Category = ({ serverData }) => {
 };
 
 export default Category;
+
