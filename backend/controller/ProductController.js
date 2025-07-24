@@ -238,7 +238,7 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
 
 
 export const getRelatedProducts = catchAsyncError(async (req, res, next) => {
-  const productSlug = req.params.slug; // Changed from productId to slug
+  const productSlug = req.query.slug;
 
   try {
     // 1. Find the main product by slug
@@ -251,7 +251,7 @@ export const getRelatedProducts = catchAsyncError(async (req, res, next) => {
     }
 
     const relatedProducts = await Products.find({
-      _id: { $ne: mainProduct._id }, // Exclude the main product by its ID
+      _id: { $ne: mainProduct._id },
       $or: [
         { categoryId: mainProduct.categoryId },
         { brandId: mainProduct.brandId }, 
