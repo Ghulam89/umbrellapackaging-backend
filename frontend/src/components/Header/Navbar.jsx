@@ -64,7 +64,7 @@ const Navbar = () => {
           <Link to={`/`}>
             <img src={logo} alt="" className="sm:w-[135px] w-[300px]" />
           </Link>
-          <div className="w-xl relative search-container">
+          <div className="w-lg relative search-container">
             <Input
               placeholder={"Search For Products"}
               className={"rounded-full p-2.5 w-full border-2 bg-white border-gray-300"}

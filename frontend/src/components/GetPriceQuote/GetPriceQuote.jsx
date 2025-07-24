@@ -104,7 +104,7 @@ const GetPriceQuote = () => {
   return (
     <div className="sm:max-w-6xl max-w-[95%] mx-auto py-7">
       <div className="bg-[#F7F7F7] rounded-lg p-4 md:p-6 w-full">
-          <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
+          <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333] ">
           Get Price Quote
         </h2>
 

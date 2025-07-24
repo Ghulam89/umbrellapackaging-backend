@@ -13,7 +13,7 @@ const BlogCard = ({data}) => {
           <img src={`${BaseUrl}/${data?.image}`} alt="" className=" w-full h-full object-center object-cover" />
           </div>
           <div className=" h-64 shadow border p-2 border-t-0  border-gray-100">
-          <strong className="  font-bold text-black   text-2xl  whitespace-pre-wrap py-3">{data?.title?.slice(0,70)}</strong>
+          <strong className="  font-bold text-[#333333]  text-2xl  whitespace-pre-wrap py-3">{data?.title?.slice(0,70)}</strong>
          <div 
               className="text-gray-600 mb-4 flex-1 line-clamp-3"
               dangerouslySetInnerHTML={{ __html: data?.content }}

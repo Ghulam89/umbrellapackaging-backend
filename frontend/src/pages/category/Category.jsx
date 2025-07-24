@@ -109,11 +109,11 @@ const Category = ({ serverData }) => {
 
             </div>
             <div className="mt-7">
-              <Link to={'/shop/'}>
+              <Link to={'/shop'}>
                 <Button
 
                   label={"Our Catalogue"}
-                  className=" bg-white border border-[#4440E6] text-[#4440E6] hover:bg-[#4440E6]  hover:text-white w-80"
+                  className=" bg-white border border-[#4440E6] text-[#4440E6] hover:bg-[#4440E6]  hover:text-white sm:w-80 w-60"
                 />
               </Link>
             </div>

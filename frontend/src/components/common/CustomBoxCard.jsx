@@ -9,7 +9,7 @@ const CustomBoxCard = ({ title, subTitle, description, image, buttonUrl }) => {
           <div className="sm:p-5 p-3">
                       <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
 {title}</h2>
-            <h3 className="pt-4"> <strong>{subTitle}</strong></h3>
+            <h3 className="pt-4 sm:text-2xl text-xl"> <strong>{subTitle}</strong></h3>
             <p className="pt-2.5">{description}</p>
             <Button
               label={"Get Quote"}

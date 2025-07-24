@@ -132,7 +132,7 @@ const BottomNav = ({ Menu, OpenMenu }) => {
           {allCategories?.map((category, index) => (
             <li key={index}>
               <NavLink
-                to={`/${category?.slug}`}
+                to={`/category/${category?.slug}`}
                 className="flex items-center  font-sans gap-1 py-2.5 text-sm text-[#333333]  font-medium transition-colors"
                 onClick={OpenMenu}
               >
@@ -146,7 +146,7 @@ const BottomNav = ({ Menu, OpenMenu }) => {
                   {category.midcategories.map((submenu, subIndex) => (
                     <li key={subIndex}>
                       <NavLink
-                        to={`/${submenu.slug}`}
+                        to={`/sub-category/${submenu.slug}`}
                         className="text-sm  text-[#333333]  font-medium flex gap-0.5 items-center transition-colors"
                         onClick={OpenMenu}
                       >
