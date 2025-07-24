@@ -7,8 +7,9 @@ const CustomBoxCard = ({ title, subTitle, description, image, buttonUrl }) => {
       <div className="flex  sm:flex-row  flex-col items-center">
         <div className="sm:w-6/12 w-full">
           <div className="sm:p-5 p-3">
-            <h1>{title}</h1>
-            <h2 className="pt-4">{subTitle}</h2>
+                      <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
+{title}</h2>
+            <h3 className="pt-4"> <strong>{subTitle}</strong></h3>
             <p className="pt-2.5">{description}</p>
             <Button
               label={"Get Quote"}

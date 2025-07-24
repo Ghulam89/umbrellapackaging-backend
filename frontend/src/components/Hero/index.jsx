@@ -14,10 +14,14 @@ const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="   sm:max-w-6xl max-w-[95%] pt-5 mx-auto">
-      <div className=" bg-[#B8B6FA99] flex sm:flex-row  flex-col   my-3.5 px-9 pb-4 rounded-md w-full">
-        <div className=" sm:w-7/12 w-full">
-          <h1 className=" font-semibold">Umbrella Custom Packaging</h1>
-          <h3 className=" pt-1.5 text-[#4440E6]">Customize Everything Under This Umbrella</h3>
+     
+      <div className=" bg-[#B8B6FA99] flex sm:flex-row   flex-col-reverse  my-3.5 pt-3 sm:px-9 px-4 pb-4 rounded-md w-full">
+        
+        <div className=" sm:w-7/12  w-full">
+          <div className=" hidden sm:block">
+            <strong className=" sm:text-[38px] text-[20px] text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
+          <h2 className=" sm:text-2xl text-sm  font-medium  text-[#4440E6]">Customize Everything Under This Umbrella</h2>
+          </div>
           <div className=" flex  mt-7 gap-2 flex-wrap items-center">
             <Link to={'/sub-category/fashion-apparel-packaging-boxes'}>
               <Button
@@ -64,35 +68,40 @@ const Hero = () => {
 
           </div>
         </div>
+        
         <div className=" sm:w-6/12 w-full">
           <img src={Hero1} className=" w-full" alt="" />
         </div>
+         <div className=" block sm:hidden">
+            <strong className=" sm:text-[38px] text-[20px] text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
+          <h2 className=" sm:text-2xl text-sm  font-medium  text-[#4440E6]">Customize Everything Under This Umbrella</h2>
+          </div>
       </div>
 
       <div className=" bg-[#B8B6FA99]  grid sm:grid-cols-6  grid-cols-2 mt-8 p-4 rounded-md w-full">
         <div className=" flex gap-1 items-center">
           <img src={Icon1} width={30} alt="" />
-          <h5>Free Quote</h5>
+          <strong className="  font-light">Free Quote</strong>
         </div>
         <div className=" flex gap-1 items-center">
           <img src={Icon2} width={30} alt="" />
-          <h5>Free Design support</h5>
+          <strong className="  font-light">Free Design support</strong>
         </div>
         <div className=" flex gap-1 items-center">
           <img src={Icon3} width={30} alt="" />
-          <h5>Free Lamination</h5>
+          <strong className="  font-light">Free Lamination</strong>
         </div>
         <div className=" flex gap-1 items-center">
           <img src={Icon4} width={30} alt="" />
-          <h5>Free Shipping</h5>
+          <strong className="  font-light">Free Shipping</strong>
         </div>
         <div className=" flex gap-1 items-center">
           <img src={Icon5} width={30} alt="" />
-          <h5>FSC Certified</h5>
+          <strong className="  font-light">FSC Certified</strong>
         </div>
         <div className=" flex gap-1 items-center">
           <img src={Icon6} width={30} alt="" />
-          <h5>Quickest Turnaround</h5>
+          <strong  className="  font-light">Quickest Turnaround</strong>
         </div>
       </div>
 

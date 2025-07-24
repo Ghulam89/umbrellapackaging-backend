@@ -358,8 +358,8 @@ const ProductDetails = ({
       id: 4,
       title: "Delivery",
       content: <div className=' bg-white rounded-lg  p-3'>
-        <h4>Experience fastest free delivery
-        </h4>
+        <strong className=' text-2xl'>Experience fastest free delivery
+        </strong>
         <p className=' pt'>We prioritize our customers’ convenience above all at Umbrella Custom Packaging. That’s why we’re happy to offer a wide range of payment options to suit your preferences. So, feel confident knowing that when you choose Umbrella Custom Packaging, paying for your orders is as effortless as possible.
 
         </p>
@@ -399,7 +399,7 @@ const ProductDetails = ({
   }
 
   const fetchRelatedProducts = async () => {
-    const response = await axios.get(`${BaseUrl}/products/related-products/${slug}`)
+    const response = await axios.get(`${BaseUrl}/products/related-products?slug=${slug}`)
     setRelatedProduct(response?.data?.data)
   }
 
@@ -513,7 +513,7 @@ const ProductDetails = ({
         <div className='lg:max-w-6xl max-w-[95%] bg-[#F7F7F7] rounded-lg p-2 flex lg:flex-row flex-col gap-4 mx-auto'>
           <div className='lg:w-6/12'>
             <div className=' pb-7 pt-3'>
-              <p className=' flex items-center gap-1'><h5 className='  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </h5>/<h5 className='  text-[#4440E6] capitalize'> <Link className='font-sans' to={`/category/${product?.brandId?.slug}`}>{product?.brandId?.name}</Link> </h5> /<h5 className=' text-[#4440E6] capitalize'> <Link className=' font-sans' to={`/sub-category/${product?.categoryId?.slug}`}>{product?.categoryId?.title}</Link> </h5> /<span className='  '>{product?.name} </span></p>
+              <p className=' flex items-center gap-1'><strong className=' font-normal  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </strong>/<strong className=' font-normal text-[#4440E6] capitalize'> <Link className='font-sans' to={`/category/${product?.brandId?.slug}`}>{product?.brandId?.name}</Link> </strong> /<strong className='font-normal text-[#4440E6] capitalize'> <Link className=' font-sans' to={`/sub-category/${product?.categoryId?.slug}`}>{product?.categoryId?.title}</Link> </strong> /<span className='  '>{product?.name} </span></p>
             </div>
             <div className='w-full'>
               <div className="overflow-hidden relative">
@@ -573,7 +573,7 @@ const ProductDetails = ({
           </div>
 
           <div className="pt-3.5 lg:w-6/12">
-            <h2 className='pb-2 text-black'>{product?.name}</h2>
+            <h1  className='pb-2 font-semibold font-sans sm:text-[28px] text-[20px]'>{product?.name}</h1>
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="w-full">
@@ -685,7 +685,7 @@ const ProductDetails = ({
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Unit
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                    <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="unit" value={formData.unit}
                     onChange={handleChange} className="w-full outline-none bg-lightGray   text-gray-500 placeholder:text-gray-400 placeholder:text-sm  border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -706,7 +706,7 @@ const ProductDetails = ({
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Stock
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                    <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="stock" value={formData.stock}
                     onChange={handleChange} className="w-full border text-gray-500 border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -737,7 +737,7 @@ const ProductDetails = ({
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Colors
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                    <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="colors" value={formData.colors}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -766,7 +766,7 @@ const ProductDetails = ({
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Printing Sides
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                    <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="printingSides" value={formData.printingSides}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -802,7 +802,7 @@ const ProductDetails = ({
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Add-Ons
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                    <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="addOns" value={formData.addOns}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -941,10 +941,10 @@ const ProductDetails = ({
 
       <div className=" sm:max-w-6xl max-w-[95%]  mt-5 py-4 bg-[#F7F7F7] rounded-lg  px-3 mx-auto">
         <div className="text-center mb-12">
-          <h1 className="">
+              <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
             Enhance Your Product Presentation with Our Special Packaging Features
 
-          </h1>
+          </h2>
 
         </div>
 
@@ -958,7 +958,7 @@ const ProductDetails = ({
                 <div>
                   <img src={feature.icon} alt='' className=' rounded-lg w-full' />
                 </div>
-                <h4 className="text-lg font-medium text-gray-900 mb-2">{feature.name}</h4>
+                <strong className="text-xl font-medium text-gray-900 mb-2">{feature.name}</strong>
               </div>
             </div>
           ))}
@@ -995,18 +995,24 @@ const ProductDetails = ({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-4 w-full mb-4">
                 {/* Product Name */}
                 <div className="border border-gray-200 rounded-lg p-2 md:p-3 bg-white shadow-sm">
-                  <button className="bg-[#5A56E9] hover:bg-[#4440E6] text-white w-full text-sm md:text-base font-medium py-2 px-3 rounded">
+                  <button className="bg-[#5A56E9] mb-2 hover:bg-[#4440E6] text-white w-full text-sm md:text-base font-medium py-2 px-3 rounded">
                     Product Name
                   </button>
-                  <h5 className="text-center py-3 text-gray-800 font-medium">{product?.name}</h5>
+                  <div className=' pt-3 text-center'>
+                  <strong className="  text-gray-400  font-medium text-[16px]">{product?.name}</strong>
+
+                  </div>
                 </div>
 
                 {/* Size */}
                 <div className="border border-gray-200 rounded-lg p-2 md:p-3 bg-white shadow-sm">
-                  <button className="bg-[#5A56E9] hover:bg-[#4440E6] text-white w-full text-sm md:text-base font-medium py-2 px-3 rounded">
+                  <button className="bg-[#5A56E9] mb-2 hover:bg-[#4440E6] text-white w-full text-sm md:text-base font-medium py-2 px-3 rounded">
                     Size
                   </button>
-                  <h5 className="text-center py-3 text-gray-800 font-medium">{product?.size}</h5>
+                   <div className=' pt-3 text-center'>
+                  <strong className="  text-gray-400  font-medium text-[16px]">{product?.size}</strong>
+
+                  </div>
                 </div>
 
                 {/* Price */}
@@ -1014,7 +1020,10 @@ const ProductDetails = ({
                   <button className="bg-[#5A56E9] hover:bg-[#4440E6] text-white w-full text-sm md:text-base font-medium py-2 px-3 rounded">
                     Price
                   </button>
-                  <h5 className="text-center py-3 text-gray-800 font-medium">${product?.actualPrice}</h5>
+                            <div className=' pt-3 text-center'>
+                  <strong className="  text-gray-400  font-medium text-[16px]">${product?.actualPrice}</strong>
+
+                  </div>
                 </div>
               </div>
 
@@ -1059,7 +1068,7 @@ const ProductDetails = ({
         <Container fullWidth={false} className="">
           <div className="">
             <div>
-              <h3 className="">RELATED PRODUCTS</h3>
+              <h3 className=" text-2xl font-semibold">RELATED PRODUCTS</h3>
             </div>
             <div className=' py-5'>
               <CardSlider item={relatedProduct?.relatedProducts} />

@@ -104,16 +104,16 @@ const GetPriceQuote = () => {
   return (
     <div className="sm:max-w-6xl max-w-[95%] mx-auto py-7">
       <div className="bg-[#F7F7F7] rounded-lg p-4 md:p-6 w-full">
-        <h1 className="text-[#333333] text-center font-semibold text-lg md:text-xl mb-4">
+          <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
           Get Price Quote
-        </h1>
+        </h2>
 
 
         <form onSubmit={handleSubmit}>
 
           {step === 2 && (
             <div className="pt-3.5">
-              <h6 className="text-sm md:text-base font-medium mb-4">Personal Information</h6>
+              <strong className=" text-lg text-[#333333] mb-4">Personal Information</strong>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="w-full">
@@ -188,7 +188,7 @@ const GetPriceQuote = () => {
 
           {step === 1 && (
             <div className="pt-3.5">
-              <h6 className="text-sm md:text-base font-medium mb-4">Product Specification</h6>
+              <strong className=" text-lg text-[#333333] mb-4">Product Specification</strong>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 <div className="w-full">
@@ -250,7 +250,7 @@ const GetPriceQuote = () => {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Unit
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                    <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="unit" value={formData.unit}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -283,7 +283,7 @@ const GetPriceQuote = () => {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Stock
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                      <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="stock" value={formData.stock}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -314,7 +314,7 @@ const GetPriceQuote = () => {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Colors
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                      <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="colors" value={formData.colors}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -343,7 +343,7 @@ const GetPriceQuote = () => {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Printing Sides
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                      <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="printingSides" value={formData.printingSides}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -379,7 +379,7 @@ const GetPriceQuote = () => {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Add-Ons
-                    <h5 className=" text-red-600 m-0 pl-1">*</h5>
+                    <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
                   <select name="addOns" value={formData.addOns}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"

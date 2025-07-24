@@ -6,7 +6,7 @@ const ProducedCard = ({data}) => {
         {data.map((item) => (
           <div key={item.title} className="col-span-1 border rounded-lg p-4  border-black  hover:-translate-y-3 transform transition duration-300 ease-in-out">
             <div className=" text-center">
-              <h5 className=" font-semibold ">{item?.title}</h5>
+              <strong className=" font-semibold ">{item?.title}</strong>
               <p className=" font-extralight text-gray-700">{item?.desc}</p>
             </div>
           </div>

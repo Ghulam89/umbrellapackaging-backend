@@ -49,14 +49,12 @@ a {
 }
 
 h1{
-    @apply     sm:text-[38px] text-[28px] text-[#333333]  font-sans 
+    @apply   text-[#333333]  
 }
 
-h2{
-  @apply  sm:text-3xl text-xl  text-[#333333]
-}
+
 h3{
-  @apply  sm:text-2xl text-xl  font-medium font-sans  opacity-90
+  @apply    font-sans  opacity-90
 }
 h4{
   @apply sm:text-xl text-base

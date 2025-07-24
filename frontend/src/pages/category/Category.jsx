@@ -78,12 +78,12 @@ const Category = ({ serverData }) => {
 
 
       <Container>
-        <div style={{ backgroundColor: categoryData?.bgColor }} className="flex  sm:max-w-6xl max-w-[95%]  mx-auto sm:flex-row  items-center flex-col  my-3.5 p-8 rounded-md w-full">
+        <div style={{ backgroundColor: categoryData?.bgColor }} className="flex  sm:max-w-6xl max-w-[95%]  mx-auto sm:flex-row  items-center flex-col  my-3.5 sm:p-8 p-4 rounded-md w-full">
           <div className=" sm:w-7/12 w-full">
-            <h1 className=" font-semibold">Umbrella Custom Packaging</h1>
+            <strong className=" sm:text-[38px] text-[20px] m-0 text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
             <h1
               style={{ color: "#4440E6" }}
-              className=" pt-1.5    font-sans   opacity-90 font-medium capitalize  text-[#4440E6]"
+              className="  font-sans  sm:text-4xl text-xl  opacity-90 font-medium capitalize  text-[#4440E6]"
             >
               {categoryData?.name}
             </h1>
@@ -132,9 +132,9 @@ const Category = ({ serverData }) => {
         </div>
 
         <div className=" bg-[#F7F7F7] rounded-xl  sm:max-w-6xl max-w-[95%]  mx-auto py-8 px-5  my-8">
-          <h1 className=" text-center">
+          <h2 className="sm:text-[35px] text-[25px]    text-center  font-sans   font-[600] text-[#333333]">
             Discover Our Custom Packaging Variety
-          </h1>
+          </h2>
 
           <p className=" text-center pt-5">
             Check out all the different types of boxes we have at Umbrella
@@ -153,7 +153,7 @@ const Category = ({ serverData }) => {
             <Container fullWidth={false} className=" sm:max-w-6xl max-w-[95%]  mx-auto">
               <div className=" flex sm:flex-row flex-col gap-3  py-9 justify-between items-center">
                 <div>
-                  <h2 className="">{item?.categoryName}</h2>
+                  <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333]">{item?.categoryName}</h2>
                 </div>
                 <div>
                   <Link to={`/sub-category/${item?.categorySlug}`} >
@@ -189,9 +189,9 @@ const Category = ({ serverData }) => {
           <div className='w-full lg:w-1/2 '>
 
             <div className=" pt-3">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="sm:text-[38px] text-[25px]     font-sans   font-[600] text-[#333333]">
                 Why Choose US?
-              </h1>
+              </h2>
               <div className=' overflow-y-auto h-56'>
                 <p dangerouslySetInnerHTML={{
                   __html: (categoryData?.content)

@@ -60,11 +60,11 @@ const CustomPackagingApart = () => {
     <>
      <div className="sm:max-w-6xl  my-6  max-w-[95%] mx-auto">
      <div className="text-center pb-3">
-     <h1 className="text-[#333333] pb-3.5 font-semibold">
+          <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
      Your Packaging Partner: What Sets Umbrella Custom Packaging Apart
 
 
-        </h1>
+        </h2>
         <div className='rounded-lg p-3 h-56 flex justify-center items-center bg-[#eff4fe]'>
         <Swiper
         slidesPerView={1}
@@ -99,7 +99,7 @@ const CustomPackagingApart = () => {
             <SwiperSlide key={item.id}>
                 <div className="text-center">
                 <img src={item.icon} alt=""  width={60} className=' mx-auto' />
-                <h5 className=" font-semibold">{item.title}</h5>
+                <strong className=" font-semibold">{item.title}</strong>
                 <p className=" m-0 text-sm">
                     {item.description}
                 </p>

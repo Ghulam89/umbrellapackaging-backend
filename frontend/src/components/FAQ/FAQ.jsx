@@ -44,7 +44,7 @@ const FAQ = () => {
       <div className="sm:max-w-6xl max-w-[95%] mx-auto">
         <div className="">
           <div className="text-center">
-            <h1 className="pt-7">FAQ's</h1>
+            <h2 className="sm:text-[35px] text-[25px]  pt-7    font-sans   font-[600] text-[#333333]">FAQ's</h2>
             <Button label={'View All'} className="bg-[#4440E6] mx-auto text-white mt-2 opacity-90" />
           </div>
           

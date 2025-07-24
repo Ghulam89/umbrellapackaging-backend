@@ -213,9 +213,9 @@ const productItems = CategoryProducts?.map((item, index) => ({
                 </li>
               </ul>
               <div className=" pt-3">
-                <h2 className=" font-bold text-gray-900 font-sans pt-4 pb-6">
+                <h1 className=" font-bold text-gray-900 sm:text-3xl text-xl font-sans pt-4 pb-6">
                   {categoryData?.subTitle}
-                </h2>
+                </h1>
                 <div className=' overflow-y-auto h-44'>
                   <p dangerouslySetInnerHTML={{ __html: categoryData?.description}}
                     className="text-sm leading-6 font-sans ">
@@ -264,10 +264,10 @@ const productItems = CategoryProducts?.map((item, index) => ({
       <div className='  py-6'>
         <div className=' sm:max-w-6xl max-w-[95%] mx-auto'>
           <div className=' py-12'>
-            <h1 className=" text-[#333333] font-semibold text-center">
+            <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
               Find a Variety of Automotive Boxes Below
 
-            </h1>
+            </h2>
             <p className="  pt-3 pb-5 text-sm text-center ">
               Following are the Automotive Boxes offered at Umbrella Custom Packaging.
 
@@ -282,7 +282,9 @@ const productItems = CategoryProducts?.map((item, index) => ({
                       <div className="  sm:h-64 h-44">
                         <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full h-full  rounded-xl" />
                       </div>
-                      <h6 className="  text-center text-[#242424]  font-medium text-lg  py-5">{item?.name}</h6>
+                      
+
+                      <h2 className="  text-center text-[#242424]  font-medium text-lg  py-5">{item?.name}</h2>
                     </div>
                   </Link>
                 </div>
@@ -306,8 +308,9 @@ const productItems = CategoryProducts?.map((item, index) => ({
 
           <div className=' '>
             <div className=' text-center py-4'>
-              <h1 className=' font-semibold'>{categoryData?.videoUpperHeading}
-              </h1>
+              <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
+{categoryData?.videoUpperHeading}
+              </h2>
               <p className=' pt-3' dangerouslySetInnerHTML={{ __html:categoryData?.videoUpperDescription}}>
 
               </p>
@@ -318,10 +321,12 @@ const productItems = CategoryProducts?.map((item, index) => ({
                 <iframe width="100%" className=' rounded-lg' height="315" src={categoryData?.videoLink} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </div>
               <div className=' sm:w-6/12 w-full'>
-                <h1>{categoryData?.title} Video Guide</h1>
+                           <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
+{categoryData?.title} Video Guide</h2>
                 <p dangerouslySetInnerHTML={{ __html:categoryData?.videoDescription}} className=' pt-4 pb-3'>
                 </p>
-                <h4 className=' pt-2'>Contact Us</h4>
+                  <h2 className="leading-[42px]  text-xl  font-sans   font-[600] text-[#333333]">
+Contact Us</h2>
                 <ul className=' leading-7'>
                   <li className=' flex gap-1 items-center'>
                     <svg width={15} aria-hidden="true" class="e-font-icon-svg e-fas-phone-alt" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M497.39 361.8l-112-48a24 24 0 0 0-28 6.9l-49.6 60.6A370.66 370.66 0 0 1 130.6 204.11l60.6-49.6a23.94 23.94 0 0 0 6.9-28l-48-112A24.16 24.16 0 0 0 122.6.61l-104 24A24 24 0 0 0 0 48c0 256.5 207.9 464 464 464a24 24 0 0 0 23.4-18.6l24-104a24.29 24.29 0 0 0-14.01-27.6z"></path></svg>
@@ -350,10 +355,10 @@ const productItems = CategoryProducts?.map((item, index) => ({
 
               <div className='w-full lg:w-1/2 '>
 
-                <div className=" pt-3">
-                  <h1 className="text-2xl sm:text-3xl  font-semibold text-[#333333] mb-4">
+                <div className="">
+            <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
                     {categoryData?.bannerTitleFirst}
-                  </h1>
+                  </h2>
                   <div className=' overflow-y-auto h-56'>
                     <p dangerouslySetInnerHTML={{ __html:categoryData?.bannerContentFirst}} className="text-sm leading-6  mb-6">
 
@@ -398,11 +403,11 @@ const productItems = CategoryProducts?.map((item, index) => ({
 
         <div className="sm:max-w-6xl  my-6 bg-[#eff4fe] py-3 rounded-lg  max-w-[95%] mx-auto">
           <div className="text-center pb-3">
-            <h1 className="text-[#333333] pb-3.5 font-semibold">
+              <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
               Your Packaging Partner: What Sets Umbrella Custom Packaging Apart
 
 
-            </h1>
+            </h2>
             <p className=' pb-3'>Order your Automotive Boxes and experience the best ever customer service, high quality products with fastest lead time of 6-7 days
             </p>
             <div className='rounded-lg p-3 h-56 flex justify-center mx-3 items-center bg-white'>
@@ -439,7 +444,7 @@ const productItems = CategoryProducts?.map((item, index) => ({
                   <SwiperSlide key={item.id}>
                     <div className="text-center">
                       <img src={item.icon} alt="" width={60} className=' mx-auto' />
-                      <h5 className=" font-semibold">{item.title}</h5>
+                      <strong className=" font-semibold">{item.title}</strong>
                       <p className=" m-0 text-sm">
                         {item.description}
                       </p>
@@ -460,9 +465,9 @@ const productItems = CategoryProducts?.map((item, index) => ({
             <div className='w-full lg:w-1/2 '>
 
               <div className=" pt-3">
-                <h1 className="text-2xl sm:text-3xl  font-semibold text-[#333333] mb-4">
+            <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
                   {categoryData?.bannerTitleSecond}
-                </h1>
+                </h2>
                 <div className=' overflow-y-auto h-56'>
                   <p dangerouslySetInnerHTML={{ __html:categoryData?.bannerContentSecond}} className="text-sm leading-6  mb-6">
 
@@ -522,9 +527,9 @@ const productItems = CategoryProducts?.map((item, index) => ({
             <div className='w-full lg:w-1/2 '>
 
               <div className=" pt-3">
-                <h1 className="text-2xl sm:text-3xl  font-semibold text-[#333333] mb-4">
+            <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
                   {categoryData?.bannerTitleThird}
-                </h1>
+                </h2>
                 <div className=' overflow-y-auto h-56'>
                   <p dangerouslySetInnerHTML={{ __html:categoryData?.bannerContentThird}} className="text-sm leading-6  mb-6">
 
@@ -562,9 +567,9 @@ const productItems = CategoryProducts?.map((item, index) => ({
             <div className='w-full lg:w-1/2 '>
 
               <div className=" pt-3">
-                <h1 className="text-2xl sm:text-3xl  font-semibold text-[#333333] mb-4">
+            <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
                   {categoryData?.bannerTitleFourth}
-                </h1>
+                </h2>
                 <div className=' overflow-y-auto h-56'>
                   <p dangerouslySetInnerHTML={{ __html:categoryData?.bannerContentFourth}} className="text-sm leading-6  mb-6">
 
@@ -627,8 +632,9 @@ const productItems = CategoryProducts?.map((item, index) => ({
           <div className=' sm:w-6/12 w-full'>
             <div className=' rounded-xl px-4 py-4 bg-white'>
 
-              <h1>Building Trust with Top <br /> Brands
-              </h1>
+                          <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
+Building Trust with Top <br /> Brands
+              </h2>
               <p className=' pt-2'>Many companies choose Umbrella Custom Packaging for amazing, affordable, and memorable custom printed boxes and packaging. We work hard to make sure we give them the best advice and solutions for their needs, so they feel confident and happy working with us. It doesn’t matter how big or small your business is, we’ll work with you to make the perfect custom boxes you want. By building trust with top brands through our dedication, reliability, and exceptional service, we continue to solidify our reputation as a trusted partner in the packaging industry.
 
               </p>

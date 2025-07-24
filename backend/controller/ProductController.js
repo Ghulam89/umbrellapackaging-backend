@@ -238,11 +238,11 @@ export const getBrandProductsByCategory = catchAsyncError(async (req, res, next)
 
 
 export const getRelatedProducts = catchAsyncError(async (req, res, next) => {
-  const productId = req.params.productId;
+  const productSlug = req.params.slug; // Changed from productId to slug
 
   try {
-    // 1. Find the main product
-    const mainProduct = await Products.findById(productId);
+    // 1. Find the main product by slug
+    const mainProduct = await Products.findOne({ slug: productSlug });
     if (!mainProduct) {
       return res.status(404).json({
         status: "fail",
@@ -251,11 +251,10 @@ export const getRelatedProducts = catchAsyncError(async (req, res, next) => {
     }
 
     const relatedProducts = await Products.find({
-      _id: { $ne: productId },
+      _id: { $ne: mainProduct._id }, // Exclude the main product by its ID
       $or: [
         { categoryId: mainProduct.categoryId },
         { brandId: mainProduct.brandId }, 
-        
       ],
     })
       .limit(8) 
@@ -264,7 +263,6 @@ export const getRelatedProducts = catchAsyncError(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: {
-        
         relatedProducts,
       },
     });

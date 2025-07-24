@@ -46,7 +46,7 @@ const InspirationPackaging = () => {
     return (
         <div className="sm:max-w-6xl bg-[#f9fafb] p-7 rounded-2xl max-w-[95%] mx-auto">
             <div className="pb-7 text-center">
-                <h2 className="">Inspiration for Creative Packaging</h2>
+             <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">Inspiration for Creative Packaging</h2>
                 <Link to={'/contact-us'}>
                  <Button 
                     label={'Contact Our Design Department'} 

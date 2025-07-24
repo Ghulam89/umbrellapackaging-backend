@@ -76,8 +76,8 @@ const CustomBoxMaterial = () => {
 
   return (
     <div className="sm:max-w-6xl max-w-[95%] mx-auto">
-      <div className="text-center">
-        <h2 className="text-[#333333] font-semibold">
+      <div className="text-center pt-6">
+        <h2  className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
           Custom Box Material Guide: Finding the Perfect Fit
         </h2>
         <p className="pt-3 text-sm">

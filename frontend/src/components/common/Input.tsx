@@ -20,7 +20,7 @@ const Input = ({
         className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
       >
         {label}
-        <h5 className=" text-red-600 m-0 pl-1">{star}</h5>
+        <strong className=" text-red-600 m-0 pl-1">{star}</strong>
       </label>
       <input
        onBlur={onBlur}

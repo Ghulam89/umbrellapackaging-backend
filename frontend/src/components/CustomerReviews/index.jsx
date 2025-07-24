@@ -119,9 +119,9 @@ const CustomerReviews = () => {
                     <p className="py-3 text-lg text-gray-600 italic">
                       {testimonial?.review}
                     </p>
-                    <h5 className="font-semibold text-gray-800">
+                    <strong className="font-semibold text-gray-800">
                       {testimonial?.name}
-                    </h5>
+                    </strong>
                     {testimonial?.position && (
                       <p className="text-sm text-gray-500">{testimonial.position}</p>
                     )}

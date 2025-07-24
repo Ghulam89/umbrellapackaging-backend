@@ -26,28 +26,29 @@ function ProductionUnits() {
         </div>
 
         {/* Title */}
-        <h1 className='text-center pb-4 text-2xl font-bold'>
+                  <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
+
           Umbrella Custom Packaging has Production Units Across the Globe
-        </h1>
+        </h2>
 
         {/* Features Grid */}
         <div className='grid md:grid-cols-3 grid-cols-1 gap-4 pb-4'>
           <div className='flex flex-col justify-center items-center bg-white rounded-lg p-5 hover:shadow-lg transition-shadow'>
-            <h4 className='text-lg  mb-2 text-center'>In-house Production</h4>
+            <strong className='text-lg  mb-2 text-center'>In-house Production</strong>
             <p className='text-base text-gray-800 font-normal text-center'>
               Umbrella Custom Packaging tends to rely on its in-house production units to expedite orders for customers.
             </p>
           </div>
           
           <div className='flex flex-col justify-center items-center bg-white rounded-lg p-5  hover:shadow-lg transition-shadow'>
-            <h4 className='text-lg  mb-2 text-center'>Offshore Printing Facilities</h4>
+            <strong className='text-lg  mb-2 text-center'>Offshore Printing Facilities</strong>
             <p className='text-base text-gray-800 font-normal text-center'>
               We have various printing facilities outside the USA where orders are produced at the lowest possible cost with the same turnaround time.
             </p>
           </div>
           
           <div className='flex flex-col justify-center items-center bg-white rounded-lg p-5  hover:shadow-lg transition-shadow'>
-            <h4 className=' mb-2 text-center'>Free Shipping</h4>
+            <strong className=' mb-2 text-center'>Free Shipping</strong>
             <p className='text-base text-gray-800 font-normal text-center'>
               We make your order even more cost-effective by providing free ground and air freight, delivering orders on time.
             </p>

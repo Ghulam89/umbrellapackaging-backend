@@ -62,10 +62,10 @@ const Footer = () => {
                             <p className=' text-[#213554] pt-1.5'>We offer Packaging Boxes delivered to your door. Secure, professional, and affordable, our custom made packaging boxes are guaranteed to protect and transport your valuable items. Our devoted team is always there to serve you.</p>
                         </div>
                         <div className=' sm:w-7/12 w-full text-center'>
-                            <h1 className=''>Need Quick Assistance? Get In Touch</h1>
+                            <h2 className="sm:text-[38px] text-[25px]     font-sans   font-[700] text-[#333333]">Need Quick Assistance? Get In Touch</h2>
                             <Link className=' flex  pt-2 items-center justify-center'>
                                 <IoCallOutline size={40} className='' />
-                                <h1 className=' font-bold'>747-247-0456</h1>
+                                <h2 className="sm:text-[50px] text-[25px]     font-sans   font-[800] text-[#333333]">747-247-0456</h2>
                             </Link>
                             <div className=' pt-5'>
                                 <ul className=' flex flex-wrap gap-4 items-center justify-center '>
@@ -127,7 +127,7 @@ const Footer = () => {
                             </div>
                         </div>
                         <div className=''>
-                            <h6 className='  text-lg '>Quick Links</h6>
+                            <strong className='  text-lg '>Quick Links</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>
                                     <Link to={'/'} className='  text-[#2e2d2d]'>Home</Link>
@@ -153,7 +153,7 @@ const Footer = () => {
                             </ul>
                         </div>
                         <div className=''>
-                            <h6 className='  text-lg '>Useful Links</h6>
+                            <strong className='  text-lg '>Useful Links</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>
                                     <Link to={'/sub-category/custom-cardboard-boxes/'} className='  text-[#2e2d2d]'>Cardboard Boxes</Link>
@@ -179,7 +179,7 @@ const Footer = () => {
                             </ul>
                         </div>
                         <div className=''>
-                            <h6 className='  text-lg '>About</h6>
+                            <strong className='  text-lg '>About</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>
                                     <Link to={'#'} className='  text-[#2e2d2d]'>About us</Link>

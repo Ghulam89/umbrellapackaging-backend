@@ -45,11 +45,11 @@ const Partners = () => {
     <>
      <div className="sm:max-w-8xl   max-w-[95%] mx-auto">
      <div className="">
-     <h4 className="text-[#333333] pb-3.5 font-semibold">
+     <strong className=" pb-3.5 text-2xl">
      Our Shipping Partners
 
 
-        </h4>
+        </strong>
         <div className='rounded-lg p-3   pb-8 flex justify-center items-center'>
         <Swiper
         slidesPerView={1}
