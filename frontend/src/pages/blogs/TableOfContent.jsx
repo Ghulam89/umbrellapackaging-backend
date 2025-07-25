@@ -70,13 +70,13 @@ function TableOfContent({ content }) {
     };
 
     return (
-        <div className='sticky top-5'>
+        <div className='sticky z-40 top-5'>
             <div className='bg-white rounded-lg border shadow overflow-hidden'>
                 <div 
                     className='flex items-center justify-between p-4 cursor-pointer'
                     onClick={() => setTableOpen(!openTable)}
                 >
-                    <span className='text-xl font-semibold'>Table of Contents</span>
+                    <h5 className='text-5xl font-semibold'>Table of Contents</h5>
                     <IoIosArrowDown className={`transition-transform ${openTable ? 'rotate-180' : ''}`} />
                 </div>
                 

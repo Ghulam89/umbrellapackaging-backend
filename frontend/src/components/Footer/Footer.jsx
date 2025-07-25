@@ -182,7 +182,7 @@ const Footer = () => {
                             <strong className='  text-lg '>About</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>
-                                    <Link to={'#'} className='  text-[#2e2d2d]'>About us</Link>
+                                    <Link to={'/about-us'} className='  text-[#2e2d2d]'>About us</Link>
                                 </li>
                                 <li>
                                     <Link to={'/privacy-policy'} className='  text-[#2e2d2d]'>Privacy Policy</Link>

@@ -56,13 +56,13 @@ const Blogs = () => {
  <PageMetadata {...metadata} />
             
              
-            <div className="sm:max-w-7xl max-w-[95%] mx-auto px-4 py-8">
+            <div className="sm:max-w-6xl max-w-[95%] mx-auto py-8">
                 <div className='bg-[#2E2D2D] rounded-[8px] p-5 h-[230px] flex flex-col justify-center items-center space-y-5 mb-5'>
-                    <h1 style={{color:'white'}} className=' flex gap-2 items-center text-[30px]  font-semibold leading-10 text-center'>Our
+                    <h1 style={{color:'white'}} className=' flex gap-2 items-center text-[40px]  font-semibold leading-10 text-center'>Our
                         <h1 style={{color:'#ff931e'}} className='md:text-[43px] text-[40px] text-[#ff931e]'> Blogs</h1></h1>
                 </div>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-5 gap-6'>
                     {blog?.map((item, index) => (
                         <BlogCard key={index} data={item} />
                     ))}

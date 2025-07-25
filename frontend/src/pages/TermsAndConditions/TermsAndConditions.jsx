@@ -17,7 +17,7 @@ function TermsAndConditions() {
     <div className='max-w-[1200px] mx-auto'>
     <div className='grid md:grid-cols-2 grid-cols-1 bg-[#d2e0FB59] rounded-[8px] p-5 mt-10'>
         <div className='flex flex-col justify-center gap-10'>
-            <h1 className=' font-semibold leading-10  capitalize'>
+            <h1 className=' font-semibold leading-10 sm:text-4xl  text-2xl  capitalize'>
                 We are committed to <br/>
                 <h1 style={{color:'#5A56E9'}} className='font-semibold leading-10 capitalize'>{text} <Cursor cursorStyle='|' /></h1>
 
