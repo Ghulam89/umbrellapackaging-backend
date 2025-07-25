@@ -5,6 +5,7 @@ import { BaseUrl } from '../../utils/BaseUrl';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
+import PageMetadata from '../../components/common/PageMetadata';
 
 function SingleBlog({ serverData }) {
     const { slug } = useParams();
@@ -34,35 +35,43 @@ function SingleBlog({ serverData }) {
         fetchAllBlogs();
     }, [slug]);
 
+
+
+  const faqItemSchema = singleBlog?.qna?.map((item, index) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Question",
+    "name": item.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": item.answer 
+    }
+  };
+});
+
+    const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqItemSchema || []
+};
+console.log(singleBlog);
+
     return (
         <>
             {/* Only render Helmet meta tags when singleBlog is available */}
-            {singleBlog && singleBlog.metaTitle && (
-                <Helmet>
-                    <title>{singleBlog.metaTitle}</title>
-                    <meta name="description" content={singleBlog.metaDescription || ''} />
-                    <meta name="keywords" content={singleBlog.keywords || ''} />
-                    <meta name="robots" content={singleBlog.robots || 'index, follow'} />
-                    <link rel="canonical" href={`${BaseUrl}/blog/${slug}`} />
-                    {/* Open Graph / Facebook */}
-                    <meta property="og:type" content="website" />
-                    <meta property="og:url" content={`${BaseUrl}/blog/${slug}`} />
-                    <meta property="og:title" content={singleBlog.metaTitle} />
-                    <meta property="og:description" content={singleBlog.metaDescription || ''} />
-                    <meta property="og:image" content={`${BaseUrl}/${singleBlog.image || ''}`} />
-                    <meta property="og:image:width" content="768" />
-                    <meta property="og:image:height" content="499" />
-                    <meta property="og:image:type" content="image/webp" />
-                    <meta property="og:site_name" content="Umbrella Custom Packaging" />
-                    <meta property="og:locale" content="en_US" />
-                    <meta property="article:modified_time" content={new Date().toISOString()} />
-                    {/* Twitter */}
-                    <meta name="twitter:card" content="summary_large_image" />
-                    <meta name="twitter:title" content={singleBlog.metaTitle} />
-                    <meta name="twitter:description" content={singleBlog.metaDescription || ''} />
-                    <meta name="twitter:image" content={`${BaseUrl}/${singleBlog.image || ''}`} />
-                </Helmet>
-            )}
+               <PageMetadata
+                   title={singleBlog?.metaTitle || serverData?.metaTitle || "Custom Packaging Solutions"}
+                   description={singleBlog?.metaDescription || serverData?.metaDescription || ""}
+                   keywords={singleBlog?.keywords || serverData?.keywords || ""}
+                   ogUrl={`${BaseUrl}/blog/${slug}`}
+                   ogImage={`${BaseUrl}/${singleBlog?.image}`}
+                   ogImageWidth="1200"
+                   ogImageHeight="630"
+                   canonicalUrl={`${BaseUrl}/blog/${slug}`}
+                   faqItemSchema={faqSchema}
+                   // robots={categoryData?.robots || serverData?.robots || "index, follow"}
+                   robots={"noindex, nofollow"}
+                 />
 
             <div className='max-w-7xl mx-auto py-6 px-4'>
                 <div className='flex gap-8 md:flex-row flex-col'>

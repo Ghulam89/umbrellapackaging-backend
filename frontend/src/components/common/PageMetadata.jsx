@@ -16,6 +16,7 @@ const PageMetadata = ({
     homeSchema = {},
     productSchema = {},
     itemListSchema = {},
+    faqItemSchema = {},
     robots
 }) => {
     useEffect(() => {
@@ -124,6 +125,11 @@ const PageMetadata = ({
             {itemListSchema && Object.keys(itemListSchema).length > 0 && (
                 <script type="application/ld+json">
                     {JSON.stringify(itemListSchema)}
+                </script>
+            )}
+            {faqItemSchema && Object.keys(faqItemSchema).length > 0 && (
+                <script type="application/ld+json">
+                    {JSON.stringify(faqItemSchema)}
                 </script>
             )}
         </Helmet>
