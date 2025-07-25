@@ -2,6 +2,20 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 const Schema = mongoose.Schema;
 
+
+
+const questionAnswerSchema = new Schema({
+  question: {
+    type: String,
+    required: true
+  },
+  answer: {
+    type: String,
+    required: true
+  }
+});
+
+
 const blogSchema = new Schema({
   title: {
     type: String,
@@ -33,6 +47,7 @@ const blogSchema = new Schema({
    processedContent: {
     type: String,
   },
+   qna: [questionAnswerSchema],
   createdAt: {
     type: Date,
     default: Date.now,

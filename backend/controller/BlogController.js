@@ -60,7 +60,16 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
     const imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
       
       const processedContent = processContentImages(req.body.content);
-    
+
+       let qna = [];
+    try {
+      if (req.body.qna) {
+        qna = JSON.parse(req.body.qna);
+      }
+    } catch (error) {
+      console.error('Error parsing Q&A:', error);
+    }
+
     const blogData = {
       image: imagePath,
       content: processedContent, 
@@ -73,7 +82,8 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
       robots:req.body.robots,
       shortDescription: req.body?.shortDescription,
       imageAltText: req.body.imageAltText || 
-        req.files.image[0].originalname.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' ')
+        req.files.image[0].originalname.replace(/\.[^/.]+$/, "").replace(/[-_]/g, ' '),
+         qna: qna 
     };
 
     const newBlog = await Blogs.create(blogData);
@@ -182,7 +192,14 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
       });
     }
     const processedContent = processContentImages(req.body.content || blog.content);
-    
+     let qna = blog.qna;
+    try {
+      if (req.body.qna) {
+        qna = JSON.parse(req.body.qna);
+      }
+    } catch (error) {
+      console.error('Error parsing Q&A:', error);
+    }
     const updateData = {
       content: processedContent,
       processedContent: processedContent,
@@ -194,6 +211,7 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
       robots:req.body.robots,
       shortDescription: req.body?.shortDescription || blog.shortDescription,
       imageAltText: req.body?.imageAltText || blog.imageAltText,
+       qna: qna
     };
 
     if (req.files?.image) {
