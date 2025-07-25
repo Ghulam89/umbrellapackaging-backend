@@ -62,12 +62,12 @@ export const createBlog = catchAsyncError(async (req, res, next) => {
       const processedContent = processContentImages(req.body.content);
 
        let qna = [];
-    try {
-      if (req.body.qna) {
-        qna = JSON.parse(req.body.qna);
+     if (req.body.qna !== undefined) {
+      try {
+        qna = typeof req.body.qna === 'string' ? JSON.parse(req.body.qna) : req.body.qna;
+      } catch (error) {
+        console.error('Error parsing Q&A:', error);
       }
-    } catch (error) {
-      console.error('Error parsing Q&A:', error);
     }
 
     const blogData = {
@@ -193,12 +193,13 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
     }
     const processedContent = processContentImages(req.body.content || blog.content);
      let qna = blog.qna;
-    try {
-      if (req.body.qna) {
-        qna = JSON.parse(req.body.qna);
+    if (req.body.qna !== undefined) {
+      try {
+        qna = typeof req.body.qna === 'string' ? JSON.parse(req.body.qna) : req.body.qna;
+      } catch (error) {
+        console.error('Error parsing Q&A:', error);
+        // Keep the existing qna if parsing fails
       }
-    } catch (error) {
-      console.error('Error parsing Q&A:', error);
     }
     const updateData = {
       content: processedContent,
