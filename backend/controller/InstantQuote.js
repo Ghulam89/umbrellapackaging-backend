@@ -1,4 +1,7 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
+import { detect } from 'detect-browser';
+import { getClientIP } from "../utils/ipDetection.js";
+
 import { InstantQuote } from "../model/InstantQuote.js";
 import nodemailer from 'nodemailer';
 import { adminTemplate, customerTemplate, instantTemplate } from "../utils/emailTemplate.js";
@@ -16,33 +19,52 @@ const transporter = nodemailer.createTransport({
   secure: false,
   auth: {
     user: "gm6681328@gmail.com",
-    pass: "ptpatylqsrszlqtq", 
+    pass: "ptpatylqsrszlqtq",
   },
   tls: {
-    rejectUnauthorized: false 
+    rejectUnauthorized: false
   }
 });
 
 // create blog
 export const createInstantQuote = catchAsyncError(async (req, res, next) => {
   const data = req.body;
-  
-let imagePath = null;
+
+  let imagePath = null;
 
   try {
-       if(req.files.image){
-        imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    if (req.files.image) {
+      imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
- 
+
+
+    // Get client IP using utility function
+    const clientIp = getClientIP(req);
+    console.log('Client IP in controller:', clientIp);
+
+
+    // Detect browser/device info
+    const browserInfo = detect(req.headers['user-agent']);
+    const deviceInfo = browserInfo
+      ? `${browserInfo.name} ${browserInfo.version} on ${browserInfo.os}`
+      : 'Unknown device';
+
     const quoteData = {
       image: imagePath,
       name: data?.name,
       email: data?.email,
       phoneNumber: data?.phoneNumber,
       message: data?.message,
+      pageUrl: data?.pageUrl,
+      device: deviceInfo,
+      ip: clientIp,
     };
 
+    console.log('Quote data being saved:', quoteData);
+
     const newInstantQuote = await InstantQuote.create(quoteData);
+    
+    console.log('Saved quote data:', newInstantQuote);
 
     const mailOptions = {
       from: 'gm6681328@gmail.com',
@@ -55,9 +77,9 @@ let imagePath = null;
       from: 'gm6681328@gmail.com',
       to: data?.email,
       subject: 'Thank You for Your Quote Request - Umbrella Packaging',
-      html: instantTemplate(data)
-    };  
-    
+      html: adminTemplate(data)
+    };
+
     try {
       await transporter.sendMail(mailOptions);
       await transporter.sendMail(adminMailOptions);
@@ -101,41 +123,41 @@ export const getInstantQuoteById = async (req, res, next) => {
 export const updateInstantQuote = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   const InstantQuoteId = req.params.id;
-  
+
   const existingInstantQuote = await InstantQuote.findById(InstantQuoteId);
   if (!existingInstantQuote) {
-    return res.status(404).json({ 
+    return res.status(404).json({
       status: "fail",
-      message: "Request quote not found" 
+      message: "Request quote not found"
     });
   }
 
   try {
     let updateData = { ...data };
-    
+
     // Handle image update if new image is provided
     if (req.files?.image) {
       // Delete old image if it exists
       if (existingInstantQuote.image) {
         const oldImagePath = path.join(
-          __dirname, 
-          '..', 
-          'public', 
+          __dirname,
+          '..',
+          'public',
           existingInstantQuote.image.replace(process.env.BASEURL, '')
         );
-        
+
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }
-      
+
       // Add new image path
       updateData.image = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
 
     const updatedInstantQuote = await InstantQuote.findByIdAndUpdate(
-      InstantQuoteId, 
-      updateData, 
+      InstantQuoteId,
+      updateData,
       { new: true }
     );
 
@@ -204,6 +226,24 @@ export const deleteInstantQuoteById = async (req, res, next) => {
     next(error);
   }
 };
+
+
+// Test endpoint for IP detection
+export const testIPDetection = catchAsyncError(async (req, res, next) => {
+  const clientIp = getClientIP(req);
+  
+  res.status(200).json({
+    status: "success",
+    message: "IP Detection Test",
+    data: {
+      ip: clientIp,
+      headers: req.headers,
+      connection: req.connection?.remoteAddress,
+      socket: req.socket?.remoteAddress,
+      expressIp: req.ip
+    }
+  });
+});
 
 
 

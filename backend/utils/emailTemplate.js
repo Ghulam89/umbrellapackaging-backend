@@ -198,6 +198,26 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
                     <td>Description:</td>
                     <td>${data.message}</td>
                 </tr>
+
+                 <tr>
+                    <td>---</td>
+                </tr>
+                 <tr>
+                    <td>Time:</td>
+                    <td>${new Date(data.createdAt).toLocaleString()}</td>
+                </tr>
+                <tr>
+                    <td>Page URL:</td>
+                    <td>${data.pageUrl}</td>
+                </tr>
+                 <tr>
+                    <td>User Agent:</td>
+                    <td>${data.device}</td>
+                </tr>
+                 <tr>
+                    <td>Remote IP:</td>
+                    <td>${data.ip}</td>
+                </tr>
             </table>
  
         </div>

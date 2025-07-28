@@ -33,6 +33,18 @@ const ContactUsSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  pageUrl: {
+    type: String,
+    require: true,
+  },
+  device: {
+    type: String,
+    require: true,
+  },
+  ip: {
+    type: String,
+    require: true,
+  },
 });
 
 export const ContactUs = mongoose.model("ContactUs", ContactUsSchema);

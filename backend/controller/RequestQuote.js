@@ -2,6 +2,8 @@ import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { RequestQuote } from "../model/RequestQuote.js";
 import nodemailer from 'nodemailer';
 import { adminTemplate, customerTemplate } from "../utils/emailTemplate.js";
+import { detect } from 'detect-browser';
+import { getClientIP } from "../utils/ipDetection.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -33,6 +35,14 @@ let imagePath = null;
         imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
  
+    // Get client IP using utility function
+    const clientIp = getClientIP(req);
+
+    // Detect browser/device info
+    const browserInfo = detect(req.headers['user-agent']);
+    const deviceInfo = browserInfo
+      ? `${browserInfo.name} ${browserInfo.version} on ${browserInfo.os}`
+      : 'Unknown device';
     
     const quoteData = {
       image: imagePath,
@@ -50,6 +60,8 @@ let imagePath = null;
       color: data?.color,
       addons: data?.addons,
       message: data?.message,
+      device: deviceInfo,
+      ip: clientIp,
     };
 
     const newRequestQuote = await RequestQuote.create(quoteData);
