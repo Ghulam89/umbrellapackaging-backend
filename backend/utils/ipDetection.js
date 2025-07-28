@@ -11,8 +11,17 @@ export const getClientIP = (req) => {
   let clientIp = requestIp.getClientIp(req);
   console.log('requestIp result:', clientIp);
   
+  // Function to check if IP is localhost
+  const isLocalhost = (ip) => {
+    return ip === '::1' || 
+           ip === '127.0.0.1' || 
+           ip === '::ffff:127.0.0.1' ||
+           ip?.startsWith('127.') ||
+           ip?.startsWith('::ffff:127.');
+  };
+  
   // Handle localhost cases first
-  if (clientIp === '::1' || clientIp === '127.0.0.1') {
+  if (isLocalhost(clientIp)) {
     clientIp = 'Local Development';
   } else if (!clientIp) {
     // Fallback IP detection if requestIp fails
@@ -32,9 +41,14 @@ export const getClientIP = (req) => {
     }
     
     // If still localhost, try to get real IP
-    if (clientIp === '::1' || clientIp === '127.0.0.1') {
+    if (isLocalhost(clientIp)) {
       clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'Local Development';
     }
+  }
+  
+  // Final check for localhost
+  if (isLocalhost(clientIp)) {
+    clientIp = 'Local Development';
   }
   
   // Ensure we always return a non-empty string
