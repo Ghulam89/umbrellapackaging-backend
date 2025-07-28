@@ -11,7 +11,7 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
           overflow:hidden;
       }
     .mainContainer{
-     padding:25px !important
+     padding:20px 15px !important
     }
   }
   </style>
