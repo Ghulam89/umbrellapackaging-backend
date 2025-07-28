@@ -1,6 +1,6 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
+import requestIp from 'request-ip';
 import { detect } from 'detect-browser';
-import { getClientIP } from "../utils/ipDetection.js";
 
 import { InstantQuote } from "../model/InstantQuote.js";
 import nodemailer from 'nodemailer';
@@ -38,16 +38,17 @@ export const createInstantQuote = catchAsyncError(async (req, res, next) => {
     }
 
 
-    // Get client IP using utility function
-    const clientIp = getClientIP(req);
-    console.log('Client IP in controller:', clientIp);
+    // Get client IP
+    const clientIp = requestIp.getClientIp(req);
 
+console.log(requestIp);
 
     // Detect browser/device info
     const browserInfo = detect(req.headers['user-agent']);
     const deviceInfo = browserInfo
       ? `${browserInfo.name} ${browserInfo.version} on ${browserInfo.os}`
       : 'Unknown device';
+console.log(browserInfo);
 
     const quoteData = {
       image: imagePath,
@@ -60,11 +61,7 @@ export const createInstantQuote = catchAsyncError(async (req, res, next) => {
       ip: clientIp,
     };
 
-    console.log('Quote data being saved:', quoteData);
-
     const newInstantQuote = await InstantQuote.create(quoteData);
-    
-    console.log('Saved quote data:', newInstantQuote);
 
     const mailOptions = {
       from: 'gm6681328@gmail.com',
@@ -228,19 +225,22 @@ export const deleteInstantQuoteById = async (req, res, next) => {
 };
 
 
-// Test endpoint for IP detection
+// Test IP Detection
 export const testIPDetection = catchAsyncError(async (req, res, next) => {
+  const { getClientIP } = await import('../utils/ipDetection.js');
   const clientIp = getClientIP(req);
+  
+  console.log('Client IP in controller:', clientIp);
   
   res.status(200).json({
     status: "success",
     message: "IP Detection Test",
-    data: {
-      ip: clientIp,
-      headers: req.headers,
-      connection: req.connection?.remoteAddress,
-      socket: req.socket?.remoteAddress,
-      expressIp: req.ip
+    clientIP: clientIp,
+    headers: {
+      'x-forwarded-for': req.headers['x-forwarded-for'],
+      'x-real-ip': req.headers['x-real-ip'],
+      'x-client-ip': req.headers['x-client-ip'],
+      'user-agent': req.headers['user-agent']
     }
   });
 });
