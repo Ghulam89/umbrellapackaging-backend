@@ -56,6 +56,7 @@ const InstantQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
         formData.append("phoneNumber", values.phoneNumber);
         formData.append("message", values.message);
         formData.append("image", values.image);
+        formData.append("pageUrl", window.location.href);
 
         const response = await axios.post(`${BaseUrl}/instantQuote/create`, formData, {
           headers: {

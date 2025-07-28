@@ -91,10 +91,15 @@ const SubCategory = ({serverData,CategoryProducts}) => {
         if (page === 1) {
         setAllProducts(response2?.data?.data);
       } else {
-        setAllProducts(prev => [...prev, ...response2?.data?.data]);
+        // Prevent duplicates by checking if product already exists
+        setAllProducts(prev => {
+          const existingIds = new Set(prev.map(p => p._id));
+          const newProducts = response2?.data?.data.filter(p => !existingIds.has(p._id));
+          return [...prev, ...newProducts];
+        });
       }
-          setCurrentPage(response?.data?.currentPage);
-      setTotalPages(response?.data?.totalPages);
+          setCurrentPage(response2?.data?.currentPage);
+      setTotalPages(response2?.data?.totalPages);
 
     } catch (err) {
 
@@ -104,16 +109,26 @@ const SubCategory = ({serverData,CategoryProducts}) => {
 
   useEffect(() => {
     if (slug) {
-      fetchProduct(categoryData);
+      // If we have server-side data, use it initially
+      if (CategoryProducts && CategoryProducts.length > 0) {
+        setAllProducts(CategoryProducts);
+        setCurrentPage(1);
+        setTotalPages(1);
+      } else {
+        setAllProducts([]);
+        setCurrentPage(1);
+        setTotalPages(1);
+        fetchProduct();
+      }
     }
-  }, [slug]);
+  }, [slug, CategoryProducts]);
 
 
 
   const loadMoreProducts = () => {
     const nextPage = currentPage + 1;
     if (nextPage <= totalPages) {
-      fetchProduct(categoryData, nextPage);
+      fetchProduct(nextPage);
     }
   };
 

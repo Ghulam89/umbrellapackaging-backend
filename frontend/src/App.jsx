@@ -25,6 +25,7 @@ import NotFound from './pages/404'
 import { useEffect } from 'react'
 import Cart from './pages/cart/Cart'
 import Checkout from './pages/checkout/Checkout'
+import { ToastContainer } from 'react-toastify'
 
 function App({ serverData,CategoryProducts}) {
   const location = useLocation();
@@ -86,6 +87,7 @@ function App({ serverData,CategoryProducts}) {
 
   return (
     <>
+    <ToastContainer/>
       <TopNav />
       <Navbar />
       {element}

@@ -1,7 +1,5 @@
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { ContactUs } from "../model/ContactUs.js";
-import { detect } from 'detect-browser';
-import { getClientIP } from "../utils/ipDetection.js";
 // contact us create
 
 import fs from 'fs';
@@ -16,16 +14,6 @@ export const create = catchAsyncError(async (req, res, next) => {
   try {
     
     const imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
-    
-    // Get client IP using utility function
-    const clientIp = getClientIP(req);
-
-    // Detect browser/device info
-    const browserInfo = detect(req.headers['user-agent']);
-    const deviceInfo = browserInfo
-      ? `${browserInfo.name} ${browserInfo.version} on ${browserInfo.os}`
-      : 'Unknown device';
-    
     const contactData = {
       image: imagePath,
       name: data?.name,
@@ -33,8 +21,7 @@ export const create = catchAsyncError(async (req, res, next) => {
       phoneNumber: data?.phoneNumber,
       companyName: data?.companyName,
       message: data?.message,
-      device: deviceInfo,
-      ip: clientIp,
+      pageUrl: data?.pageUrl,
     };
 
     const newContact = await ContactUs.create(contactData);

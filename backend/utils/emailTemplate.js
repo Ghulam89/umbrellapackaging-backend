@@ -1,3 +1,5 @@
+import moment from "moment"
+
 export const customerTemplate = (data) => `<!DOCTYPE html>
   <html>
   <head>
@@ -116,7 +118,7 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
   </html>`
 
 
-  export const adminTemplate = (data) => `<!DOCTYPE html>
+export const adminTemplate = (data) => `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -157,7 +159,9 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
             
     
             <!-- Quote Details Table -->
+            
             <table>
+            
                     <tr>
                     <td>Box Style :</td>
                     <td>${data.boxStyle}</td>
@@ -202,10 +206,12 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
                  <tr>
                     <td>---</td>
                 </tr>
+
                  <tr>
-                    <td>Time:</td>
-                    <td>${new Date(data.createdAt).toLocaleString()}</td>
+                    <td>Date:</td>
+                    <td>${moment(data.createdAt).format('DD/MM/YYYY HH:mm')}</td>
                 </tr>
+               
                 <tr>
                     <td>Page URL:</td>
                     <td>${data.pageUrl}</td>
@@ -223,7 +229,7 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
         </div>
     </body>`
 
-    export const instantTemplate = (data) => `<!DOCTYPE html>
+export const instantTemplate = (data) => `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -260,16 +266,38 @@ export const customerTemplate = (data) => `<!DOCTYPE html>
             <tr>
                 <td>File:</td>
                 <td>
-                    ${data.image ? 
-                        `<img style="width: 100%; max-width: 300px; height: auto; display: block;" src="${data.image}" alt="Uploaded file" />` : 
-                        'No image provided'
-                    }
+                    ${data.image ?
+        `<img style="width: 100%; max-width: 300px; height: auto; display: block;" src="${data.image}" alt="Uploaded file" />` :
+        'No image provided'
+    }
                 </td>
             </tr>
             <tr>
                 <td>Description:</td>
                 <td>${data.message || 'No description provided'}</td>
             </tr>
+
+                <tr>
+                    <td>---</td>
+                </tr>
+              
+                <tr>
+                    <td>Date:</td>
+                      <td>${moment(data.createdAt).format('DD/MM/YYYY HH:mm')}</td>
+                </tr>
+                  <tr>
+                    <td>Page URL:</td>
+                    <td>${data.pageUrl}</td>
+                </tr>
+                 <tr>
+                    <td>User Agent:</td>
+                    <td>${data.device}</td>
+                </tr>
+                 <tr>
+                    <td>Remote IP:</td>
+                    <td>${data.ip}</td>
+                </tr>
+
         </table>
     </div>
 </body>

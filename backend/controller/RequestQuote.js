@@ -60,6 +60,7 @@ let imagePath = null;
       color: data?.color,
       addons: data?.addons,
       message: data?.message,
+      pageUrl: data?.pageUrl,
       device: deviceInfo,
       ip: clientIp,
     };
@@ -75,8 +76,8 @@ let imagePath = null;
 
     const adminMailOptions = {
       from: 'gm6681328@gmail.com',
-      to: process.env.ADMIN_EMAIL || 'admin@example.com', 
-      subject: 'New Quote Request - Umbrella Packaging',
+      to: data?.email,
+      subject: `${data?.name} <${data?.email}> | inquiry@umbrellapackaging.com`,
       html: adminTemplate(quoteData)
     };  
     

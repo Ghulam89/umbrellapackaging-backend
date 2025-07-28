@@ -1,13 +1,22 @@
 import { MdClose } from "react-icons/md";
-import Modal from "./Modal";
 import Input from "./Input";
 import Button from "./Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Modal from "./Modal";
 
 const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [pageUrl, setPageUrl] = useState("");
 
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setPageUrl(window.location.href);
+        }
+    }, []);
     const initialFormState = {
         name: "",
         email: "",
@@ -24,7 +33,9 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
         quantity: "",
         addOns: "",
         image: null,
-        description: ""
+        description: "",
+        pageUrl:pageUrl,
+
     };
 
     const [formData, setFormData] = useState(initialFormState);
@@ -40,6 +51,7 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
             formData.colors &&
             formData.printingSides &&
             formData.quantity
+           
         );
     };
 
@@ -79,6 +91,7 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                 setIsLoading(false);
                 setStep(1)
                 setFormData(initialFormState);
+                setIsModalOpen(false);
             } else {
                 toast.error(response.data.message)
                 setIsLoading(false);
@@ -100,7 +113,7 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
     const prevStep = () => setStep(step - 1);
 
     return (
-        <Modal 
+        <Modal
             isOpen={isModalOpen} 
             onClose={closeModal} 
             className={"rounded-xl max-w-6xl w-[90%]"}

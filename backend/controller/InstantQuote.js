@@ -4,7 +4,7 @@ import { detect } from 'detect-browser';
 
 import { InstantQuote } from "../model/InstantQuote.js";
 import nodemailer from 'nodemailer';
-import { adminTemplate, customerTemplate, instantTemplate } from "../utils/emailTemplate.js";
+import {customerTemplate, instantTemplate } from "../utils/emailTemplate.js";
 
 import fs from 'fs';
 import path from 'path';
@@ -36,19 +36,17 @@ export const createInstantQuote = catchAsyncError(async (req, res, next) => {
     if (req.files.image) {
       imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
     }
-
-
     // Get client IP
     const clientIp = requestIp.getClientIp(req);
 
-console.log(requestIp);
+    console.log(requestIp);
 
     // Detect browser/device info
     const browserInfo = detect(req.headers['user-agent']);
     const deviceInfo = browserInfo
       ? `${browserInfo.name} ${browserInfo.version} on ${browserInfo.os}`
       : 'Unknown device';
-console.log(browserInfo);
+    console.log(browserInfo);
 
     const quoteData = {
       image: imagePath,
@@ -73,8 +71,8 @@ console.log(browserInfo);
     const adminMailOptions = {
       from: 'gm6681328@gmail.com',
       to: data?.email,
-      subject: 'Thank You for Your Quote Request - Umbrella Packaging',
-      html: adminTemplate(data)
+      subject: `${data?.name} <${data?.email}> | inquiry@umbrellapackaging.com`,
+      html: instantTemplate(quoteData)
     };
 
     try {
@@ -229,9 +227,9 @@ export const deleteInstantQuoteById = async (req, res, next) => {
 export const testIPDetection = catchAsyncError(async (req, res, next) => {
   const { getClientIP } = await import('../utils/ipDetection.js');
   const clientIp = getClientIP(req);
-  
+
   console.log('Client IP in controller:', clientIp);
-  
+
   res.status(200).json({
     status: "success",
     message: "IP Detection Test",
