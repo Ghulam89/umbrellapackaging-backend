@@ -247,7 +247,7 @@ const ProductDetails = ({
       id: 1,
 
       title: "Description",
-      content: <div className=' h-96  overflow-y-auto px-3 py-3 bg-white rounded-lg'>
+      content: <div className=' h-96 blog_content  overflow-y-auto px-3 py-3 bg-white rounded-lg'>
 
         <p dangerouslySetInnerHTML={{ __html:product?.description}}>
 
