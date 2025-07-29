@@ -268,7 +268,16 @@ export const getAllBlogs = catchAsyncError(async (req, res, next) => {
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 10;
     const skip = (page - 1) * limit;
+     const searchQuery = req.query.search || '';
 
+  const filter = {};
+    if (searchQuery) {
+      filter.$or = [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { content: { $regex: searchQuery, $options: 'i' } },
+        { tags: { $regex: searchQuery, $options: 'i' } }
+      ];
+    }
     const [blogs, totalBlogs] = await Promise.all([
       Blogs.find()
         .sort({ createdAt: -1 })
