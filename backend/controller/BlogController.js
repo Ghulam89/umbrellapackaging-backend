@@ -192,13 +192,26 @@ export const updateBlog = catchAsyncError(async (req, res, next) => {
       });
     }
     const processedContent = processContentImages(req.body.content || blog.content);
-     let qna = blog.qna;
+     // Handle Q&A updates
+    let qna = blog.qna; // Default to existing Q&A
+    
     if (req.body.qna !== undefined) {
       try {
-        qna = typeof req.body.qna === 'string' ? JSON.parse(req.body.qna) : req.body.qna;
+        // If qna is an empty array, string, or null, clear all Q&A
+        if (req.body.qna === '' || req.body.qna === null || req.body.qna === '[]') {
+          qna = [];
+        } 
+        // If qna is a string, parse it
+        else if (typeof req.body.qna === 'string') {
+          qna = JSON.parse(req.body.qna);
+        } 
+        // If qna is an array, use it directly
+        else if (Array.isArray(req.body.qna)) {
+          qna = req.body.qna;
+        }
       } catch (error) {
         console.error('Error parsing Q&A:', error);
-        // Keep the existing qna if parsing fails
+        // Keep existing qna if parsing fails
       }
     }
     const updateData = {

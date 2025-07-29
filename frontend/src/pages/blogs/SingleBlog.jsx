@@ -37,41 +37,41 @@ function SingleBlog({ serverData }) {
 
 
 
-  const faqItemSchema = singleBlog?.qna?.map((item, index) => {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Question",
-    "name": item.question,
-    "acceptedAnswer": {
-      "@type": "Answer",
-      "text": item.answer 
-    }
-  };
-});
+    const faqItemSchema = singleBlog?.qna?.map((item, index) => {
+        return {
+            "@context": "https://schema.org",
+            "@type": "Question",
+            "name": item.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": item.answer
+            }
+        };
+    });
 
     const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": faqItemSchema || []
-};
-console.log(singleBlog);
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqItemSchema || []
+    };
+    console.log(singleBlog);
 
     return (
         <>
             {/* Only render Helmet meta tags when singleBlog is available */}
-               <PageMetadata
-                   title={singleBlog?.metaTitle || serverData?.metaTitle || "Custom Packaging Solutions"}
-                   description={singleBlog?.metaDescription || serverData?.metaDescription || ""}
-                   keywords={singleBlog?.keywords || serverData?.keywords || ""}
-                   ogUrl={`${BaseUrl}/blog/${slug}`}
-                   ogImage={`${BaseUrl}/${singleBlog?.image}`}
-                   ogImageWidth="1200"
-                   ogImageHeight="630"
-                   canonicalUrl={`${BaseUrl}/blog/${slug}`}
-                   faqItemSchema={faqSchema}
-                   // robots={categoryData?.robots || serverData?.robots || "index, follow"}
-                   robots={"noindex, nofollow"}
-                 />
+            <PageMetadata
+                title={singleBlog?.metaTitle || serverData?.metaTitle || "Custom Packaging Solutions"}
+                description={singleBlog?.metaDescription || serverData?.metaDescription || ""}
+                keywords={singleBlog?.keywords || serverData?.keywords || ""}
+                ogUrl={`${BaseUrl}/blog/${slug}`}
+                ogImage={`${BaseUrl}/${singleBlog?.image}`}
+                ogImageWidth="1200"
+                ogImageHeight="630"
+                canonicalUrl={`${BaseUrl}/blog/${slug}`}
+                faqItemSchema={faqSchema}
+                // robots={categoryData?.robots || serverData?.robots || "index, follow"}
+                robots={"noindex, nofollow"}
+            />
 
             <div className='max-w-6xl mx-auto py-6'>
                 <div className='flex gap-8 md:flex-row flex-col'>
@@ -114,7 +114,7 @@ console.log(singleBlog);
                                                         <img src={`${BaseUrl}/${item?.image}`} className=' w-full h-full object-cover object-center rounded-lg' />
                                                     </div>
                                                     <div className=' w-8/12'>
-                                                        <Link to="#" className='text-[#4440E6] hover:underline'>
+                                                        <Link to={`/blog/${item?.slug}`} className='text-[#4440E6] hover:underline'>
                                                             {item?.title}
                                                         </Link>
                                                         <div
