@@ -94,7 +94,7 @@ console.log(singleBlog);
                         </div>
 
                         <div
-                            className="text-gray-700 leading-relaxed"
+                            className="text-gray-700 blog_content leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: singleBlog?.content }}
                         />
                     </div>
