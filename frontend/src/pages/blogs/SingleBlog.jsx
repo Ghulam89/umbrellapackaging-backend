@@ -2,22 +2,29 @@ import React, { useEffect, useState } from 'react';
 import TableOfContent from './TableOfContent';
 import Button from '../../components/common/Button';
 import { BaseUrl } from '../../utils/BaseUrl';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import PageMetadata from '../../components/common/PageMetadata';
 
 function SingleBlog({ serverData }) {
     const { slug } = useParams();
+    const navigate = useNavigate();
     // Use serverData only for the initial render (SSR/hydration)
     const [singleBlog, setSingleBlog] = useState(serverData || {});
     const [blogs, setBlogs] = useState([])
     const fetchBlogs = async () => {
         try {
             const response = await axios.get(`${BaseUrl}/blog/get?slug=${slug}`);
+            if (!response?.data?.data) {
+                // Blog not found, redirect to 404
+                navigate('/404')
+                return
+            }
             setSingleBlog(response?.data?.data);
         } catch (error) {
-            console.error("Error fetching blog:", error);
+            // If there's an error or blog not found, redirect to 404
+            navigate('/404')
         }
     };
 

@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -L app.js ",
-    "start": "node app.js"
+    "start": "node app.js",
+    "generate-sitemap": "node utils/generateSitemap.js"
   },
   "keywords": [],
   "author": "",

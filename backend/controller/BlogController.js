@@ -349,3 +349,14 @@ export const deleteBlogById = catchAsyncError(async (req, res, next) => {
     next(error);
   }
 });
+
+// Function for sitemap generation
+export const getAllBlogsForSitemap = async () => {
+  try {
+    const blogs = await Blogs.find().select('slug updatedAt');
+    return blogs;
+  } catch (error) {
+    console.error("Error fetching blogs for sitemap:", error);
+    return [];
+  }
+};

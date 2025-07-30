@@ -558,6 +558,17 @@ export const searchProduct = catchAsyncError(async (req, res, next) => {
   }
 });
 
+// Function for sitemap generation
+export const getAllProductsForSitemap = async () => {
+  try {
+    const products = await Products.find().select('slug updatedAt');
+    return products;
+  } catch (error) {
+    console.error("Error fetching products for sitemap:", error);
+    return [];
+  }
+};
+
 const getSortOption = (sort) => {
   switch (sort) {
     case "releaseDate-asc":

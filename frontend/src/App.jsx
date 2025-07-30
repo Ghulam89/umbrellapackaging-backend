@@ -49,6 +49,7 @@ function App({ serverData,CategoryProducts}) {
     { path: '/target-price', element: <TargetPrice key="target-price" /> },
     { path: '/faqs', element: <FAQ key="faq" /> },
     { path: '/portfolio', element: <Portfolio key="portfolio" /> },
+    { path: '/404', element: <NotFound key="not-found" /> },
     {
       path: '/category/:slug',
       element: <Category
@@ -79,7 +80,6 @@ function App({ serverData,CategoryProducts}) {
        
       />
     },
-    { path: '/404', element: <NotFound key="not-found" /> },
     { path: '*', element: <NotFound /> }
   ];
 

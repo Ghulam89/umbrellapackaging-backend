@@ -77,7 +77,7 @@ const Navbar = () => {
                   {searchResults.map((product) => (
                     <Link
                       key={product._id}
-                      to={`/${product.slug}`}
+                      to={`/product/${product.slug}`}
                       onClick={handleResultClick}
                       className="block"
                     >

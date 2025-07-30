@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Button from "../../components/common/Button";
 import Container from "../../components/common/Container";
@@ -10,12 +10,18 @@ import PageMetadata from "../../components/common/PageMetadata";
 
 const Category = ({ serverData }) => {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [categoryProduct, setCategoryProduct] = useState([]);
   const [categoryData, setCategoryData] = useState(null);
 
   const FetchCategory = async () => {
     try {
       const response = await axios.get(`${BaseUrl}/brands/get?slug=${slug}`);
+      if (!response?.data?.data) {
+        // Category not found, redirect to 404
+        navigate('/404')
+        return
+      }
       setCategoryData(response?.data?.data);
 
       const response2 = await axios.get(
@@ -23,7 +29,8 @@ const Category = ({ serverData }) => {
       );
       setCategoryProduct(response2?.data?.data?.categories);
     } catch (err) {
-
+      // If there's an error or category not found, redirect to 404
+      navigate('/404')
     }
   };
 
