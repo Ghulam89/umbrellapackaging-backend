@@ -59,12 +59,12 @@ const Navbar = () => {
 
   return (
     <div className="bg-[#F7F7F7] sm:pb-2.5 pb-0">
-      <div className="sm:max-w-6xl max-w-[95%] mx-auto">
+      <div className="sm:max-w-6xl relative max-w-[95%] mx-auto">
         <div className="flex space-x-5 w-full justify-between h-20 items-center">
           <Link to={`/`}>
             <img src={logo} alt="" className="sm:w-[135px] w-[300px]" />
           </Link>
-          <div className="w-lg relative search-container">
+          <div className="w-lg sm:relative search-container">
             <Input
               placeholder={"Search For Products"}
               className={"rounded-full p-2.5 w-full border-2 bg-white border-gray-300"}
@@ -72,7 +72,7 @@ const Navbar = () => {
               onChange={handleSearch}
             />
             {showResults && searchResults.length > 0 && (
-              <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg max-h-96 overflow-y-auto">
+              <div className="absolute z-10 mt-1 left-0 w-full max-w-2xl bg-white border border-gray-300 rounded-lg shadow-lg max-h-96 overflow-y-auto">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4 p-4">
                   {searchResults.map((product) => (
                     <Link

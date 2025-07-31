@@ -19,8 +19,8 @@ const Hero = () => {
         
         <div className=" sm:w-7/12  w-full">
           <div className=" hidden sm:block">
-            <strong className=" sm:text-[38px] text-[20px] text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
-          <h2 className=" sm:text-2xl text-sm  font-medium  text-[#4440E6]">Customize Everything Under This Umbrella</h2>
+            <strong className=" sm:text-[38px] text-[28px] text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
+          <h2 className=" sm:text-2xl text-base  font-medium  text-[#4440E6]">Customize Everything Under This Umbrella</h2>
           </div>
           <div className=" flex  mt-7 gap-2 flex-wrap items-center">
             <Link to={'/sub-category/fashion-apparel-packaging-boxes'}>
