@@ -21,9 +21,9 @@ import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import PageMetadata from '../../components/common/PageMetadata';
-const SubCategory = ({serverData,CategoryProducts}) => {
-      const { slug } = useParams();
-  const [categoryData,setCategoryData] = useState(null)
+const SubCategory = ({ serverData, CategoryProducts }) => {
+  const { slug } = useParams();
+  const [categoryData, setCategoryData] = useState(null)
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [allProducts, setAllProducts] = useState([]);
@@ -78,7 +78,7 @@ const SubCategory = ({serverData,CategoryProducts}) => {
 
 
   const fetchProduct = async (page = 1) => {
-  
+
 
     try {
       const response = await axios.get(`${BaseUrl}/category/get?slug=${slug}`);
@@ -88,7 +88,7 @@ const SubCategory = ({serverData,CategoryProducts}) => {
       const response2 = await axios.get(
         `${BaseUrl}/products/categoryProducts/${response?.data?.data?._id}?page=${page}`
       );
-        if (page === 1) {
+      if (page === 1) {
         setAllProducts(response2?.data?.data);
       } else {
         // Prevent duplicates by checking if product already exists
@@ -98,7 +98,7 @@ const SubCategory = ({serverData,CategoryProducts}) => {
           return [...prev, ...newProducts];
         });
       }
-          setCurrentPage(response2?.data?.currentPage);
+      setCurrentPage(response2?.data?.currentPage);
       setTotalPages(response2?.data?.totalPages);
 
     } catch (err) {
@@ -132,63 +132,63 @@ const SubCategory = ({serverData,CategoryProducts}) => {
     }
   };
 
-    const breadcrumbSchema = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": BaseUrl
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": serverData?.brandId?.name,
-          "item": `${BaseUrl}/category/${serverData?.brandId?.slug}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": categoryData?.name,
-          "item": `${BaseUrl}/sub-category/${slug}`
-        }
-      ]
-    };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": BaseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": serverData?.brandId?.name,
+        "item": `${BaseUrl}/category/${serverData?.brandId?.slug}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": categoryData?.name,
+        "item": `${BaseUrl}/sub-category/${slug}`
+      }
+    ]
+  };
 
-    // Create item list schema
-const productItems = CategoryProducts?.map((item, index) => ({
-  "@type": "ListItem",
-  "position": index + 3,
-  "name": item?.name,
-  "item": `${BaseUrl}/${item?.slug}`,
-  "image": item?.images?.[0]?.url ? `${BaseUrl}/${item.images[0].url}` : undefined
-})) || [];
-  const itemListSchema  = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": BaseUrl
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": categoryData?.name,
-      "item": `${BaseUrl}/sub-category/${slug}`
-    },
+  // Create item list schema
+  const productItems = CategoryProducts?.map((item, index) => ({
+    "@type": "ListItem",
+    "position": index + 3,
+    "name": item?.name,
+    "item": `${BaseUrl}/${item?.slug}`,
+    "image": item?.images?.[0]?.url ? `${BaseUrl}/${item.images[0].url}` : undefined
+  })) || [];
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": BaseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": categoryData?.name,
+        "item": `${BaseUrl}/sub-category/${slug}`
+      },
       ...productItems
-  ]
-};
+    ]
+  };
 
-    
+
   return (
     <>
-       
+
       <PageMetadata
         title={categoryData?.metaTitle || serverData?.metaTitle || "Custom Packaging Solutions"}
         description={categoryData?.metaDescription || serverData?.metaDescription || ""}
@@ -232,7 +232,7 @@ const productItems = CategoryProducts?.map((item, index) => ({
                   {categoryData?.subTitle}
                 </h1>
                 <div className=' overflow-y-auto h-44'>
-                  <p dangerouslySetInnerHTML={{ __html: categoryData?.description}}
+                  <p dangerouslySetInnerHTML={{ __html: categoryData?.description }}
                     className="text-sm leading-6 font-sans ">
 
                   </p>
@@ -261,16 +261,16 @@ const productItems = CategoryProducts?.map((item, index) => ({
             {/* Image */}
             {/* Fixed version */}
             <div className="w-full  lg:w-1/2">
-            {
-              categoryData?.image?<img
-                src={`${BaseUrl}/${categoryData?.image}`}
-                alt={categoryData?.bannerAltText}
-                className="w-full h-auto rounded-xl shadow-md object-cover"
-                loading="lazy"
-              />:null
+              {
+                categoryData?.image ? <img
+                  src={`${BaseUrl}/${categoryData?.image}`}
+                  alt={categoryData?.bannerAltText}
+                  className="w-full h-auto rounded-xl shadow-md object-cover"
+                  loading="lazy"
+                /> : null
 
-            }
-              
+              }
+
 
             </div>
           </div>
@@ -297,7 +297,7 @@ const productItems = CategoryProducts?.map((item, index) => ({
                       <div className="  sm:h-64 h-44">
                         <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full h-full  rounded-xl" />
                       </div>
-                      
+
 
                       <h2 className="  text-center text-[#242424]  font-medium text-lg  py-5">{item?.name}</h2>
                     </div>
@@ -324,9 +324,10 @@ const productItems = CategoryProducts?.map((item, index) => ({
           <div className=' '>
             <div className=' text-center py-4'>
               <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
-{categoryData?.videoUpperHeading}
+                {categoryData?.videoUpperHeading}
               </h2>
-              <p className=' pt-3' dangerouslySetInnerHTML={{ __html:categoryData?.videoUpperDescription}}>
+              <p className='pt-3 whitespace-normal break-words overflow-hidden'
+                dangerouslySetInnerHTML={{ __html: categoryData?.videoUpperDescription }}>
 
               </p>
             </div>
@@ -336,12 +337,12 @@ const productItems = CategoryProducts?.map((item, index) => ({
                 <iframe width="100%" className=' rounded-lg' height="315" src={categoryData?.videoLink} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </div>
               <div className=' sm:w-6/12 w-full'>
-                           <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
-{categoryData?.title} Video Guide</h2>
-                <p dangerouslySetInnerHTML={{ __html:categoryData?.videoDescription}} className=' pt-4 pb-3'>
+                <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
+                  {categoryData?.title} Video Guide</h2>
+                <p dangerouslySetInnerHTML={{ __html: categoryData?.videoDescription }} className=' pt-4 pb-3'>
                 </p>
-                  <h2 className="leading-[42px]  text-xl  font-sans   font-[600] text-[#333333]">
-Contact Us</h2>
+                <h2 className="leading-[42px]  text-xl  font-sans   font-[600] text-[#333333]">
+                  Contact Us</h2>
                 <ul className=' leading-7'>
                   <li className=' flex gap-1 items-center'>
                     <svg width={15} aria-hidden="true" class="e-font-icon-svg e-fas-phone-alt" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M497.39 361.8l-112-48a24 24 0 0 0-28 6.9l-49.6 60.6A370.66 370.66 0 0 1 130.6 204.11l60.6-49.6a23.94 23.94 0 0 0 6.9-28l-48-112A24.16 24.16 0 0 0 122.6.61l-104 24A24 24 0 0 0 0 48c0 256.5 207.9 464 464 464a24 24 0 0 0 23.4-18.6l24-104a24.29 24.29 0 0 0-14.01-27.6z"></path></svg>
@@ -371,11 +372,11 @@ Contact Us</h2>
               <div className='w-full lg:w-1/2 '>
 
                 <div className="">
-            <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
+                  <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
                     {categoryData?.bannerTitleFirst}
                   </h2>
                   <div className=' overflow-y-auto h-56'>
-                    <p dangerouslySetInnerHTML={{ __html:categoryData?.bannerContentFirst}} className="text-sm leading-6  mb-6">
+                    <p dangerouslySetInnerHTML={{ __html: categoryData?.bannerContentFirst }} className="text-sm leading-6  mb-6">
 
 
                     </p>
@@ -418,7 +419,7 @@ Contact Us</h2>
 
         <div className="sm:max-w-6xl  my-6 bg-[#eff4fe] py-3 rounded-lg  max-w-[95%] mx-auto">
           <div className="text-center pb-3">
-              <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
+            <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
               Your Packaging Partner: What Sets Umbrella Custom Packaging Apart
 
 
@@ -480,11 +481,11 @@ Contact Us</h2>
             <div className='w-full lg:w-1/2 '>
 
               <div className=" pt-3">
-            <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
+                <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
                   {categoryData?.bannerTitleSecond}
                 </h2>
                 <div className=' overflow-y-auto h-56'>
-                  <p dangerouslySetInnerHTML={{ __html:categoryData?.bannerContentSecond}} className="text-sm leading-6  mb-6">
+                  <p dangerouslySetInnerHTML={{ __html: categoryData?.bannerContentSecond }} className="text-sm leading-6  mb-6">
 
 
 
@@ -542,11 +543,11 @@ Contact Us</h2>
             <div className='w-full lg:w-1/2 '>
 
               <div className=" pt-3">
-            <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
+                <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
                   {categoryData?.bannerTitleThird}
                 </h2>
                 <div className=' overflow-y-auto h-56'>
-                  <p dangerouslySetInnerHTML={{ __html:categoryData?.bannerContentThird}} className="text-sm leading-6  mb-6">
+                  <p dangerouslySetInnerHTML={{ __html: categoryData?.bannerContentThird }} className="text-sm leading-6  mb-6">
 
 
 
@@ -582,11 +583,11 @@ Contact Us</h2>
             <div className='w-full lg:w-1/2 '>
 
               <div className=" pt-3">
-            <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
+                <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
                   {categoryData?.bannerTitleFourth}
                 </h2>
                 <div className=' overflow-y-auto h-56'>
-                  <p dangerouslySetInnerHTML={{ __html:categoryData?.bannerContentFourth}} className="text-sm leading-6  mb-6">
+                  <p dangerouslySetInnerHTML={{ __html: categoryData?.bannerContentFourth }} className="text-sm leading-6  mb-6">
 
 
 
@@ -647,8 +648,8 @@ Contact Us</h2>
           <div className=' sm:w-6/12 w-full'>
             <div className=' rounded-xl px-4 py-4 bg-white'>
 
-                          <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
-Building Trust with Top <br /> Brands
+              <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
+                Building Trust with Top <br /> Brands
               </h2>
               <p className=' pt-2'>Many companies choose Umbrella Custom Packaging for amazing, affordable, and memorable custom printed boxes and packaging. We work hard to make sure we give them the best advice and solutions for their needs, so they feel confident and happy working with us. It doesn’t matter how big or small your business is, we’ll work with you to make the perfect custom boxes you want. By building trust with top brands through our dedication, reliability, and exceptional service, we continue to solidify our reputation as a trusted partner in the packaging industry.
 

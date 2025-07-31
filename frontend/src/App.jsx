@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation, useRoutes } from 'react-router-dom'
+import { Route, Routes, useLocation, useParams, useRoutes } from 'react-router-dom'
 import './App.css'
 import { Home } from './pages/home/Home'
 import TopNav from './components/Header/TopNav'
@@ -22,10 +22,12 @@ import TargetPrice from './pages/targetPrice'
 import FAQ from './components/FAQ/FAQ'
 import Portfolio from './pages/Portfolio/Portfolio'
 import NotFound from './pages/404'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Cart from './pages/cart/Cart'
 import Checkout from './pages/checkout/Checkout'
 import { ToastContainer } from 'react-toastify'
+import axios from 'axios'
+import { BaseUrl } from './utils/BaseUrl'
 
 function App({ serverData,CategoryProducts}) {
   const location = useLocation();
@@ -72,14 +74,15 @@ function App({ serverData,CategoryProducts}) {
         CategoryProducts={CategoryProducts}
       />
     },
-    {
-      path: '/:slug',
-      element: <ProductDetails
-        key={location.pathname}
-        serverData={serverData}
-       
-      />
-    },
+  {
+  path: '/:slug',
+  element: (
+    <ProductDetailsWrapper 
+      key={location.pathname}
+      serverData={serverData}
+    />
+  )
+},
     { path: '*', element: <NotFound /> }
   ];
 
@@ -94,6 +97,38 @@ function App({ serverData,CategoryProducts}) {
       <Footer />
     </>
   )
+}
+
+
+function ProductDetailsWrapper({ serverData }) {
+  const { slug } = useParams();
+  const [productData, setProductData] = useState(serverData);
+  const [loading, setLoading] = useState(!serverData);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!serverData) {
+      const fetchProduct = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
+          setProductData(response?.data?.data);
+          setError(false);
+        } catch (err) {
+        
+          setError(true);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProduct();
+    }
+  }, [slug, serverData]);
+
+  // if (loading) return <div>Loading...</div>;
+  if (!loading && (error || !productData)) return <NotFound />;
+  
+  return <ProductDetails serverData={productData} />;
 }
 
 export default App

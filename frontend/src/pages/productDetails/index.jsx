@@ -24,7 +24,6 @@ const ProductDetails = ({
 }) => {
   const {slug} = useParams()
   const dispatch = useDispatch()
-  // Use serverData only for the initial render (SSR/hydration)
   const [product, setProduct] = useState(serverData || null);
   const [relatedProduct, setRelatedProduct] = useState([])
   const images = [
@@ -513,7 +512,7 @@ const ProductDetails = ({
         <div className='lg:max-w-6xl max-w-[95%] bg-[#F7F7F7] rounded-lg p-2 flex lg:flex-row flex-col gap-4 mx-auto'>
           <div className='lg:w-6/12'>
             <div className=' pb-7 pt-3'>
-              <p className=' flex items-center gap-1'><strong className=' font-normal  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </strong>/<strong className=' font-normal text-[#4440E6] capitalize'> <Link className='font-sans' to={`/category/${product?.brandId?.slug}`}>{product?.brandId?.name}</Link> </strong> /<strong className='font-normal text-[#4440E6] capitalize'> <Link className=' font-sans' to={`/sub-category/${product?.categoryId?.slug}`}>{product?.categoryId?.title}</Link> </strong> /<span className='  '>{product?.name} </span></p>
+              <p className=' flex  flex-wrap items-center gap-1'><strong className=' font-normal  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </strong>/<strong className=' font-normal text-[#4440E6] capitalize'> <Link className='font-sans whitespace-nowrap' to={`/category/${product?.brandId?.slug}`}>{product?.brandId?.name}</Link> </strong> /<strong className='font-normal text-[#4440E6] capitalize'> <Link className=' font-sans whitespace-nowrap' to={`/sub-category/${product?.categoryId?.slug}`}>{product?.categoryId?.title}</Link> </strong> /<span className=' font-sans  whitespace-nowrap '>{product?.name} </span></p>
             </div>
             <div className='w-full'>
               <div className="overflow-hidden relative">
@@ -557,7 +556,7 @@ const ProductDetails = ({
                     key={i}
                     onClick={() => goToSlide(i)}
                     className={`
-                                            transition-all  w-32 rounded-lg h-32 overflow-hidden bg-white 
+                                            transition-all  w-32 rounded-lg  h-auto overflow-hidden bg-white 
                                             ${curr === i ? "w-20 h-20 border-2 border-[#4440E6] border-dashed" : "bg-opacity-100 bg-white"}
                                         `}
                   >
@@ -625,8 +624,8 @@ const ProductDetails = ({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2  mt-3 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                <div className="w-full">
+<div className="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+  <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Box Style"
                     star={"*"}
@@ -639,7 +638,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Size (Length)"
                     star={"*"}
@@ -652,7 +651,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Size (Width)"
                     star={"*"}
@@ -665,7 +664,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Size (Depth)"
                     star={"*"}
@@ -678,7 +677,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Unit"
@@ -699,7 +698,7 @@ const ProductDetails = ({
 
 
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Stock"
@@ -730,7 +729,7 @@ const ProductDetails = ({
 
 
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Colors"
@@ -759,7 +758,7 @@ const ProductDetails = ({
 
 
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Printing Sides"
@@ -780,7 +779,7 @@ const ProductDetails = ({
                 </div>
 
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Quantity"
                     star={"*"}
@@ -795,7 +794,7 @@ const ProductDetails = ({
 
 
 
-                <div className="w-full">
+  <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Add-Ons"
@@ -820,7 +819,7 @@ const ProductDetails = ({
                   </select>
                 </div>
 
-                <div className="sm:col-span-5">
+  <div className="w-full col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5">
                   <label
                     htmlFor="design_upload"
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
@@ -840,7 +839,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-                <div className="col-span-5">
+  <div className="w-full col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5">
                   <label
                     htmlFor="description"
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
