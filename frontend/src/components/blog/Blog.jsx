@@ -82,9 +82,9 @@ const Blog = () => {
    },[])
 
   return (
-    <div className="py-12">
+    <div className="md:py-12 py-10">
       <div className=" sm:max-w-6xl max-w-[95%] mx-auto  text-center">
-        <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333]">Blog & News</h2>
+        <h2 className="sm:text-[35px] text-[25px]   pb-5   font-sans   font-[600] text-[#333333]">Blog & News</h2>
         <div className="w-full  mx-auto">
           <Swiper
             modules={[Autoplay, Pagination, Navigation]}

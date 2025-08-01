@@ -3,7 +3,7 @@ import UnitBG from '../../assets/images/bg-unit.webp';
 
 function ProductionUnits() {
   return (
-    <div className='bg-[#f4ecfb] mb-5'>
+    <div className='bg-[#f4ecfb] mb-5 pb-1'>
       <div className='sm:max-w-6xl mb-3.5 max-w-[95%] mx-auto'>
         {/* Hero Section with Background Image */}
         <div 
@@ -26,31 +26,31 @@ function ProductionUnits() {
         </div>
 
         {/* Title */}
-                  <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
+                  <h2 className="sm:text-[35px] text-[25px]   leading-10  text-center mb-4  font-sans   font-[600] text-[#333333] ">
 
-          Umbrella Custom Packaging has Production Units Across the Globe
+          Umbrella Custom Packaging has Production Units <br className=' hidden md:block' /> Across the Globe
         </h2>
 
         {/* Features Grid */}
         <div className='grid md:grid-cols-3 grid-cols-1 gap-4 pb-4'>
-          <div className='flex flex-col justify-center items-center bg-white rounded-lg p-5 hover:shadow-lg transition-shadow'>
-            <strong className='text-lg  mb-2 text-center'>In-house Production</strong>
-            <p className='text-base text-gray-800 font-normal text-center'>
-              Umbrella Custom Packaging tends to rely on its in-house production units to expedite orders for customers.
+          <div className='flex flex-col h-44 justify-center items-center bg-white rounded-lg md:p-6 p-5  hover:shadow-lg transition-shadow'>
+            <strong className='text-[21px] font-[500]  text-center'>In-house Production</strong>
+            <p className=' text-[#2E2D2D] font-normal text-center'>
+             Umbrella Custom Packaging tend to rely on its in-house production units most of the time in order to expedite the orders for the customers.
             </p>
           </div>
           
-          <div className='flex flex-col justify-center items-center bg-white rounded-lg p-5  hover:shadow-lg transition-shadow'>
-            <strong className='text-lg  mb-2 text-center'>Offshore Printing Facilities</strong>
-            <p className='text-base text-gray-800 font-normal text-center'>
-              We have various printing facilities outside the USA where orders are produced at the lowest possible cost with the same turnaround time.
-            </p>
+          <div className='flex flex-col h-44 justify-center items-center bg-white rounded-lg md:p-6 p-5  hover:shadow-lg transition-shadow'>
+            <strong className='text-[21px] font-[500]  text-center'>Offshore Printing Facilities</strong>
+              <p className=' text-[#2E2D2D] font-normal text-center'>
+Umbrella Custom Packaging have its various printing facilities outside USA where the orders are being produced at the lowest possible cost with same turnaround time.            </p>
           </div>
           
           <div className='flex flex-col justify-center items-center bg-white rounded-lg p-5  hover:shadow-lg transition-shadow'>
-            <strong className=' mb-2 text-center'>Free Shipping</strong>
-            <p className='text-base text-gray-800 font-normal text-center'>
-              We make your order even more cost-effective by providing free ground and air freight, delivering orders on time.
+            <strong className='text-[21px] font-[500]  text-center'>Free Shipping</strong>
+              <p className=' text-[#2E2D2D] font-normal text-center'>
+Umbrella Custom Packaging make your order even more cost effective by providing you the free ground and air freight and delivers the orders on time.
+
             </p>
           </div>
         </div>

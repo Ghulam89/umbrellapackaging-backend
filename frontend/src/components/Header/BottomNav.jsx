@@ -98,11 +98,11 @@ const BottomNav = ({ Menu, OpenMenu }) => {
         {/* Dropdown Menu */}
         {hoveredCategory && selectedCategory && (
           <div
-            className="absolute top-12 pt-1.5 left-0 w-full z-50"
+            className="absolute top-12 pt-3 left-0 w-full z-50"
             onMouseEnter={() => handleCategoryHover(hoveredCategory)}
             onMouseLeave={handleCategoryLeave}
           >
-            <div className="bg-[#F7F7F7] mt-5">
+            <div className="bg-[#F7F7F7] rounded-lg mt-5">
               <div className="max-w-8xl mx-auto px-4 py-3 grid grid-cols-4 gap-4">
                 {selectedCategory.map((submenu, index) => (
                   <NavLink

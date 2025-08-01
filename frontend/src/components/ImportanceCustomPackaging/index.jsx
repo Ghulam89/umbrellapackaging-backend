@@ -55,11 +55,12 @@ const ImportanceCustomPackaging = () => {
         <div className=' text-center sm:pb-6 pb-3'>
                   
 
-            <h2 className=' sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] flex sm:flex-row flex-col  justify-center gap-1'>What Is Custom Packaging? <h2 style={{color:'#4440E6'}} className=' m-0 '>A Complete Guide  </h2></h2>
+                      <h2 className="sm:text-[40px] sm:pb-10 pb-0 sm:pt-4 pt-0 text-[25px]  flex md:flex-row flex-col justify-center sm:gap-1 gap-0  leading-9    font-sans   font-[600] text-[#333333] ">
+What Is Custom Packaging? <h2 style={{color:'#4440E6'}} className=' m-0 '>A Complete Guide  </h2></h2>
         </div>
-        <div className="flex flex-col lg:flex-row gap-8 blog_content items-center">
+        <div className="flex flex-col lg:flex-row gap-8 blog_content banner_content items-center">
           {/* Text Content */}
-          <div dangerouslySetInnerHTML={{ __html: banner?.description}} className="w-full lg:w-1/2 bg-gray-50 h-[430px] pt-4 overflow-y-auto">
+          <div dangerouslySetInnerHTML={{ __html: banner?.description}} className="w-full lg:w-1/2 bg-gray-50 h-[430px] p-4 overflow-y-auto">
              
           </div>
           

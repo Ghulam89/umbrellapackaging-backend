@@ -16,6 +16,7 @@ import Blog from '../../components/blog/Blog'
 import FAQ from '../../components/FAQ/FAQ'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
+import goScreen from '../../assets/images/goScreen.webp'
 
 export const Home = () => {
 
@@ -120,7 +121,7 @@ export const Home = () => {
         <TemplateToDesign />
         <ProductionUnits />
         <CustomPackagingProduced />
-        <PackagingBanner title={'Order Kraft Packaging For Sustainable Future.'} subTitle={"Go Green with Umbrella Custom Packaging Go For Kraft Packaging"} bgImage="https://umbrellapackaging.com/wp-content/uploads/2024/01/f2.webp" />
+        <PackagingBanner url="/sub-category/kraft-packaging-boxes" title={'Order Kraft Packaging For Sustainable Future.'} subTitle={"Go Green with Umbrella Custom Packaging Go For Kraft Packaging"} bgImage={goScreen} />
         <WeFulfil />
         <CustomerReviews />
         <InspirationPackaging />

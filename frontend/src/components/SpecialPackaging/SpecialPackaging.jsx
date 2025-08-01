@@ -71,13 +71,13 @@ const SpecialPackaging = () => {
     
     <div className="sm:max-w-6xl bg-[#F7F7F7] p-3 max-w-[95%] mx-auto">
       <div className="text-center pb-3">
-          <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
+          <h2 className="sm:text-[35px] text-[25px]   leading-9     font-sans   font-[600] text-[#333333] ">
         Enhance Your Product Presentation with Our Special Packaging Features
 
         </h2>
        
       </div >
-      <div className="">
+      <div className=" pt-2">
         <Tabs defaultTab={"Embossing"} tabs={data} />
       </div>
     </div>

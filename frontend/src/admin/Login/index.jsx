@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
-import logo from '../../assets/images/umbrella-logo.svg';
+// import logo from '../../assets/images/umbrella-logo.svg';
 import { BaseUrl } from "../../utils/BaseUrl";
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const AdminLogin = () => {
         >
           <div className="text-center ">
             
-            <img src={logo} className=" w-44 mx-auto"  alt="" />
+            {/* <img src={logo} className=" w-44 mx-auto"  alt="" /> */}
            
           </div>
 

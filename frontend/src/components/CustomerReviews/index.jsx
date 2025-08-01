@@ -57,7 +57,7 @@ const CustomerReviews = () => {
       }}
     >
       <div className="sm:max-w-6xl max-w-[95%] mx-auto text-center">
-        <h2 className="pb-3 font-semibold text-2xl">Customer Reviews</h2>
+                 <h2 className="sm:text-[35px] text-[25px]   leading-9    pb-4  font-sans   font-[600] text-[#333333] ">Customer Reviews</h2>
         <p className="text-sm pb-5 text-gray-500">
           Share your true experience with us by writing a review below
         </p>

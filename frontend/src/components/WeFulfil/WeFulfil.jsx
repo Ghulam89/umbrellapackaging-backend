@@ -9,14 +9,14 @@ function WeFulfil() {
         <div className='flex items-center justify-center'>
           <img 
             src={IndustryStandard} 
-            className='rounded-xl w-full h-auto max-w-[600px] object-cover' 
+            className=' w-full h-auto max-w-[600px] object-cover' 
             alt='Industry Standard Packaging' 
             loading='lazy'
           />
         </div>
 
         <div className='flex flex-col items-start justify-center space-y-4 md:space-y-5'>
-          <h2 className='font-semibold text-lg md:text-xl lg:text-2xl text-start'>
+          <h2 className="sm:text-[35px] text-[25px]   leading-9    text-start  font-sans   font-[600] text-[#333333] ">
             We Fulfil the standards of the Packaging Industry.
           </h2>
           
@@ -26,8 +26,8 @@ function WeFulfil() {
             they deliver custom boxes that are both reliable and customized to your preferences.
           </p>
           
-          <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>
-            <div className='space-y-2 md:space-y-3'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 pt-6 gap-4 w-full'>
+            <div className='space-y-1'>
               {[
                 "Easy User Interface",
                 "Smart Pricing System",
@@ -46,7 +46,7 @@ function WeFulfil() {
               ))}
             </div>
             
-            <div className='space-y-2 md:space-y-3'>
+            <div className='space-y-1'>
               {[
                 "No Plate/Die Charges",
                 "Low MOQs",

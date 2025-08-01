@@ -41,20 +41,20 @@ const CustomPackagingProduced = () => {
       ],
     },
     {
-      id: 2,
+      id: 3,
       title: "Payment",
       data: [
         {
-          title: "Get Price Quote",
-          desc: "Submit a request for free custom quote first through our website or calling our customer service representative. You will have the prices in 30 minutes.",
+          title: "Credit/Debit Card",
+          desc: "The next step is to make the payment and our payment methods are very secure. the first one is that you can make it through your debit/card.",
         },
         {
-          title: "Price Matching",
-          desc: "Match the price with your budget line and ask the representative to beat that. We will try our best to give you the lowest possible prices here at Umbrella Custom Packaging.",
+          title: "PayPal",
+          desc: "The other method is for the PayPal users. We accept the payments through PayPal as well. Refund Policy is mentioned on our website.",
         },
         {
-          title: "Price Approval",
-          desc: "Give your approval on the prices to proceed with the order right away. We will be delighted to take you on board with Umbrella Custom Packaging throughout your packaging needs.",
+          title: "Wire/ACH Bank Transfer",
+          desc: "For the bigger amounts we suggest Wire/ACH bank transfers in order to avoid the payment processor’s taxes.",
         },
       ],
     },
@@ -63,16 +63,16 @@ const CustomPackagingProduced = () => {
       title: "Production",
       data: [
         {
-          title: "Get Price Quote",
-          desc: "Submit a request for free custom quote first through our website or calling our customer service representative. You will have the prices in 30 minutes.",
+          title: "Final Specification Sheet",
+          desc: "A final specification sheet will be sent to you before we send your order towards to the production after the payment.",
         },
         {
-          title: "Price Matching",
-          desc: "Match the price with your budget line and ask the representative to beat that. We will try our best to give you the lowest possible prices here at Umbrella Custom Packaging.",
+          title: "Prototyping/Sampling",
+          desc: "The sample run will be sent to the customer before the bulk order if it’s required or if the customer go for it.",
         },
         {
-          title: "Price Approval",
-          desc: "Give your approval on the prices to proceed with the order right away. We will be delighted to take you on board with Umbrella Custom Packaging throughout your packaging needs.",
+          title: "Order Production",
+          desc: "The order will be produced in the given time span and will be sent toward the Quality Control unit before shipping.",
         },
       ],
     },
@@ -81,16 +81,16 @@ const CustomPackagingProduced = () => {
       title: "Shipping",
       data: [
         {
-          title: "Get Price Quote",
-          desc: "Submit a request for free custom quote first through our website or calling our customer service representative. You will have the prices in 30 minutes.",
+          title: "Quality Control",
+          desc: "Our QC department will check the order and approve it after certain text if it comes good. After It will be sent to the shipping department.",
         },
         {
-          title: "Price Matching",
-          desc: "Match the price with your budget line and ask the representative to beat that. We will try our best to give you the lowest possible prices here at Umbrella Custom Packaging.",
+          title: "Shipping",
+          desc: "The Order will be shipped right away after it is cleared from the QC department. Tracking ID will be provided and the order will be delivered.",
         },
         {
-          title: "Price Approval",
-          desc: "Give your approval on the prices to proceed with the order right away. We will be delighted to take you on board with Umbrella Custom Packaging throughout your packaging needs.",
+          title: "Customer’s Review",
+          desc: "The customer’s thoughts and suggestions on the order will be taken and displayed on our media. Also, the issue will be addressed.",
         },
       ],
     },
@@ -99,16 +99,16 @@ const CustomPackagingProduced = () => {
       title: "Recorders",
       data: [
         {
-          title: "Get Price Quote",
-          desc: "Submit a request for free custom quote first through our website or calling our customer service representative. You will have the prices in 30 minutes.",
+          title: "Dedicated Support Person",
+          desc: "One of our customer service representative will be appointed to the customer whoever places the order with us. He/she will keep the customer in a loop so to make the next order placement super easy for both the customer and company.",
         },
         {
-          title: "Price Matching",
-          desc: "Match the price with your budget line and ask the representative to beat that. We will try our best to give you the lowest possible prices here at Umbrella Custom Packaging.",
+          title: "Discounts",
+          desc: "The customer will be regularly informed about the discounts that the company offers every month and year like month-end and Christmas discounts.",
         },
         {
-          title: "Price Approval",
-          desc: "Give your approval on the prices to proceed with the order right away. We will be delighted to take you on board with Umbrella Custom Packaging throughout your packaging needs.",
+          title: "Long Term Business Partnership",
+          desc: "Umbrella Custom Packaging will ultimately build this route to a successful and profitable business relationship with the customer.",
         },
       ],
     },
