@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Wrapper from "../Wrapper";
-import Button from "../../components/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
 import { FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
 import AddNews from "./AddNews";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
+
+import edit from '../../assets/images/edit.png'
+import del from '../../assets/images/del.png'
 const News = () => {
     const [users, setUsers] = useState([]);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
@@ -25,7 +27,7 @@ const News = () => {
 
   const fetchSizes = () => {
     axios
-      .get(`${Base_url}/blog/getAll?page=${currentPage}&limit=${limit}&search=${search}`)
+      .get(`${BaseUrl}/blog/getAll?page=${currentPage}&limit=${limit}&search=${search}`)
       .then((res) => {
         setUsers(res.data.data);
         setTotalPages(res?.data?.pagination?.totalPages);
@@ -58,7 +60,7 @@ const News = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${Base_url}/blog/delete/${id}`)
+          .delete(`${BaseUrl}/blog/delete/${id}`)
           .then((res) => {
             if (res.status === 200) {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -128,20 +130,20 @@ const News = () => {
                       </span>
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
-                      <img src={`${Base_url}/${item?.image}`}  className=" rounded-md w-16 h-16 mx-auto" alt="" />
+                      <img src={`${BaseUrl}/${item?.image}`}  className=" rounded-md w-16 h-16 mx-auto" alt="" />
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <div className="flex gap-2 justify-center items-center">
                         <img
                              onClick={() => handleEdit(item)}
 
-                          src={require("../../assets/image/edit.png")}
+                          src={edit}
                           alt="Edit"
                           className="cursor-pointer"
                         />
                         <img
                           onClick={() => removeFunction(item._id)}
-                          src={require("../../assets/image/del.png")}
+                          src={del}
                           alt="Delete"
                           className="cursor-pointer"
                         />

@@ -47,7 +47,7 @@ export async function render(url) {
     };
   }
   const appHtml = renderToString(
-    <StrictMode>
+    <>
     <HelmetProvider context={helmetContext}>
       <Provider store={store}>
         <StaticRouter location={normalizedUrl}>
@@ -55,7 +55,7 @@ export async function render(url) {
         </StaticRouter>
       </Provider>
     </HelmetProvider>
-  </StrictMode>
+  </>
   );
   const { helmet } = helmetContext
 

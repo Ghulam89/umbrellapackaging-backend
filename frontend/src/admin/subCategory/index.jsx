@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Button from "../../components/Button";
 import axios from "axios";
-import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
+import Swal from "sweetalert2"
 import { FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
 import AddSubCategory from "./AddSubCategory";
 import UploadCSV from "./UploadCSV";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
 
 const SubCategory = () => {
   const [users, setUsers] = useState([]);
@@ -29,7 +29,7 @@ const SubCategory = () => {
   const fetchSizes = () => {
     setLoading(true);
     axios
-      .get(`${Base_url}/category/getAll?page=${currentPage}&perPage=${itemsPerPage}&search=${search}`)
+      .get(`${BaseUrl}/category/getAll?page=${currentPage}&perPage=${itemsPerPage}&search=${search}`)
       .then((res) => {
         setUsers(res.data.data);
         setTotalPages(res.data.pagination.totalPages);
@@ -70,7 +70,7 @@ const SubCategory = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${Base_url}/category/delete/${id}`)
+          .delete(`${BaseUrl}/category/delete/${id}`)
           .then((res) => {
             if (res.data.status === "success") {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");

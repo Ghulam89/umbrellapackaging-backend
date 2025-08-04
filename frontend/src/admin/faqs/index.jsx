@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Wrapper from "../Wrapper";
-import Button from "../../components/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
-import { FaRegEye, FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
-import moment from "moment";
-import { Link } from "react-router-dom";
-const Orders = () => {
+import { FaSearch } from "react-icons/fa";
+import AddFaqs from "./AddFaqs";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
+import edit from '../../assets/images/edit.png'
+import del from '../../assets/images/edit.png'
+const Faqs = () => {
     const [users, setUsers] = useState([]);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -20,13 +20,14 @@ const Orders = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [limit] = useState(10);
   const [search, setSearch] = useState("");
+  
   useEffect(() => {
     fetchSizes();
   }, [currentPage, search]);
 
   const fetchSizes = () => {
     axios
-      .get(`${Base_url}/checkout/getAll?page=${currentPage}&limit=${limit}&search=${search}`)
+      .get(`${BaseUrl}/faq/getAll?page=${currentPage}&limit=${limit}&search=${search}`)
       .then((res) => {
         console.log(res);
         
@@ -61,7 +62,7 @@ const Orders = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${Base_url}/checkout/delete/${id}`)
+          .delete(`${BaseUrl}/faq/delete/${id}`)
           .then((res) => {
             if (res.status === 200) {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -75,15 +76,28 @@ const Orders = () => {
     });
   };
 
-
-  
-
   return (
     <>
       <div className="flex justify-between items-center">
-        <h2 className="main_title">Orders</h2>
-       
+        <h2 className="main_title">Faqs</h2>
+        <Button
+          className="bg-primary py-2.5"
+          label="Add Faqs"
+          onClick={() => {
+            setEditData(null);
+            setIsUpdateOpen(true);
+          }}
+        />
       </div>
+
+      
+      <AddFaqs  isModalOpen={isUpdateOpen}
+        setIsModalOpen={setIsUpdateOpen}
+        isEditMode={!!editData}
+        editData={editData}
+        fetchSizes={fetchSizes}
+        
+        />
 
       <div className="my-4">
         <Input
@@ -101,12 +115,8 @@ const Orders = () => {
               <thead className="bg-primary rounded-lg">
                 <tr>
                   <th className="text-sm text-white font-bold px-6 py-4">No</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Name</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">City</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Country</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Address</th>
-                  <th className="text-sm text-white font-bold px-6 whitespace-nowrap py-4">Total Bills</th>
-                  <th className="text-sm text-white font-bold px-6 whitespace-nowrap py-4">from deliver day</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Question</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Answer</th>
                   <th className="text-sm text-white font-bold px-6 py-4">Action</th>
                 </tr>
               </thead>
@@ -118,57 +128,26 @@ const Orders = () => {
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {`${item.firstName} ${item?.lastName}`}
-                      </span>
-                    </td>
-
-
-                    <td className="text-sm font-normal px-6 py-4">
-                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {`${item?.delivery?.city}`}
-                      </span>
-                    </td>
-                    
-                    <td className="text-sm font-normal px-6 py-4">
-                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {`${item?.delivery?.country}`}
-                      </span>
-                    </td>
-
-                    <td className="text-sm font-normal px-6 py-4">
-                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {`${item?.delivery?.addressLine1}`}
+                        {item.question}
                       </span>
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {`${item.totalBill}`}
+                        {item.answer}
                       </span>
                     </td>
-
-                    <td className="text-sm font-normal px-6 py-4">
-                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {moment(item.fromDeliverDay).format('DD-MM-YYYY')}
-                      </span>
-                    </td>
-                   
-                   
                     <td className="text-sm font-normal px-6 py-4">
                       <div className="flex gap-2 justify-center items-center">
-                        <Link to={`/order-details/${item?._id}`}>
-                        <FaRegEye size={30} className=" text-secondary" />
-
-                        </Link>
-                        {/* <img
+                        <img
                              onClick={() => handleEdit(item)}
 
-                          src={require("../../assets/image/edit.png")}
+                          src={edit}
                           alt="Edit"
                           className="cursor-pointer"
-                        /> */}
+                        />
                         <img
                           onClick={() => removeFunction(item._id)}
-                          src={require("../../assets/image/del.png")}
+                          src={del}
                           alt="Delete"
                           className="cursor-pointer"
                         />
@@ -218,4 +197,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Faqs;

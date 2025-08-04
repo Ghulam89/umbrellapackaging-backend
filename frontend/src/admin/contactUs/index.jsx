@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Wrapper from "../Wrapper";
-import Button from "../../components/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
 import { FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Input from "../../components/common/Input";
 
-const Subscribe = () => {
+const ContactUs = () => {
     const [users, setUsers] = useState([]);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -25,8 +23,10 @@ const Subscribe = () => {
 
   const fetchSizes = () => {
     axios
-      .get(`${Base_url}/subscribe/get?page=${currentPage}&limit=${limit}&search=${search}`)
+      .get(`${BaseUrl}/contact/get?page=${currentPage}&limit=${limit}&search=${search}`)
       .then((res) => {
+        console.log(res);
+        
         setUsers(res.data.data);
         setTotalPages(res.data.totalPages);
       })
@@ -58,7 +58,7 @@ const Subscribe = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${Base_url}/subscribe/delete/${id}`)
+          .delete(`${BaseUrl}/contact/delete/${id}`)
           .then((res) => {
             if (res.status === 200) {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -75,10 +75,9 @@ const Subscribe = () => {
   return (
     <>
       <div className="flex justify-between items-center">
-        <h2 className="main_title">Subscribe</h2>
+        <h2 className="main_title">Contact Us</h2>
         
       </div>
-
 
       <div className="my-4">
         <Input
@@ -96,7 +95,10 @@ const Subscribe = () => {
               <thead className="bg-primary rounded-lg">
                 <tr>
                   <th className="text-sm text-white font-bold px-6 py-4">No</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Username</th>
                   <th className="text-sm text-white font-bold px-6 py-4">Email</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Phone Number</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Message</th>
                   <th className="text-sm text-white font-bold px-6 py-4">Action</th>
                 </tr>
               </thead>
@@ -108,12 +110,33 @@ const Subscribe = () => {
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
+                        {item.fullName}
+                      </span>
+                    </td>
+                    <td className="text-sm font-normal px-6 py-4">
+                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
                         {item.email}
                       </span>
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
+                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
+                        {item.phone}
+                      </span>
+                    </td>
+                    <td className="text-sm font-normal px-6 py-4">
+                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
+                        {item.comment}
+                      </span>
+                    </td>
+                    <td className="text-sm font-normal px-6 py-4">
                       <div className="flex gap-2 justify-center items-center">
-                    
+                        <img
+                             onClick={() => handleEdit(item)}
+
+                          src={require("../../assets/image/edit.png")}
+                          alt="Edit"
+                          className="cursor-pointer"
+                        />
                         <img
                           onClick={() => removeFunction(item.id)}
                           src={require("../../assets/image/del.png")}
@@ -166,4 +189,4 @@ const Subscribe = () => {
   );
 };
 
-export default Subscribe;
+export default ContactUs;

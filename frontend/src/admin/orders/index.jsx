@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Wrapper from "../Wrapper";
-import Button from "../../components/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
-import { FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
-
-const ContactUs = () => {
+import { FaRegEye, FaSearch } from "react-icons/fa";
+import moment from "moment";
+import { Link } from "react-router-dom";
+import Input from "../../components/common/Input";
+import del from '../../assets/images/del.png';
+import { BaseUrl } from "../../utils/BaseUrl";
+const Orders = () => {
     const [users, setUsers] = useState([]);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -25,7 +25,7 @@ const ContactUs = () => {
 
   const fetchSizes = () => {
     axios
-      .get(`${Base_url}/contact/get?page=${currentPage}&limit=${limit}&search=${search}`)
+      .get(`${BaseUrl}/checkout/getAll?page=${currentPage}&limit=${limit}&search=${search}`)
       .then((res) => {
         console.log(res);
         
@@ -60,7 +60,7 @@ const ContactUs = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${Base_url}/contact/delete/${id}`)
+          .delete(`${BaseUrl}/checkout/delete/${id}`)
           .then((res) => {
             if (res.status === 200) {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -74,11 +74,14 @@ const ContactUs = () => {
     });
   };
 
+
+  
+
   return (
     <>
       <div className="flex justify-between items-center">
-        <h2 className="main_title">Contact Us</h2>
-        
+        <h2 className="main_title">Orders</h2>
+       
       </div>
 
       <div className="my-4">
@@ -97,10 +100,12 @@ const ContactUs = () => {
               <thead className="bg-primary rounded-lg">
                 <tr>
                   <th className="text-sm text-white font-bold px-6 py-4">No</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Username</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Email</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Phone Number</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Message</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Name</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">City</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Country</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Address</th>
+                  <th className="text-sm text-white font-bold px-6 whitespace-nowrap py-4">Total Bills</th>
+                  <th className="text-sm text-white font-bold px-6 whitespace-nowrap py-4">from deliver day</th>
                   <th className="text-sm text-white font-bold px-6 py-4">Action</th>
                 </tr>
               </thead>
@@ -112,35 +117,56 @@ const ContactUs = () => {
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {item.fullName}
+                        {`${item.firstName} ${item?.lastName}`}
+                      </span>
+                    </td>
+
+
+                    <td className="text-sm font-normal px-6 py-4">
+                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
+                        {`${item?.delivery?.city}`}
+                      </span>
+                    </td>
+                    
+                    <td className="text-sm font-normal px-6 py-4">
+                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
+                        {`${item?.delivery?.country}`}
+                      </span>
+                    </td>
+
+                    <td className="text-sm font-normal px-6 py-4">
+                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
+                        {`${item?.delivery?.addressLine1}`}
                       </span>
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {item.email}
+                        {`${item.totalBill}`}
                       </span>
                     </td>
+
                     <td className="text-sm font-normal px-6 py-4">
                       <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {item.phone}
+                        {moment(item.fromDeliverDay).format('DD-MM-YYYY')}
                       </span>
                     </td>
-                    <td className="text-sm font-normal px-6 py-4">
-                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {item.comment}
-                      </span>
-                    </td>
+                   
+                   
                     <td className="text-sm font-normal px-6 py-4">
                       <div className="flex gap-2 justify-center items-center">
-                        <img
+                        <Link to={`/order-details/${item?._id}`}>
+                        <FaRegEye size={30} className=" text-secondary" />
+
+                        </Link>
+                        {/* <img
                              onClick={() => handleEdit(item)}
 
                           src={require("../../assets/image/edit.png")}
                           alt="Edit"
                           className="cursor-pointer"
-                        />
+                        /> */}
                         <img
-                          onClick={() => removeFunction(item.id)}
+                          onClick={() => removeFunction(item._id)}
                           src={require("../../assets/image/del.png")}
                           alt="Delete"
                           className="cursor-pointer"
@@ -191,4 +217,4 @@ const ContactUs = () => {
   );
 };
 
-export default ContactUs;
+export default Orders;

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Wrapper from "../Wrapper";
-import Button from "../../components/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
 import { FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
 import AddAnnouncement from "./AddAnnouncement";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
 
 const Announcement = () => {
     const [users, setUsers] = useState([]);
@@ -26,7 +26,7 @@ const Announcement = () => {
 
   const fetchSizes = () => {
     axios
-      .get(`${Base_url}/announce/get?page=${currentPage}&limit=${limit}&search=${search}`)
+      .get(`${BaseUrl}/announce/get?page=${currentPage}&limit=${limit}&search=${search}`)
       .then((res) => {
         console.log(res);
         

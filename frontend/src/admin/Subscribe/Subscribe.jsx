@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Wrapper from "../Wrapper";
-import Button from "../../components/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
 import { FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
-import AddCategories from "./AddCategories";
-import UploadCSV from "./UploadCSV";
-const Categories = () => {
+import { BaseUrl } from "../../utils/BaseUrl";
+import Input from "../../components/common/Input";
+
+const Subscribe = () => {
     const [users, setUsers] = useState([]);
-    
-  const [isUploadOpen,setIsUploadOpen] = useState(false)
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [editData, setEditData] = useState(null);
   const handleEdit = (item) => {
@@ -20,23 +15,18 @@ const Categories = () => {
   };
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit] = useState(4);
+  const [limit] = useState(10);
   const [search, setSearch] = useState("");
   useEffect(() => {
     fetchSizes();
   }, [currentPage, search]);
 
-
-  
-
   const fetchSizes = () => {
     axios
-      .get(`${Base_url}/brands/getAll?page=${currentPage}&limit=${limit}&search=${search}`)
+      .get(`${BaseUrl}/subscribe/get?page=${currentPage}&limit=${limit}&search=${search}`)
       .then((res) => {
-        console.log(res);
-        
         setUsers(res.data.data);
-        setTotalPages(res.data.pagination.totalPages);
+        setTotalPages(res.data.totalPages);
       })
       .catch((error) => {
         console.log(error);
@@ -66,9 +56,9 @@ const Categories = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${Base_url}/brands/delete/${id}`)
+          .delete(`${BaseUrl}/subscribe/delete/${id}`)
           .then((res) => {
-            if (res.data.status ==="success") {
+            if (res.status === 200) {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
               fetchSizes();
             }
@@ -83,27 +73,10 @@ const Categories = () => {
   return (
     <>
       <div className="flex justify-between items-center">
-        <h2 className="main_title">Categories</h2>
-        <div className=" flex items-center gap-2">
-        <Button
-          className="bg-primary py-2.5"
-          label="Add"
-          onClick={() => {
-            setEditData(null);
-            setIsUpdateOpen(true);
-          }}
-        />
-     
-        </div>
+        <h2 className="main_title">Subscribe</h2>
+        
       </div>
 
-      <UploadCSV setIsModalOpen={setIsUploadOpen} isModalOpen={isUploadOpen} />
-      <AddCategories isModalOpen={isUpdateOpen}
-        setIsModalOpen={setIsUpdateOpen}
-        isEditMode={!!editData}
-        editData={editData}
-        fetchSizes={fetchSizes}
-        />
 
       <div className="my-4">
         <Input
@@ -121,8 +94,7 @@ const Categories = () => {
               <thead className="bg-primary rounded-lg">
                 <tr>
                   <th className="text-sm text-white font-bold px-6 py-4">No</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Name</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Image</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Email</th>
                   <th className="text-sm text-white font-bold px-6 py-4">Action</th>
                 </tr>
               </thead>
@@ -134,23 +106,14 @@ const Categories = () => {
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {item.name}
+                        {item.email}
                       </span>
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
-                      <img src={`${Base_url}/${item?.image}`}  className=" rounded-md w-16 h-16 mx-auto" alt="" />
-                    </td>
-                    <td className="text-sm font-normal px-6 py-4">
                       <div className="flex gap-2 justify-center items-center">
+                    
                         <img
-                             onClick={() => handleEdit(item)}
-
-                          src={require("../../assets/image/edit.png")}
-                          alt="Edit"
-                          className="cursor-pointer"
-                        />
-                        <img
-                          onClick={() => removeFunction(item._id)}
+                          onClick={() => removeFunction(item.id)}
                           src={require("../../assets/image/del.png")}
                           alt="Delete"
                           className="cursor-pointer"
@@ -201,4 +164,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Subscribe;

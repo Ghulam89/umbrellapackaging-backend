@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Base_url } from "../../utils/Base_url";
 import axios from "axios";
-import Modal from "../../components/modal";
 import { MdClose } from "react-icons/md";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
 import { AsyncPaginate } from "react-select-async-paginate";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { BaseUrl } from "../../utils/BaseUrl";
 
 const AddSubCategory = ({
   isModalOpen,
@@ -77,7 +74,7 @@ const AddSubCategory = ({
 
   const loadOptions = async (searchQuery, loadedOptions, { page }) => {
     try {
-      const response = await axios.get(`${Base_url}/brands/getAll`, {
+      const response = await axios.get(`${BaseUrl}/brands/getAll`, {
         params: { page, limit: 20, search: searchQuery || "" },
       });
 
@@ -140,22 +137,22 @@ const AddSubCategory = ({
       setBannerImageFourthAltText(editData?.bannerImageFourthAltText || "");
 
       if (editData?.icon) {
-        setIconPreview(`${Base_url}/${editData.icon}`);
+        setIconPreview(`${BaseUrl}/${editData.icon}`);
       }
       if (editData?.image) {
-        setImagePreview(`${Base_url}/${editData.image}`);
+        setImagePreview(`${BaseUrl}/${editData.image}`);
       }
       if (editData?.bannerImageFirst) {
-        setBannerImageFirstPreview(`${Base_url}/${editData.bannerImageFirst}`);
+        setBannerImageFirstPreview(`${BaseUrl}/${editData.bannerImageFirst}`);
       }
       if (editData?.bannerImageSecond) {
-        setBannerImageSecondPreview(`${Base_url}/${editData.bannerImageSecond}`);
+        setBannerImageSecondPreview(`${BaseUrl}/${editData.bannerImageSecond}`);
       }
       if (editData?.bannerImageThird) {
-        setBannerImageThirdPreview(`${Base_url}/${editData.bannerImageThird}`);
+        setBannerImageThirdPreview(`${BaseUrl}/${editData.bannerImageThird}`);
       }
       if (editData?.bannerImageFourth) {
-        setBannerImageFourthPreview(`${Base_url}/${editData.bannerImageFourth}`);
+        setBannerImageFourthPreview(`${BaseUrl}/${editData.bannerImageFourth}`);
       }
 
       if (editData?.brandId?._id) {
@@ -314,8 +311,8 @@ const AddSubCategory = ({
 
     try {
       const url = isEditMode
-        ? `${Base_url}/category/update/${editData._id}`
-        : `${Base_url}/category/create`;
+        ? `${BaseUrl}/category/update/${editData._id}`
+        : `${BaseUrl}/category/create`;
 
       const method = isEditMode ? "PUT" : "POST";
 

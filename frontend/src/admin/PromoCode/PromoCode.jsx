@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Wrapper from "../Wrapper";
-import Button from "../../components/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
 import { FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
 
 import AddPromoCode from "./AddPromoCode";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
 
 const PromoCode = () => {
     const [users, setUsers] = useState([]);
@@ -27,7 +26,7 @@ const PromoCode = () => {
 
   const fetchSizes = () => {
     axios
-      .get(`${Base_url}/promo/get?page=${currentPage}&limit=${limit}&search=${search}`)
+      .get(`${BaseUrl}/promo/get?page=${currentPage}&limit=${limit}&search=${search}`)
       .then((res) => {
         setUsers(res.data.data);
         setTotalPages(res.data.totalPages);

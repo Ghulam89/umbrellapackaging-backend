@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Base_url } from "../../utils/Base_url";
 import axios from "axios";
-import Modal from "../../components/modal";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
 import { MdClose } from "react-icons/md";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Modal from "../../components/common/Modal";
+import Input from "../../components/common/Input";
 
 const AddBanner = ({
   isModalOpen,
@@ -69,8 +68,8 @@ const AddBanner = ({
       const response = await axios({
         method: isEditMode ? "PUT" : "POST",
         url: isEditMode
-          ? `${Base_url}/banner/update/${editData.id}`
-          : `${Base_url}/banner/create`,
+          ? `${BaseUrl}/banner/update/${editData.id}`
+          : `${BaseUrl}/banner/create`,
         data: formData,
         headers: { "Content-Type": "multipart/form-data" },
       });

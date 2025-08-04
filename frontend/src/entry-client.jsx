@@ -8,7 +8,7 @@ import { store } from './store/store';
 import './App.css'
 hydrateRoot(
   document.getElementById('root'),
-  <StrictMode>
+  <>
     <HelmetProvider>
       <Provider store={store}>
         <BrowserRouter>
@@ -16,5 +16,5 @@ hydrateRoot(
         </BrowserRouter>
       </Provider>
     </HelmetProvider>
-  </StrictMode>
+  </>
 )

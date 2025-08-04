@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { Base_url } from "../../utils/Base_url";
 import axios from "axios";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
-import Modal from "../../components/modal";
 import { MdClose } from "react-icons/md";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Modal from "../../components/common/Modal";
+import Input from "../../components/common/Input";
+import Button from "../../components/common/Button";
 
 const UploadCSV = ({ isModalOpen, setIsModalOpen, closeModal, setUsers }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -63,12 +63,12 @@ const UploadCSV = ({ isModalOpen, setIsModalOpen, closeModal, setUsers }) => {
 
     try {
       setLoading(true);
-      const response = await axios.post(`${Base_url}/category/upload`, formData, {
+      const response = await axios.post(`${BaseUrl}/category/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
 
-      const response2 = await axios.post(`${Base_url}/category/categoryBrand/upload`, formData, {
+      const response2 = await axios.post(`${BaseUrl}/category/categoryBrand/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

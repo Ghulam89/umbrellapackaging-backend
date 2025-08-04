@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Base_url } from "../../utils/Base_url";
 import axios from "axios";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
-import ReactQuill from 'react-quill';
+import { BaseUrl } from "../../utils/BaseUrl";
+import Input from "../../components/common/Input";
+import Button from "../../components/common/Button";
 import 'react-quill/dist/quill.snow.css';
+
 const HomeBanner = () => {
+    const [ReactQuill, setReactQuill] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [description, setDescription] = useState("");
@@ -40,6 +42,12 @@ const HomeBanner = () => {
     'link', 'image'
   ];
 
+useEffect(() => {
+  import('react-quill').then((mod) => {
+    setReactQuill(() => mod.default);
+  });
+}, []);
+
   useEffect(() => {
     fetchBanner();
     return () => {
@@ -61,7 +69,7 @@ const HomeBanner = () => {
   const fetchBanner = async () => {
     setIsFetching(true);
     try {
-      const response = await axios.get(`${Base_url}/banner/getAll`);
+      const response = await axios.get(`${BaseUrl}/banner/getAll`);
       console.log(response);
       
       if (response.data && response.data.data) {
@@ -75,7 +83,7 @@ const HomeBanner = () => {
         const imagePath = firstBanner?.image;
         setPreviewImage(
           imagePath 
-            ? (imagePath.startsWith('http') ? imagePath : `${Base_url}/${imagePath}`)
+            ? (imagePath.startsWith('http') ? imagePath : `${BaseUrl}/${imagePath}`)
             : null
         );
         setBannerExists(!!firstBanner?._id);
@@ -133,8 +141,8 @@ const HomeBanner = () => {
 
     try {
       const url = bannerExists 
-        ? `${Base_url}/banner/update/${bannerId}`
-        : `${Base_url}/banner/create`;
+        ? `${BaseUrl}/banner/update/${bannerId}`
+        : `${BaseUrl}/banner/create`;
       
       const method = bannerExists ? "PUT" : "POST";
 
@@ -247,7 +255,9 @@ const HomeBanner = () => {
                 <label className="block mb-2 text-sm font-medium text-gray-900">
                   Banner Content
                 </label>
-                <ReactQuill
+
+                {ReactQuill ? (
+ <ReactQuill
                   theme="snow"
                   modules={quillModules}
                   formats={quillFormats}
@@ -255,6 +265,8 @@ const HomeBanner = () => {
                   onChange={handleDescriptionChange}
                   className="h-48 mb-12"
                 />
+                ):null}
+               
               </div>
               
               <div className="w-[100%]">

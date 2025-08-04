@@ -236,9 +236,9 @@ const Footer = () => {
                             </form>
                         </div>
                         <div className=' sm:w-6/12 w-full'>
-                            <div className=' flex sm:flex-row flex-col  justify-between'>
+                            <div className=' flex sm:flex-row items-center flex-col  justify-between'>
                                 <img src={social} className=' w-96' alt='' />
-                                <p className=' font-semibold'>Our Secure Payment Modes</p>
+                                <p className=' text-sm font-semibold'>Our Secure Payment Modes</p>
                             </div>
 
                         </div>

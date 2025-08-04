@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Base_url } from "../../utils/Base_url";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Button from "../../components/Button";
 import { useNavigate, useParams } from "react-router-dom";
+import Button from "../../components/common/Button";
+import { BaseUrl } from "../../utils/BaseUrl";
 
 const UpdateCustomers = () => {
   const { id } = useParams();
@@ -58,7 +58,7 @@ const UpdateCustomers = () => {
       }
 
       // Send only the updated fields to the server
-      const response = await axios.put(`${Base_url}/user/update/${id}`, updatedFields);
+      const response = await axios.put(`${BaseUrl}/user/update/${id}`, updatedFields);
 
       if (response.status === 200) {
         toast.success(response.data.message || "Customer updated successfully!");

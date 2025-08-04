@@ -1,13 +1,12 @@
 import react,{ useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import { Base_url } from "../../utils/Base_url";
 import axios from "axios";
-import Modal from "../../components/modal";
 import { MdClose, MdDelete } from "react-icons/md";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
-import JoditEditor from 'jodit-react';
 import { useRef } from 'react';
+import { BaseUrl } from "../../utils/BaseUrl";
+import Modal from "../../components/adminComponents/modal";
+import Input from "../../components/common/Input";
+import Button from "../../components/common/Button";
 
 const AddNews = ({
   isModalOpen,
@@ -19,7 +18,8 @@ const AddNews = ({
 }) => {
 
    console.log(editData);
-   
+   const [JoditEditor, setJoditEditor] = useState(null);
+
    const generateSlug = (title) => {
       return title
         .toLowerCase()
@@ -66,7 +66,11 @@ const [metaTitle, setMetaTitle] = useState(editData?.metaTitle || "");
       setImageAltText(fileName);
     }
   };
-
+useEffect(() => {
+  import('jodit-react').then((mod) => {
+    setJoditEditor(mod.default);
+  });
+}, []);
   const resetState = () => {
     setTitle("");
     setContent("");
@@ -102,7 +106,7 @@ const imageHandler = () => {
       const formData = new FormData();
       formData.append('image', file);
       
-      const response = await axios.post(`${Base_url}/blog/upload-editor-image`, formData, {
+      const response = await axios.post(`${BaseUrl}/blog/upload-editor-image`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
@@ -181,8 +185,8 @@ const imageHandler = () => {
       const response = await axios({
         method: isEditMode ? "PUT" : "POST",
         url: isEditMode
-          ? `${Base_url}/blog/update/${editData._id}`
-          : `${Base_url}/blog/create`,
+          ? `${BaseUrl}/blog/update/${editData._id}`
+          : `${BaseUrl}/blog/create`,
         data: formData,
         headers: { "Content-Type": "multipart/form-data" },
       });

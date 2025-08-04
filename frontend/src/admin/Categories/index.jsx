@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Wrapper from "../Wrapper";
-import Button from "../../components/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Base_url } from "../../utils/Base_url";
 import { FaSearch } from "react-icons/fa";
-import Input from "../../components/Input";
-import AddFaqs from "./AddFaqs";
-
-const Faqs = () => {
+import AddCategories from "./AddCategories";
+import UploadCSV from "./UploadCSV";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
+import { BaseUrl } from "../../utils/BaseUrl";
+import edit from '../../assets/images/edit.png'
+import del from '../../assets/images/del.png'
+const Categories = () => {
     const [users, setUsers] = useState([]);
+    
+  const [isUploadOpen,setIsUploadOpen] = useState(false)
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [editData, setEditData] = useState(null);
   const handleEdit = (item) => {
@@ -18,21 +21,23 @@ const Faqs = () => {
   };
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [limit] = useState(10);
+  const [limit] = useState(4);
   const [search, setSearch] = useState("");
-  
   useEffect(() => {
     fetchSizes();
   }, [currentPage, search]);
 
+
+  
+
   const fetchSizes = () => {
     axios
-      .get(`${Base_url}/faq/getAll?page=${currentPage}&limit=${limit}&search=${search}`)
+      .get(`${BaseUrl}/brands/getAll?page=${currentPage}&limit=${limit}&search=${search}`)
       .then((res) => {
         console.log(res);
         
         setUsers(res.data.data);
-        setTotalPages(res.data.totalPages);
+        setTotalPages(res.data.pagination.totalPages);
       })
       .catch((error) => {
         console.log(error);
@@ -62,9 +67,9 @@ const Faqs = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${Base_url}/faq/delete/${id}`)
+          .delete(`${BaseUrl}/brands/delete/${id}`)
           .then((res) => {
-            if (res.status === 200) {
+            if (res.data.status ==="success") {
               Swal.fire("Deleted!", "Your file has been deleted.", "success");
               fetchSizes();
             }
@@ -79,24 +84,26 @@ const Faqs = () => {
   return (
     <>
       <div className="flex justify-between items-center">
-        <h2 className="main_title">Faqs</h2>
+        <h2 className="main_title">Categories</h2>
+        <div className=" flex items-center gap-2">
         <Button
           className="bg-primary py-2.5"
-          label="Add Faqs"
+          label="Add"
           onClick={() => {
             setEditData(null);
             setIsUpdateOpen(true);
           }}
         />
+     
+        </div>
       </div>
 
-      
-      <AddFaqs  isModalOpen={isUpdateOpen}
+      <UploadCSV setIsModalOpen={setIsUploadOpen} isModalOpen={isUploadOpen} />
+      <AddCategories isModalOpen={isUpdateOpen}
         setIsModalOpen={setIsUpdateOpen}
         isEditMode={!!editData}
         editData={editData}
         fetchSizes={fetchSizes}
-        
         />
 
       <div className="my-4">
@@ -115,8 +122,8 @@ const Faqs = () => {
               <thead className="bg-primary rounded-lg">
                 <tr>
                   <th className="text-sm text-white font-bold px-6 py-4">No</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Question</th>
-                  <th className="text-sm text-white font-bold px-6 py-4">Answer</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Name</th>
+                  <th className="text-sm text-white font-bold px-6 py-4">Image</th>
                   <th className="text-sm text-white font-bold px-6 py-4">Action</th>
                 </tr>
               </thead>
@@ -128,26 +135,24 @@ const Faqs = () => {
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {item.question}
+                        {item.name}
                       </span>
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
-                      <span className="text-base text-black bg-green-200 py-1 px-2.5 rounded-full">
-                        {item.answer}
-                      </span>
+                      <img src={`${BaseUrl}/${item?.image}`}  className=" rounded-md w-16 h-16 mx-auto" alt="" />
                     </td>
                     <td className="text-sm font-normal px-6 py-4">
                       <div className="flex gap-2 justify-center items-center">
                         <img
                              onClick={() => handleEdit(item)}
 
-                          src={require("../../assets/image/edit.png")}
+                          src={edit}
                           alt="Edit"
                           className="cursor-pointer"
                         />
                         <img
                           onClick={() => removeFunction(item._id)}
-                          src={require("../../assets/image/del.png")}
+                          src={del}
                           alt="Delete"
                           className="cursor-pointer"
                         />
@@ -197,4 +202,4 @@ const Faqs = () => {
   );
 };
 
-export default Faqs;
+export default Categories;

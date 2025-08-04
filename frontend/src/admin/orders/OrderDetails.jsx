@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { Base_url } from "../../utils/Base_url";
 import { toast } from "react-toastify";
+import { BaseUrl } from "../../utils/BaseUrl";
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -13,7 +13,7 @@ const OrderDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`${Base_url}/checkout/get/${id}`)
+      .get(`${BaseUrl}/checkout/get/${id}`)
       .then((res) => {
         setOrderDetails(res.data.data);
         setProducts(res?.data?.data?.productIds || []);
@@ -41,7 +41,7 @@ const OrderDetails = () => {
     };
 
     axios
-      .put(`${Base_url}/checkout/update/${id}`, params)
+      .put(`${BaseUrl}/checkout/update/${id}`, params)
       .then((res) => {
         if (res?.data?.status === "ok") {
           toast.success("Status updated successfully!");

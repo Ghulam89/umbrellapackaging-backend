@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Base_url } from "../../utils/Base_url";
 import axios from "axios";
-import Modal from "../../components/modal";
 import { MdClose } from "react-icons/md";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Modal from "../../components/common/Modal";
+import Input from "../../components/common/Input";
+import Button from "../../components/common/Button";
 
 const AddPromoCode = ({
   isModalOpen,
@@ -43,8 +43,8 @@ const AddPromoCode = ({
       const response = await axios({
         method: isEditMode ? "PUT" : "POST",
         url: isEditMode
-          ? `${Base_url}/promo/update/${editData.id}`
-          : `${Base_url}/promo/create`,
+          ? `${BaseUrl}/promo/update/${editData.id}`
+          : `${BaseUrl}/promo/create`,
         data: { code,discount },
         headers: { "Content-Type": "application/json" },
       });

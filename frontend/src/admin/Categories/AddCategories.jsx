@@ -1,13 +1,12 @@
   import { useEffect, useState } from "react";
   import { toast } from "react-toastify";
-  import { Base_url } from "../../utils/Base_url";
   import axios from "axios";
-  import Modal from "../../components/modal";
   import { MdClose } from "react-icons/md";
-  import Input from "../../components/Input";
-  import Button from "../../components/Button";
-  import ReactQuill from 'react-quill';
-  import 'react-quill/dist/quill.snow.css';
+import { BaseUrl } from "../../utils/BaseUrl";
+import Input from "../../components/common/Input";
+import Button from "../../components/common/Button";
+import Modal from "../../components/adminComponents/modal";
+import 'react-quill/dist/quill.snow.css'
   const AddCategories = ({
     isModalOpen,
     setIsModalOpen,
@@ -20,11 +19,11 @@
   const generateSlug = (name) => {
       return name
         .toLowerCase()
-        .replace(/\s+/g, '-')     // Replace spaces with -
-        .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-        .replace(/\-\-+/g, '-')   // Replace multiple - with single -
-        .replace(/^-+/, '')       // Trim - from start of text
-        .replace(/-+$/, '');      // Trim - from end of text
+        .replace(/\s+/g, '-')     
+        .replace(/[^\w\-]+/g, '') 
+        .replace(/\-\-+/g, '-')   
+        .replace(/^-+/, '')      
+        .replace(/-+$/, '');  
     };
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState(editData?.name || "");  
@@ -36,6 +35,7 @@
 const [banner, setBanner] = useState(editData?.bannerImage || null);
     const [bgColor, setBgColor] = useState(editData?.bgColor || "");
     const [slug, setSlug] = useState(editData?.slug || generateSlug(editData?.name || ""));
+  const [ReactQuill, setReactQuill] = useState(null);
 
     console.log(slug);
     
@@ -55,6 +55,13 @@ const [banner, setBanner] = useState(editData?.bannerImage || null);
       setImageAltText("");
       setBannerAltText("");
     };
+
+useEffect(() => {
+  import("react-quill").then((mod) => {
+    setReactQuill(() => mod.default);
+  });
+}, []);
+
 
     useEffect(() => {
       if (!isEditMode || !editData?.slug) {
@@ -181,8 +188,8 @@ const [banner, setBanner] = useState(editData?.bannerImage || null);
         const response = await axios({
           method: isEditMode ? "PUT" : "POST",
           url: isEditMode
-            ? `${Base_url}/brands/update/${editData._id}`
-            : `${Base_url}/brands/create`,
+            ? `${BaseUrl}/brands/update/${editData._id}`
+            : `${BaseUrl}/brands/create`,
           data: formData,
           headers: { "Content-Type": "multipart/form-data" },
         });
@@ -395,7 +402,8 @@ const [banner, setBanner] = useState(editData?.bannerImage || null);
 
                 <div className=" w-full">
                   <label className="block mb-2 font-medium"> Choose Content*</label>
-                  <ReactQuill
+                  {ReactQuill && (
+ <ReactQuill
                     theme="snow"
                     value={content}
                     onChange={setContent}
@@ -404,6 +412,8 @@ const [banner, setBanner] = useState(editData?.bannerImage || null);
                     className="bg-white rounded-md"
                     placeholder="Write your blog content here..."
                   />
+                  )}
+                 
                 </div>
 
               </div>

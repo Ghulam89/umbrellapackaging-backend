@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Base_url } from "../../utils/Base_url";
 import axios from "axios";
-import Modal from "../../components/modal";
 import { MdClose } from "react-icons/md";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import { BaseUrl } from "../../utils/BaseUrl";
+import Modal from "../../components/adminComponents/modal";
+import Input from "../../components/common/Input";
+import Button from "../../components/common/Button";
 
-const AddAnnouncement = ({
+const AddFaqs = ({
     isModalOpen,
     setIsModalOpen,
     closeModal,
@@ -16,39 +16,32 @@ const AddAnnouncement = ({
     editData = {},
   }) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [title, setTitle] = useState(editData?.title || "");
-    const [color, setColor] = useState(editData?.color || "");
-    const [subTitle, setSubTitle] = useState(editData?.subTitle || "");
-
-
-
-    const resetState = ()=>{
-        setTitle("")
-        setSubTitle("")
-        setColor("")
-    }
+    const [question, setQuestion] = useState(editData?.question || "");
+    const [answer, setAnswer] = useState(editData?.answer || "");
   
     useEffect(() => {
       if (isEditMode) {
-        setTitle(editData?.title || "");
-        setColor(editData?.color || "");
-        setSubTitle(editData?.subTitle || "");
+        setQuestion(editData?.question || "");
+        setAnswer(editData?.answer || "");
       }
     }, [isEditMode, editData]);
+
+
+    const resetData = ()=>{
+      setQuestion('')
+      setAnswer('')
+    }
   
     const handleSubmit = async (e) => {
       e.preventDefault();
   
-      if (!title.trim()) {
-        toast.error("Name is required!");
+      if (!question.trim()) {
+        toast.error("Question is required!");
         return;
       }
-      if (!color.trim()) {
-        toast.error("Color is required!");
-        return;
-      }
-      if (!subTitle.trim()) {
-        toast.error("Sub Title is required!");
+
+      if (!answer.trim()) {
+        toast.error("Answer is required!");
         return;
       }
       setIsLoading(true);
@@ -56,17 +49,17 @@ const AddAnnouncement = ({
         const response = await axios({
           method: isEditMode ? "PUT" : "POST",
           url: isEditMode
-            ? `${Base_url}/announce/update/${editData.id}`
-            : `${Base_url}/announce/create`,
-          data: { title,subTitle,color:color.toLowerCase()},
+            ? `${BaseUrl}/faq/update/${editData.id}`
+            : `${BaseUrl}/faq/create`,
+          data: { question,answer },
           headers: { "Content-Type": "application/json" },
         });
   
         if (response?.status === 200) {
           setIsModalOpen(false);
-          toast.success(response.data.message || "Announce saved successfully!");
+          toast.success(response.data.message || "Faq saved successfully!");
           fetchSizes();
-          resetState();
+          resetData();
         } else {
           toast.error(response.data.message || "Failed to save size.");
         }
@@ -78,50 +71,37 @@ const AddAnnouncement = ({
     };
   
     return (
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} className={' rounded-md'}>
         <div>
           <div className="p-3 flex justify-between items-center">
             <div></div>
             <h1 className="capitalize h4 font-semibold">
-              {isEditMode ? "Edit Announce" : "Add Announce"}
+              {isEditMode ? "Edit Faq" : "Add Faq"}
             </h1>
-            <MdClose className=" cursor-pointer" onClick={() => {setIsModalOpen(false)
-              resetState()
-            }} size={25} />
+            <MdClose className=" cursor-pointer" onClick={() => setIsModalOpen(false)} size={25} />
           </div>
           <hr />
           <div className="p-5">
             <form onSubmit={handleSubmit}>
               <div className="flex gap-5 flex-wrap">
-
                 <div className="w-[100%]">
                   <Input
-                    label={"Title"}
-                    name={"title"}
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    label={"Question"}
+                    name={"name"}
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
                     className={"border w-full py-3"}
-                    defaultValue={title}
+                    defaultValue={question}
                   />
                 </div>
                 <div className="w-[100%]">
                   <Input
-                    label={"Color"}
-                    name={"Color"}
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
+                    label={"Answer"}
+                    name={"answer"}
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
                     className={"border w-full py-3"}
-                    defaultValue={color}
-                  />
-                </div>
-                <div className="w-[100%]">
-                  <Input
-                    label={"Sub Title"}
-                    name={"subTitle"}
-                    value={subTitle}
-                    onChange={(e) => setSubTitle(e.target.value)}
-                    className={"border w-full py-3"}
-                    defaultValue={subTitle}
+                    defaultValue={answer}
                   />
                 </div>
               </div>
@@ -140,5 +120,5 @@ const AddAnnouncement = ({
     );
   };
   
-  export default AddAnnouncement;
+  export default AddFaqs;
   

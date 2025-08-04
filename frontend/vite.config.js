@@ -19,7 +19,7 @@ export default defineConfig({
     allowedHosts: ['xleatherjacket.com']
   },
    ssr: {
-    noExternal: ['react-helmet-async', 'react-dom/server','react-redux', 'redux-persist', '@reduxjs/toolkit',]
+    noExternal: ['react-helmet-async', 'react-dom/server','react-redux', 'redux-persist', '@reduxjs/toolkit','react-quill','jodit-react']
   },
   optimizeDeps: {
     include: ['react-helmet-async', 'react-dom/server']

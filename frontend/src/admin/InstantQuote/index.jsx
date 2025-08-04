@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import { FaSearch } from "react-icons/fa";
 import { BaseUrl } from "../../utils/BaseUrl";
 import Input from "../../components/common/Input";
+import profile from '../../assets/images/profile.jpg';
+import del from '../../assets/images/del.png';
 const InstantQuote = () => {
   const [users, setUsers] = useState([]);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
@@ -138,9 +140,9 @@ const InstantQuote = () => {
                     <td className="text-sm font-normal px-6 py-4">
                     {item?.image?
                       <div  className=" w-16 h-16">
-                      <img  src={`${Base_url}/${item?.image}`} className=" rounded-md w-full h-full object-cover" alt="" />
+                      <img  src={`${BaseUrl}/${item?.image}`} className=" rounded-md w-full h-full object-cover" alt="" />
                     </div>:<div  className=" w-16 h-16">
-                        <img  src={require('../../assets/image/profile.jpg')} className=" rounded-md w-full h-full object-cover" alt="" />
+                        <img  src={profile} className=" rounded-md w-full h-full object-cover" alt="" />
                       </div>}
                     </td>
                    
@@ -155,7 +157,7 @@ const InstantQuote = () => {
                         
                         <img
                           onClick={() => removeFunction(item._id)}
-                          src={require("../../assets/image/del.png")}
+                          src={del}
                           alt="Delete"
                           className="cursor-pointer"
                         />
