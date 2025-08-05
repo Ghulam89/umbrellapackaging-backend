@@ -23,6 +23,7 @@ import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BaseUrl } from "../utils/BaseUrl";
+import Dielines from "../pages/Dielines";
 
 export default function WebsiteRoutes({ serverData, CategoryProducts }) {
  const location = useLocation();
@@ -71,6 +72,7 @@ function ProductDetailsWrapper({ serverData }) {
         { path: '/shipping-policy', element: <ShippingPolicy key="shipping-policy" /> },
         { path: '/returns-refunds', element: <ReturnRefunds key="returns-refunds" /> },
         { path: '/reviews', element: <Reviews key="reviews" /> },
+        { path: '/dielines', element: <Dielines key="dielines" /> },
         { path: '/get-custom-quote', element: <GetCustomQoutePage key="get-custom-quote" /> },
         { path: '/target-price', element: <TargetPrice key="target-price" /> },
         { path: '/faqs', element: <FAQ key="faq" /> },

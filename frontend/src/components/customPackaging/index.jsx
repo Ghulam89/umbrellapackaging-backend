@@ -23,7 +23,7 @@ const CustomPackaging = () => {
   return (
     <>
       <div className="   sm:max-w-6xl max-w-[95%] pt-2 mx-auto">
-        <div className=" bg-[#F7F7F7] text-center  my-7 p-4 rounded-md w-full">
+        <div className=" bg-[#F7F7F7] text-center  my-7 py-4 sm:px-9 px-2  rounded-md w-full">
           <h1 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
             Discover Our Custom Packaging Variety
           </h1>
@@ -35,10 +35,10 @@ const CustomPackaging = () => {
             perfect box for you!
           </p>
 
-          <div className=" grid sm:grid-cols-3 grid-cols-2  space-x-4 space-y-3 mt-3.5 justify-between">
+          <div className=" grid sm:grid-cols-3 grid-cols-2 mx-auto gap-5  mt-3.5 justify-between">
 
             {categories?.map((item, index) => {
-              return <div>
+              return <div className=" w-full">
                 <CategoryCard data={item} />
               </div>
             })}

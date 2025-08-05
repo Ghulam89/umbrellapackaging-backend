@@ -21,6 +21,7 @@ import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import PageMetadata from '../../components/common/PageMetadata';
+import InstantQuoteModal from '../../components/common/InstantQuoteModal';
 const SubCategory = ({ serverData, CategoryProducts }) => {
   const { slug } = useParams();
   const [categoryData, setCategoryData] = useState(null)
@@ -28,6 +29,8 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
   const data2 = [
     {
       id: 1,
@@ -243,20 +246,27 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               <div className=" flex flex-wrap   mt-5  gap-5 items-center">
                 <Button
-
+                 onClick={()=>setIsModalOpen(true)}
                   label={"Get Instant Quote"}
                   className=" bg-[#4440E6] text-white"
                 />
-                <Button
+                <Link to={'/dielines'}>
+                 <Button
                   label={"Get  Template"}
                   className="bg-[#4440E6] text-white"
                 />
+                </Link>
+               
+                <Link to={'/target-price'}>
                 <Button
                   label={"Meat My Quote"}
                   className="bg-[#4440E6]  text-white"
                 />
+                </Link>
+                
               </div>
             </div>
+      <InstantQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
 
             {/* Image */}
             {/* Fixed version */}
@@ -332,7 +342,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
               </p>
             </div>
 
-            <div className=' flex sm:flex-row flex-col gap-5  mt-5 bg-[#EFF4FE] p-4 rounded-lg justify-between'>
+            <div className=' flex sm:flex-row flex-col items-center gap-5  mt-5 bg-[#EFF4FE] p-4 rounded-lg justify-between'>
               <div className=' sm:w-6/12 w-full'>
                 <iframe width="100%" className=' rounded-lg' height="315" src={categoryData?.videoLink} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </div>

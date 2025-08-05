@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import PageMetadata from '../../components/common/PageMetadata';
+import { Link } from 'react-router-dom';
 
 function ContactUs() {
   // Form validation schema
@@ -216,37 +217,46 @@ function ContactUs() {
       <div className='max-w-[1200px] mx-auto mt-10'>
         <div className='grid md:grid-cols-3 grid-cols-1 gap-10 bg-[#5a56e9] p-5 rounded-[8px]'>
           <div className='grid grid-cols-1'>
-            <div className='bg-[#fff] flex justify-center sm:flex-row flex-col items-center rounded-[8px] p-2 gap-10 '>
-              <div className='text-white flex justify-center items-center p-3  bg-[#5a56e9] rounded-full'>
+            <div className='bg-[#fff] flex justify-start  font-sans sm:flex-row flex-col items-center rounded-[8px] p-5 gap-3'>
+              <Link  to={'tel:+1%20747-247-0456'} className='text-white flex justify-center items-center p-3  bg-[#5a56e9] rounded-full'>
                 <IoCallOutline size={40} />
-              </div>
+              </Link>
               <div className='flex flex-col  justify-between '>
-                <h5 className='text-3xl font-semibold'>Call Now</h5>
-                <p>+1 747-247-0456</p>
+                <Link to={'tel:+1%20747-247-0456'}>
+                 <h2 className='text-3xl font-medium text-[#111111]'>Call Now</h2>
+                </Link>
+               
+                <p className=' pt-1'>+1 747-247-0456</p>
               </div>
             </div>
           </div>
 
           <div className='grid grid-cols-1'>
-            <div className='bg-[#fff] flex sm:flex-row flex-col justify-center  items-center rounded-[8px] p-2 gap-10 '>
-              <div className='text-white  p-3 items-center bg-[#5a56e9]  rounded-full'>
+            <div className='bg-[#fff] flex justify-start  font-sans sm:flex-row flex-col items-center rounded-[8px] p-5 gap-3'>
+              <Link  to={'mailto:info@umbrellapackaging.com'} className='text-white flex justify-center items-center p-3  bg-[#5a56e9] rounded-full'>
                 <MdOutlineMarkEmailRead size={40} />
-              </div>
+              </Link>
               <div className='flex flex-col  justify-between items-start'>
-                <h5 className='text-3xl font-semibold'>Email</h5>
-                <p>info@umbrellapackaging.com</p>
+                   <Link to={'mailto:info@umbrellapackaging.com'}>
+                   
+                <h2 className='text-3xl font-medium text-[#111111]'>Email</h2>
+                   </Link>
+                <p className=' pt-1'>info@umbrellapackaging.com</p>
               </div>
             </div>
           </div>
 
           <div className='grid grid-cols-1 '>
-            <div className='bg-[#fff] flex sm:flex-row flex-col justify-center items-center  rounded-[8px] p-2 gap-5 '>
-              <div className='text-white  p-3 items-center bg-[#5a56e9] rounded-full'>
+            <div className='bg-[#fff] flex justify-start  font-sans sm:flex-row flex-col items-center rounded-[8px] p-5 gap-3'>
+              <Link  to={'https://maps.app.goo.gl/FCBPReqBvveR9ox96'} className='text-white flex justify-center items-center p-3  bg-[#5a56e9] rounded-full'>
                 <IoLocationOutline size={40} />
-              </div>
+              </Link>
               <div className='flex flex-col  justify-between items-start'>
-                <h5 className='text-3xl font-semibold'>Location</h5>
-                <p>9854 National Blvd #1042, Los Angeles, CA 90034, United States</p>
+                                   <Link to={'https://maps.app.goo.gl/FCBPReqBvveR9ox96'}>
+                                     <h2 className='text-3xl font-medium text-[#111111]'>Location</h2>
+                                   </Link>
+               
+                <p className=' pt-1'>9854 National Blvd #1042, Los Angeles, CA 90034, United States</p>
               </div>
             </div>
           </div>

@@ -6,6 +6,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
 import PageMetadata from '../../components/common/PageMetadata';
+import GetQuoteModal from '../../components/common/GetQuoteModal';
 
 function SingleBlog({ serverData }) {
     const { slug } = useParams();
@@ -42,7 +43,24 @@ function SingleBlog({ serverData }) {
         fetchAllBlogs();
     }, [slug]);
 
-
+// ✅ Add this block here
+useEffect(() => {
+  // Add IDs to the headings in the rendered blog content
+  const contentElement = document.querySelector('.blog_content');
+  if (contentElement) {
+    const headingElements = Array.from(
+      contentElement.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    );
+    headingElements.forEach((heading, index) => {
+      if (!heading.id) {
+        heading.id = `section-${index}-${heading.textContent
+          .toLowerCase()
+          .replace(/[^\w\s]/g, '')
+          .replace(/\s+/g, '-')}`;
+      }
+    });
+  }
+}, [singleBlog]);
 
     const faqItemSchema = singleBlog?.qna?.map((item, index) => {
         return {
@@ -62,6 +80,8 @@ function SingleBlog({ serverData }) {
         "mainEntity": faqItemSchema || []
     };
     console.log(singleBlog);
+
+    const [IsModalOpen,setIsModalOpen] = useState(false);
 
     return (
         <>
@@ -95,6 +115,7 @@ function SingleBlog({ serverData }) {
 
                         <div className='flex justify-end'>
                             <Button
+                              onClick={()=>setIsModalOpen(true)}
                                 label={"Get A Quote"}
                                 className="bg-[#4440E6] text-white w-64 px-6 py-2 rounded-md hover:bg-[#3935c7] transition-colors"
                             />
@@ -135,6 +156,7 @@ function SingleBlog({ serverData }) {
                                     })
                                 }
                                 <Button
+                                 onClick={()=>setIsModalOpen(true)}
                                     label={"Get A Quote"}
                                     className="bg-[#4440E6] text-white  w-full px-6 py-2 rounded-md hover:bg-[#3935c7] transition-colors"
                                 />
@@ -144,6 +166,9 @@ function SingleBlog({ serverData }) {
                     </div>
                 </div>
             </div>
+
+                  <GetQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={IsModalOpen} />
+
         </>
 
     );

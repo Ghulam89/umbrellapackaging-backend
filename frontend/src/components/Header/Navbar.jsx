@@ -108,13 +108,15 @@ const Navbar = () => {
           </div>
           <div className="sm:block hidden">
             <div className="flex items-center justify-between gap-2.5">
-              <div>
-                <Button
-                  onClick={() => setReviewModalOpen(true)}
-                  className="text-[#4440E6] bg-white border border-[#4440E6]"
-                  label={"Review"}
+              <Link   to={'/reviews'} className=" ">
+                <div style={{fontSize:'16px !important'}}>
+                  <Button
+                  // onClick={() => setReviewModalOpen(true)}
+                  className="text-[#4440E6]  bg-white border border-[#4440E6]"
+                  label={"Reviews"}
                 />
-              </div>
+                </div>
+              </Link>
               <div>
                 <Button
                   onClick={() => setIsModalOpen(true)}

@@ -1,7 +1,24 @@
 import React from "react";
 import Tabs from "../common/Tabs";
-import CustomBoxCard from "../common/CustomBoxCard";
 import SpecialCard from "../common/SpecialCard";
+import special1  from "../../assets/images/special/special-product1.webp";
+import special2  from "../../assets/images/special/special-product2.webp";
+import special3  from "../../assets/images/special/special-product3.webp";
+import special4  from "../../assets/images/special/special-product4.webp";
+import special5  from "../../assets/images/special/special-product5.webp";
+import special6  from "../../assets/images/special/special-product6.webp";
+import special7  from "../../assets/images/special/special-product7.webp";
+import special8  from "../../assets/images/special/special-product8.webp";
+import special9  from "../../assets/images/special/special-product9.webp";
+import special10  from "../../assets/images/special/special-product10.webp";
+import special11  from "../../assets/images/special/special-product11.webp";
+import special12  from "../../assets/images/special/special-product12.webp";
+import special13  from "../../assets/images/special/special-product13.webp";
+import special14  from "../../assets/images/special/special-product14.webp";
+import special15  from "../../assets/images/special/special-product15.webp";
+import special16  from "../../assets/images/special/special-product16.webp";
+import special17  from "../../assets/images/special/special-product17.webp";
+import special18  from "../../assets/images/special/special-product18.webp";
 
 const SpecialPackaging = () => {
   const customBox = [
@@ -10,54 +27,54 @@ const SpecialPackaging = () => {
       title: "Embossing",
       
       images:[
-        "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/6-quqt8hn0u9cayaz2pi9d79guc2u4yaawfvjb2ogiw0.webp",
-        "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/emboss11-r2398elma9uxenc1izlzn5xwzw7hyftpxr9j7cpabs.webp",
-        "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/2-1-r235qri8rhv5j1u36oh8cvbuhrh92x1cnw11vuzq14.webp"
+        special1,
+        special2,
+        special3
       ]
     },
     {
       id: 2,
       title: "Debossing",
       images:[
-        "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/deboseing3-r235qw7eht95j3hj0bn739asfcmghncagqpb4ubj4w.webp",
-        "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/DEBOSING1-qvca7u2mrlo3qmd0yxyi77hyudlt665dk8pa5r1zew.webp",
-        "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/emboss12-r235qy343c45sbkj49bmcbo2ngktksrh0slg8spytk.webp"
+        special4,
+        special5,
+        special6
       ]
     },
     {
         id: 2,
         title: "Silver Foiling",
         images:[
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/silver6-r235qi3tnapuoy20anjsjuuvikjya6sbesx0xowfq8.webp",
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/silver4-r21ndlvyk2nzgcpplos9nr2ape1vyx9hkv6ywsvxqg.webp",
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/silver2-r23c54s9qr80yl7mzraky8jroe0qkel3c3y347f72g.webp"
+          special7,
+        special8,
+        special9
         ]
       },
       {
         id: 2,
         title: "Gold Foiling",
         images:[
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/6-quqt8hn0u9cayaz2pi9d79guc2u4yaawfvjb2ogiw0.webp",
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/emboss11-r2398elma9uxenc1izlzn5xwzw7hyftpxr9j7cpabs.webp",
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/2-1-r235qri8rhv5j1u36oh8cvbuhrh92x1cnw11vuzq14.webp"
+           special10,
+        special11,
+        special2
         ]
       },
       {
         id: 2,
         title: "Spot UV",
         images:[
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/6-quqt8hn0u9cayaz2pi9d79guc2u4yaawfvjb2ogiw0.webp",
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/emboss11-r2398elma9uxenc1izlzn5xwzw7hyftpxr9j7cpabs.webp",
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/2-1-r235qri8rhv5j1u36oh8cvbuhrh92x1cnw11vuzq14.webp"
+           special13,
+        special4,
+        special5
         ]
       },
       {
         id: 2,
         title: "Holographic",
         images:[
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/6-quqt8hn0u9cayaz2pi9d79guc2u4yaawfvjb2ogiw0.webp",
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/emboss11-r2398elma9uxenc1izlzn5xwzw7hyftpxr9j7cpabs.webp",
-          "https://umbrellapackaging.com/wp-content/uploads/elementor/thumbs/2-1-r235qri8rhv5j1u36oh8cvbuhrh92x1cnw11vuzq14.webp"
+          special16,
+        special17,
+        special8
         ]
       },
   ];

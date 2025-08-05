@@ -100,22 +100,22 @@ export const About = () => {
           </div>
 
           <CustomPackagingApart />
-          <div className='bg-[#F4ECFB] rounded-[8px] mt-8'>
+          <div className='bg-[#F4ECFB] rounded-[8px] mt-8 p-3'>
             <div className='grid md:grid-cols-2 grid-cols-1 space-y-2 '>
               <div className='' >
                 <img src={map} alt="" className='w-full' />
 
 
               </div>
-              <div className=' flex flex-col justify-center items-center  gap-5'>
-                <div className='flex text-white gap-5 '>
-                  <div className='bg-[#5a56e9]  rounded-[8px] flex flex-col items-start p-2.5 space-y-5'>
-                    <h5 className='text-[32px] text-white'>5+</h5>
-                    <h5 className='text-[14px] text-white'>Head Quarter on Global Family</h5>
+              <div className=' flex flex-col sm:w-md w-full ml-auto justify-center items-center  gap-3'>
+                <div className='flex sm:flex-row flex-col text-white gap-5 '>
+                  <div className='bg-[#5a56e9]  min-h-36 rounded-[8px] flex flex-col items-start p-2.5 space-y-5'>
+                    <h2 className='text-[32px] font-semibold text-white'>5+</h2>
+                    <h3 className='text-[14px] text-left text-white'>Head Quarter on Global Family</h3>
                   </div>
-                  <div className='bg-[#5a56e9]  rounded-[8px] flex flex-col items-start p-2.5 space-y-5'>
-                    <h5 className='text-[32px]'>1000+</h5>
-                    <h5 className='text-[14px]'>Satisfied Customers All Over the Globe </h5>
+                  <div className='bg-[#5a56e9]  min-h-36  rounded-[8px] flex flex-col items-start p-2.5 space-y-5'>
+                    <h2 className='text-[32px] font-semibold text-white'>1000+</h2>
+                    <h3 className='text-[14px] text-left text-white'>Satisfied Customers All Over the Globe </h3>
                   </div>
                   <div></div>
 
@@ -127,15 +127,15 @@ export const About = () => {
 
             <div className='grid md:grid-cols-3 grid-cols-1 '>
               <div className='  flex flex-col justify-center items-start p-2.5 space-y-5 md:border-r-1 border-0'>
-                <h1 className='text-[32px]'>USA</h1>
+                <h1 className='text-[32px] font-bold'>USA</h1>
                 <p className='text-[14px] text-start'>9854 National Blvd #1042, Los Angeles, CA 90034, United States</p>
               </div>
               <div className='  flex flex-col items-start p-2.5 space-y-5 md:border-r-1 border-0'>
-                <h1 className='text-[32px]'>Uk</h1>
+                <h1 className='text-[32px] font-bold'>Uk</h1>
                 <p className='text-[14px] text-start'>275 New North Road Islington Suite 1946 London, N1 7AA United Kingdom</p>
               </div>
               <div className='  flex flex-col items-start p-2.5 space-y-5'>
-                <h1 className='text-[32px]'>Canada</h1>
+                <h1 className='text-[32px] font-bold' >Canada</h1>
                 <p className='text-[14px] text-start'>7398 Yonge St #6d, Thornhill, ON L4J 8J2, Canada </p>
               </div>
 

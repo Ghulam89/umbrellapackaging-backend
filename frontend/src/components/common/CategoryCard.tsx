@@ -5,12 +5,12 @@ import { BaseUrl } from "../../utils/BaseUrl";
 const CategoryCard = ({data}) => {
   return (
     <>
-      <Link to={`/sub-category/${data?.slug}`}>
-        <div className="">
-          <div className="  sm:h-64 h-44">
-          <img src={`${BaseUrl}/${data?.image}`} alt={data?.imageAltText} className=" w-full h-full  rounded-xl" />
+      <Link to={`/sub-category/${data?.slug}`} className=" mx-auto">
+        <div className=" w-full">
+          <div className="">
+          <img src={`${BaseUrl}/${data?.image}`} alt={data?.imageAltText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
           </div>
-          <h2 className="  sm:text-base text-sm font-semibold text-[#333333]   uppercase py-5">{data?.title}</h2>
+          <h2 className="  sm:text-base text-sm font-semibold text-[#333333]   uppercase sm:py-5 py-2">{data?.title}</h2>
         </div>
       </Link>
     </>

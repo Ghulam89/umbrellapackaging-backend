@@ -63,7 +63,7 @@ const Footer = () => {
                         </div>
                         <div className=' sm:w-7/12 w-full text-center'>
                             <h2 className="sm:text-[38px] text-[25px]     font-sans   font-[700] text-[#333333]">Need Quick Assistance? Get In Touch</h2>
-                            <Link className=' flex  pt-2 items-center justify-center'>
+                            <Link  to={'tel:+1%20747-247-0456'} className=' flex  pt-2 items-center justify-center'>
                                 <IoCallOutline size={40} className='' />
                                 <h2 className="sm:text-[50px] text-[25px]     font-sans   font-[800] text-[#333333]">747-247-0456</h2>
                             </Link>
@@ -92,7 +92,7 @@ const Footer = () => {
                                     </li>
                                 </ul>
                                 <li className=' flex  gap-2 justify-center pt-2.5 items-center'>
-                                    <Link className=' flex   items-center gap-1.5'>
+                                    <Link to={'https://maps.app.goo.gl/FCBPReqBvveR9ox96'} className=' flex   items-center gap-1.5'>
                                         <IoLocationOutline size={20} />
                                         <p className=' text-gray-700'>9854 National Blvd # 1042 Los Angeles, CA 90034 USA</p>
                                     </Link>

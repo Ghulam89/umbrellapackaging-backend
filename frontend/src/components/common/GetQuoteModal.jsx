@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 import Modal from "./Modal";
-
+import video from '../../assets/videos/getqoute.mp4';
 const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,7 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
         addOns: "",
         image: null,
         description: "",
-        pageUrl:pageUrl,
+        pageUrl: pageUrl,
 
     };
 
@@ -51,7 +51,7 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
             formData.colors &&
             formData.printingSides &&
             formData.quantity
-           
+
         );
     };
 
@@ -114,14 +114,14 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
 
     return (
         <Modal
-            isOpen={isModalOpen} 
-            onClose={closeModal} 
+            isOpen={isModalOpen}
+            onClose={closeModal}
             className={"rounded-xl max-w-6xl w-[90%]"}
         >
             <div className=" p-3 bg-[#fbfaf7] overflow-y-auto">
-                <div className="flex flex-col md:flex-row gap-5 h-[58vh]">
-                  
-                    <div className="hidden md:block h-full md:w-5/12 lg:w-4/12 overflow-hidden">
+                <div className="flex flex-col md:flex-row gap-5 h-full">
+
+                    <div className="hidden lg:block md:w-5/12 lg:w-4/12 h-96">
                         <video
                             autoPlay
                             muted
@@ -130,14 +130,14 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                             className="w-full h-full object-cover"
                         >
                             <source
-                                src="https://umbrellapackaging.com/wp-content/uploads/2024/01/d99b9001a9c4ee638d6bd0b22b3eb02a.mp4"
+                                src={video}
                                 type="video/mp4"
                             />
                         </video>
                     </div>
-                    
+
                     {/* Form Section */}
-                    <div className="w-full md:w-7/12 lg:w-8/12 flex flex-col">
+                    <div className="w-full md:w-12/12 lg:w-8/12 flex flex-col">
                         <div className="cursor-pointer flex justify-end">
                             <MdClose
                                 onClick={() => setIsModalOpen(false)}
@@ -145,7 +145,7 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                 className="text-gray-600 hover:text-gray-800"
                             />
                         </div>
-                        
+
                         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-2">
                             {step === 2 && (
                                 <div className="w-full">
@@ -201,11 +201,11 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                             />
                                         </div>
                                         <div>
-                                              <div className=" mb-4">
-          <p className=" text-lg text-gray-600">
-            <input checked type="checkbox" /> Have you filled all the information correctly?
-          </p>
-        </div>
+                                            <div className=" mb-4">
+                                                <p className=" text-lg text-gray-600">
+                                                    <input checked type="checkbox" /> Have you filled all the information correctly?
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -220,9 +220,8 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                             type="submit"
                                             label={isLoading ? "Sending..." : "Send"}
                                             disabled={!validateStep2() || isLoading}
-                                            className={`bg-[#4440E6] w-full sm:w-32 text-white py-3 px-4 rounded-lg hover:bg-[#3938b8] transition-colors text-sm font-medium ${
-                                                !validateStep2() || isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                                            }`}
+                                            className={`bg-[#4440E6] w-full sm:w-32 text-white py-3 px-4 rounded-lg hover:bg-[#3938b8] transition-colors text-sm font-medium ${!validateStep2() || isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                                                }`}
                                         />
                                     </div>
                                 </div>
@@ -232,7 +231,7 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                 <div className="">
                                     <h6 className="text-base md:text-lg font-semibold mb-4 text-gray-800">Product Specification</h6>
 
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
                                         <div className="w-full">
                                             <Input
                                                 label="Box Style"
@@ -292,10 +291,10 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                             >
                                                 Unit <span className="text-red-600">*</span>
                                             </label>
-                                            <select 
-                                                name="unit" 
+                                            <select
+                                                name="unit"
                                                 value={formData.unit}
-                                                onChange={handleChange} 
+                                                onChange={handleChange}
                                                 className="w-full border border-black bg-white text-sm p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 required
                                             >
@@ -312,10 +311,10 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                             >
                                                 Stock <span className="text-red-600">*</span>
                                             </label>
-                                            <select 
-                                                name="stock" 
+                                            <select
+                                                name="stock"
                                                 value={formData.stock}
-                                                onChange={handleChange} 
+                                                onChange={handleChange}
                                                 className="w-full border border-black bg-white text-sm p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 required
                                             >
@@ -342,10 +341,10 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                             >
                                                 Colors <span className="text-red-600">*</span>
                                             </label>
-                                            <select 
-                                                name="colors" 
+                                            <select
+                                                name="colors"
                                                 value={formData.colors}
-                                                onChange={handleChange} 
+                                                onChange={handleChange}
                                                 className="w-full border border-black bg-white text-sm p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 required
                                             >
@@ -369,10 +368,10 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                             >
                                                 Printing Sides <span className="text-red-600">*</span>
                                             </label>
-                                            <select 
-                                                name="printingSides" 
+                                            <select
+                                                name="printingSides"
                                                 value={formData.printingSides}
-                                                onChange={handleChange} 
+                                                onChange={handleChange}
                                                 className="w-full border border-black bg-white text-sm p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 required
                                             >
@@ -402,10 +401,10 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                             >
                                                 Add-Ons
                                             </label>
-                                            <select 
-                                                name="addOns" 
+                                            <select
+                                                name="addOns"
                                                 value={formData.addOns}
-                                                onChange={handleChange} 
+                                                onChange={handleChange}
                                                 className="w-full border border-black bg-white text-sm p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                             >
                                                 <option value="">Select an option</option>
@@ -463,9 +462,8 @@ const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                                             onClick={nextStep}
                                             label="Next"
                                             disabled={!validateStep1()}
-                                            className={`bg-[#4440E6] w-full sm:w-32 text-white py-3 px-4 rounded-lg hover:bg-[#3938b8] transition-colors text-sm font-medium ${
-                                                !validateStep1() ? 'opacity-50 cursor-not-allowed' : ''
-                                            }`}
+                                            className={`bg-[#4440E6] w-full sm:w-32 text-white py-3 px-4 rounded-lg hover:bg-[#3938b8] transition-colors text-sm font-medium ${!validateStep1() ? 'opacity-50 cursor-not-allowed' : ''
+                                                }`}
                                         />
                                     </div>
                                 </div>

@@ -120,8 +120,10 @@ function TargetPrice() {
   return (
     <div className='sm:max-w-6xl  p-3 py-9 rounded-xl max-w-[95%] mx-auto'>
 <div className='bg-[#2E2D2D] rounded-[8px] p-5 h-[230px] flex flex-col justify-center items-center space-y-5 mb-5'>
-                    <h5 className='md:text-[43px] flex gap-2 items-center text-[30px] text-white  leading-10 text-center'>We Provide the
-                        <h5 className='md:text-[43px] text-[30px] text-[#ff931e]'> Target Price   </h5></h5>
+                  
+
+                         <h1 style={{color:'white'}} className=' flex gap-2 items-center text-[40px]  font-semibold leading-10 text-center'>We Provide the
+                        <h1 style={{color:'#ff931e'}} className='md:text-[43px] text-[40px] text-[#ff931e]'> Target Price</h1></h1>
                         <Button  label={'Get Target Price'}   className="bg-[#4440E6] text-white hover:bg-[#3730a3] px-6 py-2 rounded-md"  />
                 </div>
       <div className='rounded-[8px] bg-[#D2E0FB59] mt-5 p-5 space-y-5'>

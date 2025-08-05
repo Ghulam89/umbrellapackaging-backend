@@ -175,7 +175,7 @@ const Category = ({ serverData }) => {
 
 
               </div>
-              <CardSlider item={item?.products} />
+              <CardSlider item={item?.products} index={index}  />
             </Container>
           </div>
         )
