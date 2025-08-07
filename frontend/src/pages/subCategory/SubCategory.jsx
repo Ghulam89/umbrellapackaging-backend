@@ -22,6 +22,7 @@ import { BaseUrl } from '../../utils/BaseUrl';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import PageMetadata from '../../components/common/PageMetadata';
 import InstantQuoteModal from '../../components/common/InstantQuoteModal';
+import goScreen from '../../assets/images/goScreen.webp';
 const SubCategory = ({ serverData, CategoryProducts }) => {
   const { slug } = useParams();
   const [categoryData, setCategoryData] = useState(null)
@@ -213,24 +214,24 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
             {/* Text Content */}
 
             <div className='w-full lg:w-1/2 '>
-              <ul className=' flex gap-3'>
+              <ul className=' flex flex-wrap sm:gap-3  gap-1'>
                 <li className=' text-sm text-[#4440E6]'>
                   <Link to={'/'}>
                     Home
                   </Link>
                 </li>
-                <li className=' text-sm text-[#4440E6]  capitalize'>
+                <li className=' text-sm text-[#4440E6]  whitespace-nowrap capitalize'>
                   <Link to={`/category/${categoryData?.brandId?.slug}`} >
                     / {categoryData?.brandId?.name}
 
                   </Link>
 
                 </li>
-                <li className=' text-sm text-[#767676]'>
+                <li className=' text-sm text-[#767676] whitespace-nowrap'>
                   / {categoryData?.title}
                 </li>
               </ul>
-              <div className=" pt-3">
+              <div className=" sm:pt-3 pt-1">
                 <h1 className=" font-bold text-gray-900 sm:text-3xl text-xl font-sans pt-4 pb-6">
                   {categoryData?.subTitle}
                 </h1>
@@ -298,18 +299,18 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
             </p>
 
-            <div className=" grid sm:grid-cols-4 grid-cols-2  gap-10 mt-3.5">
+            <div className=" grid sm:grid-cols-4 grid-cols-2  sm:gap-10 gap-4 mt-3.5">
 
               {allProducts?.map((item, index) => {
                 return <div className=' w-full'>
                   <Link state={{ productSlug: item._id }} to={`/${item?.slug}`} >
                     <div className="">
-                      <div className="  sm:h-64 h-44">
-                        <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full h-full  rounded-xl" />
+                      <div className="">
+                        <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
                       </div>
 
 
-                      <h2 className="  text-center text-[#242424]  font-medium text-lg  py-5">{item?.name}</h2>
+                      <h2 className="  sm:text-base text-sm font-semibold text-[#333333]  text-center  uppercase sm:py-5 py-2">{item?.name}</h2>
                     </div>
                   </Link>
                 </div>
@@ -532,7 +533,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
         </div>
 
 
-        <PackagingBanner title={'Order Kraft Packaging For Sustainable Future.'} subTitle={"Go Green with Umbrella Custom Packaging Go For Kraft Packaging"} bgImage="https://umbrellapackaging.com/wp-content/uploads/2024/01/f2.webp" />
+        <PackagingBanner title={'Order Kraft Packaging For Sustainable Future.'} subTitle={"Go Green with Umbrella Custom Packaging Go For Kraft Packaging"} bgImage={goScreen} />
 
 
         <div className=' sm:max-w-6xl max-w-[95%] mx-auto'>

@@ -9,6 +9,7 @@ import axios from 'axios'
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import shopChoose from '../../assets/images/Industry-standard.png-2.webp';
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -382,7 +383,7 @@ const Shop = () => {
 
             <div className="w-full  lg:w-1/2">
               <img
-                src={'https://umbrellapackaging.com/wp-content/uploads/2024/01/Industry-standard.png-2.webp'}
+                src={shopChoose}
                 alt="Custom packaging example"
                 className="w-full h-auto rounded-xl shadow-md object-cover"
                 loading="lazy"

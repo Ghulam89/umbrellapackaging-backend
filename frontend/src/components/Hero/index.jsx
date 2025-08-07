@@ -22,7 +22,8 @@ const Hero = () => {
             <strong className=" sm:text-[38px] text-[28px] text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
           <h2 className=" sm:text-2xl text-base  font-medium  text-[#4440E6]">Customize Everything Under This Umbrella</h2>
           </div>
-          <div className=" flex  mt-7 gap-2 flex-wrap items-center">
+          <div className="  hidden sm:block">
+  <div className=" flex  mt-7 gap-2 flex-wrap items-center">
             <Link to={'/sub-category/fashion-apparel-packaging-boxes'}>
               <Button
                 label={"Apparel Boxes"}
@@ -49,6 +50,8 @@ const Hero = () => {
             </Link>
 
           </div>
+          </div>
+        
           <div className=" flex flex-wrap   mt-10 gap-2.5 items-center">
             <Button
               onClick={() => setIsModalOpen(true)}
@@ -77,33 +80,33 @@ const Hero = () => {
           <h2 className=" sm:text-2xl text-sm  font-medium  text-[#4440E6]">Customize Everything Under This Umbrella</h2>
           </div>
       </div>
+<div className="bg-[#B8B6FA99] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 mt-8 py-2.5 sm:px-5 px-3 rounded-md w-full">
+  <div className="flex gap-1 justify-start items-center">
+    <img src={Icon1} width={40} alt="Free Quote" />
+    <strong className="text-[15px]  font-light  opacity-80">Free Quote</strong>
+  </div>
+  <div className="flex justify-start gap-1 items-center">
+    <img src={Icon3} width={40} alt="Free Design support" />
+    <strong className="text-[15px] sm:whitespace-nowrap whitespace-pre-wrap text-[#111111] font-light  opacity-80">Free Design support</strong>
+  </div>
+  <div className="flex justify-center  gap-1 items-center">
+    <img src={Icon2} width={40} alt="Free Lamination" />
+    <strong className="text-[15px] font-light  opacity-80">Free Lamination</strong>
+  </div>
+  <div className="flex justify-center gap-1 items-center">
+    <img src={Icon4} width={40} alt="Free Shipping" />
+    <strong className="text-[15px] font-light  opacity-80">Free Shipping</strong>
+  </div>
+  <div className="flex justify-center gap-1 items-center">
+    <img src={Icon5} width={40} alt="FSC Certified" />
+    <strong className="text-[15px] font-light  opacity-80">FSC Certified</strong>
+  </div>
+  <div className="flex  justify-start gap-1 items-center">
+    <img src={Icon6} width={40} alt="Quickest Turnaround" />
+    <strong className="text-[15px] font-light sm:whitespace-nowrap  opacity-80 whitespace-pre-wrap text-[#111111] ">Quickest Turnaround</strong>
+  </div>
+</div>
 
-      <div className=" bg-[#B8B6FA99]  grid sm:grid-cols-6  grid-cols-2 mt-8 p-4 rounded-md w-full">
-        <div className=" flex gap-1 items-center">
-          <img src={Icon1} width={30} alt="" />
-          <strong className="  font-light">Free Quote</strong>
-        </div>
-        <div className=" flex gap-1 items-center">
-          <img src={Icon2} width={30} alt="" />
-          <strong className="  font-light">Free Design support</strong>
-        </div>
-        <div className=" flex gap-1 items-center">
-          <img src={Icon3} width={30} alt="" />
-          <strong className="  font-light">Free Lamination</strong>
-        </div>
-        <div className=" flex gap-1 items-center">
-          <img src={Icon4} width={30} alt="" />
-          <strong className="  font-light">Free Shipping</strong>
-        </div>
-        <div className=" flex gap-1 items-center">
-          <img src={Icon5} width={30} alt="" />
-          <strong className="  font-light">FSC Certified</strong>
-        </div>
-        <div className=" flex gap-1 items-center">
-          <img src={Icon6} width={30} alt="" />
-          <strong  className="  font-light">Quickest Turnaround</strong>
-        </div>
-      </div>
 
       <InstantQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
     </div>

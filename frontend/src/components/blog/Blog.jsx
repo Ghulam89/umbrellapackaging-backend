@@ -25,45 +25,7 @@ const Blog = () => {
     };
   }, []);
 
-  const testimonials = [
-    {
-      id: 1,
-      
-      title:
-        "Wow... I am very happy to use this VPN, it turned out to be more than my expectations and so far there have been no problems. LaslesVPN always the best.",
-
-        desc:"The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-      
-      image: "https://umbrellapackaging.com/wp-content/uploads/2025/01/Comparison-of-soft-touch-lamination-and-soft-touch-coating-highlighting-their-textures-and-finishes-for-enhanced-tactile-experience.webp",
-    },
-    {
-      id: 2,
-      
-      title:
-        "Wow... I am very happy to use this VPN, it turned out to be more than my expectations and so far there have been no problems. LaslesVPN always the best.",
-
-        desc:"The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-      
-      image: "https://umbrellapackaging.com/wp-content/uploads/2025/01/Comparison-of-soft-touch-lamination-and-soft-touch-coating-highlighting-their-textures-and-finishes-for-enhanced-tactile-experience.webp",
-    },
-    {
-      id: 3,
-      
-      title:
-        "Wow... I am very happy to use this VPN, it turned out to be more than my expectations and so far there have been no problems. LaslesVPN always the best.",
-
-        desc:"The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-      
-      image: "https://umbrellapackaging.com/wp-content/uploads/2025/01/Comparison-of-soft-touch-lamination-and-soft-touch-coating-highlighting-their-textures-and-finishes-for-enhanced-tactile-experience.webp",
-    },
-    {
-      id: 4,
-      title:
-        "Wow... I am very happy to use this VPN, it turned out to be more than my expectations and so far there have been no problems. LaslesVPN always the best.",
-        desc:"The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-      image: "https://umbrellapackaging.com/wp-content/uploads/2025/01/Comparison-of-soft-touch-lamination-and-soft-touch-coating-highlighting-their-textures-and-finishes-for-enhanced-tactile-experience.webp",
-    },
-  ];
+  
 
 
   const [blog,setBlog] =useState([])

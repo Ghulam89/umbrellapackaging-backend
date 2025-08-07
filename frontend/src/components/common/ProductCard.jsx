@@ -10,10 +10,10 @@ const ProductCard = ({data}) => {
     <>
       <Link state={{ productSlug: data._id}} to={`/${data?.slug}`}>
         <div className="">
-          <div className="  sm:h-64 h-44">
-          <img src={`${BaseUrl}/${data?.images?.[0]?.url}`} alt="" className=" w-full h-full  rounded-xl" />
+          <div className="  ">
+          <img src={`${BaseUrl}/${data?.images?.[0]?.url}`} alt="" className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
           </div>
-          <h3 className="  text-center font-semibold text-[#333] text-base   py-5">{data?.name}</h3>
+          <h3 className="  sm:text-base text-sm m-0 font-semibold text-[#333333]  text-center  uppercase sm:py-5 py-2">{data?.name}</h3>
         </div>
       </Link>
     </>

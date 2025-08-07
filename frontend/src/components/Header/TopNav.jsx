@@ -54,7 +54,8 @@ const TopNav = () => {
               <AiOutlineUser size={18} />
               <span>My Account</span>
             </div>
-            <div className="flex space-x-3 text-gray-600">
+           <div className="  hidden sm:block">
+             <div className="flex space-x-3 mb-1 text-gray-600">
               <Link target="_blank" to={'https://www.facebook.com/umbrellapackaging'}>
                 <FaFacebook size={17} />
               </Link>
@@ -75,9 +76,37 @@ const TopNav = () => {
               </Link>
 
             </div>
+           </div>
           </div>
         </div>
       </div>
+
+
+   <div className="block sm:hidden">
+  <div className="flex fixed top-[50%] right-0 z-50">
+    <div className="flex flex-col space-y-3 bg-white p-2 rounded-l-md shadow-md text-gray-600">
+      <Link target="_blank" to="https://www.facebook.com/umbrellapackaging" className="hover:text-blue-600 transition transform hover:scale-110 duration-300">
+        <FaFacebook size={20} />
+      </Link>
+      <Link target="_blank" to="https://twitter.com/umbrellapack" className="hover:text-blue-400 transition transform hover:scale-110 duration-300">
+        <FaTwitter size={20} />
+      </Link>
+      <Link target="_blank" to="https://www.youtube.com/channel/UCkxeWyAJqxjFSzlbnSoIVLQ" className="hover:text-red-600 transition transform hover:scale-110 duration-300">
+        <FaYoutube size={20} />
+      </Link>
+      <Link target="_blank" to="https://www.instagram.com/umbrellacustompackaging/" className="hover:text-pink-500 transition transform hover:scale-110 duration-300">
+        <FaInstagram size={20} />
+      </Link>
+      <Link target="_blank" to="https://www.linkedin.com/company/umbrellacustompackaging/" className="hover:text-blue-800 transition transform hover:scale-110 duration-300">
+        <FaLinkedin size={20} />
+      </Link>
+      <Link target="_blank" to="https://wa.me/message/JTJTB4YWJYNQP1" className="hover:text-green-500 transition transform hover:scale-110 duration-300">
+        <FaWhatsapp size={20} />
+      </Link>
+    </div>
+  </div>
+</div>
+
     </div>
   );
 };

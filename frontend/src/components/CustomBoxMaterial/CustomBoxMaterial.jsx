@@ -1,7 +1,12 @@
 import React from "react";
 import Tabs from "../common/Tabs";
 import CustomBoxCard from "../common/CustomBoxCard";
-
+import Box1 from '../../assets/images/boxMaterial/rigid-box.webp';
+import Box2 from '../../assets/images/boxMaterial/corrugated2.webp';
+import Box3 from '../../assets/images/boxMaterial/kraft.webp';
+import Box4 from '../../assets/images/boxMaterial/cardboard.webp';
+import Box5 from '../../assets/images/boxMaterial/blak-linen-boxes.webp';
+import Box6 from '../../assets/images/boxMaterial/white-linen-boxes.webp';
 const CustomBoxMaterial = () => {
   const customBox = [
     {
@@ -11,7 +16,7 @@ const CustomBoxMaterial = () => {
       description:
         "Rigid boxes are like super strong and unbreakable homes for extraordinary things. The manufacturers make these boxes using special materials to keep toys, makeup, and nice things protected. Additionally, people use printed rigid boxes to make things look extra special by painting them with cool colors and designs.",
       image:
-        "https://umbrellapackaging.com/wp-content/uploads/2024/01/rigid-box.webp",
+        Box1,
       buttonUrl: "#",
     },
     {
@@ -21,7 +26,7 @@ const CustomBoxMaterial = () => {
       description:
         "Corrugated boxes are special types of containers made from a material called corrugated cardboard. Essentially, these boxes consist of three layers. The inner layer, known as corrugation, adds strength and durability to the box. Perfect for mailing and shipping, they make sure your items reach their destination in great shape. Trust corrugated boxes for a safe and secure journey!",
       image:
-        "https://umbrellapackaging.com/wp-content/uploads/2024/01/corrugated2.webp",
+        Box2,
       buttonUrl: "#",
     },
     {
@@ -31,7 +36,7 @@ const CustomBoxMaterial = () => {
       description:
         "Make a smart choice with Kraft boxes—good for your stuff and good for the environment! These boxes are strong containers for packing things, and they’re made from a special paper called kraft paper. These boxes are handy for packing lots of different things, showing that they work well for many uses.",
       image:
-        "https://umbrellapackaging.com/wp-content/uploads/2024/01/kraft.webp",
+       Box3,
       buttonUrl: "#",
     },
     {
@@ -42,7 +47,7 @@ const CustomBoxMaterial = () => {
       description:
         "Cardboard boxes are like strong, big containers made out of thick paper. They’re used for packing and carrying lots of different things. They come in all shapes and sizes, like small ones for holding toys or big ones. These boxes are perfect for packaging your items and making them look neat on the shelves. They keep your products safe and make your shop look great!",
       image:
-        "https://umbrellapackaging.com/wp-content/uploads/2024/01/cardboard.webp",
+        Box4,
       buttonUrl: "#",
     },
     {
@@ -53,7 +58,7 @@ const CustomBoxMaterial = () => {
       description:
         "Get sleek Black Linen boxes for your special items! These boxes look cool and feel smooth. They come in black color. These boxes are eco-friendly helping to keep the Earth healthy. Perfect for keeping your things safe and looking fancy. You can choose black Linen boxes for a stylish way to store and protect your stuff!",
       image:
-        "https://umbrellapackaging.com/wp-content/uploads/2024/01/blak-linen-boxes.webp",
+        Box5,
       buttonUrl: "#",
     },
     {
@@ -64,7 +69,7 @@ const CustomBoxMaterial = () => {
       description:
         "White Linen boxes are bright and feel soft. Perfect for keeping your stuff safe and looking neat. They come in bright white color. You can choose white Linen boxes for a cool way to store and protect your things! These boxes are eco-friendly helping to keep the Earth healthy.",
       image:
-        "https://umbrellapackaging.com/wp-content/uploads/2024/01/white-linen-boxes.webp",
+        Box6,
       buttonUrl: "#",
     },
   ];
@@ -85,7 +90,7 @@ const CustomBoxMaterial = () => {
         </p>
       </div>
       <div className="my-10">
-        <Tabs defaultTab={"Rigid Boxes"} tabs={data} />
+        <Tabs defaultTab={"Rigid Boxes"} className={' border-[#F7F7F7] border'} tabs={data} />
       </div>
     </div>
   );

@@ -130,7 +130,7 @@ const CustomPackagingProduced = () => {
         </p>
       </div>
       <div className="">
-        <Tabs defaultTab={"Price Quote"} tabs={data} />
+        <Tabs defaultTab={"Price Quote"} className={' bg-white'} tabs={data} />
       </div>
     </div>
   );

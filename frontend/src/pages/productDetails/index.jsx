@@ -16,93 +16,51 @@ import { useDispatch } from 'react-redux'
 import { addToCart } from '../../store/productSlice'
 import { IoSearch } from 'react-icons/io5'
 import PageMetadata from '../../components/common/PageMetadata'
+
+import pd1 from '../../assets/images/pd1.webp';
+import pd2 from '../../assets/images/pd2.webp';
+import pd3 from '../../assets/images/pd3.webp';
+import pd4 from '../../assets/images/pd4.webp';
+
+import sky from '../../assets/images/footer/sky.svg';
+import dhl from '../../assets/images/footer/dhl.png';
+import sups from '../../assets/images/footer/sups.svg';
+import ups from '../../assets/images/footer/ups.svg';
 const ProductDetails = ({
   serverData,
   children: slides,
   autoSlide = false,
   autoSlideInterval = 3000,
 }) => {
-  const {slug} = useParams()
+  const { slug } = useParams()
   const dispatch = useDispatch()
   const [product, setProduct] = useState(serverData || null);
   const [relatedProduct, setRelatedProduct] = useState([])
-  const images = [
-    "https://umbrellapackaging.com/wp-content/uploads/2024/07/Cardboard-Bags.webp",
-    "https://umbrellapackaging.com/wp-content/uploads/2024/07/Cardboard-Bag.webp",
-    "https://umbrellapackaging.com/wp-content/uploads/2024/07/Cardboard-Bags-1.webp",
-  ];
 
 
   const navigate = useNavigate();
-
-  const testimonials3 = [
-    {
-      id: 1,
-
-      title:
-        "Cardboard Chocolate Boxes",
-
-      desc: "The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-
-      image: "https://umbrellapackaging.com/wp-content/uploads/2024/04/cardboard-chocolate-boxes.webp",
-    },
-    {
-      id: 2,
-
-      title:
-        "Chocolate Bomb Boxes",
-
-      desc: "The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-
-      image: "https://umbrellapackaging.com/wp-content/uploads/2024/04/chocolate-bomb-boxes.webp",
-    },
-    {
-      id: 3,
-
-      title:
-        "Small Chocolate Boxes ",
-
-      desc: "The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-
-      image: "https://umbrellapackaging.com/wp-content/uploads/2024/04/Small-Chocolate-Boxes.webp",
-    },
-    {
-      id: 4,
-      title:
-        "I am very happy to use this VPN,",
-      desc: "The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-      image: "https://umbrellapackaging.com/wp-content/uploads/2024/04/auto-airspring-boxes.webp",
-    },
-    {
-      id: 4,
-      title:
-        " I am very happy to use this VPN",
-      desc: "The finish of printed materials makes a big difference, ...and it can turly affect how people see your ",
-      image: "https://umbrellapackaging.com/wp-content/uploads/2024/04/auto-airspring-boxes.webp",
-    }
-  ];
 
 
   const features = [
     {
       name: 'Embossing',
       description: 'Raised designs that add a tactile dimension to your packaging',
-      icon: 'https://umbrellapackaging.com/wp-content/uploads/2024/01/6-1.webp'
+      icon: pd1
     },
     {
       name: 'Debossing',
       description: 'Recessed designs that create an elegant, subtle effect',
-      icon: 'https://umbrellapackaging.com/wp-content/uploads/2024/01/7.webp'
+      icon: pd2
     },
     {
       name: 'Foiling',
       description: 'Metallic finishes that add luxury and shine to your branding',
-      icon: 'https://umbrellapackaging.com/wp-content/uploads/2024/01/1.webp'
+      icon: pd3
     },
     {
       name: 'Spot UV',
       description: 'Glossy coatings that highlight specific areas for visual impact',
-      icon: 'https://umbrellapackaging.com/wp-content/uploads/2024/01/3.webp'
+      icon: pd4
     }
   ];
 
@@ -248,7 +206,7 @@ const ProductDetails = ({
       title: "Description",
       content: <div className=' h-96 blog_content  overflow-y-auto px-3 py-3 bg-white rounded-lg'>
 
-        <p dangerouslySetInnerHTML={{ __html:product?.description}}>
+        <p dangerouslySetInnerHTML={{ __html: product?.description }}>
 
         </p>
 
@@ -364,17 +322,17 @@ const ProductDetails = ({
         </p>
 
         <div className=' flex   flex-wrap   gap-2 justify-between pt-8'>
-          <div className='  border border-gray-200 rounded-lg'>
-            <img src='https://umbrellapackaging.com/wp-content/uploads/2024/01/4.svg' alt='' />
+          <div className=' w-56 h-20   border-gray-200 rounded-lg'>
+            <img src={sky} alt='' className=' w-full h-full object-contain' />
           </div>
-          <div className='  border border-gray-200 rounded-lg'>
-            <img src='https://umbrellapackaging.com/wp-content/uploads/2024/01/3.svg' alt='' />
+          <div className=' w-56 h-20  border-gray-200 rounded-lg'>
+            <img src={dhl} alt='' className=' w-full h-full object-contain' />
           </div>
-          <div className='  border border-gray-200 rounded-lg'>
-            <img src='https://umbrellapackaging.com/wp-content/uploads/2024/01/2.svg' alt='' />
+          <div className='  w-56 h-20  border-gray-200 rounded-lg'>
+            <img src={sups} alt='' className=' w-full h-full object-contain' />
           </div>
-          <div className='  border border-gray-200 rounded-lg'>
-            <img src='https://umbrellapackaging.com/wp-content/uploads/2024/01/2.svg' alt='' />
+          <div className='  w-44 h-20 border-gray-200 rounded-lg'>
+            <img src={ups} alt='' className=' w-full h-full object-contain' />
           </div>
         </div>
 
@@ -408,83 +366,83 @@ const ProductDetails = ({
   }, [slug])
 
 
-  
 
-    const breadcrumbSchema = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": BaseUrl
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": serverData?.brandId?.name,
-          "item": `${BaseUrl}/category/${serverData?.brandId?.slug}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": product?.name,
-          "item": `${BaseUrl}/sub-category/${slug}`
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
-          "name": product?.name,
-          "item": `${BaseUrl}/${slug}`
-        }
-      ]
-    };
 
-     const productSchema = {
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": BaseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": serverData?.brandId?.name,
+        "item": `${BaseUrl}/category/${serverData?.brandId?.slug}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": product?.name,
+        "item": `${BaseUrl}/sub-category/${slug}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": product?.name,
+        "item": `${BaseUrl}/${slug}`
+      }
+    ]
+  };
+
+  const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": serverData?.name,
     "description": serverData?.description,
-      "image": serverData?.images?.map(img => `${BaseUrl}/${img.url}`) || [],
-     "brand": {
-    "@type": "Brand",
-    "name": "Umbrella Custom Packaging"
-  },
-  "review": {
-    "@type": "Review",
-    "reviewRating": {
-      "@type": "Rating",
-      "ratingValue": "4.7",
-      "bestRating": "5"
-    },
- "author": {
-      "@type": "Person",
-      "name": "Scott Ray"
-    },
- "datePublished": new Date().toISOString().split('T')[0],
-    "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!",
-
-    
-      "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "42"
-  },
-  "offers": {
-      "@type": "Offer",
-      "url": `${BaseUrl}/${slug}`,
-      "priceCurrency": "USD",
-      "price": product?.actualPrice,
-       "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-      "availability": "https://schema.org/InStock",
-      "itemCondition": "https://schema.org/NewCondition",
-      "seller": {
-      "@type": "Organization",
+    "image": serverData?.images?.map(img => `${BaseUrl}/${img.url}`) || [],
+    "brand": {
+      "@type": "Brand",
       "name": "Umbrella Custom Packaging"
-    }
     },
-}
+    "review": {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.7",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Scott Ray"
+      },
+      "datePublished": new Date().toISOString().split('T')[0],
+      "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!",
+
+
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "42"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": `${BaseUrl}/${slug}`,
+        "priceCurrency": "USD",
+        "price": product?.actualPrice,
+        "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": "Umbrella Custom Packaging"
+        }
+      },
+    }
 
   };
 
@@ -511,7 +469,10 @@ const ProductDetails = ({
       <section className='py-8'>
         <div className='lg:max-w-6xl max-w-[95%] bg-[#F7F7F7] rounded-lg p-2 flex lg:flex-row flex-col gap-4 mx-auto'>
           <div className='lg:w-6/12'>
+
             <div className=' pb-7 pt-3'>
+                          <h1 className='pb-2  font-sans text-[28px] block sm:hidden'>{product?.name}</h1>
+
               <p className=' flex  flex-wrap items-center gap-1'><strong className=' font-normal  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </strong>/<strong className=' font-normal text-[#4440E6] capitalize'> <Link className='font-sans whitespace-nowrap' to={`/category/${product?.brandId?.slug}`}>{product?.brandId?.name}</Link> </strong> /<strong className='font-normal text-[#4440E6] capitalize'> <Link className=' font-sans whitespace-nowrap' to={`/sub-category/${product?.categoryId?.slug}`}>{product?.categoryId?.title}</Link> </strong> /<span className=' font-sans  whitespace-nowrap '>{product?.name} </span></p>
             </div>
             <div className='w-full'>
@@ -572,7 +533,7 @@ const ProductDetails = ({
           </div>
 
           <div className="pt-3.5 lg:w-6/12">
-            <h1  className='pb-2 font-semibold font-sans sm:text-[28px] text-[20px]'>{product?.name}</h1>
+            <h1 className='pb-2 font-semibold font-sans sm:text-[28px] hidden sm:block text-[20px]'>{product?.name}</h1>
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="w-full">
@@ -624,8 +585,8 @@ const ProductDetails = ({
                   />
                 </div>
               </div>
-<div className="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-  <div className="w-full col-span-1 sm:col-span-1">
+              <div className="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Box Style"
                     star={"*"}
@@ -638,7 +599,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Size (Length)"
                     star={"*"}
@@ -651,7 +612,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Size (Width)"
                     star={"*"}
@@ -664,7 +625,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Size (Depth)"
                     star={"*"}
@@ -677,7 +638,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Unit"
@@ -698,7 +659,7 @@ const ProductDetails = ({
 
 
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Stock"
@@ -729,7 +690,7 @@ const ProductDetails = ({
 
 
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Colors"
@@ -758,7 +719,7 @@ const ProductDetails = ({
 
 
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Printing Sides"
@@ -779,7 +740,7 @@ const ProductDetails = ({
                 </div>
 
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Quantity"
                     star={"*"}
@@ -794,7 +755,7 @@ const ProductDetails = ({
 
 
 
-  <div className="w-full col-span-1 sm:col-span-1">
+                <div className="w-full col-span-1 sm:col-span-1">
 
                   <label
                     htmlFor="Add-Ons"
@@ -819,7 +780,7 @@ const ProductDetails = ({
                   </select>
                 </div>
 
-  <div className="w-full col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5">
+                <div className="w-full col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5">
                   <label
                     htmlFor="design_upload"
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
@@ -839,7 +800,7 @@ const ProductDetails = ({
                   />
                 </div>
 
-  <div className="w-full col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5">
+                <div className="w-full col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5">
                   <label
                     htmlFor="description"
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
@@ -880,7 +841,7 @@ const ProductDetails = ({
       <section>
         <div className=' sm:max-w-6xl bg-[#F7F7F7] p-3 rounded-xl mb-8 max-w-[95%] mx-auto'>
           <div className="my-10">
-            <Tabs defaultTab={"Description"} tabs={customBox} />
+            <Tabs defaultTab={"Description"} className={' bg-white'} tabs={customBox} />
           </div>
         </div>
       </section>
@@ -906,7 +867,7 @@ const ProductDetails = ({
 
                 </h2>
                 <div className=' overflow-y-auto h-56'>
-                  <p dangerouslySetInnerHTML={{ __html:product?.bannerContent}} className="text-sm leading-6 text-gray-700 mb-6">
+                  <p dangerouslySetInnerHTML={{ __html: product?.bannerContent }} className="text-sm leading-6 text-gray-700 mb-6">
 
 
 
@@ -940,7 +901,7 @@ const ProductDetails = ({
 
       <div className=" sm:max-w-6xl max-w-[95%]  mt-5 py-4 bg-[#F7F7F7] rounded-lg  px-3 mx-auto">
         <div className="text-center mb-12">
-              <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
+          <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
             Enhance Your Product Presentation with Our Special Packaging Features
 
           </h2>
@@ -998,7 +959,7 @@ const ProductDetails = ({
                     Product Name
                   </button>
                   <div className=' pt-3 text-center'>
-                  <strong className="  text-gray-400  font-medium text-[16px]">{product?.name}</strong>
+                    <strong className="  text-gray-400  font-medium text-[16px]">{product?.name}</strong>
 
                   </div>
                 </div>
@@ -1008,8 +969,8 @@ const ProductDetails = ({
                   <button className="bg-[#5A56E9] mb-2 hover:bg-[#4440E6] text-white w-full text-sm md:text-base font-medium py-2 px-3 rounded">
                     Size
                   </button>
-                   <div className=' pt-3 text-center'>
-                  <strong className="  text-gray-400  font-medium text-[16px]">{product?.size}</strong>
+                  <div className=' pt-3 text-center'>
+                    <strong className="  text-gray-400  font-medium text-[16px]">{product?.size}</strong>
 
                   </div>
                 </div>
@@ -1019,8 +980,8 @@ const ProductDetails = ({
                   <button className="bg-[#5A56E9] hover:bg-[#4440E6] text-white w-full text-sm md:text-base font-medium py-2 px-3 rounded">
                     Price
                   </button>
-                            <div className=' pt-3 text-center'>
-                  <strong className="  text-gray-400  font-medium text-[16px]">${product?.actualPrice}</strong>
+                  <div className=' pt-3 text-center'>
+                    <strong className="  text-gray-400  font-medium text-[16px]">${product?.actualPrice}</strong>
 
                   </div>
                 </div>

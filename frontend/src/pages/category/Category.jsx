@@ -85,7 +85,7 @@ const Category = ({ serverData }) => {
 
 
       <Container>
-        <div style={{ backgroundColor: categoryData?.bgColor }} className="flex  sm:max-w-6xl max-w-[95%]  mx-auto sm:flex-row  items-center flex-col  my-3.5 sm:p-8 p-4 rounded-md w-full">
+        <div style={{ backgroundColor: categoryData?.bgColor }} className="flex  sm:max-w-6xl max-w-[95%] gap-4  mx-auto sm:flex-row  items-center flex-col  my-3.5 sm:p-8 p-4 rounded-md w-full">
           <div className=" sm:w-7/12 w-full">
             <strong className=" sm:text-[38px] text-[20px] m-0 text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
             <h1
@@ -98,24 +98,24 @@ const Category = ({ serverData }) => {
               <Link to={'/category/box-by-industry'} className="">
                 <Button
                   label={"Industry"}
-                  className=" bg-[#4440E6] opacity-90 border border-[#4440E6] w-32 text-white hover:bg-[#4440E6]  hover:text-white"
+                  className=" bg-[#4440E6] opacity-90 border border-[#4440E6] sm:w-32 w-28 text-white hover:bg-[#4440E6]  hover:text-white"
                 />
               </Link>
               <Link to={'/category/shapes-styles'}>
                 <Button
                   label={"Style"}
-                  className=" bg-white border border-[#4440E6] w-32 text-[#4440E6] hover:bg-[#4440E6]  hover:text-white "
+                  className=" bg-white border border-[#4440E6] sm:w-32 w-28 text-[#4440E6] hover:bg-[#4440E6]  hover:text-white "
                 />
               </Link>
               <Link to={'/category/boxes-by-material'}>
                 <Button
                   label={"Material"}
-                  className=" bg-white border border-[#4440E6]  w-32 text-[#4440E6] hover:bg-[#4440E6]  hover:text-white "
+                  className=" bg-white border border-[#4440E6]  sm:w-32 w-28 text-[#4440E6] hover:bg-[#4440E6]  hover:text-white "
                 />
               </Link>
 
             </div>
-            <div className="mt-7">
+            <div className="sm:mt-7 mt-4">
               <Link to={'/shop'}>
                 <Button
 
@@ -163,11 +163,11 @@ const Category = ({ serverData }) => {
                   <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333]">{item?.categoryName}</h2>
                 </div>
                 <div>
-                  <Link to={`/sub-category/${item?.categorySlug}`} >
+                  <Link to={`/sub-category/${item?.categorySlug}`} className="" >
                     <Button
 
                       label={`View All ${item?.categoryName}`}
-                      className=" bg-white border border-[#4440E6]  text-[#4440E6] hover:bg-[#4440E6]  hover:text-white w-80"
+                      className=" bg-white border border-[#4440E6]  text-[#4440E6] hover:bg-[#4440E6]  hover:text-white sm:w-80 w-72"
                     />
                   </Link>
 

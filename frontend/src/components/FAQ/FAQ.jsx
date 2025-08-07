@@ -3,7 +3,7 @@ import Accordion from '../common/Accordion';
 import Button from '../common/Button';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
-
+import faq from '../../assets/images/faq.png';
 const FAQ = () => {
   const [accordions, setAccordions] = useState([]);
 
@@ -40,7 +40,7 @@ const FAQ = () => {
   }, []);
 
   return (
-    <div style={{ backgroundImage: `url(${'https://umbrellapackaging.com/wp-content/uploads/2024/01/1.png'})` }} className="">
+    <div style={{ backgroundImage: `url(${faq})` }} className="">
       <div className="sm:max-w-6xl max-w-[95%] mx-auto">
         <div className="">
           <div className="text-center">
