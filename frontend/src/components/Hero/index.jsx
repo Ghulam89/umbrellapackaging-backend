@@ -19,7 +19,7 @@ const Hero = () => {
         
         <div className=" sm:w-7/12  w-full">
           <div className=" hidden sm:block">
-            <strong className=" sm:text-[38px] text-[28px] text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
+            <strong className=" text-[38px]  text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
           <h2 className=" sm:text-2xl text-base  font-medium  text-[#4440E6]">Customize Everything Under This Umbrella</h2>
           </div>
           <div className="  hidden sm:block">
