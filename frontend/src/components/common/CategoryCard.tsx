@@ -5,8 +5,8 @@ import { BaseUrl } from "../../utils/BaseUrl";
 const CategoryCard = ({data}) => {
   return (
     <>
-      <Link to={`/sub-category/${data?.slug}`} className=" mx-auto">
-        <div className=" w-full">
+      <Link to={`/sub-category/${data?.slug}`} className=" ">
+        <div className="">
           <div className="">
           <img src={`${BaseUrl}/${data?.image}`} alt={data?.imageAltText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
           </div>
