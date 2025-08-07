@@ -289,7 +289,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
       </div>
       <div className='  py-6'>
         <div className=' sm:max-w-6xl max-w-[95%] mx-auto'>
-          <div className=' py-12'>
+          <div className=' sm:py-12 py-2'>
             <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
               Find a Variety of Automotive Boxes Below
 

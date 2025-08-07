@@ -25,15 +25,15 @@ const TopNav = () => {
           {/* Left Side: Country Flags */}
           <div className="flex items-center space-x-4">
             <div className="flex items-center  space-x-1.5">
-              <img src={usa} alt="USA" className="w-8 h-8" />
+              <img src={usa} alt="USA" className="w-8 object-contain" />
               <span>USA</span>
             </div>
             <div className="flex items-center space-x-1">
-              <img src={uk} alt="UK" className="w-8 h-8" />
+              <img src={uk} alt="UK" className="w-8 object-contain" />
               <span>UK</span>
             </div>
             <div className="flex items-center space-x-1">
-              <img src={canada} alt="Canada" className="w-8 h-8" />
+              <img src={canada} alt="Canada" className="w-8 object-contain" />
               <span>Canada</span>
             </div>
           </div>
