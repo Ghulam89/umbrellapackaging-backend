@@ -82,7 +82,7 @@ const TopNav = () => {
       </div>
 
 
-   <div className="">
+   <div className="block sm:hidden">
   <div className="flex fixed top-[50%] right-0 z-50">
     <div className="flex flex-col space-y-3  bg-transparent py-2 px-2 rounded-l-md shadow-lg text-[#111111]">
       <Link target="_blank" to="https://www.facebook.com/umbrellapackaging" className="hover:text-blue-600 transition transform hover:scale-110 duration-300">
