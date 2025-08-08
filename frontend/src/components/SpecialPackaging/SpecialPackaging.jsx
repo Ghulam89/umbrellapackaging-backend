@@ -95,7 +95,7 @@ const SpecialPackaging = () => {
        
       </div >
       <div className=" pt-2">
-        <Tabs defaultTab={"Embossing"} tabs={data} />
+        <Tabs defaultTab={"Embossing"} className={' bg-white'} tabs={data} />
       </div>
     </div>
   );
