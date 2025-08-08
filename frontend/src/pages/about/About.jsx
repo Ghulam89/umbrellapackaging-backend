@@ -57,9 +57,9 @@ export const About = () => {
             </div>
 
             <div className='flex flex-col items-start justify-center space-y-2'>
-              <hr className='text-[#000] md:w-120 w-80 border' />
-              <h2 className='md:text-[36px] text-[25px] font-semibold text-start'>Umbrella Custom Packaging</h2>
-              <p className='text-[#333333] md:text-[16px] text-[14px] text-left'>
+              <hr className='text-gray-400 md:w-120 w-80 border-0.5' />
+              <h2 className='md:text-[36px] text-[25px]  font-[600]  opacity-70 font-sans text-start'>Umbrella Custom Packaging</h2>
+              <p className='text-[#333333] md:text-[16px] leading-6 text-[14px] text-left'>
                 Umbrella Custom Packaging offers customized printing and packaging solutions for all your business needs.
                 We have technologically advanced digital and offset presses. It ensures that every packaging box we print
                 has supreme quality. Our accomplished designers provide amazing artwork choices for all kinds of boxes.
