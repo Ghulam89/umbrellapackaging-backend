@@ -36,7 +36,7 @@ const Category = ({ serverData }) => {
 
   useEffect(() => {
     FetchCategory();
-  }, [slug]);
+  }, [slug,categoryData]);
 
   useEffect(() => {
     return () => {
