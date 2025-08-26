@@ -445,7 +445,14 @@ const productSchema = {
     "seller": {
       "@type": "Organization",
       "name": "Umbrella Custom Packaging"
-    }
+    },
+     "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "42",
+    "bestRating": "5"
+  },
+    
   }
 };
 
