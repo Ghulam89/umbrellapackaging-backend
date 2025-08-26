@@ -398,19 +398,29 @@ const ProductDetails = ({
       }
     ]
   };
-
-  const productSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": serverData?.name,
-    "description": serverData?.description,
-    "image": serverData?.images?.map(img => `${BaseUrl}/${img.url}`) || [],
-    "brand": {
-      "@type": "Brand",
-      "name": "Umbrella Custom Packaging"
-    },
-    "review": {
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": serverData?.name,
+  "description": serverData?.description,
+  "image": serverData?.images?.map(img => `${BaseUrl}/${img.url}`) || [],
+  "brand": {
+    "@type": "Brand",
+    "name": "Umbrella Custom Packaging"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "42",
+    "bestRating": "5"
+  },
+  "review": [
+    {
       "@type": "Review",
+      "itemReviewed": {
+        "@type": "Product",
+        "name": serverData?.name
+      },
       "reviewRating": {
         "@type": "Rating",
         "ratingValue": "4.7",
@@ -421,34 +431,27 @@ const ProductDetails = ({
         "name": "Scott Ray"
       },
       "datePublished": new Date().toISOString().split('T')[0],
-      "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!",
-
-
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "42"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": `${BaseUrl}/${slug}`,
-        "priceCurrency": "USD",
-        "price": product?.actualPrice || serverData?.actualPrice,
-        "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-        "availability": "https://schema.org/InStock",
-        "itemCondition": "https://schema.org/NewCondition",
-        "seller": {
-          "@type": "Organization",
-          "name": "Umbrella Custom Packaging"
-        }
-      },
+      "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!"
     }
-
-  };
+  ],
+  "offers": {
+    "@type": "Offer",
+    "url": `${BaseUrl}/${slug}`,
+    "priceCurrency": "USD",
+    "price": product?.actualPrice || serverData?.actualPrice,
+    "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+    "availability": "https://schema.org/InStock",
+    "itemCondition": "https://schema.org/NewCondition",
+    "seller": {
+      "@type": "Organization",
+      "name": "Umbrella Custom Packaging"
+    }
+  }
+};
 
   return (
     <>
-      {/* Only render PageMetadata when product is available */}
+     
       {product && (
         <PageMetadata
           title={product.metaTitle || "Custom Packaging Solutions"}
