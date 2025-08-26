@@ -401,9 +401,10 @@ const ProductDetails = ({
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": serverData?.name || "Custom Packaging",
-  "description": serverData?.description || "High quality custom packaging.",
-  "image": serverData?.images?.map(img => `${BaseUrl}/${img.url}`) || [],
+  "name": "Brake Fluid Boxes",
+  "image": "https://example.com/images/brake-fluid-box.jpg",
+  "description": "High quality brake fluid packaging boxes.",
+  "sku": "12345",
   "brand": {
     "@type": "Brand",
     "name": "Umbrella Custom Packaging"
@@ -411,38 +412,14 @@ const productSchema = {
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.8",
-    "reviewCount": "42",
-    "bestRating": "5"
+    "reviewCount": "42"
   },
-  "review": [
-    {
-      "@type": "Review",
-      "name": "Great Packaging!",
-      "itemReviewed": {
-        "@type": "Product",
-        "name": serverData?.name || "Custom Packaging"
-      },
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "4.7",
-        "bestRating": "5"
-      },
-      "author": {
-        "@type": "Person",
-        "name": "Scott Ray"
-      },
-      "datePublished": new Date().toISOString().split('T')[0],
-      "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!"
-    }
-  ],
   "offers": {
     "@type": "Offer",
-    "url": `${BaseUrl}/${slug}`,
+    "url": "https://example.com/brake-fluid-boxes",
     "priceCurrency": "USD",
-    "price": String(product?.actualPrice || serverData?.actualPrice || "0.00"),
-    "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-      .toISOString()
-      .split('T')[0],
+    "price": "29.99",
+    "priceValidUntil": "2026-12-31",
     "availability": "https://schema.org/InStock",
     "itemCondition": "https://schema.org/NewCondition",
     "seller": {
