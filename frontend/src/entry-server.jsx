@@ -29,7 +29,7 @@ export async function render(url) {
     } else if (baseUrl.startsWith('/sub-category/')) {
       const slug = baseUrl.split('/')[2];
       const response = await axios.get(`${BaseUrl}/category/get?slug=${slug}`);
-      const response2 = await axios.get(  `${BaseUrl}/products/categoryProducts/${response?.data?.data?._id}`);
+      const response2 = await axios.get(`${BaseUrl}/products/categoryProducts/${response?.data?.data?._id}`);
       CategoryProducts = response2?.data?.data;
       serverData = response?.data?.data;
     } else if (baseUrl.split('/').length === 2 && baseUrl !== '/') {
@@ -48,14 +48,14 @@ export async function render(url) {
   }
   const appHtml = renderToString(
     <>
-    <HelmetProvider context={helmetContext}>
-      <Provider store={store}>
-        <StaticRouter location={normalizedUrl}>
-          <App serverData={serverData} CategoryProducts={CategoryProducts} />
-        </StaticRouter>
-      </Provider>
-    </HelmetProvider>
-  </>
+      <HelmetProvider context={helmetContext}>
+        <Provider store={store}>
+          <StaticRouter location={normalizedUrl}>
+            <App serverData={serverData} CategoryProducts={CategoryProducts} />
+          </StaticRouter>
+        </Provider>
+      </HelmetProvider>
+    </>
   );
   const { helmet } = helmetContext
 
@@ -67,6 +67,6 @@ export async function render(url) {
       link: helmet?.link?.toString() || '',
       script: helmet?.script?.toString() || '',
     },
-    
+
   };
 }

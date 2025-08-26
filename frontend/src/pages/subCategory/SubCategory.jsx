@@ -23,6 +23,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import PageMetadata from '../../components/common/PageMetadata';
 import InstantQuoteModal from '../../components/common/InstantQuoteModal';
 import goScreen from '../../assets/images/goScreen.webp';
+import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart';
 const SubCategory = ({ serverData, CategoryProducts }) => {
   const { slug } = useParams();
   const [categoryData, setCategoryData] = useState(null)
@@ -430,59 +431,11 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
 
 
-        <div className="sm:max-w-6xl  my-6 bg-[#eff4fe] py-3 rounded-lg  max-w-[95%] mx-auto">
-          <div className="text-center pb-3">
-            <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
-              Your Packaging Partner: What Sets Umbrella Custom Packaging Apart
-
-
-            </h2>
-            <p className=' pb-3'>Order your Automotive Boxes and experience the best ever customer service, high quality products with fastest lead time of 6-7 days
-            </p>
-            <div className='rounded-lg p-3 h-56 flex justify-center mx-3 items-center bg-white'>
-              <Swiper
-                slidesPerView={1}
-                spaceBetween={10}
-                speed={2000}
-                autoplay={{
-                  delay: 0,
-                  disableOnInteraction: false,
-                }}
-                loop={true}
-                // pagination={{
-                //   clickable: true,
-                // }}
-                breakpoints={{
-                  640: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                  },
-                  768: {
-                    slidesPerView: 3,
-                    spaceBetween: 40,
-                  },
-                  1024: {
-                    slidesPerView: 4,
-                    spaceBetween: 50,
-                  },
-                }}
-                modules={[Pagination, Autoplay]}
-                className="mySwiper"
-              >
-                {data2?.map((item) => (
-                  <SwiperSlide key={item.id}>
-                    <div className="text-center">
-                      <img src={item.icon} alt="" width={60} className=' mx-auto' />
-                      <strong className=" font-semibold">{item.title}</strong>
-                      <p className=" m-0 text-sm">
-                        {item.description}
-                      </p>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
-
+        <div className="sm:max-w-6xl  my-6  py-3 rounded-lg  max-w-[95%] mx-auto">
+          <div className="text-center">
+           
+             <CustomPackagingApart />
+           
           </div>
         </div>
 
