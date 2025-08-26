@@ -415,6 +415,27 @@ const productSchema = {
     "reviewCount": "42",
     
   },
+    "review": [
+    {
+      "@type": "Review",
+      "name": "Great Packaging!",
+      "itemReviewed": {
+        "@type": "Product",
+        "name": serverData?.name
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.7",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Scott Ray"
+      },
+      "datePublished": new Date().toISOString().split('T')[0],
+      "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!"
+    }
+  ],
   "offers": {
     "@type": "Offer",
     "url": `https://umbrellapackaging.com/${serverData?.slug}`,
