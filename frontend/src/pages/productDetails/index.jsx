@@ -419,7 +419,7 @@ const productSchema = {
     "url": `https://umbrellapackaging.com/${serverData?.slug}`,
     "priceCurrency": "USD",
     "price":serverData?.actualPrice,
-    "priceValidUntil": "2026-12-31",
+    "priceValidUntil": serverData?.createdAt,
     "availability": "https://schema.org/InStock",
     "itemCondition": "https://schema.org/NewCondition",
     "seller": {
