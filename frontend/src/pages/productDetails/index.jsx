@@ -403,7 +403,7 @@ const productSchema = {
   "@type": "Product",
   "name": serverData?.name,
   "image": `${BaseUrl}/${serverData?.name?.images?.[0]}`,
-  "description": serverData?.description,
+  "description": serverData?.metaDescription,
   "sku": "12345",
   "brand": {
     "@type": "Brand",
