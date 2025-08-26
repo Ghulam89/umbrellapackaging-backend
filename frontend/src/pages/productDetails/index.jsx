@@ -415,14 +415,10 @@ const productSchema = {
     "reviewCount": "42",
     
   },
-    "review": [
+     "review": [
     {
       "@type": "Review",
       "name": "Great Packaging!",
-      "itemReviewed": {
-        "@type": "Product",
-        "name": serverData?.name
-      },
       "reviewRating": {
         "@type": "Rating",
         "ratingValue": "4.7",
@@ -432,7 +428,7 @@ const productSchema = {
         "@type": "Person",
         "name": "Scott Ray"
       },
-      "datePublished": new Date().toISOString().split('T')[0],
+      "datePublished": "2025-08-26",
       "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!"
     }
   ],
