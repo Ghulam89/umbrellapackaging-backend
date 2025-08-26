@@ -9,6 +9,9 @@ import CustomPackagingProduced from "../../components/CustomPackagingProduced";
 import PageMetadata from "../../components/common/PageMetadata";
 
 const Category = ({ serverData }) => {
+
+  console.log(serverData);
+  
   const { slug } = useParams();
   const navigate = useNavigate();
   const [categoryProduct, setCategoryProduct] = useState([]);
@@ -45,8 +48,7 @@ const Category = ({ serverData }) => {
     };
   }, [slug]);
 
-  
-  
+
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -61,7 +63,7 @@ const Category = ({ serverData }) => {
       {
         "@type": "ListItem",
         "position": 2,
-        "name": categoryData?.name,
+        "name": categoryData? categoryData?.name:'',
         "item": `${BaseUrl}/category/${slug}`
       }
     ]
