@@ -61,7 +61,7 @@ const Category = ({ serverData }) => {
       {
         "@type": "ListItem",
         "position": 2,
-        "name": categoryData.name,
+        "name": categoryData?.name,
         "item": `${BaseUrl}/category/${slug}`
       }
     ]
