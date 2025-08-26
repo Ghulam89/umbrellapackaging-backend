@@ -411,8 +411,7 @@ const productSchema = {
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.8",
-    "reviewCount": "42",
-    "bestRating": "5"
+    "reviewCount": "42"
   },
   "review": [
     {
@@ -420,7 +419,7 @@ const productSchema = {
       "name": "Great Packaging!",
       "itemReviewed": {
         "@type": "Product",
-        "name": serverData?.name || "Custom Packaging"
+        "name": serverData?.name
       },
       "reviewRating": {
         "@type": "Rating",
@@ -439,9 +438,9 @@ const productSchema = {
       "@type": "Offer",
       "url": `${BaseUrl}/product/${slug}`,
       "priceCurrency": "USD",
-      "price": product?.actualPrice || "0.00",
+      "price": product?.actualPrice || serverData?.actualPrice,
       "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-      "availability": product?.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
       "seller": {
         "@type": "Organization",
