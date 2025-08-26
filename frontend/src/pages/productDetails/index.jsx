@@ -401,8 +401,8 @@ const ProductDetails = ({
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": serverData?.name,
-  "description": serverData?.description,
+  "name": serverData?.name || "Custom Packaging",
+  "description": serverData?.description || "High quality custom packaging.",
   "image": serverData?.images?.map(img => `${BaseUrl}/${img.url}`) || [],
   "brand": {
     "@type": "Brand",
@@ -417,9 +417,10 @@ const productSchema = {
   "review": [
     {
       "@type": "Review",
+      "name": "Great Packaging!",
       "itemReviewed": {
         "@type": "Product",
-        "name": serverData?.name
+        "name": serverData?.name || "Custom Packaging"
       },
       "reviewRating": {
         "@type": "Rating",
@@ -438,23 +439,19 @@ const productSchema = {
     "@type": "Offer",
     "url": `${BaseUrl}/${slug}`,
     "priceCurrency": "USD",
-    "price": product?.actualPrice || serverData?.actualPrice,
-    "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+    "price": String(product?.actualPrice || serverData?.actualPrice || "0.00"),
+    "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+      .toISOString()
+      .split('T')[0],
     "availability": "https://schema.org/InStock",
     "itemCondition": "https://schema.org/NewCondition",
     "seller": {
       "@type": "Organization",
       "name": "Umbrella Custom Packaging"
-    },
-     "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "42",
-    "bestRating": "5"
-  },
-    
+    }
   }
 };
+
 
   return (
     <>
