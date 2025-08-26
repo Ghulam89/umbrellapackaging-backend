@@ -402,8 +402,8 @@ const productSchema = {
    "@context": "https://schema.org",
   "@type": "Product",
   "name": serverData?.name,
-  "image": "https://example.com/images/brake-fluid-box.jpg",
-  "description": "High quality brake fluid packaging boxes.",
+  "image": `${BaseUrl}/${serverData?.name?.images?.[0]}`,
+  "description": serverData?.description,
   "sku": "12345",
   "brand": {
     "@type": "Brand",
@@ -416,7 +416,7 @@ const productSchema = {
   },
   "offers": {
     "@type": "Offer",
-    "url": "https://example.com/brake-fluid-boxes",
+    "url": `https://umbrellapackaging.com/${serverData?.slug}`,
     "priceCurrency": "USD",
     "price": "29.99",
     "priceValidUntil": "2026-12-31",
