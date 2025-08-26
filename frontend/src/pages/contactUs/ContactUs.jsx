@@ -87,7 +87,7 @@ function ContactUs() {
     modifiedTime: "2025-06-13T15:18:43+00:00",
     twitterTitle: "Contact Us - Umbrella Custom Packaging",
     twitterDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
-    robots: "noindex, nofollow"
+    robots: "index, follow"
   };
 
   return (

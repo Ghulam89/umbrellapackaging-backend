@@ -96,8 +96,8 @@ useEffect(() => {
                 ogImageHeight="630"
                 canonicalUrl={`${BaseUrl}/blog/${slug}`}
                 faqItemSchema={faqSchema}
-                // robots={categoryData?.robots || serverData?.robots || "index, follow"}
-                robots={"noindex, nofollow"}
+                robots={singleBlog?.robots || serverData?.robots}
+              
             />
 
             <div className='max-w-6xl mx-auto py-6'>

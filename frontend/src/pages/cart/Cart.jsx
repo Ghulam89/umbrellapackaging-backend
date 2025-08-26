@@ -37,7 +37,7 @@ const Cart = () => {
     modifiedTime: "2025-06-13T15:18:43+00:00",
     twitterTitle: "add to cart - Umbrella Custom Packaging",
     // twitterDescription: "Our Blogs Simple Steps to get the Custom Packaging Produced Following are few steps which provide the complete Guide. Price Quote Payment Design Approval Production Shipping Reorders Get Price Quote Submit a request for free custom quote first through our website or calling our customer service representative. You will have the prices in 30 minutes. [&hellip;]",
-    robots: "noindex, nofollow"
+    robots: "index, follow"
   };
 
   return (

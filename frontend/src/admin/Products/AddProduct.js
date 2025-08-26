@@ -485,7 +485,7 @@ const AddProduct = () => {
                     className="border w-full bg-lightGray py-3 px-2 rounded-md"
                   >
                     <option value="index, follow">index, follow</option>
-                    <option value="noindex, nofollow">noindex, nofollow</option>
+                    <option value="index, follow">index, follow</option>
                   </Field>
                   <ErrorMessage
                     name="robots"

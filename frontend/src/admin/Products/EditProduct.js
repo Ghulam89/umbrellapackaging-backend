@@ -598,7 +598,7 @@ if (existingImages?.length > 0) {
                       <option value="index, follow">Index, Follow</option>
                       <option value="noindex, follow">Noindex, Follow</option>
                       <option value="index, nofollow">Index, Nofollow</option>
-                      <option value="noindex, nofollow">Noindex, Nofollow</option>
+                      <option value="index, follow">index, follow</option>
                     </Field>
                     <ErrorMessage
                       name="robots"

@@ -203,8 +203,8 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
         ogImageHeight="630"
         canonicalUrl={`${BaseUrl}/sub-category/${slug}`}
         breadcrumbSchema={breadcrumbSchema}
-        // robots={categoryData?.robots || serverData?.robots || "index, follow"}
-        robots={"noindex, nofollow"}
+        robots={categoryData?.robots || serverData?.robots}
+        
         itemListSchema={itemListSchema}
       />
 

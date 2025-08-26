@@ -461,8 +461,8 @@ const ProductDetails = ({
           canonicalUrl={`${BaseUrl}/${slug}`}
           breadcrumbSchema={breadcrumbSchema}
           productSchema={productSchema}
-          // robots={product.robots || "index, follow"}
-          robots={"noindex, nofollow"}
+          robots={product.robots || serverData.robots}
+          
         />
       )}
 

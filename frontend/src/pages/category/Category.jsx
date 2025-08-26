@@ -79,8 +79,8 @@ const Category = ({ serverData }) => {
         ogImageHeight="630"
         canonicalUrl={`${BaseUrl}/category/${slug}`}
         breadcrumbSchema={breadcrumbSchema}
-        // robots={categoryData?.robots || serverData?.robots || "noindex, nofollow"}
-        robots={"noindex, nofollow"}
+        robots={categoryData?.robots || serverData?.robots}
+      
       />
 
 

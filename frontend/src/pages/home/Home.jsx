@@ -26,6 +26,7 @@ export const Home = () => {
     keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
     author: "Umbrella Custom Packaging",
     canonicalUrl: BaseUrl,
+    robots:'index, follow',
     ogUrl: BaseUrl,
     ogImage: `${BaseUrl}/images/web-banner.webp`,
     ogImageWidth: "768",

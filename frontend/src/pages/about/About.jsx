@@ -39,7 +39,7 @@ export const About = () => {
     modifiedTime: "2025-06-13T15:18:43+00:00",
     twitterTitle: "About us - Umbrella Custom Packaging",
     twitterDescription: "Umbrella Custom Packaging Umbrella Custom Packaging offers customized printing and packaging solutions for all your business needs. We have technologically advanced digital and offset presses. It ensures that every packaging box we print has supreme quality. Our accomplished designers provide amazing artwork choices for all kinds of boxes. We don’t charge our valued customers for [&hellip;]",
-    robots: "noindex, nofollow"
+    robots: "index, follow"
   };
   return (
     <>

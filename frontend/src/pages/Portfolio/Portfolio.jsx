@@ -30,7 +30,7 @@ function Portfolio() {
         modifiedTime: "2025-06-13T15:18:43+00:00",
         twitterTitle: "Portfolio - Umbrella Custom Packaging",
         twitterDescription: "Our Portfolio Our portfolio highlights a range of custom packaging solutions, designed to protect, promote, and enhance your products with style.",
-        robots: "noindex, nofollow"
+        robots: "index, follow"
       };
     
 
