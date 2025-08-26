@@ -433,7 +433,7 @@ const ProductDetails = ({
         "@type": "Offer",
         "url": `${BaseUrl}/${slug}`,
         "priceCurrency": "USD",
-        "price": product?.actualPrice,
+        "price": product?.actualPrice || serverData?.actualPrice,
         "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
         "availability": "https://schema.org/InStock",
         "itemCondition": "https://schema.org/NewCondition",
