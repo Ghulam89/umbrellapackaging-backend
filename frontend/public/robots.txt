@@ -31,4 +31,3 @@ Allow: /returns-refunds
 # Categories, sub-categories, products, and blog posts are all at root level
 
 # Crawl delay (optional - be respectful to server)
-Crawl-delay: 1 
