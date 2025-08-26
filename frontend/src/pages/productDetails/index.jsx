@@ -401,7 +401,7 @@ const ProductDetails = ({
 const productSchema = {
    "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Brake Fluid Boxes",
+  "name": serverData?.name,
   "image": "https://example.com/images/brake-fluid-box.jpg",
   "description": "High quality brake fluid packaging boxes.",
   "sku": "12345",
