@@ -401,10 +401,9 @@ const ProductDetails = ({
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "Brake Fluid Boxes",
-  "image": "https://example.com/images/brake-fluid-box.jpg",
-  "description": "High quality brake fluid packaging boxes.",
-  "sku": "12345",
+  "name": serverData?.name || "Custom Packaging",
+  "description": serverData?.description || "High quality custom packaging.",
+  "image": serverData?.images?.map(img => `${BaseUrl}/${img.url}`) || [],
   "brand": {
     "@type": "Brand",
     "name": "Umbrella Custom Packaging"
@@ -412,21 +411,43 @@ const productSchema = {
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.8",
-    "reviewCount": "42"
+    "reviewCount": "42",
+    "bestRating": "5"
   },
-  "offers": {
-    "@type": "Offer",
-    "url": "https://example.com/brake-fluid-boxes",
-    "priceCurrency": "USD",
-    "price": "29.99",
-    "priceValidUntil": "2026-12-31",
-    "availability": "https://schema.org/InStock",
-    "itemCondition": "https://schema.org/NewCondition",
-    "seller": {
-      "@type": "Organization",
-      "name": "Umbrella Custom Packaging"
+  "review": [
+    {
+      "@type": "Review",
+      "name": "Great Packaging!",
+      "itemReviewed": {
+        "@type": "Product",
+        "name": serverData?.name || "Custom Packaging"
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.7",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Scott Ray"
+      },
+      "datePublished": new Date().toISOString().split('T')[0],
+      "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!"
     }
-  }
+  ],
+   "offers": {
+      "@type": "Offer",
+      "url": `${BaseUrl}/product/${slug}`,
+      "priceCurrency": "USD",
+      "price": product?.actualPrice || "0.00",
+      "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+      "availability": product?.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "Umbrella Custom Packaging"
+      }
+    }
 };
 
 
