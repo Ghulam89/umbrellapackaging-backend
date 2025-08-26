@@ -31,6 +31,8 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+
   
   const data2 = [
     {
@@ -155,7 +157,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
       {
         "@type": "ListItem",
         "position": 3,
-        "name": categoryData?.name || serverData?.name,
+        "name": categoryData?.title || serverData?.title,
         "item": `${BaseUrl}/sub-category/${slug}`
       }
     ]
