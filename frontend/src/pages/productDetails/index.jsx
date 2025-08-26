@@ -411,7 +411,8 @@ const productSchema = {
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.8",
-    "reviewCount": "42"
+    "reviewCount": "42",
+    "bestRating": "5"
   },
   "review": [
     {
@@ -438,7 +439,7 @@ const productSchema = {
       "@type": "Offer",
       "url": `${BaseUrl}/product/${slug}`,
       "priceCurrency": "USD",
-      "price": product?.actualPrice || serverData?.actualPrice,
+       "price": "29.99",
       "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
       "availability": "https://schema.org/InStock",
       "itemCondition": "https://schema.org/NewCondition",
