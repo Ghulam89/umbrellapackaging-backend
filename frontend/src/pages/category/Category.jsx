@@ -13,7 +13,6 @@ const Category = ({ serverData }) => {
   const navigate = useNavigate();
   const [categoryProduct, setCategoryProduct] = useState([]);
   const [categoryData, setCategoryData] = useState(null);
-  const [breadcrumbSchema, setBreadcrumbSchema] = useState(null);
 
   const FetchCategory = async () => {
     try {
@@ -30,6 +29,7 @@ const Category = ({ serverData }) => {
       );
       setCategoryProduct(response2?.data?.data?.categories);
     } catch (err) {
+      // If there's an error or category not found, redirect to 404
       navigate('/404')
     }
   };
@@ -45,31 +45,27 @@ const Category = ({ serverData }) => {
     };
   }, [slug]);
 
-    useEffect(() => {
-    if (categoryData) {
-      setBreadcrumbSchema({
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": BaseUrl
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": categoryData.name || "Category",
-            "item": `${BaseUrl}/category/${slug}`
-          }
-        ]
-      });
-    }
-  }, [categoryData, slug]);
-
+  
   
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": BaseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": categoryData?.name || 'Category',
+        "item": `${BaseUrl}/category/${slug}`
+      }
+    ]
+  };
 
   return (
 
