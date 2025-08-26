@@ -418,7 +418,7 @@ const productSchema = {
     "@type": "Offer",
     "url": `https://umbrellapackaging.com/${serverData?.slug}`,
     "priceCurrency": "USD",
-    "price": "29.99",
+    "price":serverData?.actualPrice,
     "priceValidUntil": "2026-12-31",
     "availability": "https://schema.org/InStock",
     "itemCondition": "https://schema.org/NewCondition",
