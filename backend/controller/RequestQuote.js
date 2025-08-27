@@ -17,8 +17,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false,
   auth: {
-    user:EMAIL,
-    pass:PASS, 
+    user:'inquiry@umbrellapackaging.com',
+    pass:'iNQuIRy.@2502', 
   },
   tls: {
     rejectUnauthorized: false 
@@ -69,14 +69,14 @@ let imagePath = null;
     const newRequestQuote = await RequestQuote.create(quoteData);
 
     const mailOptions = {
-      from:EMAIL,
+      from:'inquiry@umbrellapackaging.com',
       to: data?.email,
       subject: 'Thank You for Your Quote Request - Umbrella Packaging',
       html: customerTemplate(data?.name)
     };
 
     const adminMailOptions = {
-      from:EMAIL,
+      from:'inquiry@umbrellapackaging.com',
       to: data?.email,
       subject: `${data?.name} <${data?.email}> | inquiry@umbrellapackaging.com`,
       html: adminTemplate(quoteData)
