@@ -57,10 +57,13 @@ const Hero = () => {
               label={"Get Instant Quote"}
               className=" bg-[#4440E6]  text-white"
             />
+            <Link to={'/dielines'}>
             <Button
               label={"Get Custom Template"}
               className="bg-[#4440E6] text-white"
             />
+            </Link>
+            
             <Link to={'/contact-us'}>
               <Button
                 label={"Order Sample Kit"}
