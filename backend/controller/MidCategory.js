@@ -403,13 +403,15 @@ export const deleteCategoryById = async (req, res, next) => {
   }
 };
 
+
+
 // Function for sitemap generation
-export const getAllCategoriesForSitemap = async () => {
-  try {
-    const categories = await MidCategory.find().select('slug updatedAt');
-    return categories;
-  } catch (error) {
-    console.error("Error fetching categories for sitemap:", error);
-    return [];
-  }
+export const getAllSubCategoriesForSitemap = async () => {
+    try {
+        const subCategories = await MidCategory.find().select('slug updatedAt');
+        return subCategories;
+    } catch (error) {
+        console.error("Error fetching sub-categories for sitemap:", error);
+        return [];
+    }
 };

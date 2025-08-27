@@ -159,7 +159,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
         "@type": "ListItem",
         "position": 3,
         "name": categoryData?.title || serverData?.title,
-        "item": `${BaseUrl}/sub-category/${slug}`
+        "item": `${BaseUrl}/sub-category/${serverData?.slug}`
       }
     ]
   };

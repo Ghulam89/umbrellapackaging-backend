@@ -62,7 +62,7 @@ useEffect(() => {
   }
 }, [singleBlog]);
 
-    const faqItemSchema = singleBlog?.qna?.map((item, index) => {
+    const faqItemSchema = serverData?.qna?.map((item, index) => {
         return {
             "@context": "https://schema.org",
             "@type": "Question",

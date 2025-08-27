@@ -1,8 +1,8 @@
 import express from "express";
 import { getAllProductsForSitemap } from "../controller/ProductController.js";
 import { getAllBlogsForSitemap } from "../controller/BlogController.js";
-import { getAllCategoriesForSitemap } from "../controller/MidCategory.js";
-import { getAllSubCategoriesForSitemap } from "../controller/SubCategory.js";
+import { getAllCategoriesForSitemap } from "../controller/BrandController.js";
+import { getAllSubCategoriesForSitemap } from "../controller/MidCategory.js";
 
 const sitemapRouter = express.Router();
 

@@ -319,3 +319,16 @@ export const deleteBrandById = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
+// Function for sitemap generation
+export const getAllCategoriesForSitemap = async () => {
+  try {
+    const categories = await Brands.find().select('slug updatedAt');
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories for sitemap:", error);
+    return [];
+  }
+};
