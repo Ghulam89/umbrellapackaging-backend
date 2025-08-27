@@ -85,8 +85,6 @@ export const createBrand = catchAsyncError(async (req, res, next) => {
   }
 });
 
-
-
 export const getBrandById = async (req, res, next) => {
   const { id, slug } = req.query;
 
@@ -124,7 +122,6 @@ export const getBrandById = async (req, res, next) => {
     });
   }
 };
-
 
 export const updateBrand = catchAsyncError(async (req, res, next) => {
   const brandId = req.params.id;
@@ -258,6 +255,17 @@ export const getAllBrand = async (req, res, next) => {
           localField: "_id",
           foreignField: "brandId",
           as: "midcategories",
+           pipeline: [
+        {
+          $project: {
+            _id: 1,
+            title: 1,
+            slug: 1,
+            icon: 1,
+            image: 1
+          }
+        }
+      ]
         },
       },
       {
@@ -320,9 +328,6 @@ export const deleteBrandById = async (req, res, next) => {
   }
 };
 
-
-
-// Function for sitemap generation
 export const getAllCategoriesForSitemap = async () => {
   try {
     const categories = await Brands.find().select('slug updatedAt');

@@ -23,13 +23,13 @@ function App({ serverData, CategoryProducts }) {
 
   const element = useRoutes(routes);
 
- 
+
   return (
     <>
       <ToastContainer />
       {!isAdminRoute && (
         <>
-           <WhatsAppFloat
+          <WhatsAppFloat
             phone="+17472470456"
             message={`Hello, I am reaching out to inquire about ${currentUrl}`}
             tooltip="WhatsApp us"
