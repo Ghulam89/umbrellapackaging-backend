@@ -9,11 +9,20 @@ import PageMetadata from '../../components/common/PageMetadata';
 import GetQuoteModal from '../../components/common/GetQuoteModal';
 
 function SingleBlog({ serverData }) {
+
+
+    console.log(serverData);
+
+   
     const { slug } = useParams();
     const navigate = useNavigate();
-    // Use serverData only for the initial render (SSR/hydration)
     const [singleBlog, setSingleBlog] = useState(serverData || {});
     const [blogs, setBlogs] = useState([])
+
+
+     console.log(singleBlog);
+    
+    
     const fetchBlogs = async () => {
         try {
             const response = await axios.get(`${BaseUrl}/blog/get?slug=${slug}`);
@@ -74,11 +83,34 @@ useEffect(() => {
         };
     });
 
-    const faqSchema = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": faqItemSchema || []
+     // Generate FAQ schema only if there are Q&A items
+    const generateFaqSchema = () => {
+        const qna = singleBlog?.qna || serverData?.qna || [];
+        
+        if (!qna.length) return null;
+        
+        const faqItemSchema = qna.map((item, index) => {
+            return {
+                "@context": "https://schema.org",
+                "@type": "Question",
+                "name": item.question,
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": item.answer
+                }
+            };
+        });
+
+        return {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": faqItemSchema
+        };
     };
+
+    
+    const faqSchema = generateFaqSchema();
+
     console.log(singleBlog);
 
     const [IsModalOpen,setIsModalOpen] = useState(false);
