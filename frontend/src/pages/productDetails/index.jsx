@@ -537,7 +537,7 @@ const productSchema = {
           <div className="pt-3.5 lg:w-6/12">
             <h1 className='pb-2 font-semibold font-sans sm:text-[28px] hidden sm:block text-[20px]'>{product?.name}</h1>
             <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="w-full">
                   <Input
                     label="Name"
@@ -587,7 +587,7 @@ const productSchema = {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              <div className="grid grid-cols-2 mt-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 <div className="w-full col-span-1 sm:col-span-1">
                   <Input
                     label="Box Style"
@@ -782,7 +782,11 @@ const productSchema = {
                   </select>
                 </div>
 
-                <div className="w-full col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5">
+                
+              </div>
+
+              <div  className=' grid md:grid-cols-2 grid-cols-1 gap-4 mt-4'>
+                <div className="w-full">
                   <label
                     htmlFor="design_upload"
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
@@ -802,7 +806,7 @@ const productSchema = {
                   />
                 </div>
 
-                <div className="w-full col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 xl:col-span-5">
+                <div className="w-full ">
                   <label
                     htmlFor="description"
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
@@ -819,7 +823,8 @@ const productSchema = {
                     placeholder="Tell us the size / dimensions, material, finising, add-ons, and design preferences."
 
                   ></textarea>
-                </div>
+                </div> 
+
               </div>
 
               <div>
