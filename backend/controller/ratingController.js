@@ -7,12 +7,12 @@ import { Rating } from "../model/rating.js";
     try {
       const existRating = await Rating.findOne({ user, rating });
   
-      if (existRating) {
-        return res.status(400).json({
-          status: "fail",
-          message: "You have already given a rating to this product",
-        });
-      }
+      // if (existRating) {
+      //   return res.status(400).json({
+      //     status: "fail",
+      //     message: "You have already given a rating to this product",
+      //   });
+      // }
   
       const newRating = new Rating(data);
       await newRating.save();

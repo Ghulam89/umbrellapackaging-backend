@@ -89,10 +89,11 @@ const AddReviews = ({ isModalOpen, setIsModalOpen, closeModal }) => {
             value={ratingValue}
             onClick={() => handleRatingChange(ratingValue)}
             className="hidden"
+            required
           />
           {ratingValue <= (hoverRating || formData.rating) ? (
             <FaStar 
-              className="text-3xl text-[#F0AD4E]" 
+              className="text-3xl text-[#f0ad4e]" 
               style={{ filter: "drop-shadow(0px 2px 2px rgba(0,0,0,0.2))" }}
             />
           ) : (
@@ -117,7 +118,7 @@ const AddReviews = ({ isModalOpen, setIsModalOpen, closeModal }) => {
             </div>
             
             <div className="flex flex-col items-center mt-4 mb-2">
-              <img src={logo} alt="Company Logo" width={80} height={48} className="mb-3" />
+              <img src={logo} alt="Company Logo" className="mb-3 w-32" />
               <h2 className="text-2xl font-semibold text-gray-800 mb-1">Share Your Feedback</h2>
               <p className="text-gray-600 text-sm">We value your opinion</p>
             </div>
@@ -132,7 +133,7 @@ const AddReviews = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder="Your name"
-                    className="rounded-lg w-full h-12 border-gray-300 border bg-white px-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    className="rounded-lg w-full h-12  border bg-white px-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400 transition-colors"
                     required
                   />
                 </div>
@@ -144,7 +145,7 @@ const AddReviews = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="your.email@example.com"
-                    className="rounded-lg w-full h-12 border-gray-300 border bg-white px-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                    className="rounded-lg w-full h-12  border bg-white px-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400 transition-colors"
                     required
                   />
                 </div>
@@ -154,7 +155,7 @@ const AddReviews = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                 <p className="pb-2 text-gray-700 font-medium">
                   How would you rate your experience?
                 </p>
-                <div className="flex justify-start gap-1 mb-1">
+                <div className="flex justify-start gap-1">
                   {renderStars()}
                 </div>
                
@@ -170,18 +171,18 @@ const AddReviews = ({ isModalOpen, setIsModalOpen, closeModal }) => {
                 <textarea
                   id="review"
                   name="review"
-                  rows={4}
+                  rows={3}
                   value={formData.review}
                   onChange={handleChange}
                   placeholder="Share details of your experience with us..."
-                  className="rounded-lg w-full border-gray-300 border bg-white p-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  className="rounded-lg w-full  border bg-white p-4 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
                   required
                 ></textarea>
               </div>
               
               <Button
                 label={loading ? "Submitting..." : "Submit Review"}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white mt-2 w-full py-3 rounded-lg font-medium disabled:opacity-50 transition-colors shadow-md hover:shadow-lg"
+                className=" bg-indigo-700 hover:bg-indigo-700 text-white mt-2 w-full py-3 rounded-lg font-medium disabled:opacity-80 transition-colors shadow-md hover:shadow-lg"
                 type="submit"
                 disabled={loading || formData.rating === 0}
               />
