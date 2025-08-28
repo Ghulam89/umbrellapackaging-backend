@@ -33,7 +33,7 @@ function App({ serverData, CategoryProducts }) {
             phone="+17472470456"
             message={`Hello, I am reaching out to inquire about ${currentUrl}`}
             tooltip="WhatsApp us"
-            bottomClass="bottom-6"
+            bottomClass="bottom-5"
             leftClass="left-8"
           />
           <TopNav />
