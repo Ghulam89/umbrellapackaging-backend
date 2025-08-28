@@ -14,13 +14,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  host: "smtp.gmail.com",
+  // service: 'gmail',
+  host: "smtp.hostinger.com",
   port: 587,
   secure: false,
   auth: {
     user:EMAIL,
-    pass:PASS,
+    pass:PASS, 
   },
   tls: {
     rejectUnauthorized: false
@@ -71,8 +71,8 @@ export const createInstantQuote = catchAsyncError(async (req, res, next) => {
 
     const adminMailOptions = {
       from:EMAIL,
-      to: data?.email,
-      subject: `${data?.name} <${data?.email}> | inquiry@umbrellapackaging.com`,
+      to:EMAIL,
+      subject: `${data?.name} <${data?.email}> | ${EMAIL}`,
       html: instantTemplate(quoteData)
     };
 
