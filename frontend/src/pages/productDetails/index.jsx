@@ -473,7 +473,7 @@ const productSchema = {
           <div className='lg:w-6/12'>
 
             <div className=' pb-7 pt-3'>
-                          <h1 className='pb-2  font-sans text-[28px] block sm:hidden'>{product?.name}</h1>
+                          {/* <h1 className='pb-2  font-sans text-[28px] block sm:hidden'>{product?.name}</h1> */}
 
               <p className=' flex  flex-wrap items-center gap-1'><strong className=' font-normal  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </strong>/<strong className=' font-normal text-[#4440E6] capitalize'> <Link className='font-sans whitespace-nowrap' to={`/category/${product?.brandId?.slug}`}>{product?.brandId?.name}</Link> </strong> /<strong className='font-normal text-[#4440E6] capitalize'> <Link className=' font-sans whitespace-nowrap' to={`/sub-category/${product?.categoryId?.slug}`}>{product?.categoryId?.title}</Link> </strong> /<span className=' font-sans  whitespace-nowrap '>{product?.name} </span></p>
             </div>
@@ -535,7 +535,7 @@ const productSchema = {
           </div>
 
           <div className="pt-3.5 lg:w-6/12">
-            <h1 className='pb-2 font-semibold font-sans sm:text-[28px] hidden sm:block text-[20px]'>{product?.name}</h1>
+            <h1 className='pb-2 font-semibold font-sans sm:text-[28px]  text-[20px]'>{product?.name}</h1>
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-2 gap-4">
                 <div className="w-full">
