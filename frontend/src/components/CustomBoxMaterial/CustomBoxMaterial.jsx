@@ -92,6 +92,9 @@ const CustomBoxMaterial = () => {
       <div className="my-10">
         <Tabs defaultTab={"Rigid Boxes"} className={' border-[#F7F7F7] border'} tabs={data} />
       </div>
+
+
+      
     </div>
   );
 };

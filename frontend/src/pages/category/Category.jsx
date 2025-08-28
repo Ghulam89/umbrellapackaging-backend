@@ -7,6 +7,7 @@ import { BaseUrl } from "../../utils/BaseUrl";
 import CardSlider from "../../components/common/CardSlider";
 import CustomPackagingProduced from "../../components/CustomPackagingProduced";
 import PageMetadata from "../../components/common/PageMetadata";
+import InstantQuoteModal from "../../components/common/InstantQuoteModal";
 
 const Category = ({ serverData }) => {
 
@@ -68,6 +69,9 @@ const Category = ({ serverData }) => {
       }
     ]
   };
+
+
+  const [isModalOpen,setIsModalOpen] = useState(false)
 
   return (
 
@@ -219,7 +223,7 @@ const Category = ({ serverData }) => {
 
             <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
               <Button
-
+                 onClick={()=>setIsModalOpen(true)}
                 label={"Get Instant Quote"}
                 className=" bg-[#4440E6] text-white"
               />
@@ -236,7 +240,7 @@ const Category = ({ serverData }) => {
       <div className=" mb-8">
         <CustomPackagingProduced />
       </div>
-
+   <InstantQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
     </>
 
   );

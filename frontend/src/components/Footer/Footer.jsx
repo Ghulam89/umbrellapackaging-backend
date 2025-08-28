@@ -149,7 +149,7 @@ const Footer = () => {
                                     <Link to={'/contact-us'} className='  text-[#2e2d2d]'>Order Sample Kit</Link>
                                 </li>
                                 <li>
-                                    <Link to={'#'} className='  text-[#2e2d2d]'>Get Custom Template</Link>
+                                    <Link to={'/dielines'} className='  text-[#2e2d2d]'>Get Custom Template</Link>
                                 </li>
                                 <li>
                                     <Link to={'/reviews'} className='  text-[#2e2d2d]'>Customer Reviews</Link>
@@ -163,25 +163,25 @@ const Footer = () => {
                             <strong className='  text-lg '>Useful Links</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>
-                                    <Link to={'/sub-category/custom-cardboard-boxes/'} className='  text-[#2e2d2d]'>Cardboard Boxes</Link>
+                                    <Link to={'/sub-category/custom-cardboard-boxes'} className='  text-[#2e2d2d]'>Cardboard Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/custom-corrugated-boxes/'} className='  text-[#2e2d2d]'>Corrugated Boxes</Link>
+                                    <Link to={'/sub-category/custom-corrugated-boxes'} className='  text-[#2e2d2d]'>Corrugated Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/kraft-packaging-boxes/'} className='  text-[#2e2d2d]'>Karft Boxes</Link>
+                                    <Link to={'/sub-category/kraft-packaging-boxes'} className='  text-[#2e2d2d]'>Karft Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/custom-rigid-boxes/'} className='  text-[#2e2d2d]'>Rigid Boxes</Link>
+                                    <Link to={'/sub-category/custom-rigid-boxes'} className='  text-[#2e2d2d]'>Rigid Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/custom-laminated-boxes/'} className='  text-[#2e2d2d]'>Laminated Boxes</Link>
+                                    <Link to={'/sub-category/custom-laminated-boxes'} className='  text-[#2e2d2d]'>Laminated Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/custom-textured-boxes/'} className='  text-[#2e2d2d]'>Textured Boxes</Link>
+                                    <Link to={'/sub-category/custom-textured-boxes'} className='  text-[#2e2d2d]'>Textured Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/cbd-packaging-boxes/'} className='  text-[#2e2d2d] '>CBD Packaging</Link>
+                                    <Link to={'/sub-category/cbd-packaging-boxes'} className='  text-[#2e2d2d] '>CBD Packaging</Link>
                                 </li>
                             </ul>
                         </div>

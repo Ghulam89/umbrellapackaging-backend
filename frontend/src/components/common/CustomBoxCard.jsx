@@ -1,7 +1,11 @@
 import React from "react";
 import Button from "./Button";
+import GetQuoteModal from "./GetQuoteModal";
+import { useState } from "react";
 
 const CustomBoxCard = ({ title, subTitle, description, image, buttonUrl }) => {
+
+  const  [IsModalOpen,setIsModalOpen] = useState(false)
   return (
     <div className="bg-[#F7F7F7] rounded-md p-2">
       <div className="flex  sm:flex-row  flex-col items-center">
@@ -12,9 +16,10 @@ const CustomBoxCard = ({ title, subTitle, description, image, buttonUrl }) => {
             <h3 className="pt-4 sm:text-2xl text-xl"> <strong>{subTitle}</strong></h3>
             <p className="pt-2.5">{description}</p>
             <Button
+               onClick={()=>setIsModalOpen(true)}
               label={"Get Quote"}
               className="bg-[#4440E6] text-white mt-2 opacity-90"
-              onClick={() => window.location.href = buttonUrl}
+              // onClick={() => window.location.href = buttonUrl}
             />
           </div>
         </div>
@@ -26,6 +31,9 @@ const CustomBoxCard = ({ title, subTitle, description, image, buttonUrl }) => {
           />
         </div>
       </div>
+
+      
+            <GetQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={IsModalOpen} />
     </div>
   );
 };

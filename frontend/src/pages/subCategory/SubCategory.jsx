@@ -402,7 +402,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
                 <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
                   <Button
-
+  onClick={()=>setIsModalOpen(true)}
                     label={"Get Instant Quote"}
                     className=" bg-[#4440E6] text-white"
                   />
@@ -465,7 +465,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
                 <Button
-
+  onClick={()=>setIsModalOpen(true)}
                   label={"Get Instant Quote"}
                   className=" bg-[#4440E6] text-white"
                 />
@@ -527,7 +527,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
                 <Button
-
+  onClick={()=>setIsModalOpen(true)}
                   label={"Get Instant Quote"}
                   className=" bg-[#4440E6] text-white"
                 />
@@ -567,7 +567,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
                 <Button
-
+  onClick={()=>setIsModalOpen(true)}
                   label={"Get Instant Quote"}
                   className=" bg-[#4440E6] text-white"
                 />
@@ -601,9 +601,9 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
           </p>
         </div>
 
-        <div>
+        <Link to={'/dielines'}>
           <Button label={'Get Template'} className=" bg-[#4440E6] text-white" />
-        </div>
+        </Link>
       </div>
 
       <CustomBoxMaterial />
