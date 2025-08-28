@@ -190,7 +190,7 @@ const GetPriceQuote = () => {
             <div className="pt-3.5">
               <strong className=" text-lg text-[#333333] mb-4">Product Specification</strong>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 <div className="w-full">
                   <Input
                     label="Box Style"
@@ -397,7 +397,11 @@ const GetPriceQuote = () => {
                   </select>
                 </div>
 
-                <div className="sm:col-span-2">
+                
+              </div>
+
+              <div  className=" grid sm:grid-cols-2 grid-cols-1 mt-4 gap-4">
+                <div className="">
                   <label
                     htmlFor="design_upload"
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
@@ -417,7 +421,7 @@ const GetPriceQuote = () => {
                   />
                 </div>
 
-                <div className="sm:col-span-2 lg:col-span-3">
+                <div className="">
                   <label
                     htmlFor="description"
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
