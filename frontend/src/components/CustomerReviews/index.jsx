@@ -85,11 +85,11 @@ const CustomerReviews = () => {
                 } : false
               }
               loop={true}
-              pagination={{
-                clickable: true,
-                el: '.swiper-pagination',
-                type: 'bullets',
-              }}
+              // pagination={{
+              //   clickable: true,
+              //   el: '.swiper-pagination',
+              //   type: 'bullets',
+              // }}
               navigation={{
                 nextEl: ".custom-next",
                 prevEl: ".custom-prev",
@@ -105,7 +105,7 @@ const CustomerReviews = () => {
             >
               {testimonials.map((testimonial) => (
                 <SwiperSlide key={testimonial._id}>
-                  <div className="max-w-6xl mx-auto px-4 py-8">
+                  <div className="max-w-5xl mx-auto px-4 py-8">
                     <ul className="flex justify-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <li key={i}>

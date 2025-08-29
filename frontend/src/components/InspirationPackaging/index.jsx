@@ -19,13 +19,13 @@ const InspirationPackaging = () => {
     const images = [
         gallery1,
        gallery2,
-        gallery3,
-       gallery4,
        gallery5,
+       gallery9,
        gallery6,
        gallery7,
         gallery8,
-       gallery9,
+       gallery3,
+        gallery4,
     ].map(img => `${img}`);
 
     const openImageViewer = (index) => {
@@ -63,21 +63,17 @@ const InspirationPackaging = () => {
                 </Link>
                
             </div>
-            <div className="grid gap-1.5 pb-12 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-                {images.map((img, index) => (
-                    <div 
-                        key={index} 
-                        className="w-full cursor-pointer"
-                        onClick={() => openImageViewer(index)}
-                    >
-                        <img
-                            src={img}
-                            className="w-full h-full object-cover rounded-2xl hover:opacity-90 transition-opacity"
-                            alt={`Packaging Inspiration ${index + 1}`}
-                        />
-                    </div>
-                ))}
-            </div>
+       <div className="columns-2 sm:columns-3 md:columns-4 gap-1.5">
+  {images.map((img, index) => (
+    <div key={index} className=" mt-1.5 cursor-pointer" onClick={() => openImageViewer(index)}>
+      <img
+        src={img}
+        alt={`Packaging Inspiration ${index + 1}`}
+        className="w-full rounded-lg hover:opacity-90 transition-opacity"
+      />
+    </div>
+  ))}
+</div>
 
             {isViewerOpen && selectedImage && (
                 <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] bg-opacity-90 z-50 flex items-center justify-center p-4">

@@ -196,7 +196,7 @@ export const adminTemplate = (data) => `<!DOCTYPE html>
                 </tr>
                 <tr>
                     <td>File:</td>
-                    <td><img style="width:'100%'" src=${data.image} /></td>
+                    <td><img style="width: 100%; max-width: 300px; height: auto; display: block;" src=${`https://umbrellapackaging.com/${data.image}`} /></td>
                 </tr>
                 <tr>
                     <td>Description:</td>
@@ -267,7 +267,7 @@ export const instantTemplate = (data) => `<!DOCTYPE html>
                 <td>File:</td>
                 <td>
                     ${data.image ?
-        `<img style="width: 100%; max-width: 300px; height: auto; display: block;" src="${data.image}" alt="Uploaded file" />` :
+        `<img style="width: 100%; max-width: 300px; height: auto; display: block;" src=${`https://umbrellapackaging.com/${data.image}`} alt="Uploaded file" />` :
         'No image provided'
     }
                 </td>

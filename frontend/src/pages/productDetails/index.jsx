@@ -145,7 +145,8 @@ const ProductDetails = ({
     quantity: "",
     addons: "",
     image: null,
-    message: ""
+    message: "",
+     pageUrl: typeof window !== "undefined" ? window.location.href : ""
   };
 
   const [formData, setFormData] = useState(initialFormState);

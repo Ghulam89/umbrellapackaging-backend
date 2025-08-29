@@ -4,6 +4,7 @@ import Button from '../common/Button';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import faq from '../../assets/images/faq.png';
+import { Link } from 'react-router-dom';
 const FAQ = () => {
   const [accordions, setAccordions] = useState([]);
 
@@ -45,7 +46,7 @@ const FAQ = () => {
         <div className="">
           <div className="text-center">
             <h2 className="sm:text-[35px] text-[25px]  pt-7    font-sans   font-[600] text-[#333333]">FAQ's</h2>
-            <Button label={'View All'} className="bg-[#4440E6] mx-auto text-white mt-2 opacity-90" />
+            <Link to={'/faqs'}><Button label={'View All'} className="bg-[#4440E6] mx-auto text-white mt-2 opacity-90" /></Link> 
           </div>
           
           <div className="flex sm:flex-row flex-col justify-between sm:gap-5 gap-0">

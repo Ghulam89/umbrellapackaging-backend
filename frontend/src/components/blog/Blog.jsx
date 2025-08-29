@@ -68,14 +68,14 @@ const Blog = () => {
             }}
           >
             {blog.map((testimonial) => (
-              <SwiperSlide key={testimonial._id}>
+              <SwiperSlide className=" mb-8" key={testimonial._id}>
                 <BlogCard data={testimonial} />
               </SwiperSlide>
             ))}
           </Swiper>
 
           
-          <div className="flex  justify-center gap-3 items-center mt-8">
+          <div className="flex  justify-center gap-3 items-center">
             <button className="custom-prev w-12 h-12 bg-[#F6F6F6]  hover:bg-[#4440E6] hover:text-white  rounded-full flex items-center justify-center">
               <IoIosArrowBack  size={25}  />
             </button>

@@ -62,7 +62,7 @@ const Blogs = () => {
                         <h1 style={{color:'#ff931e'}} className='md:text-[43px] text-[40px] text-[#ff931e]'> Blogs</h1></h1>
                 </div>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-5 gap-6'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pt-5 gap-5'>
                     {blog?.map((item, index) => (
                         <BlogCard key={index} data={item} />
                     ))}
@@ -73,7 +73,7 @@ const Blogs = () => {
                         <button
                             onClick={loadMore}
                             disabled={loading}
-                            className="bg-[#ff931e] hover:bg-[#e68317] text-white font-medium py-2 px-6 rounded-md transition duration-300"
+                            className=" bg-[#5652E8] hover:bg-[#e68317] text-white font-medium py-2 px-6 rounded-md transition duration-300"
                         >
                             {loading ? 'Loading...' : 'Load More'}
                         </button>

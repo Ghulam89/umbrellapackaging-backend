@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import UnitBG from '../../assets/images/bg-unit.webp';
 import { Link } from 'react-router-dom';
 
 function ProductionUnits() {
+
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+  
+  const closeImageViewer = () => {
+    setIsViewerOpen(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  const openImageViewer = () => {
+   
+    setIsViewerOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+
   return (
     <div className='bg-[#f4ecfb] mb-5 pb-1'>
       <div className='sm:max-w-6xl mb-3.5 max-w-[95%] mx-auto'>
@@ -13,9 +28,9 @@ function ProductionUnits() {
           aria-label="Production units background"
         >
 
-          <Link to={'https://www.youtube.com/@umbrellacustompackaging'}>
-          
             <svg 
+
+              onClick={openImageViewer} 
             width={80} 
             className="text-red-500" 
             aria-hidden="true" 
@@ -27,7 +42,7 @@ function ProductionUnits() {
               fill="currentColor"
             />
           </svg>  
-          </Link>
+       
               
         </div>
 
@@ -61,6 +76,35 @@ Umbrella Custom Packaging make your order even more cost effective by providing 
           </div>
         </div>
       </div>
+
+
+        {isViewerOpen && (
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] bg-opacity-90 z-50 flex items-center justify-center p-4">
+          <div className='absolute top-4 right-4'>
+            <button
+              onClick={closeImageViewer}
+              className="text-white text-3xl   cursor-pointer hover:text-gray-300"
+            >
+              &times;
+            </button>
+          </div>
+
+          <div className="w-full max-w-2xl  bg-[#f4ecfb]  p-2 rounded-lg  overflow-hidden aspect-video">
+           <iframe
+  width="100%"
+  height="100%"
+  src="https://www.youtube.com/embed/AT6X5EGzgPs"
+  title="YouTube video player"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+  className="w-full h-full"
+></iframe>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

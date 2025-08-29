@@ -263,7 +263,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                
                 <Link to={'/target-price'}>
                 <Button
-                  label={"Meat My Quote"}
+                  label={"Beat My Quote"}
                   className="bg-[#4440E6]  text-white"
                 />
                 </Link>

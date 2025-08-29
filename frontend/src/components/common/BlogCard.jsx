@@ -3,28 +3,43 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import { BaseUrl } from "../../utils/BaseUrl";
 
-const BlogCard = ({data}) => {
+const BlogCard = ({ data }) => {
   return (
-    <>
-    <div className=" ">
-    <Link to={`/blog/${data?.slug}`} className="">
-        <div className="">
-          <div className="  w-full sm:h-32 h-32">
-          <img src={`${BaseUrl}/${data?.image}`} alt="" className=" w-full h-full object-center object-cover" />
+    <div className="group relative">
+      <Link to={`/blog/${data?.slug}`}>
+        <div className="p-3 rounded-[10px]  h-96 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+          
+          {/* Blog Image */}
+          <div className="w-full h-40 overflow-hidden rounded-[10px]">
+            <img
+              src={`${BaseUrl}/${data?.image}`}
+              alt={data?.title}
+              className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
+            />
           </div>
-          <div className=" h-64 shadow border p-2 border-t-0 text-center text-[#333333]  border-gray-100">
-          <strong className="  font-bold text-[#333333] font-medium  text-2xl  whitespace-pre-wrap py-3">{data?.title?.slice(0,70)}</strong>
-         <div 
-              className="text-gray-600 mb-4 flex-1 line-clamp-3 pt-2"
+
+          {/* Blog Content */}
+          <div className="p-4 text-center text-[#333333]">
+            <h2 className="text-xl font-semibold text-gray-800 line-clamp-2 mb-2">
+              {data?.title?.slice(0, 70)}
+            </h2>
+            
+            <div
+              className="text-gray-600 line-clamp-3 mb-4 text-sm"
               dangerouslySetInnerHTML={{ __html: data?.content }}
             />
-          <Button className=" hover:bg-[#4440E6]  text-[#4440E6] uppercase hover:text-white mx-auto  mt-3" label={'Continue Reading'} />
+            <div className=" absolute bottom-4 left-0 flex justify-center items-center w-full">
+   <Button
+              className="bg-transparent  border  border-[#4440E6] text-[#4440E6] font-medium px-4 py-2 rounded-lg 
+                         hover:bg-[#4440E6] hover:text-white transition-colors duration-300 uppercase"
+              label="Continue Reading"
+            />
+            </div>
+         
           </div>
         </div>
       </Link>
     </div>
-      
-    </>
   );
 };
 
