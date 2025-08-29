@@ -21,16 +21,17 @@ const GetPriceQuote = () => {
     depth: "",
     unit: "Inches",
     stock: "Stock",
-    colors: "Colors",
+    color: "Colors",
     printingSides: "Inside",
     quantity: "",
-    addOns: "",
+    addons: "",
     image: null,
-    description: ""
+    message: ""
   };
 
   const [formData, setFormData] = useState(initialFormState);
-
+   console.log(formData);
+   
   const validateStep1 = () => {
     return (
       formData.boxStyle &&
@@ -39,7 +40,7 @@ const GetPriceQuote = () => {
       formData.depth &&
       formData.unit &&
       formData.stock &&
-      formData.colors &&
+      formData.color &&
       formData.printingSides &&
       formData.quantity
     );
@@ -61,8 +62,11 @@ const GetPriceQuote = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+ 
+     
+      
 
+    e.preventDefault();
     if (!validateStep2()) {
       alert("Please fill all required fields");
       return;
@@ -89,6 +93,8 @@ const GetPriceQuote = () => {
       toast.error(error?.response?.data?.message)
       setIsLoading(false);
     }
+
+
   };
 
   const nextStep = () => {
@@ -316,7 +322,7 @@ const GetPriceQuote = () => {
                     Colors
                       <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
-                  <select name="colors" value={formData.colors}
+                  <select name="color" value={formData.color}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
@@ -327,9 +333,9 @@ const GetPriceQuote = () => {
                     <option value={'3 Color'}>3 Color</option>
                     <option value={'4 Color'}>4 Color</option>
                     <option value={'4/1 Color'}>4/1 Color</option>
-                    <option value={'4/2 Color'}>4/1 Color</option>
-                    <option value={'4/3 Color'}>4/1 Color</option>
-                    <option value={'4/4 Color'}>4/1 Color</option>
+                    <option value={'4/2 Color'}>4/2 Color</option>
+                    <option value={'4/3 Color'}>4/3 Color</option>
+                    <option value={'4/4 Color'}>4/4 Color</option>
 
                   </select>
                 </div>
@@ -381,7 +387,7 @@ const GetPriceQuote = () => {
                     Add-Ons
                     <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
-                  <select name="addOns" value={formData.addOns}
+                  <select name="addons" value={formData.addons}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
@@ -429,9 +435,9 @@ const GetPriceQuote = () => {
                     Description
                   </label>
                   <textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
+                    id="message"
+                    name="message"
+                    value={formData.message}
                     onChange={handleChange}
                     rows={3}
                     className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"

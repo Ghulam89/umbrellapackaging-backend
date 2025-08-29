@@ -29,6 +29,10 @@ const transporter = nodemailer.createTransport({
 // create blog
 export const createRequestQuote = catchAsyncError(async (req, res, next) => {
   const data = req.body;
+
+    console.log(data);
+
+    
 let imagePath = null;
 
   try {
@@ -45,7 +49,8 @@ let imagePath = null;
     const deviceInfo = browserInfo
       ? `${browserInfo.name} ${browserInfo.version} on ${browserInfo.os}`
       : 'Unknown device';
-    
+      
+        
     const quoteData = {
       image: imagePath,
       name: data?.name,

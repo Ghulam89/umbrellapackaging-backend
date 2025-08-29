@@ -83,7 +83,9 @@ const InstantQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
   return (
     <Modal isOpen={isModalOpen} onClose={closeModal} className={"rounded-xl"}>
       <div className="p-5 overflow-y-auto ">
-        <div className="cursor-pointer flex w-full justify-end">
+      
+        <div className="bg-[#F7F7F7] rounded-[10px] flex flex-col items-center p-6">
+            <div className="cursor-pointer flex w-full justify-end">
           <MdClose
             onClick={() => {
               formik.resetForm();
@@ -92,7 +94,6 @@ const InstantQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
             size={25}
           />
         </div>
-        <div className="bg-[#F7F7F7] rounded-[10px] flex flex-col items-center p-6">
           <h2 className="text-xl font-semibold mb-4">Get an Instant Quote</h2>
 
           <form onSubmit={formik.handleSubmit} className="w-full">

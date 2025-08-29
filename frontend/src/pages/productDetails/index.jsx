@@ -140,12 +140,12 @@ const ProductDetails = ({
     depth: "",
     unit: "Inches",
     stock: "Stock",
-    colors: "Colors",
+    color: "Colors",
     printingSides: "Inside",
     quantity: "",
-    addOns: "",
+    addons: "",
     image: null,
-    description: ""
+    message: ""
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -158,7 +158,7 @@ const ProductDetails = ({
       formData.depth &&
       formData.unit &&
       formData.stock &&
-      formData.colors &&
+      formData.color &&
       formData.printingSides &&
       formData.quantity
     );
@@ -701,7 +701,7 @@ const productSchema = {
                     Colors
                     <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
-                  <select name="colors" value={formData.colors}
+                  <select name="color" value={formData.color}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
@@ -712,9 +712,9 @@ const productSchema = {
                     <option value={'3 Color'}>3 Color</option>
                     <option value={'4 Color'}>4 Color</option>
                     <option value={'4/1 Color'}>4/1 Color</option>
-                    <option value={'4/2 Color'}>4/1 Color</option>
-                    <option value={'4/3 Color'}>4/1 Color</option>
-                    <option value={'4/4 Color'}>4/1 Color</option>
+                    <option value={'4/2 Color'}>4/2 Color</option>
+                    <option value={'4/3 Color'}>4/3 Color</option>
+                    <option value={'4/4 Color'}>4/4 Color</option>
 
                   </select>
                 </div>
@@ -766,7 +766,7 @@ const productSchema = {
                     Add-Ons
                     <strong className=" text-red-600 m-0 pl-1">*</strong>
                   </label>
-                  <select name="addOns" value={formData.addOns}
+                  <select name="addons" value={formData.addons}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
@@ -814,9 +814,9 @@ const productSchema = {
                     Description
                   </label>
                   <textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
+                    id="message"
+                    name="message"
+                    value={formData.message}
                     onChange={handleChange}
                     rows={3}
                     className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"

@@ -58,7 +58,7 @@ const Navbar = () => {
   const [ReviewModalOpen, setReviewModalOpen] = useState(false)
 
   return (
-    <div className="bg-[#F7F7F7] sm:pb-2.5 pb-0">
+    <div className="bg-[#F7F7F7] sticky top-0 z-40 sm:pb-2.5 pb-0">
       <div className="sm:max-w-6xl relative max-w-[95%] mx-auto">
         <div className="flex space-x-5 w-full justify-between h-20 items-center">
           <Link to={`/`}>
