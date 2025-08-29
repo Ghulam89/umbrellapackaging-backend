@@ -31,10 +31,10 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false)
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
 
-  
+
   const data2 = [
     {
       id: 1,
@@ -207,7 +207,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
         canonicalUrl={`${BaseUrl}/sub-category/${slug}`}
         breadcrumbSchema={breadcrumbSchema}
         robots={categoryData?.robots || serverData?.robots}
-        
+
         itemListSchema={itemListSchema}
       />
 
@@ -250,27 +250,27 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               <div className=" flex flex-wrap   mt-5  gap-5 items-center">
                 <Button
-                 onClick={()=>setIsModalOpen(true)}
+                  onClick={() => setIsModalOpen(true)}
                   label={"Get Instant Quote"}
                   className=" bg-[#4440E6] text-white"
                 />
                 <Link to={'/dielines'}>
-                 <Button
-                  label={"Get  Template"}
-                  className="bg-[#4440E6] text-white"
-                />
+                  <Button
+                    label={"Get  Template"}
+                    className="bg-[#4440E6] text-white"
+                  />
                 </Link>
-               
+
                 <Link to={'/target-price'}>
-                <Button
-                  label={"Beat My Quote"}
-                  className="bg-[#4440E6]  text-white"
-                />
+                  <Button
+                    label={"Beat My Quote"}
+                    className="bg-[#4440E6]  text-white"
+                  />
                 </Link>
-                
+
               </div>
             </div>
-      <InstantQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+            <InstantQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
 
             {/* Image */}
             {/* Fixed version */}
@@ -347,8 +347,16 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
             </div>
 
             <div className=' flex sm:flex-row flex-col items-center gap-5  mt-5 bg-[#EFF4FE] p-4 rounded-lg justify-between'>
-              <div className=' sm:w-6/12 w-full'>
-                <iframe width="100%" className=' rounded-lg' height="315" src={categoryData?.videoLink} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              <div className="sm:w-6/12 w-full">
+                <div className="relative w-full aspect-video">
+                  <iframe
+                    src={categoryData?.videoLink}
+                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
               </div>
               <div className=' sm:w-6/12 w-full'>
                 <h2 className="sm:text-[38px] text-[25px]  leading-[42px] pb-2  font-sans   font-[600] text-[#333333]">
@@ -366,7 +374,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                     <svg width={15} aria-hidden="true" class="e-font-icon-svg e-fab-whatsapp" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"></path></svg>
                     WhatsApp :747-247-0456
                   </li>
-                  <li className=' flex gap-1 items-center'>
+                  <li className=' flex gap-1    whitespace-nowrap items-center'>
                     <svg width={15} aria-hidden="true" class="e-font-icon-svg e-far-envelope" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm0 48v40.805c-22.422 18.259-58.168 46.651-134.587 106.49-16.841 13.247-50.201 45.072-73.413 44.701-23.208.375-56.579-31.459-73.413-44.701C106.18 199.465 70.425 171.067 48 152.805V112h416zM48 400V214.398c22.914 18.251 55.409 43.862 104.938 82.646 21.857 17.205 60.134 55.186 103.062 54.955 42.717.231 80.509-37.199 103.053-54.947 49.528-38.783 82.032-64.401 104.947-82.653V400H48z"></path></svg>
                     Email :sales@umbrellapackaging.com
                   </li>
@@ -402,7 +410,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
                 <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
                   <Button
-  onClick={()=>setIsModalOpen(true)}
+                    onClick={() => setIsModalOpen(true)}
                     label={"Get Instant Quote"}
                     className=" bg-[#4440E6] text-white"
                   />
@@ -433,9 +441,9 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
         <div className="sm:max-w-6xl  my-6  py-3 rounded-lg  max-w-[95%] mx-auto">
           <div className="text-center">
-           
-             <CustomPackagingApart />
-           
+
+            <CustomPackagingApart />
+
           </div>
         </div>
 
@@ -465,7 +473,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
                 <Button
-  onClick={()=>setIsModalOpen(true)}
+                  onClick={() => setIsModalOpen(true)}
                   label={"Get Instant Quote"}
                   className=" bg-[#4440E6] text-white"
                 />
@@ -527,7 +535,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
                 <Button
-  onClick={()=>setIsModalOpen(true)}
+                  onClick={() => setIsModalOpen(true)}
                   label={"Get Instant Quote"}
                   className=" bg-[#4440E6] text-white"
                 />
@@ -567,7 +575,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               <div className=" flex flex-wrap   mt-7 gap-2.5 items-center">
                 <Button
-  onClick={()=>setIsModalOpen(true)}
+                  onClick={() => setIsModalOpen(true)}
                   label={"Get Instant Quote"}
                   className=" bg-[#4440E6] text-white"
                 />
@@ -594,7 +602,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
       <div className=' mb-5 flex  justify-between sm:flex-row flex-col gap-3 items-center px-3 py-5 sm:max-w-6xl max-w-[95%] bg-[#FFDEBF] rounded-lg mx-auto'>
         <div>
-          <h3>Looking for the templates of custom boxes and packaging ?
+          <h3 className=' sm:text-3xl  text-xl font-semibold'>Looking for the templates of custom boxes and packaging ?
           </h3>
           <p className=' py-2'>Get a quick template file from us, where you can put your design and save some good time.
 
@@ -621,23 +629,24 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
               </p>
 
-              <ul className=' flex pb-4 mt-10 w-full gap-2'>
-                <li className=' bg-white shadow-xl h-20 w-28  flex justify-center items-center rounded-xl'>
-                  <img src={brand1} alt='' />
+              <ul className="flex pb-4  flex-wrap  justify-center mt-10 w-full gap-2">
+                <li className="bg-white shadow-xl h-20 w-28 flex justify-center items-center rounded-xl">
+                  <img src={brand1} alt="" className="max-h-full max-w-full object-contain" />
                 </li>
-                <li className=' bg-white shadow-xl h-20 w-28   flex justify-center items-center rounded-xl'>
-                  <img src={brand2} className='  h-full' alt='' />
+                <li className="bg-white shadow-xl h-20 w-28 flex justify-center items-center rounded-xl">
+                  <img src={brand2} alt="" className="max-h-full max-w-full object-contain" />
                 </li>
-                <li className=' bg-white shadow-xl h-20 w-28   flex justify-center items-center rounded-xl'>
-                  <img src={brand3} className='h-full' alt='' />
+                <li className="bg-white shadow-xl h-20 w-28 flex justify-center items-center rounded-xl">
+                  <img src={brand3} alt="" className="max-h-full max-w-full object-contain" />
                 </li>
-                <li className=' bg-white shadow-xl h-20 w-28   flex justify-center items-center rounded-xl'>
-                  <img src={brand4} className='h-full' alt='' />
+                <li className="bg-white shadow-xl h-20 w-28 flex justify-center items-center rounded-xl">
+                  <img src={brand4} alt="" className="max-h-full max-w-full object-contain" />
                 </li>
-                <li className=' bg-white shadow-xl h-20 w-28   flex justify-center items-center rounded-xl'>
-                  <span><img src={brand5} alt='' /></span>
+                <li className="bg-white shadow-xl h-20 w-28 flex justify-center items-center rounded-xl">
+                  <img src={brand5} alt="" className="max-h-full max-w-full object-contain" />
                 </li>
               </ul>
+
 
             </div>
           </div>

@@ -113,7 +113,7 @@ const Footer = () => {
                         </div>
                     </div>
                     <div className=' sm:pt-8 sm:gap-12  gap-7  pt-4 grid md:grid-cols-5 grid-cols-2'>
-                        <div className=' col-span-2'>
+                         <div className="col-span-2 order-4 md:order-1">
                             <Partners />
                             <div className=' bg-white h-56  rounded-md flex   justify-center w-full items-center' >
                                 <div className=' grid   py-5 grid-cols-2 gap-6 w-full'>
@@ -133,7 +133,7 @@ const Footer = () => {
 
                             </div>
                         </div>
-                        <div className=''>
+                          <div className="order-1 md:order-2">
                             <strong className='  text-lg '>Quick Links</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>
@@ -159,7 +159,7 @@ const Footer = () => {
                                 </li>
                             </ul>
                         </div>
-                        <div className=''>
+                      <div className="order-2 md:order-3">
                             <strong className='  text-lg '>Useful Links</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>
@@ -185,7 +185,7 @@ const Footer = () => {
                                 </li>
                             </ul>
                         </div>
-                        <div className=''>
+                        <div className="order-3 md:order-4">
                             <strong className='  text-lg '>About</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>

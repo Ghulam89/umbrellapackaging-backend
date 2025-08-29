@@ -82,29 +82,29 @@ const Hero = () => {
           <h2 className=" sm:text-2xl text-sm  font-medium  text-[#4440E6]">Customize Everything Under This Umbrella</h2>
         </div>
       </div>
-      <div className="bg-[#B8B6FA99] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 mt-8 py-2.5 sm:px-5 px-3 rounded-md w-full">
+      <div className="bg-[#B8B6FA99] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 mt-8 py-2.5  px-3 rounded-md w-full">
         <div className="flex gap-1 justify-start items-center">
-          <img src={Icon1} width={40} alt="Free Quote" />
+          <img src={Icon1}  className=" sm:w-10 w-8" alt="Free Quote" />
           <strong className="text-[15px]  font-light  opacity-80">Free Quote</strong>
         </div>
         <div className="flex justify-start gap-1 items-center">
-          <img src={Icon3} width={40} alt="Free Design support" />
+          <img src={Icon3} className="  sm:w-10 w-8"  alt="Free Design support" />
           <strong className="text-[15px] sm:whitespace-nowrap whitespace-pre-wrap text-[#111111] font-light  opacity-80">Free Design support</strong>
         </div>
         <div className="flex justify-center  gap-1 items-center">
-          <img src={Icon2} width={40} alt="Free Lamination" />
+          <img src={Icon2}  className=" sm:w-10 w-8"  alt="Free Lamination" />
           <strong className="text-[15px] font-light  opacity-80">Free Lamination</strong>
         </div>
         <div className="flex justify-center gap-1 items-center">
-          <img src={Icon4} width={40} alt="Free Shipping" />
+          <img src={Icon4} className="  sm:w-10 w-8"   alt="Free Shipping" />
           <strong className="text-[15px] font-light  opacity-80">Free Shipping</strong>
         </div>
         <div className="flex justify-center gap-1 items-center">
-          <img src={Icon5} width={40} alt="FSC Certified" />
+          <img src={Icon5}  className="  sm:w-10 w-8"  alt="FSC Certified" />
           <strong className="text-[15px] font-light  opacity-80">FSC Certified</strong>
         </div>
         <div className="flex  justify-start gap-1 items-center">
-          <img src={Icon6} width={40} alt="Quickest Turnaround" />
+          <img src={Icon6}  className=" sm:w-10 w-8"  alt="Quickest Turnaround" />
           <strong className="text-[15px] font-light sm:whitespace-nowrap  opacity-80 whitespace-pre-wrap text-[#111111] ">Quickest Turnaround</strong>
         </div>
       </div>

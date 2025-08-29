@@ -24,18 +24,20 @@ const TopNav = () => {
         <div className="flex sm:justify-between justify-center flex-wrap items-center px-6 sm:py-4 py-2 border-b border-gray-200 text-sm text-gray-700">
           {/* Left Side: Country Flags */}
           <div className="flex items-center space-x-4">
-            <div className="flex items-center  space-x-1.5">
+            <Link to={'https://umbrellapackaging.com/'} className="flex items-center  space-x-1.5">
               <img src={usa} alt="USA" className="w-8 object-contain" />
-              <span>USA</span>
-            </div>
-            <div className="flex items-center space-x-1">
+              <span >USA</span>
+            </Link>
+            <Link to={'https://umbrellapackaging.co.uk/'}  target="_blank"
+  rel="noopener noreferrer" className="flex items-center space-x-1">
               <img src={uk} alt="UK" className="w-8 object-contain" />
               <span>UK</span>
-            </div>
-            <div className="flex items-center space-x-1">
+            </Link>
+            <Link to={'https://umbrellapackaging.ca/'}  target="_blank"
+  rel="noopener noreferrer" className="flex items-center space-x-1">
               <img src={canada} alt="Canada" className="w-8 object-contain" />
               <span>Canada</span>
-            </div>
+            </Link>
           </div>
 
 

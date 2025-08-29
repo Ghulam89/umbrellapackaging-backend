@@ -7,6 +7,7 @@ import Box3 from '../../assets/images/boxMaterial/kraft.webp';
 import Box4 from '../../assets/images/boxMaterial/cardboard.webp';
 import Box5 from '../../assets/images/boxMaterial/blak-linen-boxes.webp';
 import Box6 from '../../assets/images/boxMaterial/white-linen-boxes.webp';
+import Box7 from '../../assets/images/boxMaterial/bux-borad-images.webp';
 const CustomBoxMaterial = () => {
   const customBox = [
     {
@@ -70,6 +71,17 @@ const CustomBoxMaterial = () => {
         "White Linen boxes are bright and feel soft. Perfect for keeping your stuff safe and looking neat. They come in bright white color. You can choose white Linen boxes for a cool way to store and protect your things! These boxes are eco-friendly helping to keep the Earth healthy.",
       image:
         Box6,
+      buttonUrl: "#",
+    },
+    {
+      id: 5,
+      title: "Bux Boxes Boxes",
+      subTitle:
+        "Affordable and Reliable: Bux Board Boxes!",
+      description:
+        "Bux Board boxes are budget-friendly options for storing your things. Despite being economical, they’re still strong and reliable. Don’t let the low price fool you – they are still sturdy and get the job done. So, if you’re looking for an inexpensive yet dependable packaging or storage option, Bux Board boxes are a great choice, providing both affordability and reliability.",
+      image:
+        Box7,
       buttonUrl: "#",
     },
   ];

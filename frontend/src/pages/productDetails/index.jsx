@@ -323,16 +323,16 @@ const ProductDetails = ({
         </p>
 
         <div className=' flex   flex-wrap   gap-2 justify-between pt-8'>
-          <div className=' w-56 h-20   border-gray-200 rounded-lg'>
+          <div className=' sm:w-56 w-28 h-20   border-gray-200 rounded-lg'>
             <img src={sky} alt='' className=' w-full h-full object-contain' />
           </div>
-          <div className=' w-56 h-20  border-gray-200 rounded-lg'>
+          <div className='sm:w-56 w-28 border-gray-200 rounded-lg'>
             <img src={dhl} alt='' className=' w-full h-full object-contain' />
           </div>
-          <div className='  w-56 h-20  border-gray-200 rounded-lg'>
+          <div className='  sm:w-56 w-28 border-gray-200 rounded-lg'>
             <img src={sups} alt='' className=' w-full h-full object-contain' />
           </div>
-          <div className='  w-44 h-20 border-gray-200 rounded-lg'>
+          <div className=' sm:w-56 w-28 border-gray-200 rounded-lg'>
             <img src={ups} alt='' className=' w-full h-full object-contain' />
           </div>
         </div>

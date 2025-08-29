@@ -51,7 +51,7 @@ const ImportanceCustomPackaging = () => {
   }, []);
   return (
     <div className="py-8 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+      <div className="container mx-auto px-4 sm:px-0  max-w-6xl">
         <div className=' text-center sm:pb-6 pb-3'>
                   
 
@@ -60,7 +60,7 @@ What Is Custom Packaging? <h2 style={{color:'#4440E6'}} className=' m-0 '>A Comp
         </div>
         <div className="flex flex-col lg:flex-row gap-8 blog_content banner_content items-center">
           {/* Text Content */}
-          <div dangerouslySetInnerHTML={{ __html: banner?.description}} className="w-full lg:w-1/2 bg-gray-50 h-[430px] p-4 overflow-y-auto">
+          <div dangerouslySetInnerHTML={{ __html: banner?.description}} className="w-full lg:w-1/2 bg-gray-50 h-[430px] rounded-xl p-4 overflow-y-auto">
              
           </div>
           
