@@ -293,6 +293,7 @@ export const getAllBlogs = catchAsyncError(async (req, res, next) => {
     }
     const [blogs, totalBlogs] = await Promise.all([
       Blogs.find(filter)
+        .select("slug title image imageAltText metaTitle metaDescription createdAt keywords")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
