@@ -185,7 +185,8 @@ const ProductDetails = ({
       const response = await axios.post(`${BaseUrl}/requestQuote/create`, formDataToSend);
 
       if (response.data.status === 'success') {
-        toast.success(response.data.message)
+        // toast.success(response.data.message)
+        navigate('/thank-your-page')
         setIsLoading(false);
 
         setFormData(initialFormState);

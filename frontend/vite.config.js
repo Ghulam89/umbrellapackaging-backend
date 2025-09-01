@@ -29,6 +29,7 @@ export default defineConfig({
       "@reduxjs/toolkit",
       "react-quill",
       "jodit-react",
+      "lottie-react"
     ],
   },
 
@@ -39,6 +40,7 @@ export default defineConfig({
       "react-helmet-async",
       "react-redux",
       "@reduxjs/toolkit",
+      'lottie-react'
     ],
     exclude: [
       "react-dom/server",

@@ -8,8 +8,12 @@ import Input from "./Input";
 import Button from "./Button";
 import { BaseUrl } from "../../utils/BaseUrl";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const InstantQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
+
+
+  const navigate = useNavigate()
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string()
@@ -65,7 +69,8 @@ const InstantQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
         });
 
         if(response?.data?.status==="success"){
-         toast.success(response?.data?.message)
+        //  toast.success(response?.data?.message)
+         navigate('/thank-your-page')
         }else{
           toast.error(response?.data?.message)
         }

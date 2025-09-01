@@ -24,6 +24,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { BaseUrl } from "../utils/BaseUrl";
 import Dielines from "../pages/Dielines";
+import SuccessPage from "../pages/thankYouPage";
 
 export default function WebsiteRoutes({ serverData, CategoryProducts }) {
   const location = useLocation();
@@ -64,6 +65,7 @@ export default function WebsiteRoutes({ serverData, CategoryProducts }) {
     { path: '/about-us', element: <About key="about" /> },
     { path: '/contact-us', element: <ContactUs key="contact" /> },
     { path: '/blogs', element: <Blogs key="blogs" /> },
+     { path: '/thank-your-page', element: <SuccessPage key="success" /> },
     { path: '/shop', element: <Shop key="shop" /> },
     { path: '/cart', element: <Cart key="cart" /> },
     { path: '/checkout', element: <Checkout key="checkout" /> },

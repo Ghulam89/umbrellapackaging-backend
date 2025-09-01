@@ -4,12 +4,13 @@ import Button from "../common/Button";
 import { toast } from "react-toastify";
 import { BaseUrl } from "../../utils/BaseUrl";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const GetPriceQuote = () => {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
-
+const navigate = useNavigate();
   const initialFormState = {
     name: "",
     email: "",
@@ -82,9 +83,10 @@ const GetPriceQuote = () => {
       const response = await axios.post(`${BaseUrl}/requestQuote/create`, formDataToSend);
 
       if (response.data.status === 'success') {
-        toast.success(response.data.message)
+        // toast.success(response.data.message)
         setIsLoading(false);
         setStep(1)
+        navigate('/thank-your-page')
         setFormData(initialFormState);
       } else {
         toast.error(response.data.message)
