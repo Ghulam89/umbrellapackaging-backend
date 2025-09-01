@@ -154,9 +154,9 @@ const Shop = () => {
 
   return (
     <>
-      <div className=' bg-[#F7F7F7] sm:max-w-7xl max-w-[95%] mx-auto  px-3 my-5 py-12'>
+      <div className=' bg-[#F7F7F7] rounded-lg sm:max-w-7xl max-w-[95%] mx-auto  px-3.5 my-5 py-12'>
         <div className='  mx-auto text-center'>
-          <h1>Discover Our Custom Packaging Variety</h1>
+          <h1 className=' sm:text-4xl text-2xl'>Discover Our Custom Packaging Variety</h1>
           <p className=' pt-2'>Check out all the different types of boxes we have at Umbrella Custom Packaging! We have special categories for boxes that you can customize just the way you like. You get to choose whether it’s the size, the material, or how it looks. So, have a look and pick the perfect box for you!
           </p>
         </div>

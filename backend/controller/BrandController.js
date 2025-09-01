@@ -3,6 +3,7 @@ import { Brands } from "../model/Brand.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import redisClient from "../config/redis.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -199,6 +200,16 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
 export const getAllBrand = async (req, res, next) => {
   try {
     const { page = 1, limit = 4, search = '', all = false } = req.query;
+    
+    const cacheKey = `brands:${page}:${limit}:${search}:${all}`;
+    
+    const cachedData = await redisClient.get(cacheKey);
+    
+    if (cachedData) {
+      console.log('Serving from Redis cache');
+      return res.status(200).json(JSON.parse(cachedData));
+    }
+
     if (all === 'true') {
       const brands = await Brands.aggregate([
         {
@@ -235,11 +246,15 @@ export const getAllBrand = async (req, res, next) => {
         },
       ]);
 
-      return res.status(200).json({
+      const responseData = {
         status: "success",
         data: brands,
         totalBrands: brands.length,
-      });
+      };
+
+      await redisClient.setEx(cacheKey, 300, JSON.stringify(responseData));
+      
+      return res.status(200).json(responseData);
     }
 
     const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
@@ -255,17 +270,17 @@ export const getAllBrand = async (req, res, next) => {
           localField: "_id",
           foreignField: "brandId",
           as: "midcategories",
-           pipeline: [
-        {
-          $project: {
-            _id: 1,
-            title: 1,
-            slug: 1,
-            icon: 1,
-            image: 1
-          }
-        }
-      ]
+          pipeline: [
+            {
+              $project: {
+                _id: 1,
+                title: 1,
+                slug: 1,
+                icon: 1,
+                image: 1
+              }
+            }
+          ]
         },
       },
       {
@@ -295,7 +310,7 @@ export const getAllBrand = async (req, res, next) => {
       $or: [{ name: { $regex: search, $options: 'i' } }],
     });
 
-    res.status(200).json({
+    const responseData = {
       status: "success",
       data: brands,
       totalBrands,
@@ -305,7 +320,11 @@ export const getAllBrand = async (req, res, next) => {
         limit: parseInt(limit, 10),
         totalPages: Math.ceil(totalBrands / parseInt(limit, 10)),
       },
-    });
+    };
+
+    await redisClient.setEx(cacheKey, 300, JSON.stringify(responseData));
+    
+    res.status(200).json(responseData);
   } catch (error) {
     next(error);
   }

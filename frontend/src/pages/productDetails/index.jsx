@@ -157,10 +157,10 @@ const ProductDetails = ({
       formData.length &&
       formData.width &&
       formData.depth &&
-      formData.unit &&
-      formData.stock &&
-      formData.color &&
-      formData.printingSides &&
+      // formData.unit &&
+      // formData.stock &&
+      // formData.color &&
+      // formData.printingSides &&
       formData.quantity
     );
   };
@@ -769,7 +769,7 @@ const productSchema = {
                   </label>
                   <select name="addons" value={formData.addons}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
-                    required
+                    // required
                   >
                     <option selected></option>
                     <option value={'Foiling'}>Foiling</option>
@@ -834,7 +834,7 @@ const productSchema = {
                   <Button
                     type="submit"
                     label={isLoading ? "Sending..." : "Request A Quote"}
-                    disabled={!validate() || isLoading}
+                    // disabled={!validate() || isLoading}
                     className={`bg-[#4440E6] w-full text-white py-2.5 px-4 rounded-lg hover:bg-[#3938b8] transition-colors ${!validate || isLoading ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                   />

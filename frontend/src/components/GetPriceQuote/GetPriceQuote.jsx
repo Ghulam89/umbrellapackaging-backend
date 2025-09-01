@@ -39,10 +39,10 @@ const GetPriceQuote = () => {
       formData.length &&
       formData.width &&
       formData.depth &&
-      formData.unit &&
-      formData.stock &&
-      formData.color &&
-      formData.printingSides &&
+      // formData.unit &&
+      // formData.stock &&
+      // formData.color &&
+      // formData.printingSides &&
       formData.quantity
     );
   };
