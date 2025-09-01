@@ -199,54 +199,14 @@ export const updateBrand = catchAsyncError(async (req, res, next) => {
 export const getAllBrand = async (req, res, next) => {
   try {
     const { page = 1, limit = 4, search = '', all = false } = req.query;
-    if (all === 'true') {
-      const brands = await Brands.aggregate([
-        {
-          $match: {
-            $or: [{ name: { $regex: search, $options: 'i' } }],
-          },
-        },
-        {
-          $lookup: {
-            from: "midcategories",
-            localField: "_id",
-            foreignField: "brandId",
-            as: "midcategories",
-          },
-        },
-        {
-          $project: {
-            name: 1,
-            image: 1,
-            imageAltText: 1,
-            bannerImage: 1,
-            bannerAltText: 1,
-            bgColor: 1,
-            slug: 1,
-            metaTitle: 1,
-            metaDescription: 1,
-            keywords: 1,
-            robots: 1,
-            content: 1,
-            createdAt: 1,
-            status: 1,
-            midcategories: 1,
-          },
-        },
-      ]);
-
-      return res.status(200).json({
-        status: "success",
-        data: brands,
-        totalBrands: brands.length,
-      });
-    }
-
-    const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
-    const brands = await Brands.aggregate([
+    
+    const basePipeline = [
       {
         $match: {
-          $or: [{ name: { $regex: search, $options: 'i' } }],
+          $or: [
+            { name: { $regex: search, $options: 'i' } },
+            { slug: { $regex: search, $options: 'i' } }
+          ],
         },
       },
       {
@@ -255,17 +215,17 @@ export const getAllBrand = async (req, res, next) => {
           localField: "_id",
           foreignField: "brandId",
           as: "midcategories",
-           pipeline: [
-        {
-          $project: {
-            _id: 1,
-            title: 1,
-            slug: 1,
-            icon: 1,
-            image: 1
-          }
-        }
-      ]
+          pipeline: [
+            {
+              $project: {
+                _id: 1,
+                title: 1,
+                slug: 1,
+                icon: 1,
+                image: 1
+              }
+            }
+          ]
         },
       },
       {
@@ -276,24 +236,46 @@ export const getAllBrand = async (req, res, next) => {
           bannerImage: 1,
           bannerAltText: 1,
           bgColor: 1,
-          content: 1,
+          // content: 1,
           createdAt: 1,
           slug: 1,
           metaTitle: 1,
-          metaDescription: 1,
-          keywords: 1,
-          robots: 1,
+          // metaDescription: 1,
+          // keywords: 1,
+          // robots: 1,
           status: 1,
           midcategories: 1,
         },
-      },
-      { $skip: skip },
-      { $limit: parseInt(limit, 10) },
-    ]);
+      }
+    ];
 
-    const totalBrands = await Brands.countDocuments({
-      $or: [{ name: { $regex: search, $options: 'i' } }],
-    });
+    if (all === 'true') {
+      const brands = await Brands.aggregate(basePipeline);
+      
+      return res.status(200).json({
+        status: "success",
+        data: brands,
+        totalBrands: brands.length,
+      });
+    }
+
+    // For paginated results
+    const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+    const paginationPipeline = [
+      ...basePipeline,
+      { $skip: skip },
+      { $limit: parseInt(limit, 10) }
+    ];
+
+    const [brands, totalBrands] = await Promise.all([
+      Brands.aggregate(paginationPipeline),
+      Brands.countDocuments({
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { slug: { $regex: search, $options: 'i' } }
+        ]
+      })
+    ]);
 
     res.status(200).json({
       status: "success",
