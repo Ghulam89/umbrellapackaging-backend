@@ -332,7 +332,7 @@ export const getAllCategory = catchAsyncError(async (req, res, next) => {
         path: "brandId",
         select: "name slug"
       })
-      .sort({ title: 1 });
+      .sort({ title: 1 }).select("slug title icon image metaTitle metaDescription keywords");
 
       return res.status(200).json({
         status: "success",
