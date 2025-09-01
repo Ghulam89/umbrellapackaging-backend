@@ -66,6 +66,7 @@ export default function WebsiteRoutes({ serverData, CategoryProducts }) {
     { path: '/contact-us', element: <ContactUs key="contact" /> },
     { path: '/blogs', element: <Blogs key="blogs" /> },
      { path: '/thank-your-page', element: <SuccessPage key="success" /> },
+     //{ path: '/thank-your-page', element: <SuccessPage key="success" /> },
     //  { path: '/thank-your-page', element: <SuccessPage key="success" /> },
     { path: '/shop', element: <Shop key="shop" /> },
     { path: '/cart', element: <Cart key="cart" /> },
