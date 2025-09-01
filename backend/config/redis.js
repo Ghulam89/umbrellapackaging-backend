@@ -2,48 +2,66 @@ import { createClient } from "redis";
 
 let redisClient;
 
-try {
-  redisClient = createClient({
-    socket: {
-      // Use IPv4 address to avoid IPv6 issues
-      host: '127.0.0.1',
-      port: 6379,
-      connectTimeout: 5000,
-      reconnectStrategy: (retries) => {
-        if (retries > 3) {
-          console.log('Too many retries on Redis. Connection terminated');
-          return new Error('Too many retries');
+const createRedisClient = async () => {
+  try {
+    const client = createClient({
+      socket: {
+        host: process.env.REDIS_HOST || '127.0.0.1',
+        port: process.env.REDIS_PORT || 6379,
+        connectTimeout: 5000,
+        reconnectStrategy: (retries) => {
+          console.log(`Redis connection attempt ${retries + 1}`);
+          if (retries > 2) {
+            console.log('Redis connection failed, using mock client');
+            return false;
+          }
+          return Math.min(retries * 200, 1000);
         }
-        return Math.min(retries * 100, 3000);
       }
-    }
-  });
+    });
 
-  redisClient.on('error', (err) => {
-    console.log('Redis Client Error:', err);
-  });
+    client.on('error', (err) => {
+      if (err.code !== 'ECONNREFUSED') {
+        console.log('Redis Client Error:', err.message);
+      }
+    });
 
-  redisClient.on('connect', () => {
-    console.log('Redis Client Connected');
-  });
+    client.on('connect', () => {
+      console.log('Redis Client Connected');
+    });
 
-  redisClient.on('ready', () => {
-    console.log('Redis Client Ready');
-  });
+    client.on('ready', () => {
+      console.log('Redis Client Ready');
+    });
 
-  // Connect to Redis
-  await redisClient.connect();
-  
-} catch (error) {
-  console.log('Redis connection failed, continuing without cache:', error.message);
-  // Fallback: create a mock redis client that doesn't break the application
-  redisClient = {
+    await client.connect();
+    return client;
+  } catch (error) {
+    console.log('Redis connection failed, using mock client');
+    return createMockRedisClient();
+  }
+};
+
+const createMockRedisClient = () => {
+  console.log('Using mock Redis client - application will work without caching');
+  return {
     get: async () => null,
     setEx: async () => {},
     del: async () => {},
     keys: async () => [],
-    isConnected: false
+    isConnected: false,
+    connect: async () => {},
+    disconnect: async () => {},
+    quit: async () => {}
   };
+};
+
+// Initialize Redis client
+try {
+  redisClient = await createRedisClient();
+} catch (error) {
+  console.log('Failed to initialize Redis client:', error.message);
+  redisClient = createMockRedisClient();
 }
 
 export default redisClient;
