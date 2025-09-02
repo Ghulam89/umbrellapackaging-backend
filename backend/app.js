@@ -290,70 +290,115 @@ let vite = null;
 // Preload production assets in production mode
 if (isProduction) {
   try {
-    productionTemplate = await fs.readFile(
-      path.join(__dirname, '../frontend/dist/client/index.html'), 
-      'utf-8'
-    );
-    
-    // Import the server entry point
+    const templatePath = path.join(__dirname, '../frontend/dist/client/index.html');
     const serverEntryPath = path.join(__dirname, '../frontend/dist/server/entry-server.js');
-    productionRender = (await import(serverEntryPath)).render;
+    
+    // Load assets in parallel
+    const [template, serverModule] = await Promise.all([
+      fs.readFile(templatePath, 'utf-8'),
+      import(serverEntryPath)
+    ]);
+    
+    productionTemplate = template;
+    productionRender = serverModule.render;
     
     console.log('Production assets preloaded successfully');
   } catch (error) {
     console.error('Failed to preload production assets:', error);
+    // Don't crash the server, but log the error
   }
 } else {
   // Development mode - use Vite
-  const { createServer } = await import('vite');
-  vite = await createServer({
-    server: { middlewareMode: true },
-    appType: 'custom',
-    base,
-    root: path.join(__dirname, '../frontend'),
-  });
-  app.use(vite.middlewares);
+  try {
+    const { createServer } = await import('vite');
+    vite = await createServer({
+      server: { middlewareMode: true },
+      appType: 'custom',
+      base,
+      root: path.join(__dirname, '../frontend'),
+    });
+    app.use(vite.middlewares);
+  } catch (error) {
+    console.error('Failed to start Vite:', error);
+  }
 }
 
 // In production, serve static files with caching headers
 if (isProduction) {
-  const compression = (await import('compression')).default;
-  const sirv = (await import('sirv')).default;
-  app.use(compression());
-  app.use(base, sirv(path.join(__dirname, '../frontend/dist/client'), {
-    extensions: [],
-    maxAge: 31536000, // 1 year
-    immutable: true
-  }));
+  try {
+    const compression = (await import('compression')).default;
+    const sirv = (await import('sirv')).default;
+    app.use(compression());
+    app.use(base, sirv(path.join(__dirname, '../frontend/dist/client'), {
+      extensions: [],
+      maxAge: 31536000, // 1 year
+      immutable: true
+    }));
+  } catch (error) {
+    console.error('Failed to set up static file serving:', error);
+  }
 }
 
-// Cache for rendered pages (simple in-memory cache)
+// Cache for rendered pages with LRU strategy
 const ssrCache = new Map();
 const CACHE_TTL = 1000 * 60 * 5; // 5 minutes cache
+const MAX_CACHE_SIZE = 100; // Limit cache size to prevent memory issues
 
 // Function to generate cache key from request
 function getCacheKey(req) {
   return req.originalUrl;
 }
 
-// SSR middleware with caching (must be last)
-app.use('*', async (req, res, next) => {
-  try {
-    const url = req.originalUrl.replace(base, '') || '/';
-    
-    // Check cache first
-    const cacheKey = getCacheKey(req);
-    const cached = ssrCache.get(cacheKey);
-    
-    if (cached && cached.expiry > Date.now()) {
-      res.set(cached.headers).status(200).send(cached.html);
-      return;
+// Function to clean up cache periodically
+function cleanCache() {
+  const now = Date.now();
+  for (const [key, value] of ssrCache.entries()) {
+    if (value.expiry < now) {
+      ssrCache.delete(key);
     }
-    
-    let template, render, rendered;
-    
-    if (!isProduction) {
-      // Development mode with Vite
+  }
+  
+  // Enforce size limit
+  if (ssrCache.size > MAX_CACHE_SIZE) {
+    const entries = Array.from(ssrCache.entries());
+    // Remove oldest entries (first in the array)
+    for (let i = 0; i < entries.length - MAX_CACHE_SIZE; i++) {
+      ssrCache.delete(entries[i][0]);
+    }
+  }
+}
+
+// Run cleanup every minute
+setInterval(cleanCache, 60000);
+
+// SSR middleware with caching and timeout (must be last)
+app.use('*', async (req, res, next) => {
+  const startTime = Date.now();
+  const url = req.originalUrl.replace(base, '') || '/';
+  
+  // Skip SSR for API routes and static files
+  if (url.startsWith('/api/') || 
+      url.startsWith('/_vite') || 
+      url.includes('.') && !url.endsWith('/')) {
+    return next();
+  }
+  
+  // Check cache first
+  const cacheKey = getCacheKey(req);
+  const cached = ssrCache.get(cacheKey);
+  
+  if (cached && cached.expiry > Date.now()) {
+    res.set(cached.headers).status(200).send(cached.html);
+    console.log(`SSR Cache hit for ${url}: ${Date.now() - startTime}ms`);
+    return;
+  }
+  
+  let template, render;
+  let rendered = { html: '', helmet: {}, serverData: {} };
+  
+  try {
+    if (!isProduction && vite) {
+      // Development mode
       try {
         template = await fs.readFile(
           path.join(__dirname, '../frontend/index.html'), 
@@ -361,28 +406,28 @@ app.use('*', async (req, res, next) => {
         );
         template = await vite.transformIndexHtml(url, template);
         render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render;
-        rendered = await render(url);
       } catch (error) {
-        console.error('Vite SSR error:', error);
-        return next(error);
+        console.error('Vite development error:', error);
+        return sendErrorResponse(res, 'Development server error');
       }
-    } else {
+    } else if (isProduction && productionTemplate && productionRender) {
       // Production mode
-      if (!productionTemplate || !productionRender) {
-        return res.status(500).send('Server not ready yet');
-      }
-      
       template = productionTemplate;
       render = productionRender;
-      
-      try {
-        rendered = await render(url);
-      } catch (error) {
-        console.error('Production SSR error:', error);
-        return next(error);
-      }
+    } else {
+      // Server not ready
+      return sendErrorResponse(res, 'Server not ready yet');
     }
-
+    
+    // Set timeout for SSR rendering (max 4 seconds)
+    const renderPromise = render(url);
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('SSR timeout')), 4000)
+    );
+    
+    // Race between render and timeout
+    rendered = await Promise.race([renderPromise, timeoutPromise]);
+    
     const html = template
       .replace(
         '<!--app-head-->',
@@ -394,7 +439,7 @@ app.use('*', async (req, res, next) => {
         `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})}</script>`
       );
     
-    // Cache the response (only successful responses)
+    // Cache successful responses
     if (isProduction && res.statusCode === 200) {
       ssrCache.set(cacheKey, {
         html,
@@ -404,24 +449,49 @@ app.use('*', async (req, res, next) => {
     }
     
     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-  } catch (e) {
-    vite?.ssrFixStacktrace?.(e);
-    console.error('SSR Error:', e.stack);
+    console.log(`SSR completed for ${url}: ${Date.now() - startTime}ms`);
     
-    res.status(500).send(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Error</title>
-        </head>
-        <body>
-          <h1>Something went wrong</h1>
-          <p>Please try again later.</p>
-        </body>
-      </html>
-    `);
+  } catch (e) {
+    if (e.message === 'SSR timeout') {
+      console.error(`SSR timeout for ${url}: ${Date.now() - startTime}ms`);
+      // Fall back to client-side rendering
+      if (template) {
+        const fallbackHtml = template
+          .replace('<!--app-head-->', '')
+          .replace('<!--app-html-->', '<div id="app"></div>')
+          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = {}</script>');
+        
+        res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);
+      } else {
+        sendErrorResponse(res, 'SSR timeout and no template available');
+      }
+    } else {
+      console.error('SSR Error:', e.stack);
+      sendErrorResponse(res, 'Server rendering error');
+    }
   }
 });
+
+// Helper function for error responses
+function sendErrorResponse(res, message) {
+  res.status(500).send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Error</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+          h1 { color: #d32f2f; }
+        </style>
+      </head>
+      <body>
+        <h1>Something went wrong</h1>
+        <p>${message}</p>
+        <p>Please try again later.</p>
+      </body>
+    </html>
+  `);
+}
 
 // Start server
 const PORT = process.env.PORT || 8000;
