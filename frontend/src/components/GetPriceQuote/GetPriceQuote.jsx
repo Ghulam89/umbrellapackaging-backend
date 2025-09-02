@@ -86,7 +86,7 @@ const navigate = useNavigate();
         // toast.success(response.data.message)
         setIsLoading(false);
         setStep(1)
-        navigate('/thank-your-page')
+        navigate('/thank-you-page')
         setFormData(initialFormState);
       } else {
         toast.error(response.data.message)
@@ -374,6 +374,7 @@ const navigate = useNavigate();
                     label="Quantity"
                     star={"*"}
                     name="quantity"
+                    type={'number'}
                     value={formData.quantity}
                     onChange={handleChange}
                     placeholder="Quantity"

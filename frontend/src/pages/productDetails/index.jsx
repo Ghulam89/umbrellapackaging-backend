@@ -186,7 +186,7 @@ const ProductDetails = ({
 
       if (response.data.status === 'success') {
         // toast.success(response.data.message)
-        navigate('/thank-your-page')
+        navigate('/thank-you-page')
         setIsLoading(false);
 
         setFormData(initialFormState);
@@ -753,6 +753,7 @@ const productSchema = {
                     label="Quantity"
                     star={"*"}
                     name="quantity"
+                     type={'number'}
                     value={formData.quantity}
                     onChange={handleChange}
                     placeholder="Quantity"
