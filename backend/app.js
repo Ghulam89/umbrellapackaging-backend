@@ -454,7 +454,7 @@ app.use('*', async (req, res, next) => {
   } catch (e) {
     if (e.message === 'SSR timeout') {
       console.error(`SSR timeout for ${url}: ${Date.now() - startTime}ms`);
-      // Fall back to client-side rendering
+      
       if (template) {
         const fallbackHtml = template
           .replace('<!--app-head-->', '')
@@ -472,7 +472,6 @@ app.use('*', async (req, res, next) => {
   }
 });
 
-// Helper function for error responses
 function sendErrorResponse(res, message) {
   res.status(500).send(`
     <!DOCTYPE html>
