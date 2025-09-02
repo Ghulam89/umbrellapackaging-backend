@@ -31,12 +31,12 @@ import fs from 'node:fs/promises';
 connectDB();
 const app = express();
 
-// const redisClient = redis.createClient({
-//     url: 'redis://31.97.14.21:6379',
-// });
-// redisClient.connect()
-//     .then(() => console.log("Connected to Redis"))
-//     .catch(err => console.error("Redis connection error:", err));
+const redisClient = redis.createClient({
+    url: 'redis://31.97.14.21:6379',
+});
+redisClient.connect()
+    .then(() => console.log("Connected to Redis"))
+    .catch(err => console.error("Redis connection error:", err));
     
 app.use(express.static("static"));
 app.use('/images', express.static(path.join(__dirname, 'images')));
@@ -278,16 +278,33 @@ app.get('/soap-packaging/', (req, res) => res.redirect(301, '/process-of-making-
 // Error middleware for APIs
 app.use(ErrorMiddleware);
 
-// ================= SSR/Frontend logic =================
+// ================= SSR/Frontend optimization =================
 const isProduction = process.env.NODE_ENV === 'production';
 const base = process.env.BASE || '/';
-let templateHtml = '';
-if (isProduction) {
-  templateHtml = await fs.readFile(path.join(__dirname, '../frontend/dist/client/index.html'), 'utf-8');
-}
 
-let vite;
-if (!isProduction) {
+// Cache for production template and render function
+let productionTemplate = '';
+let productionRender = null;
+let vite = null;
+
+// Preload production assets in production mode
+if (isProduction) {
+  try {
+    productionTemplate = await fs.readFile(
+      path.join(__dirname, '../frontend/dist/client/index.html'), 
+      'utf-8'
+    );
+    
+    // Import the server entry point
+    const serverEntryPath = path.join(__dirname, '../frontend/dist/server/entry-server.js');
+    productionRender = (await import(serverEntryPath)).render;
+    
+    console.log('Production assets preloaded successfully');
+  } catch (error) {
+    console.error('Failed to preload production assets:', error);
+  }
+} else {
+  // Development mode - use Vite
   const { createServer } = await import('vite');
   vite = await createServer({
     server: { middlewareMode: true },
@@ -296,45 +313,118 @@ if (!isProduction) {
     root: path.join(__dirname, '../frontend'),
   });
   app.use(vite.middlewares);
-} else {
+}
+
+// In production, serve static files with caching headers
+if (isProduction) {
   const compression = (await import('compression')).default;
   const sirv = (await import('sirv')).default;
   app.use(compression());
-  app.use(base, sirv(path.join(__dirname, '../frontend/dist/client'), { extensions: [] }));
+  app.use(base, sirv(path.join(__dirname, '../frontend/dist/client'), {
+    extensions: [],
+    maxAge: 31536000, // 1 year
+    immutable: true
+  }));
 }
 
-// SSR middleware (must be last)
-app.use('*', async (req, res) => {
+// Cache for rendered pages (simple in-memory cache)
+const ssrCache = new Map();
+const CACHE_TTL = 1000 * 60 * 5; // 5 minutes cache
+
+// Function to generate cache key from request
+function getCacheKey(req) {
+  return req.originalUrl;
+}
+
+// SSR middleware with caching (must be last)
+app.use('*', async (req, res, next) => {
   try {
     const url = req.originalUrl.replace(base, '') || '/';
-    let template;
-    let render;
-    if (!isProduction) {
-      template = await fs.readFile(path.join(__dirname, '../frontend/index.html'), 'utf-8');
-      template = await vite.transformIndexHtml(url, template);
-      render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render;
-    } else {
-      template = templateHtml;
-      render = (await import(path.join(__dirname, '../frontend/dist/server/entry-server.js'))).render;
+    
+    // Check cache first
+    const cacheKey = getCacheKey(req);
+    const cached = ssrCache.get(cacheKey);
+    
+    if (cached && cached.expiry > Date.now()) {
+      res.set(cached.headers).status(200).send(cached.html);
+      return;
     }
-    const rendered = await render(url);
+    
+    let template, render, rendered;
+    
+    if (!isProduction) {
+      // Development mode with Vite
+      try {
+        template = await fs.readFile(
+          path.join(__dirname, '../frontend/index.html'), 
+          'utf-8'
+        );
+        template = await vite.transformIndexHtml(url, template);
+        render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render;
+        rendered = await render(url);
+      } catch (error) {
+        console.error('Vite SSR error:', error);
+        return next(error);
+      }
+    } else {
+      // Production mode
+      if (!productionTemplate || !productionRender) {
+        return res.status(500).send('Server not ready yet');
+      }
+      
+      template = productionTemplate;
+      render = productionRender;
+      
+      try {
+        rendered = await render(url);
+      } catch (error) {
+        console.error('Production SSR error:', error);
+        return next(error);
+      }
+    }
+
     const html = template
       .replace(
         '<!--app-head-->',
-        `\n${rendered.helmet.title}\n${rendered.helmet.meta}\n${rendered.helmet.link}\n${rendered.helmet.script}\n`
+        `\n${rendered.helmet?.title || ''}\n${rendered.helmet?.meta || ''}\n${rendered.helmet?.link || ''}\n${rendered.helmet?.script || ''}\n`
       )
-      .replace('<!--app-html-->', rendered.html)
-      .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})}</script>`);
+      .replace('<!--app-html-->', rendered.html || '')
+      .replace(
+        '<!--server-data-->', 
+        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})}</script>`
+      );
+    
+    // Cache the response (only successful responses)
+    if (isProduction && res.statusCode === 200) {
+      ssrCache.set(cacheKey, {
+        html,
+        headers: { 'Content-Type': 'text/html' },
+        expiry: Date.now() + CACHE_TTL
+      });
+    }
+    
     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
   } catch (e) {
     vite?.ssrFixStacktrace?.(e);
-    console.log(e.stack);
-    res.status(500).end(e.stack);
+    console.error('SSR Error:', e.stack);
+    
+    res.status(500).send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Error</title>
+        </head>
+        <body>
+          <h1>Something went wrong</h1>
+          <p>Please try again later.</p>
+        </body>
+      </html>
+    `);
   }
 });
 
 // Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is running on port ${PORT} in dev mode`);
+  console.log(`Server is running on port ${PORT} in ${isProduction ? 'production' : 'development'} mode`);
 });
