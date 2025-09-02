@@ -168,7 +168,7 @@ export const adminTemplate = (data) => `<!DOCTYPE html>
                 </tr>
                 <tr>
                     <td>Length:</td>
-                    <td>${data.boxStyle}</td>
+                    <td>${data.length}</td>
                 </tr>
                 <tr>
                     <td>Width:</td>
