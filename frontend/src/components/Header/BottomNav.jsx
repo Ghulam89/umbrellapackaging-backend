@@ -43,6 +43,7 @@ const BottomNav = ({ Menu, OpenMenu }) => {
     handleCategoryLeave();
   };
 
+
   return (
     <div className="relative">
       {/* Desktop Menu */}

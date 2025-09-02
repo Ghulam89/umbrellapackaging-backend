@@ -649,7 +649,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Unit
-                    <strong className=" text-red-600 m-0 pl-1">*</strong>
+                    
                   </label>
                   <select name="unit" value={formData.unit}
                     onChange={handleChange} className="w-full outline-none bg-lightGray   text-gray-500 placeholder:text-gray-400 placeholder:text-sm  border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -670,7 +670,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Stock
-                    <strong className=" text-red-600 m-0 pl-1">*</strong>
+                  
                   </label>
                   <select name="stock" value={formData.stock}
                     onChange={handleChange} className="w-full border text-gray-500 border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -701,7 +701,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Colors
-                    <strong className=" text-red-600 m-0 pl-1">*</strong>
+                    
                   </label>
                   <select name="color" value={formData.color}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -730,7 +730,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Printing Sides
-                    <strong className=" text-red-600 m-0 pl-1">*</strong>
+                   
                   </label>
                   <select name="printingSides" value={formData.printingSides}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -766,7 +766,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Add-Ons
-                    <strong className=" text-red-600 m-0 pl-1">*</strong>
+                   
                   </label>
                   <select name="addons" value={formData.addons}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"

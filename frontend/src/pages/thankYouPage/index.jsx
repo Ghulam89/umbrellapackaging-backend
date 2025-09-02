@@ -3,14 +3,19 @@ import { PiSealCheckFill } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { FaArrowAltCircleDown, FaArrowAltCircleLeft, FaWhatsapp } from "react-icons/fa";
 import Button from "../../components/common/Button";
-
+import Lottie from "lottie-react";
+import success from '../../animations/success.json';
 export default function SuccessPage() {
   return (
     <div className="flex flex-col items-center justify-center  py-8 bg-gray-100">
       <div className="bg-[#2E2D2D] custom-shadow  hover:shadow-xl text-white rounded-lg shadow-lg p-8 w-[90%] sm:w-[560px] text-center">
         {/* Success Icon */}
-        <PiSealCheckFill color="#8B8DFF" className="text-[130px] mx-auto" />
-        
+         <Lottie
+            animationData={success}
+            // loop={false}
+            // autoplay={true}
+            className="w-56 mx-auto h-56"
+          />
         <h2 className="text-xl font-semibold mt-4">Success!</h2>
         <h2 className="mt-4 text-2xl text-white font-bold">
           Thank You for Reaching Out to Us!
