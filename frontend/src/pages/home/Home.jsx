@@ -127,7 +127,7 @@ export const Home = () => {
         <CustomerReviews />
         <InspirationPackaging />
         {/* <ImportanceCustomPackaging /> */}
-        <Blog />
+        {/* <Blog /> */}
         <FAQ />
       </main>
     </>
