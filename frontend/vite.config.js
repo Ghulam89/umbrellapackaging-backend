@@ -16,7 +16,7 @@ export default defineConfig({
   },
 
   server: {
-    allowedHosts: ["umbrellapackaging.com"],
+    allowedHosts: ["umbrellapackaging.com,www.umbrellapackaging.com"],
     strictPort: true,
   },
 
