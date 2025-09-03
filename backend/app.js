@@ -432,10 +432,9 @@ app.use('*', async (req, res, next) => {
       return sendErrorResponse(res, 'Server not ready yet');
     }
     
-    // Set timeout for SSR rendering (max 4 seconds)
     const renderPromise = render(url);
     const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('SSR timeout')), 4000)
+      setTimeout(() => reject(new Error('SSR timeout')), 2000)
     );
     
     // Race between render and timeout
@@ -452,7 +451,6 @@ app.use('*', async (req, res, next) => {
         `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})}</script>`
       );
     
-    // Cache successful responses
     if (isProduction && res.statusCode === 200) {
       ssrCache.set(cacheKey, {
         html,
