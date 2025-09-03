@@ -156,7 +156,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* <BottomNav Menu={menu} OpenMenu={OpenMenu} /> */}
+        <BottomNav Menu={menu} OpenMenu={OpenMenu} />
       </div>
 
       <GetQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={IsModalOpen} />

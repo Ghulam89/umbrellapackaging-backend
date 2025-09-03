@@ -41,11 +41,33 @@ export const getRatings = async (req, res) => {
 };
 export const getRating = async (req, res) => {
   const { id } = req.params;
-  try {
-    const rating = await Rating.findById(id);
+  const page = parseInt(req.query.page) || 1; // Get page number from query params, default to 1
+  const limit = 5;
+  
+  try { 
+    // Calculate skip value for pagination
+    const skip = (page - 1) * limit;
+    
+    // Fetch ratings with pagination
+    const ratings = await Rating.find({ productId: id })
+      .skip(skip)
+      .limit(limit);
+    
+    // Get total count for pagination info
+    const totalRatings = await Rating.countDocuments({ productId: id });
+    const totalPages = Math.ceil(totalRatings / limit);
+    
     res.status(200).json({
-      data: rating,
-      message: "Rating fetched successfully",
+      data: ratings,
+      pagination: {
+        currentPage: page,
+        totalPages: totalPages,
+        totalItems: totalRatings,
+        itemsPerPage: limit,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1
+      },
+      message: "Ratings fetched successfully",
       status: "success",
     });
   } catch (error) {
