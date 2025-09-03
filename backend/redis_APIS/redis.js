@@ -433,7 +433,7 @@ const fetchCategoriesFromDB = async (queryParams) => {
 };
 
 // Redis-optimized category endpoint
-REDIS.get("/category/getAll"),async (req, res, next) => {
+REDIS.get("/category/getAll", async (req, res, next) => {
   const startTime = Date.now();
   
   try {
@@ -446,7 +446,7 @@ REDIS.get("/category/getAll"),async (req, res, next) => {
         new Promise(resolve => setTimeout(() => resolve(null), 5))
       ]);
     } catch (e) {
-    
+      // Silently handle cache errors
     }
     
     if (cachedData) {
@@ -478,7 +478,7 @@ REDIS.get("/category/getAll"),async (req, res, next) => {
       },
     });
   }
-}
+});
 
 // Add cache clearing endpoint for categories
 REDIS.delete("/clear-categories-cache", async (req, res) => {
