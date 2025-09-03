@@ -114,7 +114,7 @@ export const Home = () => {
 
       <main>
         <Hero />
-        {/* <CustomPackaging /> */}
+        <CustomPackaging />
         <CustomBoxMaterial />
         <GetPriceQuote />
         <SpecialPackaging />
@@ -124,11 +124,11 @@ export const Home = () => {
         <CustomPackagingProduced />
         <PackagingBanner url="/sub-category/kraft-packaging-boxes" title={'Order Kraft Packaging For Sustainable Future.'} subTitle={"Go Green with Umbrella Custom Packaging Go For Kraft Packaging"} bgImage={goScreen} />
         <WeFulfil />
-        {/* <CustomerReviews /> */}
+        <CustomerReviews />
         <InspirationPackaging />
-        {/* <ImportanceCustomPackaging /> */}
-        {/* <Blog /> */}
-        {/* <FAQ /> */}
+        <ImportanceCustomPackaging />
+        <Blog />
+        <FAQ />
       </main>
     </>
   )
