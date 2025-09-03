@@ -115,7 +115,7 @@ export const Home = () => {
       <main>
         <Hero />
         <CustomPackaging />
-        <CustomBoxMaterial />
+        {/* <CustomBoxMaterial /> */}
         <GetPriceQuote />
         {/* <SpecialPackaging /> */}
         {/* <CustomPackagingApart /> */}
