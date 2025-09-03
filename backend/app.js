@@ -19,7 +19,7 @@ import requestQuoteRouter from "./routes/RequestQuote.js";
 import instantQuoteRouter from "./routes/InstantQuote.js";
 import sitemapRouter from "./routes/sitemapRouter.js";
 import path from 'path';
-import redis from 'redis';
+import REDIS  from  './redis_APIS/redis.js';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,14 +30,6 @@ import fs from 'node:fs/promises';
 // Connect to database
 connectDB();
 const app = express();
-
-const redisClient = redis.createClient({
-    url: 'redis://31.97.14.21:6379',
-});
-redisClient.connect()
-    .then(() => console.log("Connected to Redis"))
-    .catch(err => console.error("Redis connection error:", err));
-    
 app.use(express.static("static"));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
@@ -69,6 +61,8 @@ app.use("/", sitemapRouter);
 app.get("/apis", async (req, res) => {
   res.send("App Is Running backend!");
 });
+
+
 
 // ================= URL Redirects =================
 // Category redirects
@@ -491,6 +485,10 @@ function sendErrorResponse(res, message) {
     </html>
   `);
 }
+
+
+app.use("/redis", REDIS.REDIS);
+
 
 // Start server
 const PORT = process.env.PORT || 8000;
