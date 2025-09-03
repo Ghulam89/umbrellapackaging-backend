@@ -18,12 +18,12 @@ import subscribeRouter from "./routes/SubscribeRouter.js";
 import requestQuoteRouter from "./routes/RequestQuote.js";
 import instantQuoteRouter from "./routes/InstantQuote.js";
 import sitemapRouter from "./routes/sitemapRouter.js";
+import redisModule from './redis_APIS/redis.js';
+const { REDIS, redisClient } = redisModule;
 import path from 'path';
-import REDIS  from  './redis_APIS/redis.js';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 // SSR/Frontend imports
 import fs from 'node:fs/promises';
 
@@ -37,6 +37,26 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+   
+// const redisClient = redis.createClient({
+//         socket: {
+//         host: "31.97.14.21",
+//         port: 6379,
+//     },
+//     username: "umbrella",
+//     password: "umbrella123",
+// });
+
+// redisClient.connect()
+//     .then(() => console.log("Connected to Redis"))
+//     .catch(err => console.error("Redis connection error:", err));
+
+
+
+
+app.use("/redis", REDIS);
 
 
 // Backend API routes
@@ -486,8 +506,6 @@ function sendErrorResponse(res, message) {
   `);
 }
 
-
-app.use("/redis", REDIS.REDIS);
 
 
 // Start server
