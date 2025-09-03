@@ -1,6 +1,7 @@
 import redis from 'redis';
 import express from 'express';
 import { Brands } from '../model/Brand.js';
+import { MidCategory } from '../model/MidCategory.js';
 
 // Redis client with optimized settings
 const redisClient = redis.createClient({
@@ -212,22 +213,20 @@ const fetchBrandsFromDB = async (queryParams) => {
     }
 };
 
-// Optimized route handler for 40ms response
 REDIS.get("/brand/getAll", async (req, res, next) => {
     const startTime = Date.now();
     
     try {
         const cacheKey = generateCacheKey(req);
         
-        // Fast cache check with very short timeout
         let cachedData = null;
         try {
             cachedData = await Promise.race([
                 redisClient.get(cacheKey),
-                new Promise(resolve => setTimeout(() => resolve(null), 3)) // Reduced to 3ms
+                new Promise(resolve => setTimeout(() => resolve(null), 3))
             ]);
         } catch (e) {
-            // Cache error - continue with DB
+           
         }
         
         if (cachedData) {
@@ -235,7 +234,6 @@ REDIS.get("/brand/getAll", async (req, res, next) => {
             return res.status(200).json(JSON.parse(cachedData));
         }
 
-        // Check if we have a similar pattern in memory cache
         const { search = '' } = req.query;
         let memoryCachedResult = null;
         
@@ -247,14 +245,13 @@ REDIS.get("/brand/getAll", async (req, res, next) => {
         let result = memoryCachedResult;
         
         if (!result) {
-            // Fetch from DB
+         
             result = await fetchBrandsFromDB(req.query);
             
-            // Cache search pattern in memory for frequent searches
             if (search) {
                 searchPatternCache.set(search.toLowerCase(), result);
                 
-                // Limit memory cache size
+              
                 if (searchPatternCache.size > 100) {
                     const firstKey = searchPatternCache.keys().next().value;
                     searchPatternCache.delete(firstKey);
@@ -262,7 +259,6 @@ REDIS.get("/brand/getAll", async (req, res, next) => {
             }
         }
 
-        // Async caching with shorter TTL
         redisClient.setEx(cacheKey, CACHE_TTL, JSON.stringify(result))
             .catch(err => console.error('Cache set error:', err.message));
 
@@ -271,7 +267,6 @@ REDIS.get("/brand/getAll", async (req, res, next) => {
     } catch (error) {
         console.error(`Error after ${Date.now() - startTime}ms:`, error.message);
         
-        // Fallback response if something fails
         res.status(200).json({
             status: "success",
             data: [],
@@ -286,32 +281,30 @@ REDIS.get("/brand/getAll", async (req, res, next) => {
     }
 });
 
-// Fast cache clearing with pattern-based deletion
 REDIS.delete("/clear-brands-cache", async (req, res) => {
     try {
-        // Clear memory cache
+       
         searchPatternCache.clear();
         
-        // Use SCAN with smaller COUNT for faster iteration
         let cursor = 0;
         let deletedCount = 0;
         
         do {
             const reply = await redisClient.scan(cursor, { 
                 MATCH: 'brands:*', 
-                COUNT: 100 // Increased for faster clearing
+                COUNT: 100
             });
             
             cursor = reply.cursor;
             
             if (reply.keys.length > 0) {
-                // Use UNLINK for non-blocking deletion
+               
                 await redisClient.unlink(reply.keys);
                 deletedCount += reply.keys.length;
             }
         } while (cursor !== 0);
         
-        // Pre-warm cache again after clearing
+     
         setTimeout(preWarmCache, 1000);
         
         res.json({ 
@@ -321,6 +314,202 @@ REDIS.delete("/clear-brands-cache", async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+
+
+// Generate cache key for categories
+const generateCategoryCacheKey = (req) => {
+  const { 
+    page = 1, 
+    perPage = 18, 
+    search = '', 
+    categories = '',
+    sortBy = 'createdAt'
+  } = req.query;
+  
+  return `categories:${page}:${perPage}:${search}:${categories}:${sortBy}`;
+};
+
+// Pre-warm cache for common category queries
+const preWarmCategoryCache = async () => {
+  const commonQueries = [
+    { page: 1, perPage: 18, search: '', categories: '', sortBy: 'createdAt' },
+    { page: 1, perPage: 36, search: '', categories: '', sortBy: 'createdAt' },
+    { page: 1, perPage: 18, search: '', categories: '', sortBy: 'title' }
+  ];
+  
+  for (const query of commonQueries) {
+    const cacheKey = `categories:${query.page}:${query.perPage}:${query.search}:${query.categories}:${query.sortBy}`;
+    try {
+      const data = await fetchCategoriesFromDB(query);
+      await redisClient.setEx(cacheKey, CACHE_TTL, JSON.stringify(data));
+    } catch (error) {
+      console.error('Pre-warm category cache error:', error.message);
+    }
+  }
+};
+
+// Add to existing pre-warm call
+setTimeout(() => {
+  preWarmCache();
+  preWarmCategoryCache();
+}, 5000);
+
+// Fetch categories from DB
+const fetchCategoriesFromDB = async (queryParams) => {
+  const { 
+    page = 1, 
+    perPage = 18, 
+    search = '', 
+    categories = '',
+    sortBy = 'createdAt'
+  } = queryParams;
+  
+  const parsedPage = parseInt(page, 10);
+  const parsedPerPage = parseInt(perPage, 10);
+  const skip = (parsedPage - 1) * parsedPerPage;
+  const requestedCategories = categories.split(',').filter(cat => cat);
+  
+  try {
+    // Handle specific categories request
+    if (requestedCategories.length > 0) {
+      const categoriesData = await MidCategory.find({
+        title: { $in: requestedCategories } 
+      })
+      .populate({
+        path: "brandId",
+        select: "name slug"
+      })
+      .sort({ title: 1 })
+      .select("slug title icon image metaTitle metaDescription keywords")
+      .maxTimeMS(5000);
+
+      return {
+        status: "success",
+        data: categoriesData,
+      };
+    }
+
+    // Handle search and pagination
+    const filter = search
+      ? { 
+          $or: [
+            { title: { $regex: search, $options: 'i' } },
+          ],
+        }
+      : {};
+
+    const [count, categoriesData] = await Promise.all([
+      MidCategory.countDocuments(filter).maxTimeMS(3000),
+      MidCategory.find(filter)
+        .populate({
+          path: "brandId",
+          select: "name slug"
+        })
+        .sort(sortBy === 'title' ? { title: 1 } : { createdAt: -1 })
+        .skip(skip)
+        .limit(parsedPerPage)
+        .maxTimeMS(5000)
+    ]);
+
+    const totalPages = Math.ceil(count / parsedPerPage);
+
+    return {
+      status: "success",
+      data: categoriesData,
+      totalItems: count,
+      pagination: {
+        currentPage: parsedPage,
+        itemsPerPage: parsedPerPage,
+        totalPages,
+      },
+      sort: sortBy
+    };
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+};
+
+// Redis-optimized category endpoint
+REDIS.get("/category/getAll"),async (req, res, next) => {
+  const startTime = Date.now();
+  
+  try {
+    const cacheKey = generateCategoryCacheKey(req);
+    
+    let cachedData = null;
+    try {
+      cachedData = await Promise.race([
+        redisClient.get(cacheKey),
+        new Promise(resolve => setTimeout(() => resolve(null), 5))
+      ]);
+    } catch (e) {
+    
+    }
+    
+    if (cachedData) {
+      console.log(`Category cache hit - ${Date.now() - startTime}ms`);
+      return res.status(200).json(JSON.parse(cachedData));
+    }
+
+    // If not in cache, fetch from database
+    const result = await fetchCategoriesFromDB(req.query);
+    
+    // Cache the result for future requests
+    redisClient.setEx(cacheKey, CACHE_TTL, JSON.stringify(result))
+      .catch(err => console.error('Category cache set error:', err.message));
+
+    console.log(`Category response - ${Date.now() - startTime}ms`);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(`Category error after ${Date.now() - startTime}ms:`, error.message);
+    
+    // Return empty response on error to maintain API consistency
+    res.status(200).json({
+      status: "success",
+      data: [],
+      totalItems: 0,
+      pagination: {
+        currentPage: parseInt(req.query.page || 1, 10),
+        itemsPerPage: parseInt(req.query.perPage || 18, 10),
+        totalPages: 0,
+      },
+    });
+  }
+}
+
+// Add cache clearing endpoint for categories
+REDIS.delete("/clear-categories-cache", async (req, res) => {
+  try {
+    let cursor = 0;
+    let deletedCount = 0;
+    
+    do {
+      const reply = await redisClient.scan(cursor, { 
+        MATCH: 'categories:*', 
+        COUNT: 100
+      });
+      
+      cursor = reply.cursor;
+      
+      if (reply.keys.length > 0) {
+        await redisClient.unlink(reply.keys);
+        deletedCount += reply.keys.length;
+      }
+    } while (cursor !== 0);
+    
+    // Pre-warm category cache again
+    setTimeout(preWarmCategoryCache, 1000);
+    
+    res.json({ 
+      status: "OK", 
+      message: `Cleared ${deletedCount} category cache entries` 
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export { REDIS, redisClient };
