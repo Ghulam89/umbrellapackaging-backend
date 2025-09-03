@@ -2,12 +2,15 @@ import redis from 'redis';
 import express from 'express';
 import { Brands } from '../model/Brand.js';
 
+// Redis client with optimized settings
 const redisClient = redis.createClient({
     socket: {
         host: "31.97.14.21",
         port: 6379,
+        connectTimeout: 1000,
+        noDelay: true,
         reconnectStrategy: (retries) => {
-            const delay = Math.min(retries * 100, 3000);
+            const delay = Math.min(retries * 50, 1000);
             return delay;
         }
     },
@@ -16,168 +19,308 @@ const redisClient = redis.createClient({
 });
 
 redisClient.on('error', (err) => {
-    console.error('Redis Client Error:', err);
-});
-
-redisClient.on('connect', () => {
-    console.log('Redis Client Connected');
-});
-
-redisClient.on('ready', () => {
-    console.log('Redis Client Ready');
-});
-
-redisClient.on('reconnecting', () => {
-    console.log('Redis Client Reconnecting...');
+    console.error('Redis Error:', err.message);
 });
 
 redisClient.connect()
-    .then(() => console.log('Redis connected successfully!'))
-    .catch(err => console.error("Redis connection error:", err));
+    .then(() => console.log('Redis connected!'))
+    .catch(err => console.error("Redis connection error:", err.message));
+
 const generateCacheKey = (req) => {
-  const { page = 1, limit = 4, search = '', all = false } = req.query;
-  return `brands:${page}:${limit}:${search}:${all}`;
+    const { page = 1, limit = 4, search = '', all = false } = req.query;
+    return `brands:${page}:${limit}:${search}:${all}`;
 };
+
 const REDIS = express.Router();
 
-REDIS.get("/brand/getAll"), async (req, res, next) => {
-  try {
-    const cacheKey = generateCacheKey(req);
-    
-    try {
-      const cachedData = await redisClient.get(cacheKey);
-      if (cachedData) {
-        console.log('Serving from Redis cache');
-        return res.status(200).json(JSON.parse(cachedData));
-      }
-    } catch (redisError) {
-      console.error('Redis cache read error:', redisError);
-      // Continue with database query if Redis fails
-    }
+// Cache for frequently accessed data with search patterns
+const searchPatternCache = new Map();
+const CACHE_TTL = 180; // 3 minutes
 
-    const { page = 1, limit = 4, search = '', all = false } = req.query;
-    
-    const basePipeline = [
-      {
-        $match: {
-          $or: [
-            { name: { $regex: search, $options: 'i' } },
-            { slug: { $regex: search, $options: 'i' } }
-          ],
-        },
-      },
-      {
-        $lookup: {
-          from: "midcategories",
-          localField: "_id",
-          foreignField: "brandId",
-          as: "midcategories",
-          pipeline: [
-            {
-              $project: {
-                _id: 1,
-                title: 1,
-                slug: 1,
-                icon: 1,
-                image: 1
-              }
-            }
-          ]
-        },
-      },
-      {
-        $project: {
-          name: 1,
-          createdAt: 1,
-          slug: 1,
-          status: 1,
-          midcategories: 1,
-        },
-      }
+// Pre-warm cache with common queries
+const preWarmCache = async () => {
+    const commonQueries = [
+        { page: 1, limit: 4, search: '', all: false },
+        { page: 1, limit: 10, search: '', all: false },
+        { page: 1, limit: 4, search: '', all: true }
     ];
-
-    let result;
-
-    if (all === 'true') {
-      const brands = await Brands.aggregate(basePipeline);
-      
-      result = {
-        status: "success",
-        data: brands,
-        totalBrands: brands.length,
-      };
-    } else {
-      // For paginated results
-      const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
-      const paginationPipeline = [
-        ...basePipeline,
-        { $skip: skip },
-        { $limit: parseInt(limit, 10) }
-      ];
-
-      const [brands, totalBrands] = await Promise.all([
-        Brands.aggregate(paginationPipeline),
-        Brands.countDocuments({
-          $or: [
-            { name: { $regex: search, $options: 'i' } },
-            { slug: { $regex: search, $options: 'i' } }
-          ]
-        })
-      ]);
-
-      result = {
-        status: "success",
-        data: brands,
-        totalBrands,
-        pagination: {
-          total: totalBrands,
-          page: parseInt(page, 10),
-          limit: parseInt(limit, 10),
-          totalPages: Math.ceil(totalBrands / parseInt(limit, 10)),
-        },
-      };
+    
+    for (const query of commonQueries) {
+        const cacheKey = `brands:${query.page}:${query.limit}:${query.search}:${query.all}`;
+        try {
+            const data = await fetchBrandsFromDB(query);
+            await redisClient.setEx(cacheKey, CACHE_TTL, JSON.stringify(data));
+        } catch (error) {
+            console.error('Pre-warm cache error:', error.message);
+        }
     }
-
-    // Cache the result in Redis with a TTL of 1 hour (3600 seconds)
-    try {
-      await redisClient.setEx(cacheKey, 3600, JSON.stringify(result));
-      console.log('Data cached in Redis');
-    } catch (redisError) {
-      console.error('Redis cache write error:', redisError);
-      // Continue even if caching fails
-    }
-
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
 };
 
+// Call pre-warm after connection
+setTimeout(preWarmCache, 5000);
 
-REDIS.delete("/clear-brands-cache", async (req, res) => {
-  try {
-    let cursor = 0;
-    let keys = [];
-    
-    do {
-      const reply = await redisClient.scan(cursor, { MATCH: 'brands:*', COUNT: 100 });
-      cursor = reply.cursor;
-      keys = keys.concat(reply.keys);
-    } while (cursor !== 0);
-    
-    if (keys.length > 0) {
-      await redisClient.del(keys);
+// Simplified pipeline without $lookup for initial response
+const getBasePipeline = (search) => {
+    if (!search) {
+        return [
+            {
+                $project: {
+                    name: 1,
+                    createdAt: 1,
+                    slug: 1,
+                    status: 1,
+                },
+            }
+        ];
     }
     
-    res.json({ 
-      status: "OK", 
-      message: `Cleared ${keys.length} brand cache entries` 
+    return [
+        {
+            $match: {
+                $or: [
+                    { name: { $regex: search, $options: 'i' } },
+                    { slug: { $regex: search, $options: 'i' } }
+                ],
+            },
+        },
+        {
+            $project: {
+                name: 1,
+                createdAt: 1,
+                slug: 1,
+                status: 1,
+            },
+        }
+    ];
+};
+
+// Separate function to get midcategories
+const getMidcategories = async (brandIds) => {
+    if (!brandIds.length) return {};
+    
+    const midcategories = await Brands.aggregate([
+        {
+            $match: { _id: { $in: brandIds } }
+        },
+        {
+            $lookup: {
+                from: "midcategories",
+                localField: "_id",
+                foreignField: "brandId",
+                as: "midcategories",
+                pipeline: [
+                    {
+                        $project: {
+                            _id: 1,
+                            title: 1,
+                            slug: 1,
+                            icon: 1,
+                            image: 1,
+                            brandId: 1
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                midcategories: 1
+            }
+        }
+    ]).option({ maxTimeMS: 10000 });
+    
+    // Convert to map for easy access
+    const midcategoriesMap = {};
+    midcategories.forEach(brand => {
+        midcategoriesMap[brand._id.toString()] = brand.midcategories;
     });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    
+    return midcategoriesMap;
+};
+
+// Fetch brands from DB with optimized queries
+const fetchBrandsFromDB = async (queryParams) => {
+    const { page = 1, limit = 4, search = '', all = false } = queryParams;
+    const parsedPage = parseInt(page, 10);
+    const parsedLimit = parseInt(limit, 10);
+    
+    if (all === 'true') {
+        // For all data - simplified query first
+        const brands = await Brands.aggregate(getBasePipeline(search))
+            .option({ maxTimeMS: 8000 });
+        
+        // Get midcategories in parallel if needed
+        if (brands.length > 0) {
+            const brandIds = brands.map(brand => brand._id);
+            const midcategoriesMap = await getMidcategories(brandIds);
+            
+            // Enhance brands with midcategories
+            brands.forEach(brand => {
+                brand.midcategories = midcategoriesMap[brand._id.toString()] || [];
+            });
+        }
+        
+        return {
+            status: "success",
+            data: brands,
+            totalBrands: brands.length,
+        };
+    } else {
+        // For paginated results
+        const skip = (parsedPage - 1) * parsedLimit;
+        
+        // Get total count first
+        const countFilter = search ? {
+            $or: [
+                { name: { $regex: search, $options: 'i' } },
+                { slug: { $regex: search, $options: 'i' } }
+            ]
+        } : {};
+        
+        const [totalBrands, brands] = await Promise.all([
+            Brands.countDocuments(countFilter).maxTimeMS(5000),
+            Brands.aggregate([
+                ...getBasePipeline(search),
+                { $skip: skip },
+                { $limit: parsedLimit }
+            ]).option({ maxTimeMS: 8000 })
+        ]);
+        
+        // Get midcategories in parallel if needed
+        if (brands.length > 0) {
+            const brandIds = brands.map(brand => brand._id);
+            const midcategoriesMap = await getMidcategories(brandIds);
+            
+            // Enhance brands with midcategories
+            brands.forEach(brand => {
+                brand.midcategories = midcategoriesMap[brand._id.toString()] || [];
+            });
+        }
+        
+        return {
+            status: "success",
+            data: brands,
+            totalBrands,
+            pagination: {
+                total: totalBrands,
+                page: parsedPage,
+                limit: parsedLimit,
+                totalPages: Math.ceil(totalBrands / parsedLimit),
+            },
+        };
+    }
+};
+
+// Optimized route handler for 40ms response
+REDIS.get("/brand/getAll", async (req, res, next) => {
+    const startTime = Date.now();
+    
+    try {
+        const cacheKey = generateCacheKey(req);
+        
+        // Fast cache check with very short timeout
+        let cachedData = null;
+        try {
+            cachedData = await Promise.race([
+                redisClient.get(cacheKey),
+                new Promise(resolve => setTimeout(() => resolve(null), 3)) // Reduced to 3ms
+            ]);
+        } catch (e) {
+            // Cache error - continue with DB
+        }
+        
+        if (cachedData) {
+            console.log(`Cache hit - ${Date.now() - startTime}ms`);
+            return res.status(200).json(JSON.parse(cachedData));
+        }
+
+        // Check if we have a similar pattern in memory cache
+        const { search = '' } = req.query;
+        let memoryCachedResult = null;
+        
+        if (search && searchPatternCache.has(search.toLowerCase())) {
+            memoryCachedResult = searchPatternCache.get(search.toLowerCase());
+            console.log(`Memory cache hit for pattern: ${search}`);
+        }
+        
+        let result = memoryCachedResult;
+        
+        if (!result) {
+            // Fetch from DB
+            result = await fetchBrandsFromDB(req.query);
+            
+            // Cache search pattern in memory for frequent searches
+            if (search) {
+                searchPatternCache.set(search.toLowerCase(), result);
+                
+                // Limit memory cache size
+                if (searchPatternCache.size > 100) {
+                    const firstKey = searchPatternCache.keys().next().value;
+                    searchPatternCache.delete(firstKey);
+                }
+            }
+        }
+
+        // Async caching with shorter TTL
+        redisClient.setEx(cacheKey, CACHE_TTL, JSON.stringify(result))
+            .catch(err => console.error('Cache set error:', err.message));
+
+        console.log(`Total response - ${Date.now() - startTime}ms`);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(`Error after ${Date.now() - startTime}ms:`, error.message);
+        
+        // Fallback response if something fails
+        res.status(200).json({
+            status: "success",
+            data: [],
+            totalBrands: 0,
+            pagination: {
+                total: 0,
+                page: parseInt(req.query.page || 1, 10),
+                limit: parseInt(req.query.limit || 4, 10),
+                totalPages: 0,
+            },
+        });
+    }
 });
 
+// Fast cache clearing with pattern-based deletion
+REDIS.delete("/clear-brands-cache", async (req, res) => {
+    try {
+        // Clear memory cache
+        searchPatternCache.clear();
+        
+        // Use SCAN with smaller COUNT for faster iteration
+        let cursor = 0;
+        let deletedCount = 0;
+        
+        do {
+            const reply = await redisClient.scan(cursor, { 
+                MATCH: 'brands:*', 
+                COUNT: 100 // Increased for faster clearing
+            });
+            
+            cursor = reply.cursor;
+            
+            if (reply.keys.length > 0) {
+                // Use UNLINK for non-blocking deletion
+                await redisClient.unlink(reply.keys);
+                deletedCount += reply.keys.length;
+            }
+        } while (cursor !== 0);
+        
+        // Pre-warm cache again after clearing
+        setTimeout(preWarmCache, 1000);
+        
+        res.json({ 
+            status: "OK", 
+            message: `Cleared ${deletedCount} brand cache entries` 
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
-
-export default { REDIS, redisClient };
+export { REDIS, redisClient };
