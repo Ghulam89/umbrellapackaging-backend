@@ -297,11 +297,10 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
         <div className=' sm:max-w-6xl max-w-[95%] mx-auto'>
           <div className=' sm:py-12 py-2'>
             <h2 className="sm:text-[35px] text-[25px]   text-center   font-sans   font-[600] text-[#333333]">
-              Find a Variety of Automotive Boxes Below
-
+              Find a Variety of {categoryData?.title} Below
             </h2>
             <p className="  pt-3 pb-5 text-sm text-center ">
-              Following are the Automotive Boxes offered at Umbrella Custom Packaging.
+              Following are the {categoryData?.title} offered at Umbrella Custom Packaging.
 
             </p>
 

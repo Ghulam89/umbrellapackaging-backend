@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -12,6 +12,60 @@ import AddReviews from "./AddReviews";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 
+// Star rating component for reusability
+const StarRating = ({ rating }) => {
+  return (
+    <ul className="flex justify-center gap-1">
+      {[...Array(5)].map((_, i) => (
+        <li key={i}>
+          <FaStar 
+            size={20} 
+            color={i < rating ? "#f0ad4e" : "#e4e5e9"} 
+          />
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+// Individual review slide component
+const ReviewSlide = ({ testimonial }) => {
+  return (
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      <StarRating rating={testimonial.rating} />
+      <p className="py-3 text-lg text-gray-600 italic">
+        {testimonial?.review}
+      </p>
+      <strong className="font-semibold text-gray-800">
+        {testimonial?.name}
+      </strong>
+      {testimonial?.position && (
+        <p className="text-sm text-gray-500">{testimonial.position}</p>
+      )}
+    </div>
+  );
+};
+
+// Navigation buttons component
+const NavigationButtons = () => {
+  return (
+    <div className="flex absolute top-1/2 z-40 w-full justify-between transform -translate-y-1/2">
+      <button 
+        className="custom-prev w-12 h-12 bg-[#F6F6F6] text-[#4440E6] hover:bg-[#4440E6] hover:text-white rounded-full flex items-center justify-center shadow-md ml-4"
+        aria-label="Previous review"
+      >
+        <IoIosArrowBack size={25} />
+      </button>
+      <button 
+        className="custom-next w-12 h-12 bg-[#F6F6F6] text-[#4440E6] hover:bg-[#4440E6] hover:text-white rounded-full flex items-center justify-center shadow-md mr-4"
+        aria-label="Next review"
+      >
+        <IoIosArrowForward size={25} />
+      </button>
+    </div>
+  );
+};
+
 const CustomerReviews = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
@@ -19,12 +73,21 @@ const CustomerReviews = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const handleScroll = () => {
+  // Memoize the background style to prevent unnecessary re-renders
+  const backgroundStyle = useMemo(() => ({
+    backgroundImage: `url(${review})`,
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat'
+  }), []);
+
+  // Throttle scroll handler for better performance
+  const handleScroll = useCallback(() => {
     const scrollPosition = window.scrollY;
     setIsAutoPlay(scrollPosition <= 100);
-  };
+  }, []);
 
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get(`${BaseUrl}/rating/getAll`);
@@ -36,28 +99,58 @@ const CustomerReviews = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    fetchReviews();
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
+  useEffect(() => {
+    // Add scroll event listener with throttling
+    let timeoutId = null;
+    const throttledScrollHandler = () => {
+      if (!timeoutId) {
+        timeoutId = setTimeout(() => {
+          handleScroll();
+          timeoutId = null;
+        }, 100);
+      }
+    };
+
+    window.addEventListener("scroll", throttledScrollHandler);
+    fetchReviews();
+    
+    return () => {
+      window.removeEventListener("scroll", throttledScrollHandler);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [fetchReviews, handleScroll]);
+
+  // Memoize swiper configuration
+  const swiperConfig = useMemo(() => ({
+    modules: [Autoplay, Pagination, Navigation],
+    autoplay: isAutoPlay ? { 
+      delay: 3000, 
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true 
+    } : false,
+    loop: testimonials.length > 1,
+    navigation: {
+      nextEl: ".custom-next",
+      prevEl: ".custom-prev",
+    },
+    spaceBetween: 30,
+    slidesPerView: "auto",
+    centeredSlides: true,
+    breakpoints: {
+      640: { slidesPerView: 1 },
+      768: { slidesPerView: 1 },
+      1024: { slidesPerView: 1 },
+    }
+  }), [isAutoPlay, testimonials.length]);
+
   return (
-    <div 
-      className="py-12" 
-      style={{
-        backgroundImage: `url(${review})`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
+    <div className="py-12" style={backgroundStyle}>
       <div className="sm:max-w-6xl max-w-[95%] mx-auto text-center">
-                 <h2 className="sm:text-[35px] text-[25px]   leading-9    pb-4  font-sans   font-[600] text-[#333333] ">Customer Reviews</h2>
+        <h2 className="sm:text-[35px] text-[25px] leading-9 pb-4 font-sans font-[600] text-[#333333]">
+          Customer Reviews
+        </h2>
         <p className="text-sm pb-5 text-gray-500">
           Share your true experience with us by writing a review below
         </p>
@@ -75,79 +168,20 @@ const CustomerReviews = () => {
           <div className="py-10">No reviews yet. Be the first to review!</div>
         ) : (
           <div className="w-full mx-auto relative">
-            <Swiper
-              modules={[Autoplay, Pagination, Navigation]}
-              autoplay={
-                isAutoPlay ? { 
-                  delay: 3000, 
-                  disableOnInteraction: false,
-                  pauseOnMouseEnter: true 
-                } : false
-              }
-              loop={true}
-              // pagination={{
-              //   clickable: true,
-              //   el: '.swiper-pagination',
-              //   type: 'bullets',
-              // }}
-              navigation={{
-                nextEl: ".custom-next",
-                prevEl: ".custom-prev",
-              }}
-              spaceBetween={30}
-              slidesPerView="auto"
-              centeredSlides={true}
-              breakpoints={{
-                640: { slidesPerView: 1 },
-                768: { slidesPerView: 1 },
-                1024: { slidesPerView: 1 },
-              }}
-            >
+            <Swiper {...swiperConfig}>
               {testimonials.map((testimonial) => (
                 <SwiperSlide key={testimonial._id}>
-                  <div className="max-w-5xl mx-auto px-4 py-8">
-                    <ul className="flex justify-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <li key={i}>
-                          <FaStar 
-                            size={20} 
-                            color={i < testimonial.rating ? "#f0ad4e" : "#e4e5e9"} 
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="py-3 text-lg text-gray-600 italic">
-                      {testimonial?.review}
-                    </p>
-                    <strong className="font-semibold text-gray-800">
-                      {testimonial?.name}
-                    </strong>
-                    {testimonial?.position && (
-                      <p className="text-sm text-gray-500">{testimonial.position}</p>
-                    )}
-                  </div>
+                  <ReviewSlide testimonial={testimonial} />
                 </SwiperSlide>
               ))}
             </Swiper>
 
-            {/* Navigation buttons */}
-            <div className="flex absolute top-1/2 z-40 w-full justify-between transform -translate-y-1/2">
-              <button 
-                className="custom-prev w-12 h-12 bg-[#F6F6F6] text-[#4440E6] hover:bg-[#4440E6] hover:text-white rounded-full flex items-center justify-center shadow-md ml-4"
-                aria-label="Previous review"
-              >
-                <IoIosArrowBack size={25} />
-              </button>
-              <button 
-                className="custom-next w-12 h-12 bg-[#F6F6F6] text-[#4440E6] hover:bg-[#4440E6] hover:text-white rounded-full flex items-center justify-center shadow-md mr-4"
-                aria-label="Next review"
-              >
-                <IoIosArrowForward size={25} />
-              </button>
-            </div>
+            {testimonials.length > 1 && <NavigationButtons />}
 
-            {/* Pagination */}
-            <div className="swiper-pagination mt-4 !relative"></div>
+            {/* Pagination - only show if multiple reviews */}
+            {testimonials.length > 1 && (
+              <div className="swiper-pagination mt-4 !relative"></div>
+            )}
           </div>
         )}
       </div>
@@ -161,4 +195,4 @@ const CustomerReviews = () => {
   );
 };
 
-export default CustomerReviews;
+export default React.memo(CustomerReviews);
