@@ -56,7 +56,7 @@ export async function render(url) {
   } catch (err) {
     // On error → noindex meta
     helmetContext.helmet = {
-      meta: { toString: () => `<meta name="robots" content="noindex" />` },
+      meta: { toString: () => `<meta name="robots" content="index follow" />` },
     };
   }
 
