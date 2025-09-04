@@ -27,8 +27,6 @@ export default defineConfig({
       "react-redux",
       "redux-persist",
       "@reduxjs/toolkit",
-      "react-quill",
-      "jodit-react",
       "lottie-react"
     ],
   },
@@ -56,7 +54,7 @@ export default defineConfig({
         manualChunks: {
           react: ["react", "react-dom"],
           redux: ["react-redux", "@reduxjs/toolkit", "redux-persist"],
-          editor: ["react-quill", "jodit-react"],
+          
         },
       },
     },
