@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from "mongoose";
+import { redisClient } from "../redis_APIS/redis.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -443,6 +444,47 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
       { new: true, runValidators: true }
     );
 
+    // Invalidate Redis caches for this product (by id and slug)
+    try {
+      const keysToDelete = [];
+      // old keys
+      if (currentProduct?._id) keysToDelete.push(`product:${currentProduct._id.toString()}:`);
+      if (currentProduct?.slug) keysToDelete.push(`product::${currentProduct.slug}`);
+      // new keys
+      if (updatedProduct?._id) keysToDelete.push(`product:${updatedProduct._id.toString()}:`);
+      if (updatedProduct?.slug) keysToDelete.push(`product::${updatedProduct.slug}`);
+
+      // Delete exact keys and any wildcard matches (product:*:slug and product:id:*)
+      // First try exact keys
+      const exactKeys = keysToDelete;
+      if (exactKeys.length > 0) {
+        await redisClient.unlink(exactKeys);
+      }
+
+      // Scan for wildcard patterns
+      let cursor = 0;
+      do {
+        const reply = await redisClient.scan(cursor, { MATCH: 'product:*', COUNT: 100 });
+        cursor = reply.cursor;
+        const keys = reply.keys.filter(k => {
+          const idStr = productId?.toString();
+          const oldSlug = currentProduct?.slug;
+          const newSlug = updatedProduct?.slug;
+          return (
+            (idStr && k.startsWith(`product:${idStr}:`)) ||
+            (oldSlug && k.endsWith(`:${oldSlug}`)) ||
+            (newSlug && k.endsWith(`:${newSlug}`))
+          );
+        });
+        if (keys.length > 0) {
+          await redisClient.unlink(keys);
+        }
+      } while (cursor !== 0);
+    } catch (e) {
+      // Log and continue without failing the request
+      console.error('Redis invalidation (update) failed:', e.message);
+    }
+
     res.status(200).json({
       status: "success",
       data: updatedProduct,
@@ -588,9 +630,39 @@ const getSortOption = (sort) => {
 export const deleteproductsById = async (req, res, next) => {
   const id = req.params.id;
   try {
+    const existing = await Products.findById(id);
     const delProducts = await Products.findByIdAndDelete(id);
     if (!delProducts) {
       return res.json({ status: "fail", message: "Product not Found" });
+    }
+    // Invalidate Redis caches for this product (by id and slug)
+    try {
+      const keysToDelete = [];
+      if (id) keysToDelete.push(`product:${id}:`);
+      if (existing?.slug) keysToDelete.push(`product::${existing.slug}`);
+
+      if (keysToDelete.length > 0) {
+        await redisClient.unlink(keysToDelete);
+      }
+
+      // Also scan to catch any other product cache variants
+      let cursor = 0;
+      do {
+        const reply = await redisClient.scan(cursor, { MATCH: 'product:*', COUNT: 100 });
+        cursor = reply.cursor;
+        const keys = reply.keys.filter(k => {
+          const oldSlug = existing?.slug;
+          return (
+            (id && k.startsWith(`product:${id}:`)) ||
+            (oldSlug && k.endsWith(`:${oldSlug}`))
+          );
+        });
+        if (keys.length > 0) {
+          await redisClient.unlink(keys);
+        }
+      } while (cursor !== 0);
+    } catch (e) {
+      console.error('Redis invalidation (delete) failed:', e.message);
     }
     res.json({
       status: "success",

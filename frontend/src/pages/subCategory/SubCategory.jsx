@@ -91,7 +91,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
 
     try {
-      const response = await axios.get(`${BaseUrl}/category/get?slug=${slug}`);
+      const response = await axios.get(`${BaseUrl}/redis/category/get?slug=${slug}`);
 
       setCategoryData(response?.data?.data);
 

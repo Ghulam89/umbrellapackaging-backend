@@ -2,6 +2,8 @@ import redis from 'redis';
 import express from 'express';
 import { Brands } from '../model/Brand.js';
 import { Products } from '../model/Product.js';
+import { SubCategory } from '../model/SubCategory.js';
+import { MidCategory } from '../model/MidCategory.js';
 
 // Redis client with optimized settings
 const redisClient = redis.createClient({
@@ -431,7 +433,95 @@ REDIS.delete("/clear-product-cache", async (req, res) => {
   }
 });
 
+REDIS.get("/category/get", async (req, res, next) => {
+    const { id, slug, title, details, ...otherFields } = req.query;
+    const startTime = Date.now();
 
+    if (!id && !slug) {
+        return res.status(400).json({
+            status: "fail",
+            error: "Please provide either ID or Slug",
+        });
+    }
+
+    try {
+        const fieldsPart = (() => {
+            const flags = [];
+            if (title === 'true') flags.push('title');
+            if (details === 'true') flags.push('details');
+            if (otherFields) {
+                Object.keys(otherFields).forEach(field => {
+                    if (otherFields[field] === 'true') flags.push(field);
+                });
+            }
+            return flags.sort().join(',');
+        })();
+
+        const cacheKey = `category:${id || ''}:${slug || ''}:${fieldsPart}`;
+
+        let cachedData = null;
+        try {
+            cachedData = await Promise.race([
+                redisClient.get(cacheKey),
+                new Promise(resolve => setTimeout(() => resolve(null), 3))
+            ]);
+        } catch (e) {
+        }
+
+        if (cachedData) {
+            console.log(`Category cache hit - ${Date.now() - startTime}ms`);
+            return res.status(200).json(JSON.parse(cachedData));
+        }
+
+        let query;
+        if (id) {
+            query = MidCategory.findById(id);
+        } else if (slug) {
+            query = MidCategory.findOne({ slug });
+        }
+
+        query = query.populate('brandId');
+
+        const selectFields = [];
+        if (title === 'true') selectFields.push('title');
+        if (details === 'true') selectFields.push('details');
+        if (otherFields) {
+            Object.keys(otherFields).forEach(field => {
+                if (otherFields[field] === 'true') selectFields.push(field);
+            });
+        }
+
+        if (selectFields.length > 0) {
+            query = query.select(selectFields.join(' '));
+        }
+
+        const data = await query.exec();
+
+        if (!data) {
+            return res.status(404).json({
+                status: "fail",
+                error: "Category not found",
+            });
+        }
+
+        const response = {
+            status: "success",
+            data: data,
+        };
+
+        redisClient.setEx(cacheKey, 300, JSON.stringify(response))
+            .catch(err => console.error('Category cache set error:', err.message));
+
+        console.log(`Category response - ${Date.now() - startTime}ms`);
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: "fail",
+            error: "Internal Server Error",
+        });
+    }
+});
 
 
 

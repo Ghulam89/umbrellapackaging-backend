@@ -31,7 +31,7 @@ export async function render(url) {
     } else if (baseUrl.startsWith("/sub-category/")) {
       // Handle sub-category route
       const slug = baseUrl.split("/")[2];
-      const { data } = await axios.get(`${BaseUrl}/category/get?slug=${slug}`);
+      const { data } = await axios.get(`${BaseUrl}/redis/category/get?slug=${slug}`);
       serverData = data?.data;
 
       if (serverData?._id) {
@@ -44,7 +44,7 @@ export async function render(url) {
     } else if (baseUrl.split("/").length === 2 && baseUrl !== "/") {
       // Handle product route
       const slug = baseUrl.split("/")[1];
-      const { data } = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
+      const { data } = await axios.get(`${BaseUrl}/redis/product/get?slug=${slug}`);
       serverData = data?.data;
 
     } else if (baseUrl.startsWith("/blog/")) {
