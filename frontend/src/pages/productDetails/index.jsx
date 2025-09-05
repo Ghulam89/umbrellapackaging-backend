@@ -353,7 +353,7 @@ const ProductDetails = ({
 
 
   const fetchProducts = async () => {
-    const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`)
+    const response = await axios.get(`${BaseUrl}/redis/product/get?slug=${slug}`)
     setProduct(response?.data?.data)
   }
 

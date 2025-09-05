@@ -1,6 +1,7 @@
 import redis from 'redis';
 import express from 'express';
 import { Brands } from '../model/Brand.js';
+import { Products } from '../model/Product.js';
 
 // Redis client with optimized settings
 const redisClient = redis.createClient({
@@ -313,6 +314,121 @@ REDIS.delete("/clear-brands-cache", async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+
+
+// Add Redis caching to getProductsById function
+REDIS.get("/product/get", async (req, res, next) => {
+  const { id, slug } = req.query;
+  const startTime = Date.now();
+
+  if (!id && !slug) {
+    return res.status(400).json({
+      status: "fail",
+      error: "Please provide either ID or Slug",
+    });
+  }
+
+  try {
+    // Generate cache key based on query parameters
+    const cacheKey = `product:${id || ''}:${slug || ''}`;
+    
+    // Try to get data from Redis cache first
+    let cachedData = null;
+    try {
+      cachedData = await Promise.race([
+        redisClient.get(cacheKey),
+        new Promise(resolve => setTimeout(() => resolve(null), 3))
+      ]);
+    } catch (e) {
+      console.error('Redis get error:', e.message);
+    }
+    
+    if (cachedData) {
+      console.log(`Product cache hit - ${Date.now() - startTime}ms`);
+      return res.status(200).json(JSON.parse(cachedData));
+    }
+
+    let query;
+    if (id) {
+      query = Products.findById(id); 
+    } else if (slug) {
+      query = Products.findOne({ slug }); 
+    }
+
+    // Always populate categoryId and brandId
+    query = query.populate("categoryId","_id title slug").populate("brandId","_id name slug");
+
+    const data = await query.exec();
+
+    if (!data) {
+      return res.status(404).json({
+        status: "fail",
+        error: "Product not found",
+      });
+    }
+
+    const response = {
+      status: "success",
+      data: data,
+    };
+
+    // Cache the response in Redis with a TTL of 5 minutes (300 seconds)
+    redisClient.setEx(cacheKey, 300, JSON.stringify(response))
+      .catch(err => console.error('Product cache set error:', err.message));
+
+    console.log(`Product response - ${Date.now() - startTime}ms`);
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "fail",
+      error: "Internal Server Error",
+    });
+  }
+});
+
+// Add a cache clearing endpoint for products
+REDIS.delete("/clear-product-cache", async (req, res) => {
+  try {
+    const { id, slug } = req.query;
+    
+    if (id || slug) {
+      // Clear specific product cache
+      const cacheKey = `product:${id || ''}:${slug || ''}`;
+      await redisClient.unlink(cacheKey);
+      res.json({ 
+        status: "OK", 
+        message: `Cleared cache for product: ${id || slug}` 
+      });
+    } else {
+      // Clear all product cache
+      let cursor = 0;
+      let deletedCount = 0;
+      
+      do {
+        const reply = await redisClient.scan(cursor, { 
+          MATCH: 'product:*', 
+          COUNT: 100
+        });
+        
+        cursor = reply.cursor;
+        
+        if (reply.keys.length > 0) {
+          await redisClient.unlink(reply.keys);
+          deletedCount += reply.keys.length;
+        }
+      } while (cursor !== 0);
+      
+      res.json({ 
+        status: "OK", 
+        message: `Cleared ${deletedCount} product cache entries` 
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 
