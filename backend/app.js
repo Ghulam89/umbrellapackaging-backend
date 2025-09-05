@@ -417,6 +417,7 @@ app.use('*', async (req, res, next) => {
           path.join(__dirname, '../frontend/index.html'), 
           'utf-8'
         );
+        
         template = await vite.transformIndexHtml(url, template);
         render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render;
       } catch (error) {

@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import tailwindcss from "@tailwindcss/vite";
@@ -16,7 +15,7 @@ export default defineConfig({
   },
 
   server: {
-      allowedHosts: ["umbrellapackaging.com", "www.umbrellapackaging.com"],
+    allowedHosts: ["umbrellapackaging.com", "www.umbrellapackaging.com"],
     strictPort: true,
   },
 
@@ -52,9 +51,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          react: ["react", "react-dom"],
+          // Remove 'react' from manualChunks since it's already handled by Vite
           redux: ["react-redux", "@reduxjs/toolkit", "redux-persist"],
-          
+          // You can add other logical chunks here
+          vendor: ["react-helmet-async", "lottie-react"],
         },
       },
     },
