@@ -524,5 +524,137 @@ REDIS.get("/category/get", async (req, res, next) => {
 });
 
 
+// Redis-cached: Get all categories with pagination/search
+REDIS.get("/category/getAll", async (req, res) => {
+    const startTime = Date.now();
+    try {
+        const page = parseInt(req.query.page, 10) || 1;
+        const perPage = parseInt(req.query.perPage, 10) || 18;
+        const searchQuery = req.query.search || '';
+        const requestedCategories = req.query.categories ? req.query.categories.split(',') : [];
+        const sortBy = req.query.sortBy || 'createdAt';
+
+        const cacheKey = `categories:list:${page}:${perPage}:${searchQuery}:${requestedCategories.join('|')}:${sortBy}`;
+
+        let cachedData = null;
+        try {
+            cachedData = await Promise.race([
+                redisClient.get(cacheKey),
+                new Promise(resolve => setTimeout(() => resolve(null), 3))
+            ]);
+        } catch (e) {}
+
+        if (cachedData) {
+            console.log(`Category list cache hit - ${Date.now() - startTime}ms`);
+            return res.status(200).json(JSON.parse(cachedData));
+        }
+
+        if (requestedCategories.length > 0) {
+            const categories = await MidCategory.find({
+                title: { $in: requestedCategories }
+            })
+            .populate({
+                path: "brandId",
+                select: "name slug"
+            })
+            .sort({ title: 1 })
+            .select("slug title icon image metaTitle metaDescription keywords");
+
+            const response = {
+                status: "success",
+                data: categories,
+            };
+
+            redisClient.setEx(cacheKey, 180, JSON.stringify(response))
+                .catch(err => console.error('Category list cache set error:', err.message));
+
+            console.log(`Category list response - ${Date.now() - startTime}ms`);
+            return res.status(200).json(response);
+        }
+
+        const filter = searchQuery
+            ? {
+                $or: [
+                    { title: { $regex: searchQuery, $options: 'i' } },
+                ],
+            }
+            : {};
+
+        const count = await MidCategory.countDocuments(filter);
+
+        let sortOption = { createdAt: -1 };
+        if (searchQuery || sortBy === 'title') {
+            sortOption = { title: 1 };
+        }
+
+        const skip = (page - 1) * perPage;
+
+        const categories = await MidCategory.find(filter)
+            .populate({
+                path: "brandId",
+                select: "name slug"
+            })
+            .sort(sortOption)
+            .skip(skip)
+            .limit(perPage);
+
+        const totalPages = Math.ceil(count / perPage);
+
+        const response = {
+            status: "success",
+            data: categories,
+            totalItems: count,
+            pagination: {
+                currentPage: page,
+                itemsPerPage: perPage,
+                totalPages,
+            },
+            sort: sortOption,
+        };
+
+        redisClient.setEx(cacheKey, 180, JSON.stringify(response))
+            .catch(err => console.error('Category list cache set error:', err.message));
+
+        console.log(`Category list response - ${Date.now() - startTime}ms`);
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Category list error:', error);
+        res.status(500).json({
+            status: "fail",
+            error: "Internal Server Error",
+        });
+    }
+});
+
+// Clear cache for category list
+REDIS.delete("/clear-category-list-cache", async (req, res) => {
+    try {
+        let cursor = 0;
+        let deletedCount = 0;
+
+        do {
+            const reply = await redisClient.scan(cursor, {
+                MATCH: 'categories:list:*',
+                COUNT: 100
+            });
+
+            cursor = reply.cursor;
+
+            if (reply.keys.length > 0) {
+                await redisClient.unlink(reply.keys);
+                deletedCount += reply.keys.length;
+            }
+        } while (cursor !== 0);
+
+        res.json({
+            status: "OK",
+            message: `Cleared ${deletedCount} category list cache entries`
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 
 export { REDIS, redisClient };
