@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import { hydrateRoot } from "react-dom/client";
+import { hydrateRoot, createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { Provider } from "react-redux";
@@ -11,8 +11,7 @@ const categoryProducts = window.__CATEGORY_PRODUCTS__ || null;
 
 const rootElement = document.getElementById("root");
 
-hydrateRoot(
-  rootElement,
+const app = (
   <StrictMode>
     <HelmetProvider>
       <Provider store={store}>
@@ -23,3 +22,9 @@ hydrateRoot(
     </HelmetProvider>
   </StrictMode>
 );
+
+if (rootElement && rootElement.hasChildNodes()) {
+  hydrateRoot(rootElement, app);
+} else if (rootElement) {
+  createRoot(rootElement).render(app);
+}

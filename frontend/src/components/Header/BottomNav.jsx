@@ -11,7 +11,7 @@ const BottomNav = ({ Menu, OpenMenu }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${BaseUrl}/brands/getAll`);
+      const response = await axios.get(`${BaseUrl}/redis/brand/getAll`);
       setAllCategories(response?.data?.data || []);
     } catch (error) {
       console.error("Error fetching categories:", error);

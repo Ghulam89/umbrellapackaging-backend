@@ -419,7 +419,7 @@ app.use('*', async (req, res, next) => {
         );
         
         template = await vite.transformIndexHtml(url, template);
-        render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render;
+        render = (await vite.ssrLoadModule('../frontend/src/entry-server.jsx')).render;
       } catch (error) {
         console.error('Vite development error:', error);
         return sendErrorResponse(res, 'Development server error');

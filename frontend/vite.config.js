@@ -51,9 +51,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Remove 'react' from manualChunks since it's already handled by Vite
           redux: ["react-redux", "@reduxjs/toolkit", "redux-persist"],
-          // You can add other logical chunks here
           vendor: ["react-helmet-async", "lottie-react"],
         },
       },
