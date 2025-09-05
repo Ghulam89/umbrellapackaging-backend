@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run start:frontend\"",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
-    "start:frontend": "cd frontend && npm run build",
+    "start:frontend": "cd frontend && npm run preview",
     "start": "cd backend && npm start",
     "build": "cd frontend && npm run build"
   },
