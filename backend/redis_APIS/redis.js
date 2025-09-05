@@ -2,7 +2,6 @@ import redis from 'redis';
 import express from 'express';
 import { Brands } from '../model/Brand.js';
 import { Products } from '../model/Product.js';
-import { SubCategory } from '../model/SubCategory.js';
 import { MidCategory } from '../model/MidCategory.js';
 
 // Redis client with optimized settings
@@ -558,7 +557,7 @@ REDIS.get("/category/getAll", async (req, res) => {
                 select: "name slug"
             })
             .sort({ title: 1 })
-            .select("slug title icon image metaTitle metaDescription keywords");
+            .select("slug title icon image metaTitle metaDescription keywords imageAltText iconAltText");
 
             const response = {
                 status: "success",

@@ -431,6 +431,7 @@ const navigate = useNavigate();
                     onChange={handleChange}
                     className="border w-full bg-white rounded-lg border-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:opacity-100 file:bg-[#4440E6] file:text-white hover:file:bg-[#3a36c7]"
                     accept=".png,.pdf,.jpg,.jpeg,.webp"
+                    aria-describedby="fileHint"
                   />
                 </div>
 
