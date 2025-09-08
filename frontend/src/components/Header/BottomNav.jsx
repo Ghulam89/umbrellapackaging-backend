@@ -11,22 +11,19 @@ const BottomNav = ({ Menu, OpenMenu }) => {
   const [allCategories, setAllCategories] = useState([]);
   const location = useLocation();
 
+ useEffect(() => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${BaseUrl}/redis/brand/getAll`);
-      setAllCategories(response?.data?.data || []);
-
-      console.log(response);
-      
+      setAllCategories(response?.data?.data?.length ? response.data.data : BrandsData);
     } catch (error) {
-      console.error("Error fetching categories:", error);
-      setAllCategories([]);
+      setAllCategories(BrandsData);
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  fetchCategories();
+}, []);
+
 
   useEffect(() => {
     setHoveredCategory(null);
@@ -135,7 +132,7 @@ const BottomNav = ({ Menu, OpenMenu }) => {
               HOME
             </NavLink>
           </li>
-          {allCategories?.map((category, index) => (
+          {BrandsData?.map((category, index) => (
             <li key={index}>
               <NavLink
                 to={`/category/${category?.slug}`}
