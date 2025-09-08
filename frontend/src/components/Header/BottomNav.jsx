@@ -3,6 +3,8 @@ import { FaAngleDown, FaBed } from "react-icons/fa";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
+import BrandsData from "../../api/BrandsData";
+
 const BottomNav = ({ Menu, OpenMenu }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
@@ -13,6 +15,9 @@ const BottomNav = ({ Menu, OpenMenu }) => {
     try {
       const response = await axios.get(`${BaseUrl}/redis/brand/getAll`);
       setAllCategories(response?.data?.data || []);
+
+      console.log(response);
+      
     } catch (error) {
       console.error("Error fetching categories:", error);
       setAllCategories([]);
@@ -54,7 +59,7 @@ const BottomNav = ({ Menu, OpenMenu }) => {
               HOME
             </NavLink>
           </li>
-          {allCategories.map((category, index) => (
+          {BrandsData.map((category, index) => (
             <li
               key={index}
               onMouseEnter={() => handleCategoryHover(category)}
