@@ -142,21 +142,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         }
     </script>
 
-    <!-- Deferred non-critical resources -->
-    <script>
-        // Defer email-decode script until after initial render
-        window.addEventListener('load', function() {
-            var script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/cloudflare-static/email-decode.min.js';
-            script.async = true;
-            document.head.appendChild(script);
-        });
-        
-        // Simulate deferred React refresh (in a real scenario, this would be optimized)
-        setTimeout(function() {
-            console.log("Non-critical resources loaded");
-        }, 3000);
-    </script>
+    
 </body>
 
 </html>
