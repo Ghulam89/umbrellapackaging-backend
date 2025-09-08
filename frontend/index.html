@@ -8,6 +8,7 @@
   <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin>
+<link rel="preconnect" href="https://umbrellapackaging.com/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" crossorigin>
  
 
   <!-- Google Tag Manager -->
@@ -84,63 +85,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             document.body.style.fontFamily = 'CustomFont, sans-serif';
         });
     </script>
-  <script>
-       
-        function decodeEmail(encoded) {
-            let decoded = "";
-            for (let i = 0; i < encoded.length; i++) {
-                decoded += String.fromCharCode(encoded.charCodeAt(i) - 1);
-            }
-            return decoded;
-        }
-        
-        // Apply on page load
-        window.addEventListener('load', function() {
-            const emailElement = document.querySelector('.footer p');
-            if (emailElement) {
-                const encoded = 'jpot@vntubmmbqbhjhof.dpn';
-                emailElement.innerHTML = emailElement.innerHTML.replace('inquiry@umbrellapackaging.com', decodeEmail(encoded));
-            }
-        });
-
-        // Simple React-like hydration for demonstration
-        function hydrateRoot() {
-            console.log('App hydrated successfully');
-        }
-        
-        // Defer non-critical initialization
-        if (requestIdleCallback) {
-            requestIdleCallback(hydrateRoot);
-        } else {
-            setTimeout(hydrateRoot, 2000);
-        }
-    </script>
-    
-    <script>
-        // Function to lazy load non-critical resources
-        function lazyLoadResources() {
-            // Load non-critical CSS
-            const nonCriticalCSS = document.createElement('link');
-            nonCriticalCSS.rel = 'stylesheet';
-            nonCriticalCSS.href = '/non-critical.css';
-            nonCriticalCSS.media = 'print';
-            nonCriticalCSS.onload = () => { nonCriticalCSS.media = 'all'; };
-            document.head.appendChild(nonCriticalCSS);
-            
-            // Load non-critical JS
-            const nonCriticalJS = document.createElement('script');
-            nonCriticalJS.src = '/non-critical.js';
-            nonCriticalJS.defer = true;
-            document.body.appendChild(nonCriticalJS);
-        }
-        
-        // Load non-critical resources when the page is idle
-        if (requestIdleCallback) {
-            requestIdleCallback(lazyLoadResources);
-        } else {
-            window.addEventListener('load', lazyLoadResources);
-        }
-    </script>
+ 
 
     
 </body>
