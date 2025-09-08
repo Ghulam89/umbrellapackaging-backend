@@ -16,75 +16,115 @@ import usa from "../../assets/images/flag/us.svg";
 import uk from "../../assets/images/flag/uk.svg";
 import canada from "../../assets/images/flag/canada.svg";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const TopNav = () => {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFontsLoaded(true);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className=" bg-[#F7F7F7]">
+    <div className="bg-[#F7F7F7]">
       <div className="sm:max-w-6xl max-w-[95%] mx-auto">
         <div className="flex sm:justify-between justify-center flex-wrap items-center px-6 sm:py-4 py-2 border-b border-gray-200 text-sm text-gray-700">
           {/* Left Side: Country Flags */}
-          <div className="flex items-center space-x-4">
-            <Link to={'https://umbrellapackaging.com/'} className="flex items-center  space-x-1.5">
-              <img src={usa} alt="USA" className="w-8 object-contain" />
-              <span >USA</span>
+          <div className="flex items-center space-x-4 min-h-[32px]">
+            <Link 
+              to={'https://umbrellapackaging.com/'} 
+              className="flex items-center space-x-1.5"
+            >
+              <img 
+                src={usa} 
+                alt="USA" 
+                className="w-8 h-6 object-contain" 
+                width={32}
+                height={24}
+              />
+              <span className={` transition-opacity`}>USA</span>
             </Link>
-            <Link to={'https://umbrellapackaging.co.uk/'}  target="_blank"
-  rel="noopener noreferrer" className="flex items-center space-x-1">
-              <img src={uk} alt="UK" className="w-8 object-contain" />
-              <span>UK</span>
+            <Link 
+              to={'https://umbrellapackaging.co.uk/'}  
+              target="_blank"
+              rel="noopener noreferrer" 
+              className="flex items-center space-x-1"
+            >
+              <img 
+                src={uk} 
+                alt="UK" 
+                className="w-8 h-6 object-contain" 
+                width={32}
+                height={24}
+              />
+              <span className={` transition-opacity`}>UK</span>
             </Link>
-            <Link to={'https://umbrellapackaging.ca/'}  target="_blank"
-  rel="noopener noreferrer" className="flex items-center space-x-1">
-              <img src={canada} alt="Canada" className="w-8 object-contain" />
-              <span>Canada</span>
+            <Link 
+              to={'https://umbrellapackaging.ca/'}  
+              target="_blank"
+              rel="noopener noreferrer" 
+              className="flex items-center space-x-1"
+            >
+              <img 
+                src={canada} 
+                alt="Canada" 
+                className="w-8 h-6 object-contain" 
+                width={32}
+                height={24}
+              />
+              <span className={` transition-opacity`}>Canada</span>
             </Link>
           </div>
 
-
-
           {/* Right Side: Account & Social Media */}
-          <div className="flex flex-wrap  justify-center items-center space-x-4 space-y-1">
-            <Link to={'mailto:sales@umbrellapackaging.com'} className="flex items-center space-x-2">
+          <div className="flex flex-wrap justify-center items-center space-x-4 space-y-1 min-h-[32px]">
+            <Link 
+              to={'mailto:sales@umbrellapackaging.com'} 
+              className="flex items-center space-x-2"
+            >
               <MdEmail size={15} />
-              <span>sales@umbrellapackaging.com</span>
+              <span className={` transition-opacity`}>sales@umbrellapackaging.com</span>
             </Link>
-            <Link to={'tel:747-247-0456'} className="flex items-center space-x-2">
+            <Link 
+              to={'tel:747-247-0456'} 
+              className="flex items-center space-x-2"
+            >
               <FiPhone size={15} />
-              <span>747-247-0456</span>
+              <span className={` transition-opacity`}>747-247-0456</span>
             </Link>
             <div className="flex items-center space-x-2">
               <AiOutlineUser size={18} />
-              <span>My Account</span>
+              <span className={` transition-opacity`}>My Account</span>
             </div>
-           <div className=" ">
-             <div className="flex space-x-3 mb-1 text-gray-600">
-              <Link target="_blank" to={'https://www.facebook.com/umbrellapackaging'}>
-                <FaFacebook size={17} />
-              </Link>
-              <Link target="_blank" to={'https://twitter.com/umbrellapack'}>
-                <FaTwitter size={17} />
-              </Link>
-              <Link target="_blank" to={'https://www.youtube.com/channel/UCkxeWyAJqxjFSzlbnSoIVLQ'}>
-                <FaYoutube size={17} />
-              </Link>
-              <Link target="_blank" to={'https://www.instagram.com/umbrellacustompackaging/'}>
-                <FaInstagram size={17} />
-              </Link>
-              <Link target="_blank" to={'https://www.linkedin.com/company/umbrellacustompackaging/'}>
-                <FaLinkedin size={17} />
-              </Link>
-              <Link target="_blank" to={'https://wa.me/message/JTJTB4YWJYNQP1'}>
-                <FaWhatsapp size={17} />
-              </Link>
-
+            <div>
+              <div className="flex space-x-3 mb-1 text-gray-600">
+                <Link target="_blank" to={'https://www.facebook.com/umbrellapackaging'}>
+                  <FaFacebook size={17} />
+                </Link>
+                <Link target="_blank" to={'https://twitter.com/umbrellapack'}>
+                  <FaTwitter size={17} />
+                </Link>
+                <Link target="_blank" to={'https://www.youtube.com/channel/UCkxeWyAJqxjFSzlbnSoIVLQ'}>
+                  <FaYoutube size={17} />
+                </Link>
+                <Link target="_blank" to={'https://www.instagram.com/umbrellacustompackaging/'}>
+                  <FaInstagram size={17} />
+                </Link>
+                <Link target="_blank" to={'https://www.linkedin.com/company/umbrellacustompackaging/'}>
+                  <FaLinkedin size={17} />
+                </Link>
+                <Link target="_blank" to={'https://wa.me/message/JTJTB4YWJYNQP1'}>
+                  <FaWhatsapp size={17} />
+                </Link>
+              </div>
             </div>
-           </div>
           </div>
         </div>
       </div>
-
-
-
     </div>
   );
 };

@@ -106,7 +106,7 @@ const Hero = () => {
         </div>
         <div className="flex  justify-start gap-1 items-center">
           <img src={Icon6}  className=" sm:w-10 w-8"  alt="Quickest Turnaround" />
-          <strong className="text-[15px] font-light sm:whitespace-nowrap  opacity-80 whitespace-pre-wrap text-[#111111] ">Quickest Turnaround</strong>
+          <strong className="text-sm font-medium text-gray-700 whitespace-nowrap">Quickest Turnaround</strong>
         </div>
       </div>
 
