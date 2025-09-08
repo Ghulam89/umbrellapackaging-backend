@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -76,7 +76,13 @@ const CustomPackagingApart = () => {
     },
     modules: [Pagination, Autoplay],
   }), []);
-
+ // Preload images to prevent layout shifts
+  useEffect(() => {
+    data.forEach(item => {
+      const img = new Image();
+      img.src = item.icon;
+    });
+  }, [data]);
   return (
     <div className="sm:max-w-6xl my-6 max-w-[95%] mx-auto">
       <div className="text-center pb-3">
@@ -85,7 +91,10 @@ const CustomPackagingApart = () => {
         </h2>
         
         <div className='rounded-lg p-3 h-64 flex justify-center items-center bg-[#eff4fe]'>
-          <Swiper {...swiperConfig} className="mySwiper">
+          <Swiper {...swiperConfig} className="mySwiper"
+            updateOnWindowResize={false}
+           
+            resizeObserver={false}>
             {data.map((item) => (
               <SwiperSlide key={item.id}>
                 <div className="text-center px-2">
