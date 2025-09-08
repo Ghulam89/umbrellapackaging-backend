@@ -87,56 +87,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             document.body.style.fontFamily = 'CustomFont, sans-serif';
         });
     </script>
-  <script>
-       
-        function decodeEmail(encoded) {
-            let decoded = "";
-            for (let i = 0; i < encoded.length; i++) {
-                decoded += String.fromCharCode(encoded.charCodeAt(i) - 1);
-            }
-            return decoded;
-        }
-        
-        window.addEventListener('load', function() {
-            const emailElement = document.querySelector('.footer p');
-            if (emailElement) {
-                const encoded = 'jpot@vntubmmbqbhjhof.dpn';
-                emailElement.innerHTML = emailElement.innerHTML.replace('inquiry@umbrellapackaging.com', decodeEmail(encoded));
-            }
-        });
-
-        function hydrateRoot() {
-            console.log('App hydrated successfully');
-        }
-      
-        if (requestIdleCallback) {
-            requestIdleCallback(hydrateRoot);
-        } else {
-            setTimeout(hydrateRoot, 2000);
-        }
-    </script>
-    
-    <script>
-        function lazyLoadResources() {
-            const nonCriticalCSS = document.createElement('link');
-            nonCriticalCSS.rel = 'stylesheet';
-            nonCriticalCSS.href = '/non-critical.css';
-            nonCriticalCSS.media = 'print';
-            nonCriticalCSS.onload = () => { nonCriticalCSS.media = 'all'; };
-            document.head.appendChild(nonCriticalCSS);
-            
-            const nonCriticalJS = document.createElement('script');
-            nonCriticalJS.src = '/non-critical.js';
-            nonCriticalJS.defer = true;
-            document.body.appendChild(nonCriticalJS);
-        }
-        
-        if (requestIdleCallback) {
-            requestIdleCallback(lazyLoadResources);
-        } else {
-            window.addEventListener('load', lazyLoadResources);
-        }
-    </script>
+ 
 </body>
 
 </html>
