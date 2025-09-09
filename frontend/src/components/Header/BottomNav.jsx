@@ -14,7 +14,7 @@ const BottomNav = ({ Menu, OpenMenu }) => {
  useEffect(() => {
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${BaseUrl}/redis/brand/getAll`);
+      const response = await axios.get(`${BaseUrl}/brands/getAll`);
       setAllCategories(response?.data?.data?.length ? response.data.data : BrandsData);
     } catch (error) {
       setAllCategories(BrandsData);
