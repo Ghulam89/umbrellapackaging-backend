@@ -79,7 +79,7 @@ export default function WebsiteRoutes({ serverData, CategoryProducts }) {
     { path: '/dielines', element: <Dielines key="dielines" /> },
     { path: '/get-custom-quote', element: <GetCustomQoutePage key="get-custom-quote" /> },
     { path: '/target-price', element: <TargetPrice key="target-price" /> },
-    { path: '/faqs', element: <FAQ key="faq" /> },
+    { path: '/faqs', element: <FAQ key="faqs" /> },
     { path: '/portfolio', element: <Portfolio key="portfolio" /> },
     { path: '/404', element: <NotFound key="not-found" /> },
     {

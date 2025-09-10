@@ -59,7 +59,7 @@ const FAQ = () => {
 
   return (
     <>
-      <PageMetadata {...metadata} />
+      {/* <PageMetadata {...metadata} /> */}
       <div style={{ backgroundImage: `url(${faq})` }} className="">
       <div className="sm:max-w-6xl max-w-[95%] mx-auto">
         <div className="">
