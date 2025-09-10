@@ -25,6 +25,7 @@ function Portfolio() {
         keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
         author: "Umbrella Custom Packaging",
         ogUrl: `${BaseUrl}/portfolio`,
+         canonicalUrl: `${BaseUrl}/portfolio`,
         ogTitle: "Portfolio - Umbrella Custom Packaging",
         ogDescription: "Our Portfolio Our portfolio highlights a range of custom packaging solutions, designed to protect, promote, and enhance your products with style.",
         modifiedTime: "2025-06-13T15:18:43+00:00",

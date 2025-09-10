@@ -21,7 +21,20 @@ const Reviews = () => {
   useEffect(() => {
     fetchReviews();
   }, []);
-
+const metadata = {
+              title: "Reviews - Umbrella Custom Packaging",
+              description: "Reviews Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes. Umbrella Custom Packaging facilitates your business by providing innovative styled boxes in extraordinary design. We use the finest paper material and high quality cardboard to ensure perfect Die Cut boxes. You will get guaranteed satisfaction with high quality printing.",
+              keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
+              author: "Umbrella Custom Packaging",
+              ogUrl: `${BaseUrl}/reviews`,
+              canonicalUrl: `${BaseUrl}/reviews`,
+              ogTitle: "Reviews - Umbrella Custom Packaging",
+              ogDescription: "Reviews Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+              modifiedTime: "2025-06-13T15:18:43+00:00",
+              twitterTitle: "Reviews - Umbrella Custom Packaging",
+              twitterDescription: "Reviews Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+              robots: "index, follow"
+            };
   return (
     <>
       <div className="container mx-auto px-4 py-6 max-w-6xl">

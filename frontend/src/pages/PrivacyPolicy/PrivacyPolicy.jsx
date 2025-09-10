@@ -26,6 +26,7 @@ function PrivacyPolicy() {
             keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
             author: "Umbrella Custom Packaging",
             ogUrl: `${BaseUrl}/privacy-policy`,
+              canonicalUrl: `${BaseUrl}/privacy-policy`,
             ogTitle: "Privacy Policy - Umbrella Custom Packaging",
             ogDescription: "We committed to quality&nbsp;and&nbsp;innovation. Various Custom Packaging Styles With Perfect Solutions. graphic-designing Free Design Free Shipping Cheapest​ Get Intense Quote Free Quote pen-tool-vector-design Free Design support printer Free Lamination Free Shipping FSC Certified Quickest Turnaround Free Quote pen-tool-vector-design Free Design support printer Free Lamination Free Shipping FSC Certified Quickest Turnaround Privacy Umbrella Custom Packaging is [&hellip;]",
             modifiedTime: "2025-06-13T15:18:43+00:00",

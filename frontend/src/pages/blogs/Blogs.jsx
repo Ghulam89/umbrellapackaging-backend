@@ -44,6 +44,7 @@ const Blogs = () => {
                 keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
                 author: "Umbrella Custom Packaging",
                 ogUrl: `${BaseUrl}/blogs`,
+                canonicalUrl: `${BaseUrl}/blogs`,
                 ogTitle: "Blog - Umbrella Custom Packaging",
                 ogDescription: "Our Blogs Simple Steps to get the Custom Packaging Produced Following are few steps which provide the complete Guide. Price Quote Payment Design Approval Production Shipping Reorders Get Price Quote Submit a request for free custom quote first through our website or calling our customer service representative. You will have the prices in 30 minutes. [&hellip;]",
                 modifiedTime: "2025-06-13T15:18:43+00:00",

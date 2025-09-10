@@ -15,6 +15,8 @@ import dieImg12 from '../../assets/images/dielines/Window-Boxes-1.webp';
 import Button from '../../components/common/Button';
 import SpecialPackaging from '../../components/SpecialPackaging/SpecialPackaging';
 import InstantQuoteModal from '../../components/common/InstantQuoteModal';
+import { BaseUrl } from '../../utils/BaseUrl';
+import PageMetadata from '../../components/common/PageMetadata';
 
 const categories = [
   { title: 'Auto lock Boxes',img:dieImg1},
@@ -33,9 +35,27 @@ const categories = [
 
 function Dielines() {
 
+
+   const metadata = {
+      title: "dielines - Umbrella Custom Packaging",
+      description: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes. Umbrella Custom Packaging facilitates your business by providing innovative styled boxes in extraordinary design. We use the finest paper material and high quality cardboard to ensure perfect Die Cut boxes. You will get guaranteed satisfaction with high quality printing.",
+      keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
+      author: "Umbrella Custom Packaging",
+      ogUrl: `${BaseUrl}/dielines`,
+      canonicalUrl: `${BaseUrl}/dielines`,
+      ogTitle: "dielines - Umbrella Custom Packaging",
+      ogDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+      modifiedTime: "2025-06-13T15:18:43+00:00",
+      twitterTitle: "dielines - Umbrella Custom Packaging",
+      twitterDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+      robots: "index, follow"
+    };
+
   const [isModalOpen,setIsModalOpen] = useState(false)
   return (
 <>
+ <PageMetadata {...metadata} />
+
    <div  className='bg-[#F7F7F7]'>
 <div className="  max-w-[95%] sm:max-w-6xl mx-auto   space-y-12">
       {/* Top section */}

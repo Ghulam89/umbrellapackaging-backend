@@ -8,6 +8,8 @@ import Icon2 from '../../assets/images/icon/Free Lamination.svg';
 import Icon4 from '../../assets/images/icon/free shipping.svg';
 import Icon5 from '../../assets/images/icon/FSC Certified.svg';
 import Icon6 from '../../assets/images/icon/Quickest Turnaround.svg';
+import { BaseUrl } from '../../utils/BaseUrl';
+import PageMetadata from '../../components/common/PageMetadata';
 function ShippingPolicy() {
     const [ text]  = useTypewriter({
             words: ['Quality And Innovation.'],
@@ -15,8 +17,27 @@ function ShippingPolicy() {
             deleteSpeed: 80,
             loop:{},
         });
+
+
+         const metadata = {
+                    title: "Shipping Policy - Umbrella Custom Packaging",
+                    description: "We committed to quality&nbsp;and&nbsp;innovation. Various Custom Packaging Styles With Perfect Solutions. graphic-designing Free Design Free Shipping Cheapest​ Get Intense Quote Free Quote pen-tool-vector-design Free Design support printer Free Lamination Free Shipping FSC Certified Quickest Turnaround Free Quote pen-tool-vector-design Free Design support printer Free Lamination Free Shipping FSC Certified Quickest Turnaround Privacy Umbrella Custom Packaging is [&hellip;]",
+                    keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
+                    author: "Umbrella Custom Packaging",
+                    ogUrl: `${BaseUrl}/shipping-policy`,
+                      canonicalUrl: `${BaseUrl}/shipping-policy`,
+                    ogTitle: "Shipping Policy - Umbrella Custom Packaging",
+                    ogDescription: "We committed to quality&nbsp;and&nbsp;innovation. Various Custom Packaging Styles With Perfect Solutions. graphic-designing Free Design Free Shipping Cheapest​ Get Intense Quote Free Quote pen-tool-vector-design Free Design support printer Free Lamination Free Shipping FSC Certified Quickest Turnaround Free Quote pen-tool-vector-design Free Design support printer Free Lamination Free Shipping FSC Certified Quickest Turnaround Privacy Umbrella Custom Packaging is [&hellip;]",
+                    modifiedTime: "2025-06-13T15:18:43+00:00",
+                    twitterTitle: "Shipping Policy - Umbrella Custom Packaging",
+                    twitterDescription: "We committed to quality&nbsp;and&nbsp;innovation. Various Custom Packaging Styles With Perfect Solutions. graphic-designing Free Design Free Shipping Cheapest​ Get Intense Quote Free Quote pen-tool-vector-design Free Design support printer Free Lamination Free Shipping FSC Certified Quickest Turnaround Free Quote pen-tool-vector-design Free Design support printer Free Lamination Free Shipping FSC Certified Quickest Turnaround Privacy Umbrella Custom Packaging is [&hellip;]",
+                    robots: "index, follow"
+                  };
+
   return (
-     <div className='max-w-[1200px] mx-auto'>
+    <>
+    <PageMetadata {...metadata} />
+    <div className='max-w-[1200px] mx-auto'>
                   <div className='grid md:grid-cols-2 grid-cols-1 bg-[#d2e0FB59] rounded-[8px] p-5 mt-10 gap-6 md:gap-0'>
   <div className='flex flex-col justify-center gap-6 md:gap-10'>
     <div>
@@ -154,6 +175,8 @@ function ShippingPolicy() {
     
     
             </div>
+    </>
+     
   )
 }
 

@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import shopChoose from '../../assets/images/Industry-standard.png-2.webp';
+import PageMetadata from '../../components/common/PageMetadata'
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -152,8 +153,26 @@ const Shop = () => {
     },
   });
 
+
+  
+          const metadata = {
+                title: "Shop - Umbrella Custom Packaging",
+                description: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes. Umbrella Custom Packaging facilitates your business by providing innovative styled boxes in extraordinary design. We use the finest paper material and high quality cardboard to ensure perfect Die Cut boxes. You will get guaranteed satisfaction with high quality printing.",
+                keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
+                author: "Umbrella Custom Packaging",
+                ogUrl: `${BaseUrl}/shop`,
+                canonicalUrl: `${BaseUrl}/shop`,
+                ogTitle: "Shop - Umbrella Custom Packaging",
+                ogDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+                modifiedTime: "2025-06-13T15:18:43+00:00",
+                twitterTitle: "Shop - Umbrella Custom Packaging",
+                twitterDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+                robots: "index, follow"
+              };
+
   return (
     <>
+     <PageMetadata {...metadata} />
       <div className=' bg-[#F7F7F7] rounded-lg sm:max-w-7xl max-w-[95%] mx-auto  px-3.5 my-5 py-12'>
         <div className='  mx-auto text-center'>
           <h1 className=' sm:text-4xl text-2xl'>Discover Our Custom Packaging Variety</h1>

@@ -10,6 +10,8 @@ import Icon2 from '../../assets/images/icon/Free Lamination.svg';
 import Icon4 from '../../assets/images/icon/free shipping.svg';
 import Icon5 from '../../assets/images/icon/FSC Certified.svg';
 import Icon6 from '../../assets/images/icon/Quickest Turnaround.svg';
+import { BaseUrl } from '../../utils/BaseUrl';
+import PageMetadata from '../../components/common/PageMetadata';
 
 function TermsAndConditions() {
      const [ text]  = useTypewriter({
@@ -19,8 +21,27 @@ function TermsAndConditions() {
             loop:{},
         });
     
+
+
+        const metadata = {
+              title: "Terms And Conditions - Umbrella Custom Packaging",
+              description: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes. Umbrella Custom Packaging facilitates your business by providing innovative styled boxes in extraordinary design. We use the finest paper material and high quality cardboard to ensure perfect Die Cut boxes. You will get guaranteed satisfaction with high quality printing.",
+              keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
+              author: "Umbrella Custom Packaging",
+              ogUrl: `${BaseUrl}/terms-and-conditions`,
+              canonicalUrl: `${BaseUrl}/terms-and-conditions`,
+              ogTitle: "Terms And Conditions - Umbrella Custom Packaging",
+              ogDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+              modifiedTime: "2025-06-13T15:18:43+00:00",
+              twitterTitle: "Terms And Conditions - Umbrella Custom Packaging",
+              twitterDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+              robots: "index, follow"
+            };
+
   return (
-    <div className='max-w-[1200px] mx-auto'>
+    <>
+     <PageMetadata {...metadata} />
+     <div className='max-w-[1200px] mx-auto'>
     <div className='grid md:grid-cols-2 grid-cols-1 bg-[#d2e0FB59] rounded-[8px] p-5 mt-10 gap-6 md:gap-0'>
   <div className='flex flex-col justify-center gap-6 md:gap-10'>
     <div>
@@ -240,6 +261,8 @@ The website and its content are provided on an “as is” basis, without any wa
 Umbrella Custom Packaging, its licensors, suppliers, or vendors, as well as their officers, directors, employees, or agents, shall not be liable for any special, incidental, indirect, or consequential damages of any kind or for any damages whatsoever resulting from loss of use, data, or profits, regardless of whether or not Umbrella Custom Packaging has been advised of the possibility of such damages. This includes damages arising from or in connection with the site’s use or performance or failure to provide products or services that you order from Umbrella Custom Packaging or its affiliates. Such damages may arise from mistakes, omissions, viruses, delays, or service interruptions. Umbrella Custom Packaging shall not be liable or responsible for any damages or consequences arising from or related to your inappropriate or unauthorized use of this site or its content.</p>
     </div>
 </div>
+    </>
+    
   )
 }
 

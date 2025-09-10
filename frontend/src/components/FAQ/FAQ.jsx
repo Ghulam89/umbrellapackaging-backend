@@ -5,6 +5,7 @@ import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import faq from '../../assets/images/faq.png';
 import { Link } from 'react-router-dom';
+import PageMetadata from '../common/PageMetadata';
 const FAQ = () => {
   const [accordions, setAccordions] = useState([]);
 
@@ -40,8 +41,26 @@ const FAQ = () => {
     fetchFaqs();
   }, []);
 
+
+  const metadata = {
+        title: "Faqs - Umbrella Custom Packaging",
+        description: "Faqs Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes. Umbrella Custom Packaging facilitates your business by providing innovative styled boxes in extraordinary design. We use the finest paper material and high quality cardboard to ensure perfect Die Cut boxes. You will get guaranteed satisfaction with high quality printing.",
+        keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
+        author: "Umbrella Custom Packaging",
+        ogUrl: `${BaseUrl}/faqs`,
+        canonicalUrl: `${BaseUrl}/faqs`,
+        ogTitle: "Faqs - Umbrella Custom Packaging",
+        ogDescription: "Faqs Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+        modifiedTime: "2025-06-13T15:18:43+00:00",
+        twitterTitle: "Faqs - Umbrella Custom Packaging",
+        twitterDescription: "Faqs Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+        robots: "index, follow"
+      };
+
   return (
-    <div style={{ backgroundImage: `url(${faq})` }} className="">
+    <>
+      <PageMetadata {...metadata} />
+      <div style={{ backgroundImage: `url(${faq})` }} className="">
       <div className="sm:max-w-6xl max-w-[95%] mx-auto">
         <div className="">
           <div className="text-center">
@@ -84,6 +103,8 @@ const FAQ = () => {
         </div>
       </div>
     </div>
+    </>
+  
   );
 };
 

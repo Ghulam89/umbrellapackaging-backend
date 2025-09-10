@@ -82,6 +82,7 @@ function ContactUs() {
     keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
     author: "Umbrella Custom Packaging",
     ogUrl: `${BaseUrl}/contact-us`,
+    canonicalUrl: `${BaseUrl}/contact-us`,
     ogTitle: "Contact Us - Umbrella Custom Packaging",
     ogDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
     modifiedTime: "2025-06-13T15:18:43+00:00",

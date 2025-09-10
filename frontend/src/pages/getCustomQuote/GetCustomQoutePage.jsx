@@ -25,6 +25,7 @@ import { BaseUrl } from '../../utils/BaseUrl'
 import axios from 'axios'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
+import PageMetadata from '../../components/common/PageMetadata'
 function GetCustomQoutePage() {
   const images = [discover, american, bankTranfer, masterCard, paypal, wireTransfer, maestro, visa]
 
@@ -124,8 +125,26 @@ function GetCustomQoutePage() {
   };
 
   const prevStep = () => setStep(step - 1);
+const metadata = {
+      title: "Get Custom Quote - Umbrella Custom Packaging",
+      description: "Get Custom Quote Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes. Umbrella Custom Packaging facilitates your business by providing innovative styled boxes in extraordinary design. We use the finest paper material and high quality cardboard to ensure perfect Die Cut boxes. You will get guaranteed satisfaction with high quality printing.",
+      keywords: "custom packaging, wholesale boxes, packaging solutions, affordable packaging, custom boxes, packaging design, eco-friendly packaging",
+      author: "Umbrella Custom Packaging",
+      ogUrl: `${BaseUrl}/get-custom-quote`,
+      canonicalUrl: `${BaseUrl}/get-custom-quote`,
+      ogTitle: "Get Custom Quote - Umbrella Custom Packaging",
+      ogDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+      modifiedTime: "2025-06-13T15:18:43+00:00",
+      twitterTitle: "Get Custom Quote - Umbrella Custom Packaging",
+      twitterDescription: "Get In Touch Umbrella Custom Packaging-The House of Proficient Printing & Distinct Featured Boxes...",
+      robots: "index, follow"
+    };
+
   return (
-    <div className='sm:max-w-6xl  py-9 rounded-xl max-w-[95%] mx-auto'>
+    <>
+    
+      <PageMetadata {...metadata} />
+          <div className='sm:max-w-6xl  py-9 rounded-xl max-w-[95%] mx-auto'>
 
       <div className='bg-[#F7F7F7] rounded-[8px] p-5  flex flex-col justify-center items-center'>
         <h2 className='md:text-[35px] text-[20px] text-black font-semibold leading-10 text-center mb-5'>Important Points to Get a Quote</h2>
@@ -556,6 +575,8 @@ function GetCustomQoutePage() {
 
 
     </div>
+    </>
+
   )
 }
 
