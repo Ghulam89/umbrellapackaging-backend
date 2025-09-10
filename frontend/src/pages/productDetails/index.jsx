@@ -880,7 +880,7 @@ const productSchema = {
                   {product?.bannerTitle}
 
                 </h2>
-                <div className=' overflow-y-auto h-56'>
+                <div className=' overflow-y-auto blog_content  h-56'>
                   <p dangerouslySetInnerHTML={{ __html: product?.bannerContent }} className="text-sm leading-6 text-gray-700 mb-6">
 
 
