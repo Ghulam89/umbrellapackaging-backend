@@ -148,7 +148,7 @@ const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
       )}
 
       {/* Mobile Menu Sidebar */}
-      <div className={`sm:hidden fixed top-0 h-screen  left-0  z-50 bg-[#F7F7F7]  transform transition-transform duration-300 ease-in-out ${Menu ? "translate-x-0" : "-translate-x-full"} sm:w-80 w-64`}>
+      <div className={`sm:hidden fixed top-0 h-full left-0  z-50 bg-[#F7F7F7]  transform transition-transform duration-300 ease-in-out ${Menu ? "translate-x-0" : "-translate-x-full"} sm:w-80 w-64`}>
         <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <Link to={`/`} onClick={handleLinkClick}>
             <img src={logo} alt="" className="w-[100px]" />
@@ -158,7 +158,7 @@ const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
           </div>
         </div>
         
-        <div className=" overflow-y-auto pb-12">
+        <div className=" overflow-y-auto pb-20">
           {isLoading ? (
             <div className="flex justify-center items-center h-32">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4440E6]"></div>
@@ -200,8 +200,8 @@ const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
                   </div>
                   
                   {category.midcategories?.length > 0 && (
-                    <div className={`  overflow-y-scroll  transition-all duration-500 ease-in-out ${mobileSubmenu === category.name ? 'max-h-[500px]' : 'max-h-0'}`}>
-                      <ul className="pl-6 pb-2">
+                    <div className={`  overflow-y-auto  h-48 transition-all duration-500 ease-in-out ${mobileSubmenu === category.name ? 'max-h-[500px]' : 'max-h-0'}`}>
+                      <ul className="pl-2 pb-2">
                         {category.midcategories.map((submenu, subIndex) => (
                           <li key={subIndex} className="border-t border-gray-100">
                             <NavLink
