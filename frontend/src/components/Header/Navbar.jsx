@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "../../assets/images/umbrella-logo.svg";
 import Button from "../common/Button";
 import BottomNav from "./BottomNav";
@@ -15,13 +15,26 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+  const searchRef = useRef(null);
+
   const OpenMenu = () => {
-    setMenu(!menu);
+    // Only open menu if categories are loaded
+    if (categoriesLoaded) {
+      setMenu(!menu);
+    }
   };
 
   const handleSearch = async (e) => {
     const query = e.target.value;
     setSearchQuery(query);
+    
+    if (query.length < 2) {
+      setShowResults(false);
+      setSearchResults([]);
+      return;
+    }
+    
     setIsSearchLoading(true);
     try {
       const response = await axios.get(`${BaseUrl}/products/search?name=${query}`);
@@ -33,7 +46,6 @@ const Navbar = () => {
     } finally {
       setIsSearchLoading(false);
     }
-
   };
 
   const handleResultClick = () => {
@@ -43,14 +55,14 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest(".search-container")) {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
         setShowResults(false);
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -62,59 +74,61 @@ const Navbar = () => {
       <div className="sm:max-w-6xl relative max-w-[95%] mx-auto">
         <div className="flex space-x-5 w-full justify-between h-20 items-center">
           <Link to={`/`}>
-            <img src={logo} alt="" className="sm:w-[135px] w-[300px]" />
+            <img src={logo} alt="" className="sm:w-[135px] w-[135px]" />
           </Link>
-          <div className="w-lg sm:relative search-container">
+          <div className="w-lg sm:relative search-container" ref={searchRef}>
             <Input
               placeholder={"Search For Products"}
               className={"rounded-full p-2.5 w-full border-2 bg-white border-gray-300"}
               value={searchQuery}
               onChange={handleSearch}
             />
-            {showResults && searchResults.length > 0 && (
-              <div className="absolute z-10 mt-1 left-0 w-full max-w-2xl bg-white border border-gray-300 rounded-lg shadow-lg max-h-96 overflow-y-auto">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4 p-4">
-                  {searchResults.map((product) => (
-                    <Link
-                      key={product._id}
-                      to={`/${product.slug}`}
-                      onClick={handleResultClick}
-                      className="block"
-                    >
-                      <div className="bg-[#F7F7F7] p-3 rounded-xl hover:shadow-md transition-all h-full">
-                        <div className="aspect-square mb-2">
-                          <img
-                            src={`${BaseUrl}/${product?.images?.[0]?.url}`}
-                            alt={product.name}
-                            className="w-full h-full object-contain rounded-xl"
-                          />
+            {showResults && (
+              <div className="absolute z-50 mt-1 left-0 w-full max-w-2xl bg-white border border-gray-300 rounded-lg shadow-lg max-h-96 overflow-y-auto">
+                {isSearchLoading ? (
+                  <div className="flex justify-center items-center py-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4440E6]"></div>
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4 p-4">
+                    {searchResults.map((product) => (
+                      <Link
+                        key={product._id}
+                        to={`/${product.slug}`}
+                        onClick={handleResultClick}
+                        className="block"
+                      >
+                        <div className="bg-[#F7F7F7] p-3 rounded-xl hover:shadow-md transition-all h-full">
+                          <div className="aspect-square mb-2">
+                            <img
+                              src={`${BaseUrl}/${product?.images?.[0]?.url}`}
+                              alt={product.name}
+                              className="w-full h-full object-contain rounded-xl"
+                            />
+                          </div>
+                          <h6 className="text-center font-semibold text-[#333] line-clamp-2">
+                            {product?.name}
+                          </h6>
                         </div>
-                        <h6 className="text-center font-semibold text-[#333] line-clamp-2">
-                          {product?.name}
-                        </h6>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-            {isSearchLoading && (
-              <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg p-4">
-                <div className="flex justify-center items-center py-4">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4440E6]"></div>
-                </div>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-gray-500">
+                    No products found
+                  </div>
+                )}
               </div>
             )}
           </div>
           <div className="sm:block hidden">
             <div className="flex items-center justify-between gap-2.5">
-              <Link   to={'/reviews'} className=" ">
+              <Link to={'/reviews'} className=" ">
                 <div style={{fontSize:'16px !important'}}>
                   <Button
-                  // onClick={() => setReviewModalOpen(true)}
-                  className="text-[#4440E6]  bg-white border border-[#4440E6]"
-                  label={"Reviews"}
-                />
+                    className="text-[#4440E6]  bg-white border border-[#4440E6]"
+                    label={"Reviews"}
+                  />
                 </div>
               </Link>
               <div>
@@ -129,7 +143,7 @@ const Navbar = () => {
 
           <div className="block sm:hidden cursor-pointer bg-[#B8B6FA99] text-[#4440E6] px-1.5 py-1.5 rounded-sm">
             {menu ? (
-                <svg
+              <svg
                 onClick={OpenMenu}
                 width={25}
                 aria-hidden="true"
@@ -156,7 +170,11 @@ const Navbar = () => {
           </div>
         </div>
 
-        <BottomNav Menu={menu} OpenMenu={OpenMenu} />
+        <BottomNav 
+          Menu={menu} 
+          OpenMenu={OpenMenu} 
+          setCategoriesLoaded={setCategoriesLoaded}
+        />
       </div>
 
       <GetQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={IsModalOpen} />
