@@ -5,6 +5,34 @@ import PortfolioCard from './PortfolioCard'
 import p3 from '../../assets/images/p-3.webp'
 import p4 from '../../assets/images/p-4.webp'
 import p5 from '../../assets/images/p-5.webp'
+import p6 from '../../assets/images/p6.webp'
+import p7 from '../../assets/images/p7.webp'
+import p8 from '../../assets/images/p8.webp'
+import p9 from '../../assets/images/p9.webp'
+import p10 from '../../assets/images/p10.webp'
+import p11 from '../../assets/images/p11.webp'
+import p12 from '../../assets/images/p12.webp'
+import p13 from '../../assets/images/p13.webp'
+import p14 from '../../assets/images/p14.webp'
+import p15 from '../../assets/images/p15.webp'
+import p16 from '../../assets/images/p16.webp'
+import p17 from '../../assets/images/p17.webp'
+import p18 from '../../assets/images/p18.webp'
+import p19 from '../../assets/images/p19.webp'
+import p20 from '../../assets/images/p20.webp'
+import p21 from '../../assets/images/p21.webp'
+import p22 from '../../assets/images/p22.webp'
+import p23 from '../../assets/images/p23.webp'
+import p24 from '../../assets/images/p24.webp'
+import p25 from '../../assets/images/p25.webp'
+import p26 from '../../assets/images/p26.webp'
+import p27 from '../../assets/images/p27.webp'
+import p28 from '../../assets/images/p28.webp'
+import p29 from '../../assets/images/p29.webp'
+import p30 from '../../assets/images/p30.webp'
+import p31 from '../../assets/images/p31.webp'
+import p32 from '../../assets/images/p32.webp'
+import p33 from '../../assets/images/p33.webp'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
 
@@ -12,8 +40,22 @@ function Portfolio() {
 
     const portfolioData = [
         {img1:p1,img2:p2 },
-        {img1:p3,img2:p3 },
+        {img1:p3,img2:p3},
         {img1:p4,img2:p5 },
+        {img1:p6,img2:p7},
+        {img1:p8,img2:p9},
+        {img1:p10,img2:p11},
+        {img1:p12,img2:p13},
+        {img1:p14,img2:p15},
+        {img1:p16,img2:p17},
+        {img1:p18,img2:p19},
+        {img1:p20,img2:p21},
+        {img1:p22,img2:p23},
+        {img1:p24,img2:p25},
+        {img1:p26,img2:p27},
+        {img1:p28,img2:p29},
+        {img1:p30,img2:p31},
+        {img1:p32,img2:p33},
 
         
     ]
