@@ -59,7 +59,7 @@ const navigate = useNavigate();
     const { name, value, files } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: files ? files[0] : value
+      [name]: files ? `https://umbrellapackaging.com/${files[0]}` : value
     }));
   };
 

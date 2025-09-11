@@ -187,6 +187,10 @@ export const adminTemplate = (data) => `<!DOCTYPE html>
                     <td>${data.color}</td>
                 </tr>
                 <tr>
+                    <td>Colors:</td>
+                    <td>${data.unit}</td>
+                </tr>
+                <tr>
                     <td>Quantity:</td>
                     <td>${data.quantity}</td>
                 </tr>
@@ -196,7 +200,7 @@ export const adminTemplate = (data) => `<!DOCTYPE html>
                 </tr>
                 <tr>
                     <td>File:</td>
-                    <td><img style="width: 100%; max-width: 300px; height: auto; display: block;" src=${`https://umbrellapackaging.com/${data.image}`} /></td>
+                    <td><img style="width: 100%; max-width: 300px; height: auto; display: block;" src=${data.image} /></td>
                 </tr>
                 <tr>
                     <td>Description:</td>
