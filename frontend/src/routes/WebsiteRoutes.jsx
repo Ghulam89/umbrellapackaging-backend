@@ -26,48 +26,46 @@ import { BaseUrl } from "../utils/BaseUrl";
 import Dielines from "../pages/Dielines";
 import SuccessPage from "../pages/thankYouPage";
 
-export default function WebsiteRoutes({ serverData, CategoryProducts }) {
+// Separate component for product details to avoid re-rendering issues
+function ProductDetailsWrapper({ serverData }) {
+  const { slug } = useParams();
+  const [productData, setProductData] = useState(serverData);
+  const [loading, setLoading] = useState(!serverData);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!serverData && slug) {
+      const fetchProduct = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
+          setProductData(response?.data?.data);
+          setError(false);
+        } catch (err) {
+          setError(true);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProduct();
+    }
+  }, [slug, serverData]);
+
+  if (loading) return <div>Loading...</div>;
+  if (!loading && (error || !productData)) return <NotFound />;
+
+  return <ProductDetails serverData={productData} />;
+}
+
+export default function useWebsiteRoutes(serverData, CategoryProducts) {
   const location = useLocation();
 
-
-  function ProductDetailsWrapper({ serverData }) {
-    const { slug } = useParams();
-    const [productData, setProductData] = useState(serverData);
-    const [loading, setLoading] = useState(!serverData);
-    const [error, setError] = useState(false);
-
-    useEffect(() => {
-      if (!serverData) {
-        const fetchProduct = async () => {
-          try {
-            setLoading(true);
-            const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
-            setProductData(response?.data?.data);
-            setError(false);
-          } catch (err) {
-
-            setError(true);
-          } finally {
-            setLoading(false);
-          }
-        };
-        fetchProduct();
-      }
-    }, [slug, serverData]);
-
-    // if (loading) return <div>Loading...</div>;
-    if (!loading && (error || !productData)) return <NotFound />;
-
-    return <ProductDetails serverData={productData} />;
-  }
   return [
     { path: '/', element: <Home key="home" /> },
     { path: '/about-us', element: <About key="about" /> },
     { path: '/contact-us', element: <ContactUs key="contact" /> },
     { path: '/blogs', element: <Blogs key="blogs" /> },
-     { path: '/thank-you-page', element: <SuccessPage key="success" /> },
-     //{ path: '/thank-you-page', element: <SuccessPage key="success" /> },
-    //  { path: '/thank-you-page', element: <SuccessPage key="success" /> },
+    { path: '/thank-you-page', element: <SuccessPage key="success" /> },
     { path: '/shop', element: <Shop key="shop" /> },
     { path: '/cart', element: <Cart key="cart" /> },
     { path: '/checkout', element: <Checkout key="checkout" /> },
@@ -85,21 +83,21 @@ export default function WebsiteRoutes({ serverData, CategoryProducts }) {
     {
       path: '/category/:slug',
       element: <Category
-        key={location.pathname}
+        key={`category-${location.pathname}`}
         serverData={serverData}
       />
     },
     {
       path: '/blog/:slug',
       element: <SingleBlog
-        key={location.pathname}
+        key={`blog-${location.pathname}`}
         serverData={serverData}
       />
     },
     {
       path: '/sub-category/:slug',
       element: <SubCategory
-        key={location.pathname}
+        key={`subcategory-${location.pathname}`}
         serverData={serverData}
         CategoryProducts={CategoryProducts}
       />
@@ -108,12 +106,11 @@ export default function WebsiteRoutes({ serverData, CategoryProducts }) {
       path: '/:slug',
       element: (
         <ProductDetailsWrapper
-          key={location.pathname}
+          key={`product-${location.pathname}`}
           serverData={serverData}
         />
       )
     },
-    { path: '*', element: <NotFound /> }
+    { path: '*', element: <NotFound key="catch-all" /> }
   ];
 }
-
