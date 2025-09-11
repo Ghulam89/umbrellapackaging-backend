@@ -199,7 +199,7 @@ export const adminTemplate = (data) => `<!DOCTYPE html>
                     <td>${data.addons}</td>
                 </tr>
                 <td>File:</td>
-               <td><img style="width: 100%; max-width: 300px; height: auto; display: block;" src="${data.image}" /></td>
+               <td><img style="width: 100%; max-width: 300px; height: auto; display: block;" src=${`https://umbrellapackaging.com/${data.image}`} /></td>
                 <tr>
                     <td>Description:</td>
                     <td>${data.message}</td>

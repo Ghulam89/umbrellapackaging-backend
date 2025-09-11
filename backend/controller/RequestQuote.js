@@ -52,7 +52,7 @@ let imagePath = null;
       
         
     const quoteData = {
-      image: `https://umbrellapackaging.com/${imagePath}`,
+      image:imagePath,
       name: data?.name,
       email: data?.email,
       phoneNumber: data?.phoneNumber,

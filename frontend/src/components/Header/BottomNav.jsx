@@ -72,7 +72,7 @@ const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
               HOME
             </NavLink>
           </li>
-          {allCategories.map((category, index) => (
+          {BrandsData.map((category, index) => (
             <li
               key={index}
               onMouseEnter={() => handleCategoryHover(category)}
@@ -175,7 +175,7 @@ const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
                 </NavLink>
               </li>
               
-              {allCategories?.map((category, index) => (
+              {BrandsData?.map((category, index) => (
                 <li key={index} className="border-b border-gray-200">
                   <div className="flex justify-between items-center">
                     <NavLink

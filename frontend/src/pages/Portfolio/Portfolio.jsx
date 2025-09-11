@@ -50,7 +50,7 @@ function Portfolio() {
 
 
         </div>
-        <div className='grid md:grid-cols-4 grid-cols-2 gap-5 m-2'>
+        <div className='grid md:grid-cols-3 grid-cols-2 gap-5 m-2'>
             {portfolioData.map((data,index)=>{
                 return <PortfolioCard img1={data.img1} img2={data.img2}/>
             })}
