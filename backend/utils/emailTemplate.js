@@ -198,8 +198,13 @@ export const adminTemplate = (data) => `<!DOCTYPE html>
                     <td>Add-ons:</td>
                     <td>${data.addons}</td>
                 </tr>
-               <td><img style="width: 100%; max-width: 300px; height: auto; display: block;" src=${`https://umbrellapackaging.com/${data.image}`} /></td>
-                <tr>
+                <td>File:</td>
+<td style="padding: 8px;">
+                        ${data.image ? 
+                            `<img style="max-width: 300px; height: auto; display: block; border: 1px solid #ddd;" src="https://umbrellapackaging.com/${data.image}" alt="Uploaded file" />` : 
+                            'No image provided'
+                        }
+                    </td>                <tr>
                     <td>Description:</td>
                     <td>${data.message}</td>
                 </tr>
