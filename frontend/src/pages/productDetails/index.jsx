@@ -950,6 +950,7 @@ const productSchema = {
     src={`${BaseUrl}/${product?.images[0]?.url}`}
     alt="Automobile Tuck End Boxes"
   />
+  // image
 )}
             </div>
 
