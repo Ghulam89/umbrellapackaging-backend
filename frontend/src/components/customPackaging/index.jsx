@@ -36,7 +36,7 @@ const CustomPackaging = () => {
           </p>
 
           <div className=" grid sm:grid-cols-3 grid-cols-2 mx-auto gap-5  mt-3.5 justify-between">
-
+            
             {categories?.map((item, index) => {
               return <div className=" w-full">
                 <CategoryCard data={item} />

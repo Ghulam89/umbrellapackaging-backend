@@ -944,11 +944,13 @@ const productSchema = {
           <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
             {/* Image Section */}
             <div className="w-full lg:w-3/12">
-              <img
-                className="rounded-xl w-full h-auto object-cover shadow-md"
-                src={`${BaseUrl}/${product?.images[0]?.url}`}
-                alt="Automobile Tuck End Boxes"
-              />
+             {product?.images?.[0]?.url && (
+  <img
+    className="rounded-xl w-full h-auto object-cover shadow-md"
+    src={`${BaseUrl}/${product.images[0].url}`}
+    alt="Automobile Tuck End Boxes"
+  />
+)}
             </div>
 
             {/* Content Section */}
