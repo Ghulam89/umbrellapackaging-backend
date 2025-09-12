@@ -3,27 +3,24 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation, Mousewheel, Keyboard, Autoplay } from 'swiper/modules';
-
-import box1 from '../../assets/images/boxes/box.webp';
-import box2 from '../../assets/images/boxes/box2.webp';
-import box3 from '../../assets/images/boxes/box3.webp';
+import { templateBox1, templateBox2, templateBox3 } from '../../assets';
 
 function TemplateSlider() {
  
   const slides = useMemo(() => [
     {
       id: 1,
-      image: box1,
+      image: templateBox1,
       alt: "Custom packaging box design 1"
     },
     {
       id: 2,
-      image: box2,
+      image: templateBox2,
       alt: "Custom packaging box design 2"
     },
     {
       id: 3,
-      image: box3,
+      image: templateBox3,
       alt: "Custom packaging box design 3"
     }
   ], []);

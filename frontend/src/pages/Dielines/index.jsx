@@ -16,7 +16,7 @@ import SpecialPackaging from '../../components/SpecialPackaging/SpecialPackaging
 import InstantQuoteModal from '../../components/common/InstantQuoteModal';
 import { BaseUrl } from '../../utils/BaseUrl';
 import PageMetadata from '../../components/common/PageMetadata';
-import CustomCupsImage from '../../assets';
+import { CustomCupsImage } from '../../assets';
 
 const categories = [
   { title: 'Auto lock Boxes',img:dieImg1},
