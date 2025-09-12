@@ -3,12 +3,12 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/umbrella.svg"  fetchpriority="high" />
+  <link rel="icon" type="image/svg+xml" href="/umbrella.svg" fetchpriority="high" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" /> -->
   <link rel="preload" href="/src/assets/fonts/helvetica-light-587ebe5a59211.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
-       <link rel="preload" as="image" href="src/assets/images/web-banner.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="src/assets/images/web-banner.webp" fetchpriority="high">
 
   <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
@@ -26,32 +26,185 @@
   <!-- End Google Tag Manager -->
 
   <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/632cae7754f06e12d896526c/1gdj8j15a';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+  <script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/632cae7754f06e12d896526c/1gdj8j15a';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+  </script>
+  <!--End of Tawk.to Script-->
 
 
- <style>
-        @font-face {
-            font-family: 'CustomFont';
-            src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('ttf');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
+  <style>
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('ttf');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
 
 
-        
-    </style>
+
+    body::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+      cursor: pointer;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background: #4440E6;
+      border-radius: 10px;
+      border: 3px solid #fff;
+      cursor: pointer;
+    }
+
+    body::-webkit-scrollbar-thumb:hover {
+      background: #4440E6;
+    }
+
+
+
+    .blog_content h2 {
+      font-size: 2rem !important;
+      color: #333 !important;
+      padding-bottom: 10px !important;
+    }
+
+    .banner_content h2 {
+      font-size: 1.8rem !important;
+      color: #333 !important;
+      padding-bottom: 10px !important;
+    }
+
+
+    .custom-shadow {
+      box-shadow: 0 10px 15px -3px #6965EA, 0 4px 6px -2px #6965EA;
+    }
+
+    .custom-shadow:hover {
+      box-shadow: 0 25px 50px -12px #6965EA;
+    }
+
+    .blog_content h3,
+    .faq_content h3 {
+      font-size: 1.75rem !important;
+      color: #000 !important;
+      padding-bottom: 9px !important;
+    }
+
+    .blog_content p,
+
+    .faq_content p {
+      color: #333 !important;
+      font-size: 16px !important;
+      padding-bottom: 8px !important;
+    }
+
+    .blog_content table {
+      border: 1px solid gray !important;
+      margin-bottom: 15px !important;
+    }
+
+    .blog_content table tbody tr td {
+      padding: 15px !important;
+      width: auto !important;
+      font-size: 14px !important;
+      border: 1px solid hsla(0, 0%, 50.2%, .5019607843);
+    }
+
+
+    .blog_content table tbody tr:nth-child(odd) td {
+      background-color: hsla(0, 0%, 50.2%, .0705882353) !important;
+    }
+
+    .blog_content table tbody tr:nth-child(even) td {
+      background-color: white !important;
+    }
+
+    .blog_content table tbody tr:nth-child(even) td:hover {
+      background-color: #F2F2F2 !important;
+    }
+
+    .blog_content table tbody tr:hover {
+      background-color: #F2F2F2 !important;
+    }
+
+    .blog_content a,
+
+    .faq_content a {
+      color: #4440E6 !important;
+      font-size: 16px;
+    }
+
+    .faq_content p {
+      color: #777 !important;
+      font-size: 14px !important;
+    }
+
+    .overflow-y-auto::-webkit-scrollbar {
+
+      width: 6px !important;
+
+    }
+
+    .overflow-y-auto::-webkit-scrollbar-track {
+      background-color: transparent !important;
+    }
+
+    .overflow-y-auto::-webkit-scrollbar-thumb {
+      background-color: #4440E6 !important;
+      border-radius: 4px !important;
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box !important;
+      -webkit-line-clamp: 2 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box !important;
+      -webkit-line-clamp: 3 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+    }
+
+
+
+
+    @media screen and (max-width: 480px) {
+      .banner_content h2 {
+        font-size: 1.3rem !important;
+        color: #333 !important;
+        padding-bottom: 10px !important;
+      }
+
+      .banner_content p {
+        font-size: 14px !important;
+      }
+
+
+      .blog_content h2 {
+        font-size: 1.3rem !important;
+        color: #333 !important;
+        padding-bottom: 10px !important;
+      }
+
+    }
+  </style>
 
   <link href="src/App.css" rel="stylesheet">
 
@@ -62,32 +215,33 @@ s0.parentNode.insertBefore(s1,s0);
 
 <body>
   <div id="root"><!--app-html--></div>
-  <script defer type="module" src="/src/entry-client.jsx"   fetchpriority="high"></script>
+  <script type="module" src="/src/entry-client.jsx" fetchpriority="high"></script>
   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
 
-<script>
-        
-        window.addEventListener('load', function() {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'App.css';
-            document.head.appendChild(link);
-            
-            const fontLink = document.createElement('link');
-            fontLink.rel = 'preload';
-            fontLink.href = '/src/assets/fonts/helvetica-light-587ebe5a59211.ttf';
-            fontLink.as = 'font';
-            fontLink.crossOrigin = 'anonymous';
-            document.head.appendChild(fontLink);
-        });
-        
-        document.fonts.ready.then(() => {
-            document.body.style.fontFamily = 'CustomFont, sans-serif';
-        });
-    </script>
+  <script>
+
+    window.addEventListener('load', function () {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'App.css';
+      document.head.appendChild(link);
+
+      const fontLink = document.createElement('link');
+      fontLink.rel = 'preload';
+      fontLink.href = '/src/assets/fonts/helvetica-light-587ebe5a59211.ttf';
+      fontLink.as = 'font';
+      fontLink.crossOrigin = 'anonymous';
+      document.head.appendChild(fontLink);
+    });
+
+    document.fonts.ready.then(() => {
+      document.body.style.fontFamily = 'CustomFont, sans-serif';
+    });
+  </script>
 </body>
+
 </html>
