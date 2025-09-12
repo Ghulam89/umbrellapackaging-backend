@@ -1,7 +1,7 @@
-@import "tailwindcss";
+ @import "tailwindcss";
 
 
-
+/*
 body::-webkit-scrollbar {
   width: 12px;
   height: 12px;
@@ -108,7 +108,6 @@ h6 {
 }
 
 
-/* Zebra striping - alternate row colors */
 .blog_content table tbody tr:nth-child(odd) td {
   background-color: hsla(0, 0%, 50.2%, .0705882353) !important;
 }
@@ -187,4 +186,4 @@ h6 {
   padding-bottom: 10px !important;
 }
 
-}
+} */
