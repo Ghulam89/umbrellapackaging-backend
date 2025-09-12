@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -12,6 +12,10 @@ import icon5 from '../../assets/images/icon/cheapest-price.png';
 import icon6 from '../../assets/images/icon/Free-delivery.png';
 
 const CustomPackagingApart = () => {
+
+    const [isMounted, setIsMounted] = useState(false);
+
+
   const data = useMemo(() => [
     {
       id: 1,
@@ -50,7 +54,9 @@ const CustomPackagingApart = () => {
       description: 'Enjoy the added perk of free shipping on your orders, making it even more cost-effective for you.'
     }
   ], []);
-
+ useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const swiperConfig = useMemo(() => ({
     slidesPerView: 1,
     spaceBetween: 10,
@@ -78,11 +84,13 @@ const CustomPackagingApart = () => {
   }), []);
  // Preload images to prevent layout shifts
   useEffect(() => {
-    data.forEach(item => {
-      const img = new Image();
-      img.src = item.icon;
-    });
-  }, [data]);
+    if (isMounted) {
+      data.forEach(item => {
+        const img = new Image();
+        img.src = item.icon;
+      });
+    }
+  }, [data, isMounted]);
   return (
     <div className="sm:max-w-6xl my-6 max-w-[95%] mx-auto">
       <div className="text-center pb-3">

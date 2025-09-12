@@ -5,7 +5,6 @@ import dieImg2 from '../../assets/images/dielines/Bakery-Boxes_.webp';
 import dieImg3 from '../../assets/images/dielines/Bookend-Boxes_-1.webp';
 import dieImg4 from '../../assets/images/dielines/Burger-Boxes_-1.webp';
 import dieImg5 from '../../assets/images/dielines/Child-Resistant.webp';
-import dieImg6 from '../../assets/images/dielines/Custom-Cups_.webp';
 import dieImg7 from '../../assets/images/dielines/Face-Mask-Boxes-1-1.webp';
 import dieImg8 from '../../assets/images/dielines/Gable-Boxes_-1.webp';
 import dieImg9 from '../../assets/images/dielines/Gloves-Boxes_.webp';
@@ -17,6 +16,7 @@ import SpecialPackaging from '../../components/SpecialPackaging/SpecialPackaging
 import InstantQuoteModal from '../../components/common/InstantQuoteModal';
 import { BaseUrl } from '../../utils/BaseUrl';
 import PageMetadata from '../../components/common/PageMetadata';
+import CustomCupsImage from '../../assets';
 
 const categories = [
   { title: 'Auto lock Boxes',img:dieImg1},
@@ -24,7 +24,7 @@ const categories = [
   { title: 'Bookend Boxes',img:dieImg3 },
   { title: 'Burger Boxes',img:dieImg4},
   { title: 'Child Resistant',img:dieImg5},
-  { title: 'Custom Cups',img:dieImg6},
+  { title: 'Custom Cups',img:CustomCupsImage},
   { title: 'Face Mask Boxes',img:dieImg7},
   { title: 'Gable Boxes',img:dieImg8},
   { title: 'Gloves Boxes',img:dieImg9},
