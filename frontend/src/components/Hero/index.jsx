@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
-import Hero1 from "../../assets/images/web-banner.webp";
 import Icon1 from '../../assets/images/icon/free quote.svg';
 import Icon3 from '../../assets/images/icon/Free Design support.svg';
 import Icon2 from '../../assets/images/icon/Free Lamination.svg';
@@ -9,6 +8,7 @@ import Icon5 from '../../assets/images/icon/FSC Certified.svg';
 import Icon6 from '../../assets/images/icon/Quickest Turnaround.svg';
 import InstantQuoteModal from "../common/InstantQuoteModal";
 import { Link } from "react-router-dom";
+import { Hero1 } from "../../assets";
 const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
