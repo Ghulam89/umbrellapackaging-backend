@@ -62,16 +62,14 @@ s0.parentNode.insertBefore(s1,s0);
 
 <body>
   <div id="root"><!--app-html--></div>
-  <script type="module" src="/src/entry-client.jsx"   fetchpriority="high"></script>
+  <script defer type="module" src="/src/entry-client.jsx"   fetchpriority="high"></script>
   <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 
-
-</body>
-<script defer>
+<script>
         
         window.addEventListener('load', function() {
             const link = document.createElement('link');
@@ -91,5 +89,5 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             document.body.style.fontFamily = 'CustomFont, sans-serif';
         });
     </script>
-
+</body>
 </html>
