@@ -34,7 +34,7 @@
     "react-toastify": "^11.0.5",
     "redux-persist": "^6.0.0",
     "sirv": "^3.0.1",
-    "swiper": "^11.2.10",
+    "swiper": "^12.0.1",
     "tailwindcss": "^4.1.11",
     "yup": "^1.6.1"
   },
