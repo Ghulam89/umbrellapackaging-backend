@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
-import Icon1 from '../../assets/images/icon/free quote.svg';
-import Icon3 from '../../assets/images/icon/Free Design support.svg';
-import Icon2 from '../../assets/images/icon/Free Lamination.svg';
-import Icon4 from '../../assets/images/icon/free shipping.svg';
-import Icon5 from '../../assets/images/icon/FSC Certified.svg';
-import Icon6 from '../../assets/images/icon/Quickest Turnaround.svg';
 import InstantQuoteModal from "../common/InstantQuoteModal";
 import { Link } from "react-router-dom";
-import { Hero1 } from "../../assets";
+import { Hero1, Icon1, Icon2, Icon3, Icon4, Icon5, Icon6 } from "../../assets";
 const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (

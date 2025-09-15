@@ -7,13 +7,13 @@ import map from '../../assets/images/map-01.png'
 import Icon1 from '../../assets/images/icon/free quote.svg';
 import Icon3 from '../../assets/images/icon/Free Design support.svg';
 import Icon2 from '../../assets/images/icon/Free Lamination.svg';
-import aboutVideo from '../../assets/videos/about.mp4'
 import Icon4 from '../../assets/images/icon/free shipping.svg';
 import Icon5 from '../../assets/images/icon/FSC Certified.svg';
 import Icon6 from '../../assets/images/icon/Quickest Turnaround.svg';
 import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart';
 import { BaseUrl } from '../../utils/BaseUrl';
 import PageMetadata from '../../components/common/PageMetadata';
+import { aboutVideo } from '../../assets';
 
 export const About = () => {
 

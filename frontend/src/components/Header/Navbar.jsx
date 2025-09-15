@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import logo from "../../assets/images/umbrella-logo.svg";
 import Button from "../common/Button";
 import BottomNav from "./BottomNav";
 import { Link } from "react-router-dom";
@@ -8,6 +7,7 @@ import AddReviews from "../CustomerReviews/AddReviews";
 import Input from "../common/Input";
 import GetQuoteModal from "../common/GetQuoteModal";
 import { BaseUrl } from "../../utils/BaseUrl";
+import { logo } from "../../assets";
 
 const Navbar = () => {
   const [menu, setMenu] = useState(false);

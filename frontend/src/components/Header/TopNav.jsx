@@ -12,11 +12,9 @@ import {
 import { MdEmail } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
 import { AiOutlineUser } from "react-icons/ai";
-import usa from "../../assets/images/flag/us.svg";
-import uk from "../../assets/images/flag/uk.svg";
-import canada from "../../assets/images/flag/canada.svg";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { canada, uk, usa } from "../../assets";
 
 const TopNav = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);

@@ -2,8 +2,8 @@ import React, { useEffect, useState, lazy, Suspense } from 'react';
 import Button from '../common/Button';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
-import faq from '../../assets/images/faq.png';
 import { Link } from 'react-router-dom';
+import { faq } from '../../assets';
 
 const Accordion = lazy(() => import('../common/Accordion'));
 

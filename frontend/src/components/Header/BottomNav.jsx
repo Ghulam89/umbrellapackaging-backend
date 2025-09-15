@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FaAngleDown, FaTimes } from "react-icons/fa";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import logo from "../../assets/images/umbrella-logo.svg";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 import BrandsData from "../../api/BrandsData";
+import { logo } from "../../assets";
 
 const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);

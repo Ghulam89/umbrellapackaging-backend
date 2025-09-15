@@ -947,9 +947,10 @@ const productSchema = {
              {product?.images?.[0]?.url && (
   <img
     className="rounded-xl w-full h-auto object-cover shadow-md"
-    src={`${BaseUrl}/${product.images[0].url}`}
-    alt="Automobile Tuck End Boxes"
+    src={`${BaseUrl}/${product?.images[0]?.url}`}
+    alt={product?.images[0]?.altText}
   />
+  // image
 )}
             </div>
 

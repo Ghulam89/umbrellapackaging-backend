@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Tabs from "../common/Tabs";
 import CustomBoxCard from "../common/CustomBoxCard";
-import Box1 from '../../assets/images/boxMaterial/rigid-box.webp';
-import Box2 from '../../assets/images/boxMaterial/corrugated2.webp';
-import Box3 from '../../assets/images/boxMaterial/kraft.webp';
-import Box4 from '../../assets/images/boxMaterial/cardboard.webp';
-import Box5 from '../../assets/images/boxMaterial/blak-linen-boxes.webp';
-import Box6 from '../../assets/images/boxMaterial/white-linen-boxes.webp';
-import Box7 from '../../assets/images/boxMaterial/bux-borad-images.webp';
+import { Box1, Box2, Box3, Box4, Box5, Box6, Box7 } from "../../assets";
 
 // Preload critical images to prevent layout shifts
 const preloadImages = (imageUrls) => {

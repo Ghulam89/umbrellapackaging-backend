@@ -1,25 +1,6 @@
-import React from "react";
 import Tabs from "../common/Tabs";
 import SpecialCard from "../common/SpecialCard";
-import special1  from "../../assets/images/special/special-product1.webp";
-import special2  from "../../assets/images/special/special-product2.webp";
-import special3  from "../../assets/images/special/special-product3.webp";
-import special4  from "../../assets/images/special/special-product4.webp";
-import special5  from "../../assets/images/special/special-product5.webp";
-import special6  from "../../assets/images/special/special-product6.webp";
-import special7  from "../../assets/images/special/special-product7.webp";
-import special8  from "../../assets/images/special/special-product8.webp";
-import special9  from "../../assets/images/special/special-product9.webp";
-import special10  from "../../assets/images/special/special-product10.webp";
-import special11  from "../../assets/images/special/special-product11.webp";
-import special12  from "../../assets/images/special/special-product12.webp";
-import special13  from "../../assets/images/special/special-product13.webp";
-import special14  from "../../assets/images/special/special-product14.webp";
-import special15  from "../../assets/images/special/special-product15.webp";
-import special16  from "../../assets/images/special/special-product16.webp";
-import special17  from "../../assets/images/special/special-product17.webp";
-import special18  from "../../assets/images/special/special-product18.webp";
-
+import { special1, special10, special11, special12, special13, special14, special15, special16, special17, special18, special2, special3, special4, special5, special6, special7, special8, special9 } from "../../assets";
 const SpecialPackaging = () => {
   const customBox = [
     {
@@ -56,7 +37,7 @@ const SpecialPackaging = () => {
         images:[
            special10,
         special11,
-        special2
+        special12
         ]
       },
       {
@@ -64,8 +45,8 @@ const SpecialPackaging = () => {
         title: "Spot UV",
         images:[
            special13,
-        special4,
-        special5
+        special14,
+        special15
         ]
       },
       {
@@ -74,7 +55,7 @@ const SpecialPackaging = () => {
         images:[
           special16,
         special17,
-        special8
+        special18
         ]
       },
   ];

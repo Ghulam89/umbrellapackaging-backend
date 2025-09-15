@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
+import { gallery1, gallery2, gallery3, gallery4, gallery5, gallery6, gallery7, gallery8, gallery9 } from "../../assets";
 
 // Import images with descriptive names
-import gallery1 from '../../assets/images/gallery/09.webp';
-import gallery2 from '../../assets/images/gallery/08.webp';
-import gallery3 from '../../assets/images/gallery/07.webp';
-import gallery4 from '../../assets/images/gallery/06.webp';
-import gallery5 from '../../assets/images/gallery/05.webp';
-import gallery6 from '../../assets/images/gallery/04.webp';
-import gallery7 from '../../assets/images/gallery/03.webp';
-import gallery8 from '../../assets/images/gallery/02.webp';
-import gallery9 from '../../assets/images/gallery/01.webp';
+
 
 const InspirationPackaging = () => {
     const [selectedImage, setSelectedImage] = useState(null);
