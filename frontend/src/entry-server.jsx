@@ -20,7 +20,6 @@ export async function render(url) {
   const helmetContext = {};
   let serverData = null;
   let CategoryProducts = null;
-  
 
   try {
     if (baseUrl.startsWith("/category/")) {
