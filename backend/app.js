@@ -450,7 +450,6 @@ app.use('*', async (req, res, next) => {
       .replace(
         '<!--server-data-->', 
         `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})}</script>`
-        `<script>window.__CATEGORY_PRODUCTS__  = ${JSON.stringify(rendered.categoryProducts || {})}</script>`
       );
     
     if (isProduction && res.statusCode === 200) {
