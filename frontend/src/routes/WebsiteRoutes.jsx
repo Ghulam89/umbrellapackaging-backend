@@ -84,21 +84,21 @@ export default function useWebsiteRoutes(serverData, CategoryProducts) {
       path: '/category/:slug',
       element: <Category
         key={`category-${location.pathname}`}
-        serverData={serverData}
+        serverData={serverData.serverData}
       />
     },
     {
       path: '/blog/:slug',
       element: <SingleBlog
         key={`blog-${location.pathname}`}
-        serverData={serverData}
+        serverData={serverData.serverData}
       />
     },
     {
       path: '/sub-category/:slug',
       element: <SubCategory
         key={`subcategory-${location.pathname}`}
-        serverData={serverData}
+        serverData={serverData.serverData}
         CategoryProducts={CategoryProducts}
       />
     },
@@ -107,7 +107,7 @@ export default function useWebsiteRoutes(serverData, CategoryProducts) {
       element: (
         <ProductDetailsWrapper
           key={`product-${location.pathname}`}
-          serverData={serverData}
+          serverData={serverData.serverData}
         />
       )
     },
