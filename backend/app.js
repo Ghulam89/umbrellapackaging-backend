@@ -441,16 +441,19 @@ app.use('*', async (req, res, next) => {
     // Race between render and timeout
     rendered = await Promise.race([renderPromise, timeoutPromise]);
     
-    const html = template
-      .replace(
-        '<!--app-head-->',
-        `\n${rendered.helmet?.title || ''}\n${rendered.helmet?.meta || ''}\n${rendered.helmet?.link || ''}\n${rendered.helmet?.script || ''}\n`
-      )
-      .replace('<!--app-html-->', rendered.html || '')
-      .replace(
-        '<!--server-data-->', 
-        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})}</script>`
-      );
+   const html = template
+  .replace(
+    '<!--app-head-->',
+    `\n${rendered.helmet?.title || ''}\n${rendered.helmet?.meta || ''}\n${rendered.helmet?.link || ''}\n${rendered.helmet?.script || ''}\n`
+  )
+  .replace('<!--app-html-->', rendered.html || '')
+  .replace(
+    '<!--server-data-->', 
+    `<script>
+      window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})};
+      window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || {})};
+    </script>`
+  );
     
     if (isProduction && res.statusCode === 200) {
       ssrCache.set(cacheKey, {
