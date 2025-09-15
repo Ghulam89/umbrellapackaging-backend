@@ -453,7 +453,7 @@ const productSchema = {
   return (
     <>
      
- 
+    
         <PageMetadata
           title={product.metaTitle || "Custom Packaging Solutions"}
           description={product.metaDescription || ""}
@@ -468,7 +468,7 @@ const productSchema = {
           robots={product.robots || serverData.robots}
           
         />
-
+      
 
       <section className='py-8'>
         <div className='lg:max-w-6xl max-w-[95%] bg-[#F7F7F7] rounded-lg p-2 flex lg:flex-row flex-col gap-4 mx-auto'>
@@ -947,10 +947,9 @@ const productSchema = {
              {product?.images?.[0]?.url && (
   <img
     className="rounded-xl w-full h-auto object-cover shadow-md"
-    src={`${BaseUrl}/${product?.images[0]?.url}`}
-    alt={product?.images[0]?.altText}
+    src={`${BaseUrl}/${product.images[0].url}`}
+    alt="Automobile Tuck End Boxes"
   />
-  // image
 )}
             </div>
 
