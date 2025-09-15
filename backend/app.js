@@ -414,7 +414,7 @@ app.use('*', async (req, res, next) => {
       // Development mode
       try {
         template = await fs.readFile(
-          path.join(__dirname, '../frontend/index.html'), 
+          path.join(__dirname, '../frontend/dist/client/index.html'), 
           'utf-8'
         );
         
