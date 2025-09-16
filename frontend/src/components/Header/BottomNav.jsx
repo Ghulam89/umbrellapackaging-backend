@@ -180,7 +180,8 @@ const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
                   <div className="flex justify-between items-center">
                     <NavLink
                       to={`/category/${category?.slug}`}
-                      className="block py-3 px-4 text-[#333333] font-medium flex-grow transition-colors hover:bg-gray-100"
+                      style={{fontSize:'13px'}}
+                      className="block py-3 px-4  text-[#333333] font-medium flex-grow transition-colors hover:bg-gray-100"
                       onClick={handleLinkClick}
                     >
                       {category.name}

@@ -51,7 +51,18 @@ function ProductDetailsWrapper({ serverData }) {
     }
   }, [slug, serverData]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="" style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)', 
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 9999
+      }}></div>;
   if (!loading && (error || !productData)) return <NotFound />;
 
   return <ProductDetails serverData={productData} />;

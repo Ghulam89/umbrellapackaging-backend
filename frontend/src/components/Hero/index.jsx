@@ -20,25 +20,25 @@ const Hero = () => {
               <Link to={'/sub-category/fashion-apparel-packaging-boxes'}>
                 <Button
                   label={"Apparel Boxes"}
-                  className="   py-1 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white "
+                  className="   py-2 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white "
                 />
               </Link>
               <Link to={'/sub-category/food-packaging-boxes'}>
                 <Button
                   label={"Food Boxes"}
-                  className="  py-1 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"
+                  className=" py-2 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"
                 />
               </Link>
               <Link to={'/sub-category/cbd-packaging-boxes'}>
                 <Button
                   label={"CBD Boxes"}
-                  className="   py-1 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"
+                  className="   py-2 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"
                 />
               </Link>
               <Link to={'/sub-category/custom-cardboard-boxes'}>
                 <Button
                   label={"Cardboard Boxes"}
-                  className="   py-1 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"
+                  className="  py-2 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"
                 />
               </Link>
 

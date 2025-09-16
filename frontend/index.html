@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/umbrella.svg" fetchpriority="high" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <script src="https://cdn.tailwindcss.com"></script>
   <link href="src/App.css" rel="stylesheet" preload>
   <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
   <link rel="preload" href="/src/assets/fonts/helvetica-light-587ebe5a59211.ttf" as="font" type="font/ttf" crossorigin>
@@ -49,23 +50,7 @@
       font-display: swap;
     }
 
-
-    /* Add critical CSS to prevent layout shift */
-    body {
-      margin: 0;
-      font-family: 'CustomFont', sans-serif;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    body.loaded {
-      opacity: 1;
-    }
-
-    /* Add minimal styles to prevent complete FOUC */
-    #root {
-      min-height: 100vh;
-    }
+    
   </style>
 
   <!--app-head-->

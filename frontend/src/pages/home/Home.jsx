@@ -17,6 +17,7 @@ import FAQ from '../../components/FAQ/FAQ'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
 import goScreen from '../../assets/images/goScreen.webp'
+import { Hero1 } from '../../assets'
 
 export const Home = () => {
 
@@ -28,10 +29,10 @@ export const Home = () => {
     canonicalUrl: BaseUrl,
     robots:'index, follow',
     ogUrl: BaseUrl,
-    ogImage: `${BaseUrl}/images/web-banner.webp`,
+    ogImage: `${BaseUrl}${Hero1}`,
     ogImageWidth: "768",
     ogImageHeight: "499",
-    ogImageType: "image/webp",
+    ogImageType: "images/webp",
     modifiedTime: "2025-06-13T15:18:43+00:00",
     homeSchema : {
   "@context": "https://schema.org",
