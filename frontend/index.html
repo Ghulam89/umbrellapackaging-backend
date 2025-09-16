@@ -3,9 +3,9 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/umbrella.svg" fetchpriority="high" />
+  <link rel="icon" type="image/svg+xml" href="/umbrella.svg"  fetchpriority="high" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="src/App.css" rel="stylesheet" preload>
   <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
   <link rel="preload" href="/src/assets/fonts/helvetica-light-587ebe5a59211.ttf" as="font" type="font/ttf" crossorigin>
@@ -27,64 +27,64 @@
   <!-- End Google Tag Manager -->
 
   <!--Start of Tawk.to Script-->
-  <script type="text/javascript">
-    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-    (function () {
-      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-      s1.async = true;
-      s1.src = 'https://embed.tawk.to/632cae7754f06e12d896526c/1gdj8j15a';
-      s1.charset = 'UTF-8';
-      s1.setAttribute('crossorigin', '*');
-      s0.parentNode.insertBefore(s1, s0);
-    })();
-  </script>
-  <!--End of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/632cae7754f06e12d896526c/1gdj8j15a';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 
 
-  <style>
-    @font-face {
-      font-family: 'CustomFont';
-      src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('ttf');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
+ <style>
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('ttf');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
 
-    
-  </style>
+
+        
+    </style>
 
   <!--app-head-->
 </head>
 
 <body>
   <div id="root"><!--app-html--></div>
-  <script type="module" src="/src/entry-client.jsx" fetchpriority="high"></script>
+  <script type="module" src="/src/entry-client.jsx"   fetchpriority="high"></script>
   <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
-
-  <script>
-    window.addEventListener('load', function () {
-      document.body.classList.add('loaded');
-      if (!sessionStorage.getItem('fontsLoaded')) {
-        const fontLink = document.createElement('link');
-        fontLink.rel = 'preload';
-        fontLink.href = '/src/assets/fonts/helvetica-light-587ebe5a59211.ttf';
-        fontLink.as = 'font';
-        fontLink.crossOrigin = 'anonymous';
-        fontLink.onload = function () {
-          sessionStorage.setItem('fontsLoaded', 'true');
-        };
-        document.head.appendChild(fontLink);
-      }
-    });
-
-    if (sessionStorage.getItem('fontsLoaded')) {
-      document.body.style.fontFamily = 'CustomFont, sans-serif';
-    }
-  </script>
+<script>
+        
+        window.addEventListener('load', function() {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'App.css';
+            document.head.appendChild(link);
+            
+            const fontLink = document.createElement('link');
+            fontLink.rel = 'preload';
+            fontLink.href = '/src/assets/fonts/helvetica-light-587ebe5a59211.ttf';
+            fontLink.as = 'font';
+            fontLink.crossOrigin = 'anonymous';
+            document.head.appendChild(fontLink);
+        });
+        
+        document.fonts.ready.then(() => {
+            document.body.style.fontFamily = 'CustomFont, sans-serif';
+        });
+    </script>
 
 </body>
 
