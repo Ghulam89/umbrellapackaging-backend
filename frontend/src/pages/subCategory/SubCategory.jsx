@@ -204,7 +204,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
         description={categoryData?.metaDescription || serverData?.metaDescription || ""}
         keywords={categoryData?.keywords || serverData?.keywords || ""}
         ogUrl={`${BaseUrl}/category/${slug}`}
-        ogImage={`${BaseUrl}/${categoryData?.bannerImage}`}
+        ogImage={`${BaseUrl}/${serverData?.image}`}
         ogImageWidth="1200"
         ogImageHeight="630"
         canonicalUrl={`${BaseUrl}/sub-category/${slug}`}

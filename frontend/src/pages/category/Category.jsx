@@ -81,7 +81,7 @@ const Category = ({ serverData }) => {
         description={categoryData?.metaDescription || serverData?.metaDescription || ""}
         keywords={categoryData?.keywords || serverData?.keywords || ""}
         ogUrl={`${BaseUrl}/category/${slug}`}
-        ogImage={`${BaseUrl}/${categoryData?.bannerImage}`}
+        ogImage={`${BaseUrl}/${serverData?.bannerImage}`}
         ogImageWidth="1200"
         ogImageHeight="630"
         canonicalUrl={`${BaseUrl}/category/${slug}`}

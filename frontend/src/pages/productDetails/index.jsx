@@ -404,7 +404,7 @@ const productSchema = {
    "@context": "https://schema.org",
   "@type": "Product",
   "name": serverData?.name,
-  "image": `${BaseUrl}/${serverData?.name?.images?.[0]}`,
+  "image": `${BaseUrl}/${serverData?.images?.[0]?.url}`,
   "description": serverData?.metaDescription,
   "sku": "12345",
   "brand": {
@@ -459,7 +459,7 @@ const productSchema = {
           description={product.metaDescription || ""}
           keywords={product.keywords || ""}
           ogUrl={`${BaseUrl}/category/${slug}`}
-          ogImage={`${BaseUrl}/${product?.images?.[0]?.url || ""}`}
+          ogImage={`${BaseUrl}/${serverData?.images?.[0]?.url || ""}`}
           ogImageWidth="1200"
           ogImageHeight="630"
           canonicalUrl={`${BaseUrl}/${slug}`}
