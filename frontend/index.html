@@ -5,41 +5,22 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/umbrella.svg"  fetchpriority="high" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+   <!-- Preconnect for faster external requests -->
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+
   <link href="src/App.css" rel="stylesheet" media="all">
   <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
+
+  <!-- Preload font & banner -->
   <link rel="preload" href="/src/assets/fonts/helvetica-light-587ebe5a59211.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" as="image" href="src/assets/images/web-banner.webp" fetchpriority="high">
-
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-
-    })(window, document, 'script', 'dataLayer', 'GTM-MTQHTB2V');</script>
-  <!-- End Google Tag Manager -->
-
-  <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/632cae7754f06e12d896526c/1gdj8j15a';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+  </script>
 
  <style>
         @font-face {
@@ -60,11 +41,18 @@ s0.parentNode.insertBefore(s1,s0);
 <body>
   <div id="root"><!--app-html--></div>
   <script type="module" src="/src/entry-client.jsx"   fetchpriority="high"></script>
-  <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-
+ <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-MTQHTB2V"></script>
+ <script>
+    window.addEventListener('load', function () {
+      const s1 = document.createElement("script");
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/632cae7754f06e12d896526c/1gdj8j15a';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      document.body.appendChild(s1);
+    });
+  </script>
 <script>
         
         window.addEventListener('load', function() {
