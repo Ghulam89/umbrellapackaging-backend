@@ -17,7 +17,7 @@ import FAQ from '../../components/FAQ/FAQ'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
 import goScreen from '../../assets/images/goScreen.webp'
-import { Hero1 } from '../../assets'
+import { Hero1, logo } from '../../assets'
 
 export const Home = () => {
 
@@ -40,8 +40,8 @@ export const Home = () => {
   "name": "Umbrella Custom Packaging",
   "hasMap": "https://www.google.com/maps/place/Umbrella+Custom+Packaging+USA/@34.0304757,-118.4009978,17z/data=!3m2!4b1!5s0x80c2bbd3055d51a3:0x68496cbd465819b1!4m6!3m5!1s0x80c2bbbf80eec803:0x8425555061bf7fe8!8m2!3d34.0304757!4d-118.4009978!16s%2Fg%2F11smvg80n4?entry=ttu&g_ep=EgoyMDI1MDcxMy4wIKXMDSoASAFQAw%3D%3D",
   "url": "https://umbrellapackaging.com",
-  "logo": "https://umbrellapackaging.com/src/assets/images/umbrella-logo.svg",
-  "image": "https://umbrellapackaging.com/src/assets/images/web-banner.webp",
+  "logo": `${BaseUrl}${logo}`,
+  "image": `${BaseUrl}${Hero1}`,
   "telephone": "+1-747-247-0456",
   "description": "Get high-quality custom packaging boxes at wholesale prices. We offer affordable packaging for businesses of all sizes. Enjoy bulk discounts, free design support, and fast, reliable shipping. Order now for unmatched prices!",
   "founder": {
@@ -96,6 +96,7 @@ export const Home = () => {
     }
   ],
   "sameAs": [
+    "https://www.upwork.com/umbrellapackaging",
     "https://www.facebook.com/umbrellapackaging",
     "https://www.instagram.com/umbrellacustompackaging/",
     "https://www.youtube.com/channel/UCkxeWyAJqxjFSzlbnSoIVLQ",
