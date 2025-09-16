@@ -2,88 +2,124 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/umbrella.svg"  fetchpriority="high" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="src/App.css" rel="stylesheet">
-  <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/umbrella.svg" as="image" type="image/svg+xml" fetchpriority="high">
+  <link rel="preload" href="src/assets/images/web-banner.webp" as="image" fetchpriority="high">
   <link rel="preload" href="/src/assets/fonts/helvetica-light-587ebe5a59211.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" as="image" href="src/assets/images/web-banner.webp" fetchpriority="high">
+  
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://embed.tawk.to">
+  
+  <!-- CSS Resources -->
+  <link rel="stylesheet" href="src/App.css" media="all">
+  
+  <!-- Inline critical Tailwind CSS (optional, if you know which utilities you need) -->
+  <style>
+    /* Critical CSS would go here */
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+    
+    body {
+      font-family: 'CustomFont', sans-serif;
+      margin: 0;
+    }
+    
+    /* Add minimal styles to prevent layout shift while loading */
+    #root {
+      min-height: 100vh;
+    }
+    
+    .loaded {
+      opacity: 1;
+      transition: opacity 0.3s ease-in;
+    }
+  </style>
+  
   <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-
-    })(window, document, 'script', 'dataLayer', 'GTM-MTQHTB2V');</script>
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MTQHTB2V');
+  </script>
   <!-- End Google Tag Manager -->
-
-  <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/632cae7754f06e12d896526c/1gdj8j15a';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-
-
- <style>
-        @font-face {
-            font-family: 'CustomFont';
-            src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('ttf');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-
-
-        
-    </style>
-
-  <!--app-head-->
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/umbrella.svg">
+  
+  <!-- Title should be added for SEO -->
+  <title>Your Website Title</title>
+  
+  <!-- Add meta description for SEO -->
+  <meta name="description" content="Your website description">
 </head>
 
 <body>
-  <div id="root"><!--app-html--></div>
-  <script type="module" src="/src/entry-client.jsx"   fetchpriority="high"></script>
   <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-<script>
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  
+  <div id="root"><!--app-html--></div>
+  
+  <!-- Defer non-critical scripts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tawk.to Script with defer -->
+  <script type="text/javascript" defer>
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function() {
+      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/632cae7754f06e12d896526c/1gdj8j15a';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+  </script>
+  
+  <!-- Main app script with defer -->
+  <script type="module" src="/src/entry-client.jsx" defer></script>
+  
+  <!-- Font loading optimization -->
+  <script>
+    (function() {
+      // Apply font immediately if already cached
+      if (sessionStorage.getItem('fontsLoaded')) {
+        document.documentElement.style.fontFamily = 'CustomFont, sans-serif';
+      }
+      
+      window.addEventListener('load', function() {
+        document.body.classList.add('loaded');
         
-        window.addEventListener('load', function() {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'App.css';
-            document.head.appendChild(link);
-            
-            const fontLink = document.createElement('link');
-            fontLink.rel = 'preload';
-            fontLink.href = '/src/assets/fonts/helvetica-light-587ebe5a59211.ttf';
-            fontLink.as = 'font';
-            fontLink.crossOrigin = 'anonymous';
-            document.head.appendChild(fontLink);
-        });
-        
-        document.fonts.ready.then(() => {
-            document.body.style.fontFamily = 'CustomFont, sans-serif';
-        });
-    </script>
-
+        if (!sessionStorage.getItem('fontsLoaded')) {
+          // Use Font Face Observer for better font loading control
+          const font = new FontFace('CustomFont', 'url(/src/assets/fonts/helvetica-light-587ebe5a59211.ttf)');
+          
+          font.load().then(function(loadedFont) {
+            document.fonts.add(loadedFont);
+            document.documentElement.style.fontFamily = 'CustomFont, sans-serif';
+            sessionStorage.setItem('fontsLoaded', 'true');
+          }).catch(function(error) {
+            console.error('Font loading failed:', error);
+          });
+        }
+      });
+    })();
+  </script>
 </body>
 
 </html>
