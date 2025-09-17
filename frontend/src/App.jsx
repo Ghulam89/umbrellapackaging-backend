@@ -10,10 +10,10 @@ import WhatsAppFloat from './components/SocialMedia/WhatsAppModal';
 function App({ serverData, CategoryProducts }) {
   const location = useLocation();
   const [currentUrl, setCurrentUrl] = useState('');
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    setCurrentUrl(window.location.href);
-  }, [location.pathname]);
+ useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "instant" });
+  setCurrentUrl(window.location.origin + location.pathname + location.search);
+}, [location]);
   const routes = WebsiteRoutes({ serverData, CategoryProducts })
   const element = useRoutes(routes);
   return (
