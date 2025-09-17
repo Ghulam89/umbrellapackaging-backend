@@ -13,8 +13,6 @@
   "dependencies": {
     "@paypal/react-paypal-js": "^8.8.3",
     "@reduxjs/toolkit": "^2.8.2",
-    "@tailwindcss/postcss": "^4.1.11",
-    "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.10.0",
     "compression": "^1.8.0",
     "express": "^5.1.0",
@@ -22,7 +20,6 @@
     "localforage": "^1.10.0",
     "lottie-react": "^2.4.1",
     "moment": "^2.30.1",
-    "postcss": "^8.5.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-helmet-async": "^2.0.5",

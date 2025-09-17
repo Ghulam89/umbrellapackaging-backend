@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import App from "./App";
 import "./App.css";
+import "tailwindcss";
 const serverData = window.__SERVER_DATA__ || null;
 const categoryProducts = window.__CATEGORY_PRODUCTS__ || null;
 

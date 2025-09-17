@@ -8,7 +8,6 @@ import CardSlider from "../../components/common/CardSlider";
 import CustomPackagingProduced from "../../components/CustomPackagingProduced";
 import PageMetadata from "../../components/common/PageMetadata";
 import InstantQuoteModal from "../../components/common/InstantQuoteModal";
-
 const Category = ({ serverData }) => {
 
   console.log(serverData);

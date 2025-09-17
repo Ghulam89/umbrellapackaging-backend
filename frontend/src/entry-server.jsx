@@ -8,7 +8,6 @@ import axios from "axios";
 import { BaseUrl } from "./utils/BaseUrl";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-
 export async function render(url) {
   const normalizedUrl = url.startsWith("/") ? url : `/${url}`;
   const cleanUrl = normalizedUrl.endsWith("/")

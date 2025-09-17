@@ -3,15 +3,15 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/umbrella.svg"  fetchpriority="high" />
+  <link rel="icon" type="image/svg+xml" href="/umbrella.svg" fetchpriority="high" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <!-- Preconnect for faster external requests -->
+  <!-- Preconnect for faster external requests -->
   <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
   <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-  <link href="src/App.css" rel="stylesheet" media="all">
-  <link href="/App.css" rel="stylesheet" />
+  <link rel="stylesheet" href="src/App.css">
   <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
 
   <!-- Preload font & banner -->
@@ -23,28 +23,59 @@
     gtag('js', new Date());
   </script>
 
- <style>
-        @font-face {
-            font-family: 'CustomFont';
-            src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('ttf');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
+  <style type="text/tailwindcss">
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('ttf');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+p {
+  @apply text-[#333333] 
+}
+
+span {
+  @apply text-[#333333] text-[14px]
+}
+
+a {
+  @apply text-[13px] font-sans;
+}
+
+h1 {
+  @apply text-[#333333]
+}
 
 
-        
-    </style>
+h3 {
+  @apply font-sans opacity-90
+}
+
+h4 {
+  @apply sm:text-xl text-base
+}
+
+h5 {
+  @apply sm:text-base text-base
+}
+
+h6 {
+  @apply font-semibold
+}
+
+
+  </style>
 
   <!--app-head-->
 </head>
 
 <body>
   <div id="root"><!--app-html--></div>
-  <script type="module" src="/src/entry-client.jsx"   fetchpriority="high"></script>
-<!-- End Google Tag Manager (noscript) -->
- <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-MTQHTB2V"></script>
- <script>
+  <script type="module" src="/src/entry-client.jsx" fetchpriority="high"></script>
+  <!-- End Google Tag Manager (noscript) -->
+  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-MTQHTB2V"></script>
+  <script>
     window.addEventListener('load', function () {
       const s1 = document.createElement("script");
       s1.async = true;
@@ -54,27 +85,6 @@
       document.body.appendChild(s1);
     });
   </script>
-<script>
-        
-        window.addEventListener('load', function() {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = 'App.css';
-            document.head.appendChild(link);
-            
-            const fontLink = document.createElement('link');
-            fontLink.rel = 'preload';
-            fontLink.href = '/src/assets/fonts/helvetica-light-587ebe5a59211.ttf';
-            fontLink.as = 'font';
-            fontLink.crossOrigin = 'anonymous';
-            document.head.appendChild(fontLink);
-        });
-        
-        document.fonts.ready.then(() => {
-            document.body.style.fontFamily = 'CustomFont, sans-serif';
-        });
-    </script>
-
 </body>
 
 </html>
