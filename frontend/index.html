@@ -5,15 +5,12 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/umbrella.svg" fetchpriority="high" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link href="/src/index.css" rel="stylesheet">
   <!-- Preconnect for faster external requests -->
   <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
   <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-  <link rel="stylesheet" href="src/App.css">
   <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
-
   <!-- Preload font & banner -->
   <link rel="preload" href="/src/assets/fonts/helvetica-light-587ebe5a59211.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" as="image" href="src/assets/images/web-banner.webp" fetchpriority="high">
@@ -23,7 +20,7 @@
     gtag('js', new Date());
   </script>
 
-  <style type="text/tailwindcss">
+  <style >
     @font-face {
       font-family: 'CustomFont';
       src: url('/src/assets/fonts/helvetica-light-587ebe5a59211.ttf') format('ttf');
@@ -31,40 +28,6 @@
       font-style: normal;
       font-display: swap;
     }
-p {
-  @apply text-[#333333] 
-}
-
-span {
-  @apply text-[#333333] text-[14px]
-}
-
-a {
-  @apply text-[13px] font-sans;
-}
-
-h1 {
-  @apply text-[#333333]
-}
-
-
-h3 {
-  @apply font-sans opacity-90
-}
-
-h4 {
-  @apply sm:text-xl text-base
-}
-
-h5 {
-  @apply sm:text-base text-base
-}
-
-h6 {
-  @apply font-semibold
-}
-
-
   </style>
 
   <!--app-head-->

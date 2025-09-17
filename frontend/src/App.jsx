@@ -7,6 +7,7 @@ import TopNav from './components/Header/TopNav';
 import { useEffect, useState } from 'react';
 import Navbar from './components/Header/Navbar';
 import WhatsAppFloat from './components/SocialMedia/WhatsAppModal';
+import "./index.css";
 function App({ serverData, CategoryProducts }) {
   const location = useLocation();
   const [currentUrl, setCurrentUrl] = useState('');
