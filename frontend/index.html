@@ -14,7 +14,7 @@
   <link rel="preload" as="image" href="src/assets/images/web-banner.webp" fetchpriority="high">
 
   <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
+  <script defer fetchpriority="low">(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
         'gtm.start':
           new Date().getTime(), event: 'gtm.js'
@@ -29,8 +29,8 @@
 
 <body>
   <div id="root"><!--app-html--></div>
-  <script type="module" src="/src/entry-client.jsx" fetchpriority="high"></script>
- 
+  <script type="module" src="/src/entry-client.jsx" defer  fetchpriority="high"></script>
+
   <script>
     window.addEventListener('load', function () {
       const s1 = document.createElement("script");
@@ -42,7 +42,7 @@
     });
   </script>
 
-   <!-- End Google Tag Manager (noscript) -->
+  <!-- End Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
