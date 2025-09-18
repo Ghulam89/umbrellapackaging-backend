@@ -91,7 +91,8 @@ const Footer = () => {
 
                                     </li>
                                 </ul>
-                                <li className=' flex  gap-2 justify-center pt-2.5 items-center'>
+                                <ul>
+                                    <li className=' flex  gap-2 justify-center pt-2.5 items-center'>
                                     <Link to={'https://maps.app.goo.gl/FCBPReqBvveR9ox96'} className=' flex   gap-1.5'>
                                         <IoLocationOutline size={25} />
                                         <p className=' text-base text-gray-700'>9854 National Blvd # 1042 Los Angeles, CA 90034 USA</p>
@@ -105,6 +106,7 @@ const Footer = () => {
                                     </Link>
 
                                 </li>
+                                </ul>
                             </div>
 
                         </div>

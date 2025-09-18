@@ -70,7 +70,7 @@ const Hero = () => {
 
         <div className=" sm:w-6/12 w-full">
 
-          <img src={Hero1} rel="preload" className="w-full" decoding="async" alt="Hero image" fetchpriority="high"/>
+          <img src={Hero1} rel="preload" className="w-full" decoding="async" alt="Hero image"/>
         </div>
         <div className=" block sm:hidden">
           <strong className=" sm:text-[38px] text-[20px] text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
