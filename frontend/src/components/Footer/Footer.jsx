@@ -55,7 +55,7 @@ const Footer = () => {
                 <div className=''>
                     <div className=' flex sm:flex-row   flex-col border-b gap-1.5 border-gray-500 justify-between pb-10 sm:pt-10 pt-0'>
                         <div className=' sm:w-4/12 w-12/12'>
-                            <Link to={'/'}>
+                            <Link to={'/'} aria-label="Visit Umbrella Packaging">
                                 <img src={logo} alt='' className=' w-36' />
                             </Link>
 
@@ -117,16 +117,16 @@ const Footer = () => {
                             <Partners />
                             <div className=' bg-white h-56  rounded-md flex   justify-center w-full items-center' >
                                 <div className=' grid   py-5 grid-cols-2 gap-6 w-full'>
-                                    <Link to={'https://www.google.com/search?q=Umbrella+Packaging&sca_esv=595745443&rlz=1C1CHBD_enPK1075PK1075&sxsrf=AM9HkKnBl0W9ivYXDrDVqm1eeUaJMzvaUQ%3A1704396144882&ei=cAWXZdq9NZDii-gPp4yrgAE&ved=0ahUKEwjatZa2usSDAxUQ8QIHHSfGChAQ4dUDCBA&uact=5&oq=Umbrella+Packaging&gs_lp=Egxnd3Mtd2l6LXNlcnAiElVtYnJlbGxhIFBhY2thZ2luZzIHECMYsAIYJzIHECMYsAIYJzIHECMYsAIYJzIHEAAYgAQYDTIHEAAYgAQYDTIGEAAYHhgNMggQABgFGB4YDTIIEAAYBRgeGA0yCBAAGAgYHhgNMggQABgIGB4YDUiZQVDqBVjyPnACeAGQAQCYAb8DoAGrEKoBBTMtNS4xuAEDyAEA-AEBwgIKEAAYRxjWBBiwA8ICChAAGAgYHhgNGA_CAgsQABiABBiKBRiGA8ICBBAjGCfCAgoQIxiABBiKBRgnwgIGEAAYBxgewgIFEAAYgATCAgQQABgewgIGEAAYBRgewgIGEAAYCBge4gMEGAAgQYgGAZAGCA&sclient=gws-wiz-serp'} className=' flex justify-center w-full items-center'>
+                                    <Link to={'https://www.google.com/search?q=Umbrella+Packaging&sca_esv=595745443&rlz=1C1CHBD_enPK1075PK1075&sxsrf=AM9HkKnBl0W9ivYXDrDVqm1eeUaJMzvaUQ%3A1704396144882&ei=cAWXZdq9NZDii-gPp4yrgAE&ved=0ahUKEwjatZa2usSDAxUQ8QIHHSfGChAQ4dUDCBA&uact=5&oq=Umbrella+Packaging&gs_lp=Egxnd3Mtd2l6LXNlcnAiElVtYnJlbGxhIFBhY2thZ2luZzIHECMYsAIYJzIHECMYsAIYJzIHECMYsAIYJzIHEAAYgAQYDTIHEAAYgAQYDTIGEAAYHhgNMggQABgFGB4YDTIIEAAYBRgeGA0yCBAAGAgYHhgNMggQABgIGB4YDUiZQVDqBVjyPnACeAGQAQCYAb8DoAGrEKoBBTMtNS4xuAEDyAEA-AEBwgIKEAAYRxjWBBiwA8ICChAAGAgYHhgNGA_CAgsQABiABBiKBRiGA8ICBBAjGCfCAgoQIxiABBiKBRgnwgIGEAAYBxgewgIFEAAYgATCAgQQABgewgIGEAAYBRgewgIGEAAYCBge4gMEGAAgQYgGAZAGCA&sclient=gws-wiz-serp'} className=' flex justify-center w-full items-center' aria-label="Visit Umbrella Packaging in Google">
                                         <img src={google} alt='' className=' w-28' />
                                     </Link>
-                                    <Link to={'https://www.trustindex.io/reviews/www.umbrellapackaging.com?lang=ko'} className=' flex justify-center items-center'>
+                                    <Link to={'https://www.trustindex.io/reviews/www.umbrellapackaging.com?lang=ko'} className=' flex justify-center items-center' aria-label="Visit Umbrella Packaging in Trustindex">
                                         <img src={trust} alt='' className=' w-36' />
                                     </Link>
-                                    <Link to={'https://www.trustpilot.com/review/umbrellapackaging.com?utm_medium=trustbox&utm_source=MicroReviewCount'} className=' flex justify-center items-center'>
+                                    <Link to={'https://www.trustpilot.com/review/umbrellapackaging.com?utm_medium=trustbox&utm_source=MicroReviewCount'} className=' flex justify-center items-center' aria-label="Visit Umbrella Packaging in Trustpilot">
                                         <img src={trustpilot} alt='' className=' w-36' />
                                     </Link>
-                                    <Link to={'https://www.sitejabber.com/reviews/umbrellapackaging.com'} className=' flex justify-center items-center'>
+                                    <Link to={'https://www.sitejabber.com/reviews/umbrellapackaging.com'} className=' flex justify-center items-center' aria-label="Visit Umbrella Packaging in Sitejabber">
                                         <img src={sitejabber} alt='' className=' w-36' />
                                     </Link>
                                 </div>
