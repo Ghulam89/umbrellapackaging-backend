@@ -36,10 +36,11 @@ const TopNav = () => {
             <Link 
               to={'https://umbrellapackaging.com/'} 
               className="flex items-center space-x-1.5"
+              aria-label="Visit Umbrella Packaging USA site"
             >
               <img 
                 src={usa} 
-                alt="USA" 
+                alt="USA Flag"  
                 className="w-8 h-6 object-contain" 
                 width={32}
                 height={24}
@@ -51,10 +52,12 @@ const TopNav = () => {
               target="_blank"
               rel="noopener noreferrer" 
               className="flex items-center space-x-1"
+               aria-label="Visit Umbrella Packaging UK site"
             >
               <img 
                 src={uk} 
-                alt="UK" 
+                    alt="UK Flag" 
+
                 className="w-8 h-6 object-contain" 
                 width={32}
                 height={24}
@@ -66,10 +69,13 @@ const TopNav = () => {
               target="_blank"
               rel="noopener noreferrer" 
               className="flex items-center space-x-1"
+                  aria-label="Visit Umbrella Packaging Canada site"
+
             >
               <img 
                 src={canada} 
-                alt="Canada" 
+                    alt="Canada Flag" 
+
                 className="w-8 h-6 object-contain" 
                 width={32}
                 height={24}
@@ -100,22 +106,22 @@ const TopNav = () => {
             </div>
             <div>
               <div className="flex space-x-3 mb-1 text-gray-600">
-                <Link target="_blank" to={'https://www.facebook.com/umbrellapackaging'}>
+                <Link target="_blank" to={'https://www.facebook.com/umbrellapackaging'} aria-label="Visit Umbrella Packaging on Facebook">
                   <FaFacebook size={17} />
                 </Link>
-                <Link target="_blank" to={'https://twitter.com/umbrellapack'}>
+                <Link target="_blank" to={'https://twitter.com/umbrellapack'} aria-label="Visit Umbrella Packaging on Twitter">
                   <FaTwitter size={17} />
                 </Link>
-                <Link target="_blank" to={'https://www.youtube.com/channel/UCkxeWyAJqxjFSzlbnSoIVLQ'}>
+                <Link target="_blank" to={'https://www.youtube.com/channel/UCkxeWyAJqxjFSzlbnSoIVLQ'} aria-label="Visit Umbrella Packaging on YouTube">
                   <FaYoutube size={17} />
                 </Link>
-                <Link target="_blank" to={'https://www.instagram.com/umbrellacustompackaging/'}>
+                <Link target="_blank" to={'https://www.instagram.com/umbrellacustompackaging/'} aria-label="Visit Umbrella Packaging on Instagram">
                   <FaInstagram size={17} />
                 </Link>
-                <Link target="_blank" to={'https://www.linkedin.com/company/umbrellacustompackaging/'}>
+                <Link target="_blank" to={'https://www.linkedin.com/company/umbrellacustompackaging/'} aria-label="Visit Umbrella Packaging on LinkedIn">
                   <FaLinkedin size={17} />
                 </Link>
-                <Link target="_blank" to={'https://wa.me/message/JTJTB4YWJYNQP1'}>
+                <Link target="_blank" to={'https://wa.me/message/JTJTB4YWJYNQP1'} aria-label="Chat with Umbrella Packaging on WhatsApp">
                   <FaWhatsapp size={17} />
                 </Link>
               </div>

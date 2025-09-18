@@ -265,7 +265,7 @@ const navigate = useNavigate();
                     Unit
                     
                   </label>
-                  <select name="unit" value={formData.unit}
+                  <select   id="Unit" name="unit" value={formData.unit}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
@@ -297,7 +297,7 @@ const navigate = useNavigate();
                   >
                     Stock
                   </label>
-                  <select name="stock" value={formData.stock}
+                  <select id="Stock" name="stock" value={formData.stock}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
@@ -328,7 +328,7 @@ const navigate = useNavigate();
                     Colors
                       
                   </label>
-                  <select name="color" value={formData.color}
+                  <select  id="Colors" name="color" value={formData.color}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
@@ -357,7 +357,7 @@ const navigate = useNavigate();
                     Printing Sides
                      
                   </label>
-                  <select name="printingSides" value={formData.printingSides}
+                  <select   id="Printing Sides" name="printingSides" value={formData.printingSides}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
@@ -394,7 +394,7 @@ const navigate = useNavigate();
                     Add-Ons
                    
                   </label>
-                  <select name="addons" value={formData.addons}
+                  <select  id="Add-Ons" name="addons" value={formData.addons}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >

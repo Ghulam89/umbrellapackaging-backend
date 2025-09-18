@@ -73,7 +73,7 @@ const Navbar = () => {
     <div className="bg-[#F7F7F7] sticky top-0 z-50 sm:pb-2.5 pb-0">
       <div className="sm:max-w-6xl relative max-w-[95%] mx-auto">
         <div className="flex space-x-5 w-full justify-between h-20 items-center">
-          <Link to={`/`}>
+          <Link to={`/`} aria-label="Visit Umbrella Packaging">
             <img src={logo} alt="" className="sm:w-[135px] w-[135px]" />
           </Link>
           <div className="w-lg sm:relative search-container" ref={searchRef}>
