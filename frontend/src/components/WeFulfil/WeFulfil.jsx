@@ -1,6 +1,6 @@
 import React from 'react'
 import { FaCircleNotch } from "react-icons/fa";
-import IndustryStandard from '../../assets/images/Industry-standard.webp'
+import { IndustryStandard } from '../../assets';
 
 function WeFulfil() {
   return (

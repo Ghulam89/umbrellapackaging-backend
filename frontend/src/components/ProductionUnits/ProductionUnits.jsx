@@ -25,7 +25,7 @@ function ProductionUnits() {
         <div 
           className='h-[300px] bg-contain flex justify-center items-center bg-no-repeat bg-center relative' 
           style={{ backgroundImage: `url(${UnitBG})` }}
-          aria-label="Production units background"
+           role="presentation"
         >
 
             <svg 

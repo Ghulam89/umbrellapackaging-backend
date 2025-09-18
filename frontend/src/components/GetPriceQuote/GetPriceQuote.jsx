@@ -420,7 +420,7 @@ const navigate = useNavigate();
                     className="block pb-1.5 text-[#333333] text-sm md:text-base font-medium"
                   >
                     Upload Your Design, Max Size 5MB
-                    <p className="flex flex-wrap gap-0.5 text-xs md:text-sm mt-1">
+                    <p  id="fileHint"  className="flex flex-wrap gap-0.5 text-xs md:text-sm mt-1">
                       Allowed File Types:
                       <span className="font-semibold"> png, pdf, jpg, jpeg, webp</span>
                     </p>
