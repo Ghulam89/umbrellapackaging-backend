@@ -6,66 +6,60 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Button from "../common/Button";
-import review from '../../assets/images/review.png';
+import review from "../../assets/images/review.png";
 import { FaStar } from "react-icons/fa";
 import AddReviews from "./AddReviews";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 
-// Star rating component for reusability
-const StarRating = ({ rating }) => {
-  return (
-    <ul className="flex justify-center gap-1">
-      {[...Array(5)].map((_, i) => (
-        <li key={i}>
-          <FaStar 
-            size={20} 
-            color={i < rating ? "#f0ad4e" : "#e4e5e9"} 
-          />
-        </li>
-      ))}
-    </ul>
-  );
-};
+// ==================== Star rating ====================
+const StarRating = React.memo(({ rating }) => (
+  <ul className="flex justify-center gap-1" aria-label={`Rating: ${rating} out of 5`}>
+    {[...Array(5)].map((_, i) => (
+      <li key={i}>
+        <FaStar
+          size={20}
+          color={i < rating ? "#f0ad4e" : "#e4e5e9"}
+          aria-label={i < rating ? "Filled star" : "Empty star"}
+        />
+      </li>
+    ))}
+  </ul>
+));
 
-// Individual review slide component
-const ReviewSlide = ({ testimonial }) => {
-  return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <StarRating rating={testimonial.rating} />
-      <p className="py-3 text-lg text-gray-600 italic">
-        {testimonial?.review}
-      </p>
-      <strong className="font-semibold text-gray-800">
-        {testimonial?.name}
-      </strong>
-      {testimonial?.position && (
-        <p className="text-sm text-gray-500">{testimonial.position}</p>
-      )}
-    </div>
-  );
-};
+// ==================== Review Slide ====================
+const ReviewSlide = React.memo(({ testimonial }) => (
+  <div className="max-w-5xl mx-auto px-4 py-8">
+    <StarRating rating={testimonial.rating} />
+    <blockquote className="py-3 text-lg text-gray-600 italic">
+      {testimonial?.review}
+    </blockquote>
+    <strong className="font-semibold text-gray-800">{testimonial?.name}</strong>
+    {testimonial?.position && (
+      <p className="text-sm text-gray-500">{testimonial.position}</p>
+    )}
+  </div>
+));
 
-// Navigation buttons component
-const NavigationButtons = () => {
-  return (
-    <div className="flex absolute top-1/2 z-40 w-full justify-between transform -translate-y-1/2">
-      <button 
-        className="custom-prev w-12 h-12 bg-[#F6F6F6] text-[#4440E6] hover:bg-[#4440E6] hover:text-white rounded-full flex items-center justify-center shadow-md ml-4"
-        aria-label="Previous review"
-      >
-        <IoIosArrowBack size={25} />
-      </button>
-      <button 
-        className="custom-next w-12 h-12 bg-[#F6F6F6] text-[#4440E6] hover:bg-[#4440E6] hover:text-white rounded-full flex items-center justify-center shadow-md mr-4"
-        aria-label="Next review"
-      >
-        <IoIosArrowForward size={25} />
-      </button>
-    </div>
-  );
-};
+// ==================== Navigation Buttons ====================
+const NavigationButtons = () => (
+  <div className="flex absolute top-1/2 z-40 w-full justify-between transform -translate-y-1/2">
+    <button
+      className="custom-prev w-12 h-12 bg-[#F6F6F6] text-[#4440E6] hover:bg-[#4440E6] hover:text-white rounded-full flex items-center justify-center shadow-md ml-4"
+      aria-label="Previous review"
+    >
+      <IoIosArrowBack size={25} />
+    </button>
+    <button
+      className="custom-next w-12 h-12 bg-[#F6F6F6] text-[#4440E6] hover:bg-[#4440E6] hover:text-white rounded-full flex items-center justify-center shadow-md mr-4"
+      aria-label="Next review"
+    >
+      <IoIosArrowForward size={25} />
+    </button>
+  </div>
+);
 
+// ==================== Customer Reviews ====================
 const CustomerReviews = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
@@ -73,15 +67,16 @@ const CustomerReviews = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Memoize the background style to prevent unnecessary re-renders
-  const backgroundStyle = useMemo(() => ({
-    backgroundImage: `url(${review})`,
-    backgroundPosition: 'center',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat'
-  }), []);
+  const backgroundStyle = useMemo(
+    () => ({
+      backgroundImage: `url(${review})`,
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+    }),
+    []
+  );
 
-  // Throttle scroll handler for better performance
   const handleScroll = useCallback(() => {
     const scrollPosition = window.scrollY;
     setIsAutoPlay(scrollPosition <= 100);
@@ -102,48 +97,55 @@ const CustomerReviews = () => {
   }, []);
 
   useEffect(() => {
-    // Add scroll event listener with throttling
-    let timeoutId = null;
-    const throttledScrollHandler = () => {
-      if (!timeoutId) {
-        timeoutId = setTimeout(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
           handleScroll();
-          timeoutId = null;
-        }, 100);
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", throttledScrollHandler);
+    window.addEventListener("scroll", onScroll);
     fetchReviews();
-    
+
     return () => {
-      window.removeEventListener("scroll", throttledScrollHandler);
-      if (timeoutId) clearTimeout(timeoutId);
+      window.removeEventListener("scroll", onScroll);
     };
   }, [fetchReviews, handleScroll]);
 
-  // Memoize swiper configuration
-  const swiperConfig = useMemo(() => ({
-    modules: [Autoplay, Pagination, Navigation],
-    autoplay: isAutoPlay ? { 
-      delay: 3000, 
-      disableOnInteraction: false,
-      pauseOnMouseEnter: true 
-    } : false,
-    loop: testimonials.length > 1,
-    navigation: {
-      nextEl: ".custom-next",
-      prevEl: ".custom-prev",
-    },
-    spaceBetween: 30,
-    slidesPerView: "auto",
-    centeredSlides: true,
-    breakpoints: {
-      640: { slidesPerView: 1 },
-      768: { slidesPerView: 1 },
-      1024: { slidesPerView: 1 },
-    }
-  }), [isAutoPlay, testimonials.length]);
+  const swiperConfig = useMemo(
+    () => ({
+      modules: [Autoplay, Pagination, Navigation],
+      autoplay: isAutoPlay
+        ? {
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }
+        : false,
+      loop: testimonials.length > 1,
+      navigation: {
+        nextEl: ".custom-next",
+        prevEl: ".custom-prev",
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      spaceBetween: 30,
+      slidesPerView: "auto",
+      centeredSlides: true,
+      breakpoints: {
+        640: { slidesPerView: 1 },
+        768: { slidesPerView: 1 },
+        1024: { slidesPerView: 1 },
+      },
+    }),
+    [isAutoPlay, testimonials.length]
+  );
 
   return (
     <div className="py-12" style={backgroundStyle}>
@@ -154,12 +156,12 @@ const CustomerReviews = () => {
         <p className="text-sm pb-5 text-gray-500">
           Share your true experience with us by writing a review below
         </p>
-        <Button 
-          onClick={() => setOpenModal(true)} 
-          label={'Write a Review'} 
-          className="mx-auto bg-[#4440E6] mb-5 text-white hover:bg-[#3730a3]" 
+        <Button
+          onClick={() => setOpenModal(true)}
+          label={"Write a Review"}
+          className="mx-auto bg-[#4440E6] mb-5 text-white hover:bg-[#3730a3]"
         />
-        
+
         {loading ? (
           <div className="py-10">Loading reviews...</div>
         ) : error ? (
@@ -177,19 +179,17 @@ const CustomerReviews = () => {
             </Swiper>
 
             {testimonials.length > 1 && <NavigationButtons />}
-
-            {/* Pagination - only show if multiple reviews */}
             {testimonials.length > 1 && (
               <div className="swiper-pagination mt-4 !relative"></div>
             )}
           </div>
         )}
       </div>
-      
-      <AddReviews 
-        isModalOpen={openModal} 
-        setIsModalOpen={setOpenModal} 
-        onReviewAdded={fetchReviews} 
+
+      <AddReviews
+        isModalOpen={openModal}
+        setIsModalOpen={setOpenModal}
+        onReviewAdded={fetchReviews}
       />
     </div>
   );
