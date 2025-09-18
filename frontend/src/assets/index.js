@@ -50,4 +50,5 @@ import Icon5 from './images/icon/FSC Certified.svg';
 import Icon6 from './images/icon/Quickest Turnaround.svg';
 import faq from './images/faq.png';
 import IndustryStandard from './images/Industry-standard.webp'
-export { CustomCupsImage, templateBox1, templateBox2, templateBox3, Hero1,usa,uk,canada,logo,special1,special2,special3,special4,special5,special6,special7,special8,special9,special10,special11,special12,special13,special14,special15,special16,special17,special18,aboutVideo,Box1,Box2,Box3,Box4,Box5,Box6,Box7,gallery1,gallery2,gallery3,gallery4,gallery5,gallery6,gallery7,gallery8,gallery9,Icon1,Icon2,Icon3,Icon4,Icon5,Icon6,faq,IndustryStandard};
+import review from "./images/review.png";
+export { CustomCupsImage, templateBox1, templateBox2, templateBox3, Hero1,usa,uk,canada,logo,special1,special2,special3,special4,special5,special6,special7,special8,special9,special10,special11,special12,special13,special14,special15,special16,special17,special18,aboutVideo,Box1,Box2,Box3,Box4,Box5,Box6,Box7,gallery1,gallery2,gallery3,gallery4,gallery5,gallery6,gallery7,gallery8,gallery9,Icon1,Icon2,Icon3,Icon4,Icon5,Icon6,faq,IndustryStandard,review};

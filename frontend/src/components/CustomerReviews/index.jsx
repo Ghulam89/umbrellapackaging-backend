@@ -6,11 +6,11 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Button from "../common/Button";
-import review from "../../assets/images/review.png";
 import { FaStar } from "react-icons/fa";
 import AddReviews from "./AddReviews";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
+import { review } from "../../assets";
 
 // ==================== Star rating ====================
 const StarRating = React.memo(({ rating }) => (
