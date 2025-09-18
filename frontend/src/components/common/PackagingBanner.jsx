@@ -14,8 +14,12 @@ function PackagingBanner({
       <div className='flex flex-col justify-center items-center'>
      <strong className='text-center sm:text-[14px] text-[13px] text-[#E97900] font-semibold' >{title}</strong>
       <label className='md:text-[38px] text-[20px] font-semibold leading-9 pt-2 text-center text-[#fff]' >{subTitle}</label>
-      <Link to={url}>
-       <Button className='bg-[#4440E6] mt-4 text-white' label={"Order Kraft Packaging"}/></Link>
+      <Link to={url} className="mt-4">
+            <Button
+              className="bg-[#4440E6] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg min-w-[150px] text-sm sm:text-base"
+              label="Order Kraft Packaging"
+            />
+          </Link>
      
       </div>
      </div>

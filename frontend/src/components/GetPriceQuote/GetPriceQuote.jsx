@@ -426,6 +426,7 @@ const navigate = useNavigate();
                     </p>
                   </label>
                   <Input
+                   id="design_upload"
                     type="file"
                     name="image"
                     onChange={handleChange}
