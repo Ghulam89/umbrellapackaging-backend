@@ -1,10 +1,9 @@
 
-import { PiSealCheckFill } from "react-icons/pi";
 import { Link } from "react-router-dom";
-import { FaArrowAltCircleDown, FaArrowAltCircleLeft, FaWhatsapp } from "react-icons/fa";
+import {FaArrowAltCircleLeft, FaWhatsapp } from "react-icons/fa";
 import Button from "../../components/common/Button";
 import Lottie from "lottie-react";
-import success from '../../animations/success.json';
+import { success } from "../../assets";
 export default function SuccessPage() {
   return (
     <div className="flex flex-col items-center justify-center  py-8 bg-gray-100">
