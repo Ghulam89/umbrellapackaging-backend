@@ -4,12 +4,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import { Pagination, Autoplay } from 'swiper/modules';
-import icon1 from '../../assets/images/icon/no-die-&-plate-charge.png';
-import icon2 from '../../assets/images/icon/No-minimum-order-qnty.png';
-import icon3 from '../../assets/images/icon/Free-design.png';
-import icon4 from '../../assets/images/icon/Quick-turnaround.png';
-import icon5 from '../../assets/images/icon/cheapest-price.png';
-import icon6 from '../../assets/images/icon/Free-delivery.png';
+import { Icon10, Icon11, Icon12, Icon7, Icon8, Icon9 } from '../../assets';
 
 const CustomPackagingApart = () => {
 
@@ -19,37 +14,37 @@ const CustomPackagingApart = () => {
   const data = useMemo(() => [
     {
       id: 1,
-      icon: icon1,
+      icon: Icon7,
       title: 'No Die & Plate Charges',
       description: 'Enjoy the benefit of no additional costs for die and plate setups on your custom orders.'
     },
     {
       id: 2,
-      icon: icon2,
+      icon: Icon8,
       title: 'No Minimum Order Qty',
       description: 'Order as few or as many items as you need without any minimum quantity restrictions.'
     },
     {
       id: 3,
-      icon: icon3,
+      icon: Icon9,
       title: 'Free Design',
       description: 'Avail professional design services without any added fees, ensuring your vision comes to life.'
     },
     {
       id: 4,
-      icon: icon4,
+      icon: Icon10,
       title: 'Quickest Turnaround',
       description: 'Get your orders processed and delivered promptly, ensuring the fastest turnaround time possible.'
     },
     {
       id: 5,
-      icon: icon5,
+      icon: Icon11,
       title: 'Cheapest Prices',
       description: 'Benefit from our regular discounted rates and get the best custom packaging at the lowest prices.'
     },
     {
       id: 6,
-      icon: icon6,
+      icon: Icon12,
       title: 'Free Shipping',
       description: 'Enjoy the added perk of free shipping on your orders, making it even more cost-effective for you.'
     }

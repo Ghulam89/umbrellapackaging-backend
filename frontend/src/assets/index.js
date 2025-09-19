@@ -48,8 +48,16 @@ import Icon2 from './images/icon/Free Lamination.svg';
 import Icon4 from './images/icon/free shipping.svg';
 import Icon5 from './images/icon/FSC Certified.svg';
 import Icon6 from './images/icon/Quickest Turnaround.svg';
+import Icon7 from './images/icon/no-die-&-plate-charge.png';
+import Icon8 from './images/icon/No-minimum-order-qnty.png';
+import Icon9 from './images/icon/Free-design.png';
+import Icon10 from './images/icon/Quick-turnaround.png';
+import Icon11 from './images/icon/cheapest-price.png';
+import Icon12 from './images/icon/Free-delivery.png';
 import faq from './images/faq.png';
 import IndustryStandard from './images/Industry-standard.webp'
 import review from "./images/review.png";
 import success from '../animations/success.json';
-export { success,CustomCupsImage, templateBox1, templateBox2, templateBox3, Hero1,usa,uk,canada,logo,special1,special2,special3,special4,special5,special6,special7,special8,special9,special10,special11,special12,special13,special14,special15,special16,special17,special18,aboutVideo,Box1,Box2,Box3,Box4,Box5,Box6,Box7,gallery1,gallery2,gallery3,gallery4,gallery5,gallery6,gallery7,gallery8,gallery9,Icon1,Icon2,Icon3,Icon4,Icon5,Icon6,faq,IndustryStandard,review};
+import banner from './images/banner.jpg';
+import map from './images/map-01.png';
+export {map, banner,success,CustomCupsImage, templateBox1, templateBox2, templateBox3, Hero1,usa,uk,canada,logo,special1,special2,special3,special4,special5,special6,special7,special8,special9,special10,special11,special12,special13,special14,special15,special16,special17,special18,aboutVideo,Box1,Box2,Box3,Box4,Box5,Box6,Box7,gallery1,gallery2,gallery3,gallery4,gallery5,gallery6,gallery7,gallery8,gallery9,Icon1,Icon2,Icon3,Icon4,Icon5,Icon6,Icon7,Icon8,Icon9,Icon10,Icon11,Icon12,faq,IndustryStandard,review};

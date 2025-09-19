@@ -1,19 +1,11 @@
 
 
 import React, { useState } from 'react'
-import banner from '../../assets/images/banner.jpg'
 import { IoPlayCircleOutline } from "react-icons/io5";
-import map from '../../assets/images/map-01.png'
-import Icon1 from '../../assets/images/icon/free quote.svg';
-import Icon3 from '../../assets/images/icon/Free Design support.svg';
-import Icon2 from '../../assets/images/icon/Free Lamination.svg';
-import Icon4 from '../../assets/images/icon/free shipping.svg';
-import Icon5 from '../../assets/images/icon/FSC Certified.svg';
-import Icon6 from '../../assets/images/icon/Quickest Turnaround.svg';
 import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart';
 import { BaseUrl } from '../../utils/BaseUrl';
 import PageMetadata from '../../components/common/PageMetadata';
-import { aboutVideo } from '../../assets';
+import { aboutVideo, banner, Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, map } from '../../assets';
 
 export const About = () => {
 
