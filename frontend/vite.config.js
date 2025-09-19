@@ -50,6 +50,9 @@ export default defineConfig({
     chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
+          entryFileNames: "assets/[name]-[hash].js",
+      chunkFileNames: "assets/[name]-[hash].js",
+      assetFileNames: "assets/[name]-[hash].[ext]",
         manualChunks: {
           redux: ["react-redux", "@reduxjs/toolkit", "redux-persist"],
           vendor: ["react-helmet-async", "lottie-react"],
