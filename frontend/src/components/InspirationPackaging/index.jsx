@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
 import { gallery1, gallery2, gallery3, gallery4, gallery5, gallery6, gallery7, gallery8, gallery9 } from "../../assets";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 // Import images with descriptive names
 
@@ -131,60 +132,48 @@ const InspirationPackaging = () => {
             </div>
 
             {/* Image Viewer Modal */}
-            {isViewerOpen && (
-                <div 
-                    className="fixed inset-0 bg-[rgba(0,0,0,0.5)] bg-opacity-90 z-50 flex items-center justify-center p-4"
-                    onClick={closeImageViewer}
-                    role="dialog"
-                    aria-label="Image viewer"
-                    aria-modal="true"
-                >
-                    <div 
-                        className="relative max-w-4xl max-h-screen overflow-auto"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                       
-
+            
+                  {isViewerOpen && selectedImage && (
+                    <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] bg-opacity-90 z-50 flex items-center justify-center p-4">
+                      <div className='absolute top-4 right-4'>
                         <button
-                            onClick={goToPrevious}
-                            className="absolute left-0  cursor-pointer top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-gray-300 p-4 transition-colors"
-                            aria-label="Previous image"
+                          onClick={closeImageViewer}
+                          className=" text-white text-3xl  cursor-pointer hover:text-gray-300"
                         >
-                            &#10094;
+                          &times;
                         </button>
-
-                        <div className="max-w-full max-h-screen overflow-auto flex items-center justify-center">
-                            <img
-                                src={selectedImage}
-                                alt={imageDescriptions[currentIndex]}
-                                className="max-w-full max-h-screen object-contain"
-                            />
-                        </div>
-
-                        <button
-                            onClick={goToNext}
-                            className="absolute   cursor-pointer right-0 top-1/2 transform -translate-y-1/2 text-white text-3xl hover:text-gray-300 p-4 transition-colors"
-                            aria-label="Next image"
-                        >
-                            &#10095;
-                        </button>
-
-                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-[rgba(0,0,0,0.8)] bg-opacity-50 px-3 py-1 rounded-full">
-                            {currentIndex + 1} / {images.length}
-                        </div>
+            
+            
+                      </div>
+                      <button
+                        onClick={goToPrevious}
+                        className="absolute left-6 text-white text-3xl w-12 h-12 rounded-2xl bg-[#4440E6] cursor-pointer hover:text-gray-300 flex justify-center items-center "
+                      >
+                        <FaAngleLeft color="white" />
+                      </button>
+            
+            
+                      <div className="max-w-4xl max-h-screen overflow-auto">
+                        <img
+                           src={selectedImage}
+    alt={imageDescriptions[currentIndex]}
+                          className="max-w-full max-h-screen object-contain"
+                        />
+                      </div>
+            
+            
+                      <button
+                        onClick={goToNext}
+                        className="absolute right-6 w-12 h-12 rounded-2xl text-white bg-[#4440E6] text-3xl cursor-pointer hover:text-gray-300 flex justify-center items-center "
+                      >
+                        <FaAngleRight color="white" />
+                      </button>
+            
+                      <div className="absolute bottom-4 text-white">
+                        {currentIndex + 1} / {images.length}
+                      </div>
                     </div>
-
-                     <div className='absolute top-0 right-0 z-10'>
-                            <button
-                                onClick={closeImageViewer}
-                                className="text-white text-3xl  cursor-pointer hover:text-gray-300 p-4 transition-colors"
-                                aria-label="Close image viewer"
-                            >
-                                &times;
-                            </button>
-                        </div>
-                </div>
-            )}
+                  )}
         </div>
     );
 };

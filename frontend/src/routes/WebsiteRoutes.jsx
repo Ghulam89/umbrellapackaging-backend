@@ -37,21 +37,21 @@ function ProductDetailsWrapper({ serverData }) {
     if (!serverData && slug) {
       const fetchProduct = async () => {
         try {
-          setLoading(true);
+          // setLoading(true);
           const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
           setProductData(response?.data?.data);
           setError(false);
         } catch (err) {
           setError(true);
         } finally {
-          setLoading(false);
+          // setLoading(false);
         }
       };
       fetchProduct();
     }
   }, [slug, serverData]);
 
-  if (loading) return <div className=""></div>;
+  // if (loading) return <div className=""></div>;
   if (!loading && (error || !productData)) return <NotFound />;
 
   return <ProductDetails serverData={productData} />;
@@ -105,7 +105,7 @@ export default function useWebsiteRoutes(serverData, CategoryProducts) {
     {
       path: '/:slug',
       element: (
-        <ProductDetailsWrapper
+        <ProductDetails
           key={`product-${location.pathname}`}
           serverData={serverData.serverData}
         />

@@ -24,34 +24,37 @@ const CardSlider = ({ item, index }) => {
     <div className="">
       <div className="w-full  mx-auto relative">
 
-        <Swiper
-          modules={[Autoplay, Pagination, Navigation]}
-          autoplay={
-            isAutoPlay ? { delay: 3000, disableOnInteraction: false } : false
-          }
-          loop={true}
-          // pagination={{ clickable: true }}
-          navigation={{
-            nextEl: `.custom-next-${index}`,
-            prevEl: `.custom-prev-${index}`,
-          }}
-          spaceBetween={30}
-          slidesPerView="auto"
-          breakpoints={{
-            640: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
-            1024: { slidesPerView: 4 },
-          }}
-        >
-          {item?.map((item) => (
-            <SwiperSlide key={item.id}>
-              <div className="   bg-[#f7f7f7] p-2 rounded-xl max-w-6xl mx-auto">
+    <Swiper
+  modules={[Autoplay, Pagination, Navigation]}
+  autoplay={
+    isAutoPlay ? { delay: 3000, disableOnInteraction: false } : false
+  }
+  loop={true}
+  spaceBetween={30}
+  slidesPerView="auto"
+  breakpoints={{
+    640: { slidesPerView: 2 },
+    768: { slidesPerView: 3 },
+    1024: { slidesPerView: 4 },
+  }}
+  onBeforeInit={(swiper) => {
+    swiper.params.navigation.prevEl = `.custom-prev-${index}`;
+    swiper.params.navigation.nextEl = `.custom-next-${index}`;
+  }}
+  navigation={{
+    nextEl: `.custom-next-${index}`,
+    prevEl: `.custom-prev-${index}`,
+  }}
+>
+  {item?.map((item) => (
+    <SwiperSlide key={item.id}>
+      <div className="bg-[#f7f7f7] p-2 rounded-xl max-w-6xl mx-auto">
+        <ProductCard data={item} />
+      </div>
+    </SwiperSlide>
+  ))}
+</Swiper>
 
-                <ProductCard data={item} />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
 
 
         <div className="flex w-full justify-center sm:mt-0 mt-6 gap-3 items-center">

@@ -26,6 +26,7 @@ import sky from '../../assets/images/footer/sky.svg';
 import dhl from '../../assets/images/footer/dhl.png';
 import sups from '../../assets/images/footer/sups.svg';
 import ups from '../../assets/images/footer/ups.svg';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 const ProductDetails = ({
   serverData,
   children: slides,
@@ -112,7 +113,7 @@ const ProductDetails = ({
   };
 
   const goToNext = () => {
-    const newIndex = (currentIndex + 1) % images.length;
+    const newIndex = (currentIndex + 1) % product?.images?.length;
     setSelectedImage(product?.images[newIndex]);
     setCurrentIndex(newIndex);
   };
@@ -146,7 +147,7 @@ const ProductDetails = ({
     addons: "",
     image: null,
     message: "",
-     pageUrl: typeof window !== "undefined" ? window.location.href : ""
+    pageUrl: typeof window !== "undefined" ? window.location.href : ""
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -400,82 +401,82 @@ const ProductDetails = ({
       }
     ]
   };
-const productSchema = {
-   "@context": "https://schema.org",
-  "@type": "Product",
-  "name": serverData?.name,
-  "image": `${BaseUrl}/${serverData?.images?.[0]?.url}`,
-  "description": serverData?.metaDescription,
-  "sku": "12345",
-  "brand": {
-    "@type": "Brand",
-    "name": "Umbrella Custom Packaging"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.8",
-    "reviewCount": "42",
-    
-  },
-     "review": [
-    {
-      "@type": "Review",
-      "name": "Great Packaging!",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "4.7",
-        "bestRating": "5"
-      },
-      "author": {
-        "@type": "Person",
-        "name": "Scott Ray"
-      },
-      "datePublished": "2025-08-26",
-      "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!"
-    }
-  ],
-  "offers": {
-    "@type": "Offer",
-    "url": `https://umbrellapackaging.com/${serverData?.slug}`,
-    "priceCurrency": "USD",
-    "price":serverData?.actualPrice,
-    "priceValidUntil": serverData?.createdAt,
-    "availability": "https://schema.org/InStock",
-    "itemCondition": "https://schema.org/NewCondition",
-    "seller": {
-      "@type": "Organization",
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": serverData?.name,
+    "image": `${BaseUrl}/${serverData?.images?.[0]?.url}`,
+    "description": serverData?.metaDescription,
+    "sku": "12345",
+    "brand": {
+      "@type": "Brand",
       "name": "Umbrella Custom Packaging"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "42",
+
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "name": "Great Packaging!",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4.7",
+          "bestRating": "5"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Scott Ray"
+        },
+        "datePublished": "2025-08-26",
+        "reviewBody": "Excellent quality packaging and timely delivery. Highly recommended!"
+      }
+    ],
+    "offers": {
+      "@type": "Offer",
+      "url": `https://umbrellapackaging.com/${serverData?.slug}`,
+      "priceCurrency": "USD",
+      "price": serverData?.actualPrice,
+      "priceValidUntil": serverData?.createdAt,
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": {
+        "@type": "Organization",
+        "name": "Umbrella Custom Packaging"
+      }
     }
-    }
-};
+  };
 
 
   return (
     <>
-     
-    
-        <PageMetadata
-          title={product.metaTitle || "Custom Packaging Solutions"}
-          description={product.metaDescription || ""}
-          keywords={product.keywords || ""}
-          ogUrl={`${BaseUrl}/category/${slug}`}
-          ogImage={`${BaseUrl}/${serverData?.images?.[0]?.url || ""}`}
-          ogImageWidth="1200"
-          ogImageHeight="630"
-          canonicalUrl={`${BaseUrl}/${slug}`}
-          breadcrumbSchema={breadcrumbSchema}
-          productSchema={productSchema}
-          robots={product.robots || serverData.robots}
-          
-        />
-      
+
+
+      <PageMetadata
+        title={product?.metaTitle || "Custom Packaging Solutions"}
+        description={product?.metaDescription || ""}
+        keywords={product?.keywords || ""}
+        ogUrl={`${BaseUrl}/category/${slug}`}
+        ogImage={`${BaseUrl}/${serverData?.images?.[0]?.url || ""}`}
+        ogImageWidth="1200"
+        ogImageHeight="630"
+        canonicalUrl={`${BaseUrl}/${slug}`}
+        breadcrumbSchema={breadcrumbSchema}
+        productSchema={productSchema}
+        robots={product?.robots || serverData?.robots}
+
+      />
+
 
       <section className='py-8'>
         <div className='lg:max-w-6xl max-w-[95%] bg-[#F7F7F7] rounded-lg p-2 flex lg:flex-row flex-col gap-4 mx-auto'>
           <div className='lg:w-6/12'>
 
             <div className=' pb-7 pt-3'>
-                          {/* <h1 className='pb-2  font-sans text-[28px] block sm:hidden'>{product?.name}</h1> */}
+              {/* <h1 className='pb-2  font-sans text-[28px] block sm:hidden'>{product?.name}</h1> */}
 
               <p className=' flex  flex-wrap items-center gap-1'><strong className=' font-normal  text-[#4440E6]'> <Link to={'/'} className='   font-sans' > Home </Link> </strong>/<strong className=' font-normal text-[#4440E6] capitalize'> <Link className='font-sans whitespace-nowrap' to={`/category/${product?.brandId?.slug}`}>{product?.brandId?.name}</Link> </strong> /<strong className='font-normal text-[#4440E6] capitalize'> <Link className=' font-sans whitespace-nowrap' to={`/sub-category/${product?.categoryId?.slug}`}>{product?.categoryId?.title}</Link> </strong> /<span className=' font-sans  whitespace-nowrap '>{product?.name} </span></p>
             </div>
@@ -498,7 +499,7 @@ const productSchema = {
                     </div>
                   ))}
                 </div>
-                <div className=' flex justify-center items-center cursor-pointer w-10 h-10 bg-white rounded-full absolute top-3 right-3'>
+                <div onClick={() => openImageViewer(product?.images?.[curr], curr)} className=' flex justify-center items-center cursor-pointer w-10 h-10 bg-white rounded-full absolute top-3 right-3'>
                   <IoSearch size={25} />
                 </div>
                 {/* <button
@@ -595,7 +596,7 @@ const productSchema = {
                     label="Box Style"
                     star={"*"}
                     name="boxStyle"
-                        type={'text'}
+                    type={'text'}
                     value={formData.boxStyle}
                     onChange={handleChange}
                     placeholder="Box Style"
@@ -653,7 +654,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Unit
-                    
+
                   </label>
                   <select name="unit" value={formData.unit}
                     onChange={handleChange} className="w-full outline-none bg-lightGray   text-gray-500 placeholder:text-gray-400 placeholder:text-sm  border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -674,7 +675,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Stock
-                  
+
                   </label>
                   <select name="stock" value={formData.stock}
                     onChange={handleChange} className="w-full border text-gray-500 border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -705,7 +706,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Colors
-                    
+
                   </label>
                   <select name="color" value={formData.color}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -734,7 +735,7 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Printing Sides
-                   
+
                   </label>
                   <select name="printingSides" value={formData.printingSides}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
@@ -753,7 +754,7 @@ const productSchema = {
                     label="Quantity"
                     star={"*"}
                     name="quantity"
-                     type={'number'}
+                    type={'number'}
                     value={formData.quantity}
                     onChange={handleChange}
                     placeholder="Quantity"
@@ -771,11 +772,11 @@ const productSchema = {
                     className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
                   >
                     Add-Ons
-                   
+
                   </label>
                   <select name="addons" value={formData.addons}
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
-                    // required
+                  // required
                   >
                     <option selected></option>
                     <option value={'Foiling'}>Foiling</option>
@@ -789,10 +790,10 @@ const productSchema = {
                   </select>
                 </div>
 
-                
+
               </div>
 
-              <div  className=' grid md:grid-cols-2 grid-cols-1 gap-4 mt-4'>
+              <div className=' grid md:grid-cols-2 grid-cols-1 gap-4 mt-4'>
                 <div className="w-full">
                   <label
                     htmlFor="design_upload"
@@ -830,7 +831,7 @@ const productSchema = {
                     placeholder="Tell us the size / dimensions, material, finising, add-ons, and design preferences."
 
                   ></textarea>
-                </div> 
+                </div>
 
               </div>
 
@@ -944,13 +945,13 @@ const productSchema = {
           <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
             {/* Image Section */}
             <div className="w-full lg:w-3/12">
-             {product?.images?.[0]?.url && (
-  <img
-    className="rounded-xl w-full h-auto object-cover shadow-md"
-    src={`${BaseUrl}/${product.images[0].url}`}
-    alt="Automobile Tuck End Boxes"
-  />
-)}
+              {product?.images?.[0]?.url && (
+                <img
+                  className="rounded-xl w-full h-auto object-cover shadow-md"
+                  src={`${BaseUrl}/${product.images[0].url}`}
+                  alt="Automobile Tuck End Boxes"
+                />
+              )}
             </div>
 
             {/* Content Section */}
@@ -1061,7 +1062,7 @@ const productSchema = {
           <div className='absolute top-4 right-4'>
             <button
               onClick={closeImageViewer}
-              className=" text-white text-3xl cursor-pointer hover:text-gray-300"
+              className=" text-white text-3xl  cursor-pointer hover:text-gray-300"
             >
               &times;
             </button>
@@ -1070,9 +1071,9 @@ const productSchema = {
           </div>
           <button
             onClick={goToPrevious}
-            className="absolute left-4 text-white text-3xl  cursor-pointer hover:text-gray-300 p-4"
+            className="absolute left-6 text-white text-3xl w-12 h-12 rounded-2xl bg-[#4440E6] cursor-pointer hover:text-gray-300 flex justify-center items-center "
           >
-            &#10094;
+            <FaAngleLeft color="white" />
           </button>
 
 
@@ -1084,11 +1085,12 @@ const productSchema = {
             />
           </div>
 
+
           <button
             onClick={goToNext}
-            className="absolute right-4 text-white text-3xl cursor-pointer hover:text-gray-300 p-4"
+            className="absolute right-6 w-12 h-12 rounded-2xl text-white bg-[#4440E6] text-3xl cursor-pointer hover:text-gray-300 flex justify-center items-center "
           >
-            &#10095;
+            <FaAngleRight color="white" />
           </button>
 
           <div className="absolute bottom-4 text-white">

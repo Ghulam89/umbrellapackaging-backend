@@ -54,9 +54,7 @@ const CustomPackagingApart = () => {
       description: 'Enjoy the added perk of free shipping on your orders, making it even more cost-effective for you.'
     }
   ], []);
- useEffect(() => {
-    setIsMounted(true);
-  }, []);
+
   const swiperConfig = useMemo(() => ({
     slidesPerView: 1,
     spaceBetween: 10,
@@ -82,15 +80,7 @@ const CustomPackagingApart = () => {
     },
     modules: [Pagination, Autoplay],
   }), []);
- // Preload images to prevent layout shifts
-  useEffect(() => {
-    if (isMounted) {
-      data.forEach(item => {
-        const img = new Image();
-        img.src = item.icon;
-      });
-    }
-  }, [data, isMounted]);
+ 
   return (
     <div className="sm:max-w-6xl my-6 max-w-[95%] mx-auto">
       <div className="text-center pb-3">
