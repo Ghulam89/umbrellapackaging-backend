@@ -31,7 +31,7 @@ function TemplateSlider() {
     <div className="template-slider">
       <Swiper {...swiperConfig} className="mySwiper" aria-label="Custom packaging templates">
         {slides.map((slide) => (
-          <SwiperSlide key={slide.id}>
+          <SwiperSlide key={slide.id}  aria-hidden="true">
             <img 
               src={slide.image} 
               alt={slide.alt}
