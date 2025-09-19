@@ -16,8 +16,7 @@ import Blog from '../../components/blog/Blog'
 import FAQ from '../../components/FAQ/FAQ'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
-import goScreen from '../../assets/images/goScreen.webp'
-import { Hero1, logo } from '../../assets'
+import { goScreen, Hero1, logo } from '../../assets'
 
 export const Home = () => {
 
