@@ -7,17 +7,18 @@ const CategoryCard = ({ data }) => {
     data?.imageAltText?.trim()
       ? data.imageAltText
       : data?.title
-      ? `${data.title} category illustration`
-      : "Category illustration";
+        ? `${data.title} category illustration`
+        : "Category illustration";
 
   return (
     <Link to={`/sub-category/${data?.slug}`} className="block">
       <div>
         <div>
           <img
-            src={data?.image ? `${BaseUrl}/${data.image}` : "/placeholder.png"}
+            src={data?.image ? `${BaseUrl}/${data.image}` : ""}
             alt={altText}
             className="w-full sm:h-62 h-auto object-cover overflow-hidden rounded-lg"
+            loading="lazy"
             onError={(e) => {
               e.currentTarget.src = "/placeholder.png";
             }}
