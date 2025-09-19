@@ -18,6 +18,7 @@ const CategoryCard = ({ data }) => {
             src={data?.image ? `${BaseUrl}/${data.image}` : ""}
             alt={altText}
             className="w-full sm:h-62 h-auto object-cover overflow-hidden rounded-lg"
+            aria-label="Visit Umbrella Packaging"
           />
         </div>
         <h2 className="sm:text-base text-sm font-semibold text-[#333333] uppercase sm:py-5 py-2">
