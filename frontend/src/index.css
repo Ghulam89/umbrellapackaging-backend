@@ -61,13 +61,13 @@ h6 {
 
 
 .blog_content h2 {
-  font-size: 2rem !important;
+  font-size: 1.7rem !important;
   color: #333 !important;
   padding-bottom: 10px !important;
 }
 
 .banner_content h2{
-     font-size: 1.8rem !important;
+     font-size: 1.6rem !important;
   color: #333 !important;
   padding-bottom: 10px !important;
 }
@@ -82,7 +82,7 @@ h6 {
 
 .blog_content h3,
 .faq_content h3  {
-  font-size: 1.75rem !important;
+  font-size: 1.5rem !important;
   color: #000 !important;
   padding-bottom: 9px !important;
 }
