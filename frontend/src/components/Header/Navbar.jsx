@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense, lazy } from "react";
 import Button from "../common/Button";
-import BottomNav from "./BottomNav";
+const BottomNav = lazy(() => import("./BottomNav"));
 import { Link } from "react-router-dom";
 import axios from "axios";
 import AddReviews from "../CustomerReviews/AddReviews";
@@ -169,12 +169,14 @@ const Navbar = () => {
             )}
           </div>
         </div>
-
-        <BottomNav 
+          <Suspense fallback={<div className="h-12" />}>
+          <BottomNav 
           Menu={menu} 
           OpenMenu={OpenMenu} 
           setCategoriesLoaded={setCategoriesLoaded}
         />
+          </Suspense>
+        
       </div>
 
       <GetQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={IsModalOpen} />
