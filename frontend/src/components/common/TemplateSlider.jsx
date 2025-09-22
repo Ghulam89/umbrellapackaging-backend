@@ -13,7 +13,6 @@ function TemplateSlider() {
   ], []);
 
   const swiperConfig = useMemo(() => ({
-    cssMode: true,
     navigation: true,
     mousewheel: true,
     keyboard: true,
@@ -23,22 +22,25 @@ function TemplateSlider() {
     },
     loop: true,
     preloadImages: false,
-    lazy: true,
-    modules: [Navigation, Mousewheel, Keyboard, Autoplay],
+    lazy: { loadPrevNext: true },
   }), []);
 
   return (
-    <div className="template-slider">
-      <Swiper {...swiperConfig} className="mySwiper" aria-label="Custom packaging templates">
+    <div className="template-slider max-w-5xl mx-auto">
+      <Swiper 
+        {...swiperConfig} 
+        modules={[Navigation, Mousewheel, Keyboard, Autoplay]} 
+        className="mySwiper" 
+        aria-label="Custom packaging templates"
+      >
         {slides.map((slide) => (
-          <SwiperSlide key={slide.id}  aria-hidden="true">
+          <SwiperSlide key={slide.id}>
             <img 
               src={slide.image} 
               alt={slide.alt}
               className="swiper-lazy rounded-[8px] w-full h-auto object-cover"
-              loading="lazy"
             />
-            <div className="swiper-lazy-preloader"></div>
+            {/* <div className="swiper-lazy-preloader"></div> */}
           </SwiperSlide>
         ))}
       </Swiper>
