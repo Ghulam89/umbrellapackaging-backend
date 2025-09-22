@@ -3,6 +3,7 @@ import { getAllProductsForSitemap } from "../controller/ProductController.js";
 import { getAllBlogsForSitemap } from "../controller/BlogController.js";
 import { getAllCategoriesForSitemap } from "../controller/BrandController.js";
 import { getAllSubCategoriesForSitemap } from "../controller/MidCategory.js";
+import { Products } from "../model/Product.js";
 
 const sitemapRouter = express.Router();
 
@@ -185,6 +186,74 @@ sitemapRouter.get("/sitemap.xml", async (req, res) => {
   } catch (error) {
     console.error("Error generating sitemap:", error);
     res.status(500).send("Error generating sitemap");
+  }
+});
+
+
+function xmlEscape(value) {
+  if (value === null || value === undefined) return "";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+sitemapRouter.get("/merchant.xml", async (req, res) => {
+  try {
+    const products = await Products.find({})
+      .select("_id name slug description metaTitle metaDescription images bannerImage brandId actualPrice")
+      .populate({ path: "brandId", select: "name" })
+      .lean();
+
+    const siteBase = process.env.BASEURL?.replace(/\/$/, "") || "https://umbrellapackaging.com";
+
+    const stripHtml = (html) => String(html || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    const itemsXml = products.map((p) => {
+      const id = String(p._id || "");
+      const title = xmlEscape(p.metaTitle || p.name || "");
+      const description = xmlEscape(p.metaDescription || stripHtml(p.description));
+      const link = `${siteBase}/${p.slug}`;
+      const imagePath = (p.images && p.images[0]?.url) ? p.images[0].url : p.bannerImage;
+      const imageLink = imagePath
+        ? `${siteBase}/${String(imagePath).replace(/^\//, "")}`
+        : `${siteBase}/umbrella.svg`;
+      const additionalImages = Array.isArray(p.images) && p.images.length > 1
+        ? p.images.slice(1).map(img => `\n      <g:additional_image_link>${xmlEscape(`${siteBase}/${String(img.url).replace(/^\//, "")}`)}</g:additional_image_link>`).join("")
+        : "";
+      const numericPrice = parseFloat(String(p.actualPrice).replace(/[^0-9.]/g, ""));
+      const price = isNaN(numericPrice) ? "0.00 USD" : `${numericPrice.toFixed(2)} USD`;
+
+      return `    <item>
+      <g:id>${id}</g:id>
+      <g:title>${title}</g:title>
+      <g:description>${description}</g:description>
+      <g:link>${xmlEscape(link)}</g:link>
+      <g:image_link>${xmlEscape(imageLink)}</g:image_link>
+${additionalImages}
+      <g:availability>in_stock</g:availability>
+      <g:brand>Umbrella Packaging</g:brand>
+      <g:condition>new</g:condition>
+      <g:price>${price}</g:price>
+    </item>`;
+    }).join("\n");
+
+    const feed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+  <channel>
+    <title>Umbrella Packaging - Product Feed</title>
+    <link>${siteBase}/</link>
+    <description>Google Merchant Center product feed</description>
+${itemsXml}
+  </channel>
+</rss>`;
+
+    res.setHeader('Content-Type', 'application/xml');
+    res.send(feed);
+  } catch (error) {
+    console.error("Error generating merchant feed:", error);
+    res.status(500).send("Error generating merchant feed");
   }
 });
 
