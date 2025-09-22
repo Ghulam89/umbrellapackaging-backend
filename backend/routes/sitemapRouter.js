@@ -200,7 +200,7 @@ function xmlEscape(value) {
     .replace(/'/g, "&apos;");
 }
 
-sitemapRouter.get("/merchant.xml", async (req, res) => {
+sitemapRouter.get("/feed.xml", async (req, res) => {
   try {
     const products = await Products.find({})
       .select("_id name slug description metaTitle metaDescription images bannerImage brandId actualPrice")
