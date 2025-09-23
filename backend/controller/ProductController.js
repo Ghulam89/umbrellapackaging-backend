@@ -393,7 +393,8 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
       // Remove image-related fields that we'll handle separately
       images: undefined,
       bannerImage: undefined,
-      existingImages: undefined
+      existingImages: undefined,
+      description: req.body.description
     };
 
     // Handle images - both existing and new
