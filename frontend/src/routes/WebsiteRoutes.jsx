@@ -80,6 +80,7 @@ export default function useWebsiteRoutes(serverData, CategoryProducts) {
     { path: '/faqs', element: <FAQ key="faqs" /> },
     { path: '/portfolio', element: <Portfolio key="portfolio" /> },
     { path: '/404', element: <NotFound key="not-found" /> },
+    
     {
       path: '/category/:slug',
       element: <Category
