@@ -381,21 +381,22 @@ function cleanCache() {
   }
 }
 
-// Run cleanup every minute
 setInterval(cleanCache, 60000);
 
-// SSR middleware with caching and timeout (must be last)
 app.use('*', async (req, res, next) => {
   const startTime = Date.now();
-  const url = req.originalUrl.replace(base, '') || '/';
+  const url = req.originalUrl;
   
-  // Skip SSR for API routes and static files
   if (url.startsWith('/api/') || 
       url.startsWith('/_vite') || 
-      url.includes('.') && !url.endsWith('/')) {
+      url.includes('.')) {
     return next();
   }
-  
+
+  if (url.length > 1 && url.endsWith('/')) {
+    const newUrl = url.slice(0, -1);
+    return res.redirect(301, newUrl);
+  }
   // Check cache first
   const cacheKey = getCacheKey(req);
   const cached = ssrCache.get(cacheKey);
