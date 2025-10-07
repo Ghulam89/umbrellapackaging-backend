@@ -253,10 +253,7 @@ export const getRelatedProducts = catchAsyncError(async (req, res, next) => {
 
     const relatedProducts = await Products.find({
       _id: { $ne: mainProduct._id },
-      $or: [
-        { categoryId: mainProduct.categoryId },
-        { brandId: mainProduct.brandId }, 
-      ],
+      categoryId: mainProduct.categoryId,
     })
       .limit(8) 
       .sort({ createdAt: -1 }); 
