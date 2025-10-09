@@ -233,7 +233,7 @@ const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
               
               <li className="border-b border-gray-200">
                 <NavLink 
-                  to="/blog" 
+                  to="/blogs" 
                   className="block py-3 px-4 text-[#333333] font-medium transition-colors hover:bg-gray-100"
                   onClick={handleLinkClick}
                 >
