@@ -132,7 +132,7 @@ useEffect(() => {
               
             />
 
-            <div className='max-w-6xl mx-auto py-6'>
+            <div className='max-w-6xl mx-auto px-3 sm:px-0 py-6'>
                 <div className='flex gap-8 md:flex-row flex-col'>
                     <div className='md:w-8/12 w-full space-y-6'>
                         <h1 className='text-3xl font-bold text-gray-800'>{singleBlog?.title}</h1>
