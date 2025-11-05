@@ -279,7 +279,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
               {
                 categoryData?.image ? <img
                   src={`${BaseUrl}/${categoryData?.image}`}
-                  alt={categoryData?.bannerAltText}
+                  alt={categoryData?.imageAltText}
                   className="w-full h-auto rounded-xl shadow-md object-cover"
                   loading="lazy"
                 /> : null
