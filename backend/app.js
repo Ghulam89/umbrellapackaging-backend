@@ -1,4 +1,6 @@
 import express from "express";
+import cluster from "cluster";
+import os from "os";
 import { connectDB } from "./config/database.js";
 import ErrorMiddleware from "./middleware/Error.js";
 import cors from "cors";
@@ -25,6 +27,36 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // SSR/Frontend imports
 import fs from 'node:fs/promises';
+
+const numCPUs = os.cpus().length;
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (cluster.isPrimary) {
+  console.log(`Primary ${process.pid} is running`);
+  console.log(`Forking server for ${numCPUs} CPUs`);
+
+  // Fork workers based on CPU cores
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  // Handle worker exit and restart
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died with code: ${code}, and signal: ${signal}`);
+    console.log('Starting a new worker');
+    cluster.fork();
+  });
+
+  // Log worker online events
+  cluster.on('online', (worker) => {
+    console.log(`Worker ${worker.process.pid} is online`);
+  });
+
+} else {
+
+   // Worker process - this is where your Express app runs
+  console.log(`Worker ${process.pid} started`);
+
 
 // Connect to database
 connectDB();
@@ -292,7 +324,7 @@ app.get('/soap-packaging/', (req, res) => res.redirect(301, '/process-of-making-
 app.use(ErrorMiddleware);
 
 // ================= SSR/Frontend optimization =================
-const isProduction = process.env.NODE_ENV === 'production';
+// const isProduction = process.env.NODE_ENV === 'production';
 const base = process.env.BASE || '/';
 
 // Cache for production template and render function
@@ -486,6 +518,7 @@ app.use('*', async (req, res, next) => {
 
 // Start server
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server is running on port ${PORT} in ${isProduction ? 'production' : 'development'} mode`);
-});
+ app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Worker ${process.pid} is running on port ${PORT} in ${isProduction ? 'production' : 'development'} mode`);
+ });
+}
