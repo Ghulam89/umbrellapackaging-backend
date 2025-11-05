@@ -25,7 +25,7 @@ import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPa
 const SubCategory = ({ serverData, CategoryProducts }) => {
 
   console.log(serverData);
-  
+
   const { slug } = useParams();
   const [categoryData, setCategoryData] = useState(null)
   const [currentPage, setCurrentPage] = useState(1);
@@ -352,10 +352,9 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                   <iframe
                     src={categoryData?.videoLink}
                     className="absolute top-0 left-0 w-full h-full rounded-lg"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
+                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
                   ></iframe>
+
                 </div>
               </div>
               <div className=' sm:w-6/12 w-full'>
