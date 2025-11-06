@@ -75,19 +75,21 @@ const Category = ({ serverData }) => {
   return (
 
     <>
-      <PageMetadata
-        title={categoryData?.metaTitle || serverData?.metaTitle || "Custom Packaging Solutions"}
-        description={categoryData?.metaDescription || serverData?.metaDescription || ""}
-        keywords={categoryData?.keywords || serverData?.keywords || ""}
-        ogUrl={`${BaseUrl}/category/${slug}`}
-        ogImage={`${BaseUrl}/${serverData?.bannerImage}`}
-        ogImageWidth="1200"
-        ogImageHeight="630"
-        canonicalUrl={`${BaseUrl}/category/${slug}`}
-        breadcrumbSchema={breadcrumbSchema}
-        robots={categoryData?.robots || serverData?.robots}
-      
-      />
+    {(categoryData || serverData) ? (
+  <PageMetadata
+    title={categoryData?.metaTitle || serverData?.metaTitle}
+    description={categoryData?.metaDescription || serverData?.metaDescription}
+    keywords={categoryData?.keywords || serverData?.keywords}
+    ogUrl={`${BaseUrl}/category/${slug}`}
+    ogImage={`${BaseUrl}/${serverData?.bannerImage}`}
+    ogImageWidth="1200"
+    ogImageHeight="630"
+    canonicalUrl={`${BaseUrl}/category/${slug}`}
+    breadcrumbSchema={breadcrumbSchema}
+    robots={categoryData?.robots || serverData?.robots}
+  />
+) : null}
+
 
 
       <Container>

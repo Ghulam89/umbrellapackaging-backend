@@ -455,20 +455,21 @@ const ProductDetails = ({
     <>
 
 
-      <PageMetadata
-        title={product?.metaTitle || "Custom Packaging Solutions"}
-        description={product?.metaDescription || ""}
-        keywords={product?.keywords || ""}
-        ogUrl={`${BaseUrl}/category/${slug}`}
-        ogImage={`${BaseUrl}/${serverData?.images?.[0]?.url || ""}`}
-        ogImageWidth="1200"
-        ogImageHeight="630"
-        canonicalUrl={`${BaseUrl}/${slug}`}
-        breadcrumbSchema={breadcrumbSchema}
-        productSchema={productSchema}
-        robots={product?.robots || serverData?.robots}
-
-      />
+    {product ? (
+  <PageMetadata
+    title={product?.metaTitle}
+    description={product?.metaDescription || ""}
+    keywords={product?.keywords || ""}
+    ogUrl={`${BaseUrl}/category/${slug}`}
+    ogImage={`${BaseUrl}/${serverData?.images?.[0]?.url || ""}`}
+    ogImageWidth="1200"
+    ogImageHeight="630"
+    canonicalUrl={`${BaseUrl}/${slug}`}
+    breadcrumbSchema={breadcrumbSchema}
+    productSchema={productSchema}
+    robots={product?.robots || serverData?.robots}
+  />
+) : null}
 
 
       <section className='py-8'>

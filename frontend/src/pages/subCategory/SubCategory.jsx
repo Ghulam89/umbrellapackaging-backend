@@ -197,20 +197,21 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
   return (
     <>
 
-      <PageMetadata
-        title={categoryData?.metaTitle || serverData?.metaTitle || "Custom Packaging Solutions"}
-        description={categoryData?.metaDescription || serverData?.metaDescription || ""}
-        keywords={categoryData?.keywords || serverData?.keywords || ""}
-        ogUrl={`${BaseUrl}/category/${slug}`}
-        ogImage={`${BaseUrl}/${serverData?.image}`}
-        ogImageWidth="1200"
-        ogImageHeight="630"
-        canonicalUrl={`${BaseUrl}/sub-category/${slug}`}
-        breadcrumbSchema={breadcrumbSchema}
-        robots={categoryData?.robots || serverData?.robots}
-
-        itemListSchema={itemListSchema}
-      />
+     {(categoryData || serverData) ? (
+  <PageMetadata
+    title={categoryData?.metaTitle || serverData?.metaTitle}
+    description={categoryData?.metaDescription || serverData?.metaDescription || ""}
+    keywords={categoryData?.keywords || serverData?.keywords || ""}
+    ogUrl={`${BaseUrl}/category/${slug}`}
+    ogImage={`${BaseUrl}/${serverData?.image}`}
+    ogImageWidth="1200"
+    ogImageHeight="630"
+    canonicalUrl={`${BaseUrl}/sub-category/${slug}`}
+    breadcrumbSchema={breadcrumbSchema}
+    robots={categoryData?.robots || serverData?.robots}
+    itemListSchema={itemListSchema}
+  />
+) : null}
 
       <div className=' bg-[#F7F7F7] py-6'>
         <div className=' sm:max-w-6xl max-w-[95%] mx-auto'>
