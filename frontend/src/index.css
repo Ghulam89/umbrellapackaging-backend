@@ -76,6 +76,9 @@ h6 {
 .blog_content li {
   margin-bottom: 0.5rem;
 }
+.blog_content img{
+  width: 100% !important;
+}
 
 .banner_content h2{
      font-size: 1.6rem !important;
