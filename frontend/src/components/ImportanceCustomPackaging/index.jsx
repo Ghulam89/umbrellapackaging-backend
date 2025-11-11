@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 
-const ImportanceCustomPackaging = () => {
+const ImportanceCustomPackaging = React.memo(() => {
   const [banner, setBanner] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,7 +26,6 @@ const ImportanceCustomPackaging = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${BaseUrl}/banner/getAll`);
-      console.log(response);
       const data = response?.data?.data?.[0] || {};
       setBanner(data);
       setError(null);
@@ -42,7 +41,6 @@ const ImportanceCustomPackaging = () => {
     fetchBanner();
   }, []);
 
-  // Show loading state
   if (loading) {
     return (
       <div className="py-8 bg-white">
@@ -58,7 +56,6 @@ const ImportanceCustomPackaging = () => {
     );
   }
 
-  // Show error state
   if (error) {
     return (
       <div className="py-8 bg-white">
@@ -87,18 +84,16 @@ const ImportanceCustomPackaging = () => {
       <div className="container mx-auto px-4 sm:px-0 max-w-6xl">
         <div className='text-center sm:pb-6 pb-3'>
           <h2 className="sm:text-[40px] sm:pb-10 pb-0 sm:pt-4 pt-0 text-[25px] flex md:flex-row flex-col justify-center sm:gap-1 gap-0 leading-9 font-sans font-[600] text-[#333333]">
-            What Is Custom Packaging? <h2   className='m-0 sm:text-[40px] text-[25px] text-[#4440E6]'>A Complete Guide</h2>
+            What Is Custom Packaging? <h2 className='m-0 sm:text-[40px] text-[25px] text-[#4440E6]'>A Complete Guide</h2>
           </h2>
         </div>
         
         <div className="flex flex-col lg:flex-row gap-8 blog_content banner_content items-center">
-          {/* Text Content */}
           <div 
             dangerouslySetInnerHTML={{ __html: banner?.description }} 
             className="w-full lg:w-1/2 bg-gray-50 h-[430px] rounded-xl p-4 overflow-y-auto"
           />
           
-          {/* Image with Play Button */}
           <div className="w-full relative lg:w-1/2">
             {banner?.image ? (
               <>
@@ -156,6 +151,6 @@ const ImportanceCustomPackaging = () => {
       )}
     </div>
   );
-};
+});
 
 export default ImportanceCustomPackaging;

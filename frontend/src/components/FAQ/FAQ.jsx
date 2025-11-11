@@ -7,15 +7,15 @@ import { faq } from '../../assets';
 
 const Accordion = lazy(() => import('../common/Accordion'));
 
-const AccordionLoading = () => (
+const AccordionLoading = React.memo(() => (
   <div className="animate-pulse mb-4">
     <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
     <div className="h-4 bg-gray-200 rounded w-full"></div>
     <div className="h-4 bg-gray-200 rounded w-5/6 mt-1"></div>
   </div>
-);
+));
 
-const FAQ = () => {
+const FAQ = React.memo(() => {
   const [accordions, setAccordions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -113,6 +113,6 @@ const FAQ = () => {
       </div>
     </>
   );
-};
+});
 
 export default FAQ;

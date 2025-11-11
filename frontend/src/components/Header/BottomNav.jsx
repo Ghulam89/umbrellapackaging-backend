@@ -6,7 +6,7 @@ import { BaseUrl } from "../../utils/BaseUrl";
 import BrandsData from "../../api/BrandsData";
 import { logo } from "../../assets";
 
-const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
+const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [allCategories, setAllCategories] = useState([]);
@@ -266,6 +266,6 @@ const BottomNav = ({ Menu, OpenMenu, setCategoriesLoaded }) => {
       </div>
     </div>
   );
-};
+});
 
 export default BottomNav;

@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import CategoryCard from "../common/CategoryCard";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 
-const CustomPackaging = () => {
+ const SkeletonLoader = React.memo(() => (
+    <div className="w-full bg-white rounded-lg overflow-hidden animate-pulse">
+      <div className="h-44 bg-gray-300"></div>
+      <div className="p-4">
+        <div className="h-6 bg-gray-300 rounded mb-2"></div>
+        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+      </div>
+    </div>
+));
+
+
+const CustomPackaging =React.memo(() => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -25,15 +35,12 @@ const CustomPackaging = () => {
     fetchData();
   }, []);
 
-  const SkeletonLoader = () => (
-    <div className="w-full bg-white rounded-lg overflow-hidden animate-pulse">
-      <div className="h-44 bg-gray-300"></div>
-      <div className="p-4">
-        <div className="h-6 bg-gray-300 rounded mb-2"></div>
-        <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-      </div>
-    </div>
+ const skeletons = useMemo(
+    () => Array.from({ length: 6 }).map((_, index) => <SkeletonLoader key={index} />),
+    []
   );
+
+
 
   return (
     <div className="sm:max-w-6xl max-w-[95%] pt-2 mx-auto">
@@ -48,10 +55,8 @@ const CustomPackaging = () => {
         </p>
 
         <div className="grid sm:grid-cols-3 grid-cols-2 mx-auto gap-5 mt-3.5 justify-between">
-          {loading
-            ? Array.from({ length: 6 }).map((_, index) => (
-                <SkeletonLoader key={index} />
-              ))
+             {loading
+            ? skeletons
             : categories.length > 0
             ? categories.map((item) => (
                 <CategoryCard key={item._id || item.slug} data={item} />
@@ -65,6 +70,6 @@ const CustomPackaging = () => {
       </div>
     </div>
   );
-};
+});
 
 export default CustomPackaging;
