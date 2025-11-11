@@ -1,4 +1,6 @@
-import { useLocation, useParams } from "react-router-dom";
+// ...existing code...
+import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import FAQ from "../components/FAQ/FAQ";
 import NotFound from "../pages/404";
 import { About } from "../pages/about/About";
@@ -20,47 +22,61 @@ import Shop from "../pages/shop";
 import SubCategory from "../pages/subCategory/SubCategory";
 import TargetPrice from "../pages/targetPrice";
 import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import { BaseUrl } from "../utils/BaseUrl";
 import Dielines from "../pages/Dielines";
 import SuccessPage from "../pages/thankYouPage";
+// ...existing code...
 
-// Separate component for product details to avoid re-rendering issues
-function ProductDetailsWrapper({ serverData }) {
+// Product details wrapper: uses initial server data if present, otherwise fetch by slug.
+// Memoized to avoid re-renders when parent re-computes routes.
+function ProductDetailsWrapper({ initialProduct }) {
   const { slug } = useParams();
-  const [productData, setProductData] = useState(serverData);
-  const [loading, setLoading] = useState(!serverData);
+  const [productData, setProductData] = useState(initialProduct || null);
   const [error, setError] = useState(false);
 
+  const fetchProduct = useCallback(
+    async (s) => {
+      try {
+        const response = await axios.get(`${BaseUrl}/products/get?slug=${s}`);
+        setProductData(response?.data?.data || null);
+        setError(false);
+      } catch (err) {
+        setError(true);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
-    if (!serverData && slug) {
-      const fetchProduct = async () => {
+    if (!initialProduct && slug) {
+      let cancelled = false;
+      (async () => {
         try {
-          // setLoading(true);
           const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
-          setProductData(response?.data?.data);
+          if (!cancelled) setProductData(response?.data?.data || null);
           setError(false);
-        } catch (err) {
-          setError(true);
-        } finally {
-          // setLoading(false);
+        } catch {
+          if (!cancelled) setError(true);
         }
+      })();
+      return () => {
+        cancelled = true;
       };
-      fetchProduct();
     }
-  }, [slug, serverData]);
+  }, [slug, initialProduct, fetchProduct]);
 
-  // if (loading) return <div className=""></div>;
-  if (!loading && (error || !productData)) return <NotFound />;
-
+  if (error || !productData) return <NotFound />;
   return <ProductDetails serverData={productData} />;
 }
+const MemoProductDetailsWrapper = React.memo(ProductDetailsWrapper);
 
+// routes hook: useMemo to return stable routes array and avoid recreating elements on every render.
 export default function useWebsiteRoutes(serverData, CategoryProducts) {
-  const location = useLocation();
+  const sharedServer = serverData?.serverData ?? null;
+  const initialProduct = sharedServer ?? null;
 
-  return [
+  const routes = useMemo(() => [
     { path: '/', element: <Home key="home" /> },
     { path: '/about-us', element: <About key="about" /> },
     { path: '/contact-us', element: <ContactUs key="contact" /> },
@@ -82,35 +98,23 @@ export default function useWebsiteRoutes(serverData, CategoryProducts) {
     { path: '/404', element: <NotFound key="not-found" /> },
     {
       path: '/category/:slug',
-      element: <Category
-        key={`category-${location.pathname}`}
-        serverData={serverData.serverData}
-      />
+      element: <Category key="category" serverData={sharedServer} />
     },
     {
       path: '/blog/:slug',
-      element: <SingleBlog
-        key={`blog-${location.pathname}`}
-        serverData={serverData.serverData}
-      />
+      element: <SingleBlog key="blog" serverData={sharedServer} />
     },
     {
       path: '/sub-category/:slug',
-      element: <SubCategory
-        key={`subcategory-${location.pathname}`}
-        serverData={serverData.serverData}
-        CategoryProducts={CategoryProducts}
-      />
+      element: <SubCategory key="subcategory" serverData={sharedServer} CategoryProducts={CategoryProducts} />
     },
     {
       path: '/:slug',
-      element: (
-        <ProductDetails
-          key={`product-${location.pathname}`}
-          serverData={serverData.serverData}
-        />
-      )
+      element: <MemoProductDetailsWrapper key="product" initialProduct={initialProduct} />
     },
     { path: '*', element: <NotFound key="catch-all" /> }
-  ];
+  ], [sharedServer, CategoryProducts, initialProduct]);
+
+  return routes;
 }
+// ...existing code...
