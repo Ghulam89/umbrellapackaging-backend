@@ -10,7 +10,7 @@ import video from '../../assets/videos/getqoute.mp4';
 const GetQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
     const [step, setStep] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
-    const [pageUrl, setPageUrl] = useState("");
+    const [pageUrl, setPageUrl] = useState("");0
 
     useEffect(() => {
         if (typeof window !== "undefined") {
