@@ -83,9 +83,12 @@ const ImportanceCustomPackaging = React.memo(() => {
     <div className="py-8 bg-white">
       <div className="container mx-auto px-4 sm:px-0 max-w-6xl">
         <div className='text-center sm:pb-6 pb-3'>
+          
+
           <h2 className="sm:text-[40px] sm:pb-10 pb-0 sm:pt-4 pt-0 text-[25px] flex md:flex-row flex-col justify-center sm:gap-1 gap-0 leading-9 font-sans font-[600] text-[#333333]">
-            What Is Custom Packaging? <h2 className='m-0 sm:text-[40px] text-[25px] text-[#4440E6]'>A Complete Guide</h2>
-          </h2>
+  <p className=' sm:text-[40px] text-[25px]'>What Is Custom Packaging?</p>
+  <p className='m-0 sm:text-[40px] text-[25px] text-[#4440E6]' style={{color:'#4440E6'}} >A Complete Guide</p>
+</h2>
         </div>
         
         <div className="flex flex-col lg:flex-row gap-8 blog_content banner_content items-center">

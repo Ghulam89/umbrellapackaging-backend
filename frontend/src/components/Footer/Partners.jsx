@@ -33,7 +33,7 @@ const Partners = () => {
 
         },
         {
-            id:3,
+            id:4,
             icon:partner4,
             title:'Cheapest Prices',
             description:'Benefit from our regular discounted rates and get the best custom packaging at the lowest prices.'

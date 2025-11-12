@@ -21,8 +21,6 @@ function TemplateSlider() {
       disableOnInteraction: false,
     },
     loop: true,
-    preloadImages: false,
-    lazy: { loadPrevNext: true },
   }), []);
 
   return (
@@ -40,7 +38,6 @@ function TemplateSlider() {
               alt={slide.alt}
               className="swiper-lazy rounded-[8px] w-full h-auto object-cover"
             />
-            {/* <div className="swiper-lazy-preloader"></div> */}
           </SwiperSlide>
         ))}
       </Swiper>

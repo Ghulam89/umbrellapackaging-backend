@@ -1,4 +1,3 @@
-// ...existing code...
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import FAQ from "../components/FAQ/FAQ";
@@ -26,52 +25,45 @@ import axios from "axios";
 import { BaseUrl } from "../utils/BaseUrl";
 import Dielines from "../pages/Dielines";
 import SuccessPage from "../pages/thankYouPage";
-// ...existing code...
 
-// Product details wrapper: uses initial server data if present, otherwise fetch by slug.
-// Memoized to avoid re-renders when parent re-computes routes.
 function ProductDetailsWrapper({ initialProduct }) {
   const { slug } = useParams();
   const [productData, setProductData] = useState(initialProduct || null);
   const [error, setError] = useState(false);
-
-  const fetchProduct = useCallback(
-    async (s) => {
-      try {
-        const response = await axios.get(`${BaseUrl}/products/get?slug=${s}`);
-        setProductData(response?.data?.data || null);
-        setError(false);
-      } catch (err) {
-        setError(true);
-      }
-    },
-    []
-  );
+  const [loading, setLoading] = useState(!initialProduct && !!slug);
 
   useEffect(() => {
     if (!initialProduct && slug) {
       let cancelled = false;
+      setLoading(true);
+      
       (async () => {
         try {
           const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
-          if (!cancelled) setProductData(response?.data?.data || null);
-          setError(false);
+          if (!cancelled) {
+            setProductData(response?.data?.data || null);
+            setError(false);
+          }
         } catch {
           if (!cancelled) setError(true);
+        } finally {
+          if (!cancelled) setLoading(false);
         }
       })();
+      
       return () => {
         cancelled = true;
       };
     }
-  }, [slug, initialProduct, fetchProduct]);
+  }, [slug, initialProduct]);
 
-  if (error || !productData) return <NotFound />;
+  // if (loading) return <div>Loading...</div>;
+  // if (error || !productData) return <NotFound />;
   return <ProductDetails serverData={productData} />;
 }
+
 const MemoProductDetailsWrapper = React.memo(ProductDetailsWrapper);
 
-// routes hook: useMemo to return stable routes array and avoid recreating elements on every render.
 export default function useWebsiteRoutes(serverData, CategoryProducts) {
   const sharedServer = serverData?.serverData ?? null;
   const initialProduct = sharedServer ?? null;
@@ -96,25 +88,12 @@ export default function useWebsiteRoutes(serverData, CategoryProducts) {
     { path: '/faqs', element: <FAQ key="faqs" /> },
     { path: '/portfolio', element: <Portfolio key="portfolio" /> },
     { path: '/404', element: <NotFound key="not-found" /> },
-    {
-      path: '/category/:slug',
-      element: <Category key="category" serverData={sharedServer} />
-    },
-    {
-      path: '/blog/:slug',
-      element: <SingleBlog key="blog" serverData={sharedServer} />
-    },
-    {
-      path: '/sub-category/:slug',
-      element: <SubCategory key="subcategory" serverData={sharedServer} CategoryProducts={CategoryProducts} />
-    },
-    {
-      path: '/:slug',
-      element: <MemoProductDetailsWrapper key="product" initialProduct={initialProduct} />
-    },
+    { path: '/category/:slug', element: <Category key="category" serverData={sharedServer} /> },
+    { path: '/blog/:slug', element: <SingleBlog key="blog" serverData={sharedServer} /> },
+    { path: '/sub-category/:slug', element: <SubCategory key="subcategory" serverData={sharedServer} CategoryProducts={CategoryProducts} /> },
+    { path: '/:slug', element: <MemoProductDetailsWrapper key="product" initialProduct={initialProduct} /> },
     { path: '*', element: <NotFound key="catch-all" /> }
   ], [sharedServer, CategoryProducts, initialProduct]);
 
   return routes;
 }
-// ...existing code...

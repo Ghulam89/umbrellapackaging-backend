@@ -398,7 +398,7 @@ const navigate = useNavigate();
                     onChange={handleChange} className="w-full border border-[#333333] bg-white text-xs md:text-sm p-2.5 rounded-lg"
                     required
                   >
-                    <option selected></option>
+                   <option value="">Select an option</option>
                     <option value={'Foiling'}>Foiling</option>
                     <option value={'Spot UV'}>Spot UV</option>
                     <option value={'Embossing'}>Embossing</option>

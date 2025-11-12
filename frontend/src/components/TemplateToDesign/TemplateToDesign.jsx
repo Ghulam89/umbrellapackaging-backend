@@ -25,7 +25,7 @@ Need Box Template to design?</h2>
                 <svg
                   width={16}
                   aria-hidden="true"
-                  class="e-font-icon-svg e-far-hand-point-right"
+                  className="e-font-icon-svg e-far-hand-point-right"
                   viewBox="0 0 512 512"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -38,7 +38,7 @@ Need Box Template to design?</h2>
                 <svg
                   width={16}
                   aria-hidden="true"
-                  class="e-font-icon-svg e-far-hand-point-right"
+                  className="e-font-icon-svg e-far-hand-point-right"
                   viewBox="0 0 512 512"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -51,7 +51,7 @@ Need Box Template to design?</h2>
                 <svg
                   width={16}
                   aria-hidden="true"
-                  class="e-font-icon-svg e-far-hand-point-right"
+                  className="e-font-icon-svg e-far-hand-point-right"
                   viewBox="0 0 512 512"
                   xmlns="http://www.w3.org/2000/svg"
                 >

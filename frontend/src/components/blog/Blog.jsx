@@ -96,7 +96,7 @@ const Blog = () => {
   }, [fetchBlogs]);
 
   // Memoize Swiper configuration
-  const swiperConfig = useMemo(() => ({
+   const swiperConfig = useMemo(() => ({
     modules: [Autoplay, Pagination, Navigation],
     autoplay: isAutoPlay ? { 
       delay: 3000, 
@@ -119,7 +119,6 @@ const Blog = () => {
       loadPrevNext: true,
       loadPrevNextAmount: visibleSlides + 1, // Load one extra slide on each side
     },
-    preloadImages: false,
   }), [isAutoPlay, visibleSlides]);
 
   // Function to determine if a slide should be loaded
