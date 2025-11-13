@@ -421,7 +421,6 @@ const ProductDetails = ({
     "review": [
       {
         "@type": "Review",
-        "name": "Great Packaging!",
         "reviewRating": {
           "@type": "Rating",
           "ratingValue": "4.7",
