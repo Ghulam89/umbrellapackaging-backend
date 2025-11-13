@@ -17,8 +17,9 @@ import FAQ from '../../components/FAQ/FAQ'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
 import { goScreen, Hero1, logo } from '../../assets'
+import React from 'react'
 
-export const Home = () => {
+export const Home = React.memo(() => {
 
   const metadata = {
     title: "Affordable, High-Quality Custom Packaging Boxes – Wholesale | Umbrella Custom Packaging",
@@ -132,4 +133,4 @@ export const Home = () => {
       </main>
     </>
   )
-}
+})

@@ -106,4 +106,4 @@ Umbrella Custom Packaging make your order even more cost effective by providing 
   );
 }
 
-export default ProductionUnits;
+export default React.memo(ProductionUnits);
