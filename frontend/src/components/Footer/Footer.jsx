@@ -14,8 +14,17 @@ import { BaseUrl } from '../../utils/BaseUrl';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { logo } from '../../assets';
-const Footer = () => {
+import discover from '../../assets/images/discover.png'
+import american from '../../assets/images/emrican-expreess.png'
+import bankTranfer from '../../assets/images/ebank-transfer.png'
+import masterCard from '../../assets/images/master-card.png'
+import paypal from '../../assets/images/paypal.png'
+import wireTransfer from '../../assets/images/wire-transfer.png'
+import maestro from '../../assets/images/mastro.png'
+import visa from '../../assets/images/visa.png'
 
+const Footer = () => {
+const images = [discover, american, bankTranfer, masterCard, paypal, wireTransfer, maestro, visa]
 
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
@@ -222,7 +231,7 @@ const Footer = () => {
 
                     <div className=' flex sm:flex-row flex-col py-5 justify-between items-end'>
 
-                        <div className=' sm:w-4/12 w-full'>
+                        <div className=' sm:w-5/12 w-full'>
                             <label className=''>Get More Update Join Our Newsletters:</label>
 
                             <form onSubmit={handleSubscribe}>
@@ -237,16 +246,25 @@ const Footer = () => {
                                     />
                                     <Button
                                         label={loading ? 'Submitting...' : 'Submit'}
-                                        className='text-white rounded-md bg-[#4440E6]'
+                                        className='text-white md:mb-0 mb-2 rounded-md bg-[#4440E6]'
                                         type="submit"
                                         disabled={loading}
                                     />
                                 </div>
                             </form>
                         </div>
-                        <div className=' sm:w-6/12 w-full'>
+                        <div className=' sm:w-7/12 w-full'>
                             <div className=' flex sm:flex-row items-center flex-col  justify-between'>
-                                <img src={social} className=' w-96' alt='' />
+                                 <div className=' flex gap-2  flex-wrap justify-center items-center'>
+          {images.map((image, index) => (
+            <div key={index} >
+
+              <img src={image} width={50} alt=""  className={`transition-all duration-300 ease-in-out`} /></div>
+
+          ))}
+
+
+        </div>
                                 <p className=' text-sm font-semibold'>Our Secure Payment Modes</p>
                             </div>
 
