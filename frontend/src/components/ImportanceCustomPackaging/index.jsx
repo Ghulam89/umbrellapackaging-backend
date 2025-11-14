@@ -139,16 +139,13 @@ const ImportanceCustomPackaging = React.memo(() => {
           </div>
 
           <div className="w-full max-w-4xl aspect-video">
-            <iframe
-              width="100%"
-              height="100%"
-              src={banner.videoLink}
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full rounded-lg"
-            ></iframe>
+            
+
+             <iframe
+                     src={banner.videoLink}
+                    className="w-full h-full rounded-lg"
+                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+                  ></iframe>
           </div>
         </div>
       )}
