@@ -4,7 +4,7 @@ import WebsiteRoutes from './routes/WebsiteRoutes';
 import { ToastContainer } from 'react-toastify';
 import Footer from './components/Footer/Footer';
 import TopNav from './components/Header/TopNav';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Navbar from './components/Header/Navbar';
 import WhatsAppFloat from './components/SocialMedia/WhatsAppModal';
 function App({ serverData, CategoryProducts }) {
@@ -30,7 +30,9 @@ function App({ serverData, CategoryProducts }) {
           <TopNav />
           <Navbar />
            {/* sds */}
-         {element}
+         <Suspense fallback={<div className="page-loader" />}>
+           {element}
+         </Suspense>
        <Footer />
     </>
   );

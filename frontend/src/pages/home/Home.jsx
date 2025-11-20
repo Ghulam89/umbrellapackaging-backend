@@ -12,12 +12,57 @@ import WeFulfil from '../../components/WeFulfil/WeFulfil'
 import CustomerReviews from '../../components/CustomerReviews'
 import InspirationPackaging from '../../components/InspirationPackaging'
 import ImportanceCustomPackaging from '../../components/ImportanceCustomPackaging'
-import Blog from '../../components/blog/Blog'
-import FAQ from '../../components/FAQ/FAQ'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
 import { goScreen, Hero1, logo } from '../../assets'
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
+
+// Lazy load components below the fold for faster initial page load
+const Blog = lazy(() => import('../../components/blog/Blog'))
+const FAQ = lazy(() => import('../../components/FAQ/FAQ'))
+
+// Loading placeholders
+const BlogPlaceholder = () => (
+  <div className="md:py-12 py-10">
+    <div className="sm:max-w-6xl max-w-[95%] mx-auto text-center">
+      <h2 className="sm:text-[35px] text-[25px] pb-5 font-sans font-[600] text-[#333333]">
+        Blog & News
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-white rounded-lg overflow-hidden shadow-md animate-pulse">
+            <div className="h-48 bg-gray-300"></div>
+            <div className="p-4">
+              <div className="h-6 bg-gray-300 rounded mb-2"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)
+
+const FAQPlaceholder = () => (
+  <div className="bg-gray-100 py-12">
+    <div className="sm:max-w-6xl max-w-[95%] mx-auto">
+      <div className="text-center mb-8">
+        <h2 className="sm:text-[35px] text-[25px] font-sans font-[600] text-[#333333]">
+          Frequently Asked Questions
+        </h2>
+      </div>
+      <div className="space-y-4">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="bg-white rounded-lg p-4 animate-pulse">
+            <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-300 rounded w-full"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)
 
 export const Home = React.memo(() => {
 
@@ -114,6 +159,7 @@ export const Home = React.memo(() => {
       <PageMetadata {...metadata} />
 
       <main>
+        {/* Above the fold - load immediately */}
         <Hero />
         <CustomPackaging />
         <CustomBoxMaterial />
@@ -128,8 +174,14 @@ export const Home = React.memo(() => {
         <CustomerReviews />
         <InspirationPackaging />
         <ImportanceCustomPackaging />
-        <Blog />
-        <FAQ />
+        
+        {/* Below the fold - lazy load for faster initial render */}
+        <Suspense fallback={<BlogPlaceholder />}>
+          <Blog />
+        </Suspense>
+        <Suspense fallback={<FAQPlaceholder />}>
+          <FAQ />
+        </Suspense>
       </main>
     </>
   )

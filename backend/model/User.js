@@ -25,6 +25,11 @@ const userSchema = new Schema({
     default: "approved",
   },
 });
+
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ username: 1 });
+userSchema.index({ status: 1 });
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);

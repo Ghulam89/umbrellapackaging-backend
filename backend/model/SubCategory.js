@@ -31,4 +31,9 @@ const subcategorySchema = new Schema({
   },
 });
 
+subcategorySchema.index({ categoryId: 1, status: 1 });
+subcategorySchema.index({ brandId: 1, categoryId: 1 });
+subcategorySchema.index({ title: 1 });
+subcategorySchema.index({ createdAt: -1 });
+
 export const SubCategory = mongoose.model("SubCategory", subcategorySchema);

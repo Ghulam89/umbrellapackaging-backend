@@ -19,6 +19,11 @@ const wishlistSchema = new Schema({
       },
 });
 
+wishlistSchema.index({ userId: 1, productId: 1 }, { unique: true });
+wishlistSchema.index({ userId: 1 });
+wishlistSchema.index({ productId: 1 });
+wishlistSchema.index({ addedAt: -1 });
+
 wishlistSchema.post("findOneAndDelete", async function (doc) {
   if (doc) {
     await Wishlist.deleteMany({ productId: doc._id });

@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux'
 import { addToCart } from '../../store/productSlice'
 import { IoSearch } from 'react-icons/io5'
 import PageMetadata from '../../components/common/PageMetadata'
+import { prefetchProductsBatch } from '../../utils/prefetchUtils'
 
 import pd1 from '../../assets/images/pd1.webp';
 import pd2 from '../../assets/images/pd2.webp';
@@ -361,10 +362,21 @@ const ProductDetails = ({
   const fetchRelatedProducts = async () => {
     const response = await axios.get(`${BaseUrl}/products/related-products?slug=${slug}`)
     setRelatedProduct(response?.data?.data)
+    
+    // Prefetch related products immediately for fast navigation
+    if (response?.data?.data?.relatedProducts && response.data.data.relatedProducts.length > 0) {
+      prefetchProductsBatch(response.data.data.relatedProducts, {
+        batchSize: 5,
+        delayBetweenBatches: 50,
+        priority: true // Priority for related products
+      });
+    }
   }
 
   useEffect(() => {
-    fetchProducts();
+    if (!serverData) {
+      fetchProducts();
+    }
     fetchRelatedProducts();
   }, [slug])
 

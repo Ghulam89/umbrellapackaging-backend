@@ -9,4 +9,6 @@ const subscribeSchema = new Schema({
   },
 });
 
+subscribeSchema.index({ email: 1 }, { unique: true });
+
 export const Subscribe = mongoose.model("Subscribe", subscribeSchema);

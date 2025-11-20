@@ -4,6 +4,7 @@ import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import { Link } from 'react-router-dom';
 import { faq } from '../../assets';
+import { useIntersectionObserver } from '../../utils/useIntersectionObserver';
 
 const Accordion = lazy(() => import('../common/Accordion'));
 
@@ -18,6 +19,13 @@ const AccordionLoading = React.memo(() => (
 const FAQ = React.memo(() => {
   const [accordions, setAccordions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Use Intersection Observer to defer API call until component is visible
+  const [faqRef, isVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '200px', // Start loading 200px before visible
+    triggerOnce: true
+  });
 
   const toggleAccordion = (accordionKey) => {
     const updatedAccordions = accordions.map((accordion) => {
@@ -50,13 +58,16 @@ const FAQ = React.memo(() => {
     }
   };
 
+  // Only fetch FAQs when component is visible (deferred loading)
   useEffect(() => {
-    fetchFaqs();
-  }, []);
+    if (isVisible) {
+      fetchFaqs();
+    }
+  }, [isVisible]);
 
   return (
     <>
-      <div style={{ backgroundImage: `url(${faq})` }} className="">
+      <div ref={faqRef} style={{ backgroundImage: `url(${faq})` }} className="">
         <div className="sm:max-w-6xl max-w-[95%] mx-auto">
           <div className="">
             <div className="text-center">

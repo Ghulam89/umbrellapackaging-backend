@@ -15,21 +15,32 @@ const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
   const location = useLocation();
 
   useEffect(() => {
+    // Load categories immediately but don't block rendering
+    // Use fallback data first, then update when API responds
+    setAllCategories(BrandsData);
+    setCategoriesLoaded(true); // Allow menu to work with fallback data
+    
     const fetchCategories = async () => {
       try {
-        setIsLoading(true);
-        const response = await axios.get(`${BaseUrl}/brands/getAll`);
-        setAllCategories(response?.data?.data?.length ? response.data.data : BrandsData);
-        setCategoriesLoaded(true);
+        // Fetch in background without blocking
+        const response = await axios.get(`${BaseUrl}/brands/getAll`, {
+          timeout: 5000 // 5 second timeout
+        });
+        if (response?.data?.data?.length) {
+          setAllCategories(response.data.data);
+        }
       } catch (error) {
-        setAllCategories(BrandsData);
-        setCategoriesLoaded(true);
+        // Silently fail - already using fallback data
+        console.error('Category fetch failed, using fallback:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchCategories();
+    // Defer API call slightly to not block initial render
+    setTimeout(() => {
+      fetchCategories();
+    }, 100);
   }, [setCategoriesLoaded]);
 
   useEffect(() => {

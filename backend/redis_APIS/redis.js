@@ -1,5 +1,6 @@
 import redis from 'redis';
 import express from 'express';
+import mongoose from 'mongoose';
 import { Brands } from '../model/Brand.js';
 import { Products } from '../model/Product.js';
 import { MidCategory } from '../model/MidCategory.js';
@@ -58,8 +59,22 @@ const preWarmCache = async () => {
     }
 };
 
-// Call pre-warm after connection
-setTimeout(preWarmCache, 5000);
+// Trigger cache pre-warm only after Mongo connection is ready
+let preWarmScheduled = false;
+const schedulePreWarm = () => {
+    if (preWarmScheduled) return;
+    preWarmScheduled = true;
+    // slight delay to ensure indexes are ready
+    setTimeout(() => {
+        preWarmCache().catch(err => console.error('Pre-warm cache error:', err.message));
+    }, 1000);
+};
+
+if (mongoose.connection.readyState === 1) {
+    schedulePreWarm();
+} else {
+    mongoose.connection.once('connected', schedulePreWarm);
+}
 
 // Simplified pipeline without $lookup for initial response
 const getBasePipeline = (search) => {

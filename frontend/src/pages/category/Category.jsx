@@ -8,6 +8,7 @@ import CardSlider from "../../components/common/CardSlider";
 import CustomPackagingProduced from "../../components/CustomPackagingProduced";
 import PageMetadata from "../../components/common/PageMetadata";
 import InstantQuoteModal from "../../components/common/InstantQuoteModal";
+import { prefetchProduct, prefetchProductsBatch } from "../../utils/prefetchUtils";
 const Category = ({ serverData }) => {
 
   console.log(serverData);
@@ -47,6 +48,23 @@ const Category = ({ serverData }) => {
       setCategoryProduct([]);
     };
   }, [slug]);
+
+  // Automatically prefetch all products when they load (for fast navigation) - OPTIMIZED
+  useEffect(() => {
+    if (categoryProduct && categoryProduct.length > 0) {
+      // Collect all products from all categories
+      const allProducts = categoryProduct.flatMap((category) => category?.products || []);
+      
+      if (allProducts.length > 0) {
+        // Use optimized batch prefetching for faster loading
+        prefetchProductsBatch(allProducts, {
+          batchSize: 5, // Increased from 3 to 5 for faster prefetching
+          delayBetweenBatches: 50, // Reduced from 100ms to 50ms for faster loading
+          priority: true // Priority for faster loading
+        });
+      }
+    }
+  }, [categoryProduct]);
 
 
 

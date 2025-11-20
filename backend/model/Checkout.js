@@ -91,4 +91,9 @@ const checkoutSchema = new Schema({
   },
 });
 
+checkoutSchema.index({ userId: 1, createdAt: -1 });
+checkoutSchema.index({ email: 1, createdAt: -1 });
+checkoutSchema.index({ paymentStatus: 1, createdAt: -1 });
+checkoutSchema.index({ status: 1, createdAt: -1 });
+
 export const Checkout = mongoose.model("Checkout", checkoutSchema);

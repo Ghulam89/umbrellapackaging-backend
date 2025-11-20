@@ -47,4 +47,9 @@ const instantQuoteSchema = new Schema({
   },
 });
 
+instantQuoteSchema.index({ email: 1, createdAt: -1 });
+instantQuoteSchema.index({ phoneNumber: 1, createdAt: -1 });
+instantQuoteSchema.index({ status: 1, createdAt: -1 });
+instantQuoteSchema.index({ pageUrl: 1 });
+
 export const InstantQuote = mongoose.model("InstantQuote", instantQuoteSchema);

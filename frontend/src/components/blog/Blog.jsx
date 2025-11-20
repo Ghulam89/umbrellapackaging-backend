@@ -7,6 +7,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { BaseUrl } from "../../utils/BaseUrl";
 import axios from "axios";
+import { useIntersectionObserver } from "../../utils/useIntersectionObserver";
 
 // Lazy load the BlogCard component
 const BlogCard = lazy(() => import("../common/BlogCard"));
@@ -29,6 +30,13 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleSlides, setVisibleSlides] = useState(1); // Track visible slides for lazy loading
+  
+  // Use Intersection Observer to defer API call until component is visible
+  const [blogRef, isVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '200px', // Start loading 200px before visible
+    triggerOnce: true
+  });
 
   // Memoized scroll handler with throttling
   const handleScroll = useCallback(() => {
@@ -91,9 +99,12 @@ const Blog = () => {
     }
   }, []);
 
+  // Only fetch blogs when component is visible (deferred loading)
   useEffect(() => {
-    fetchBlogs();
-  }, [fetchBlogs]);
+    if (isVisible) {
+      fetchBlogs();
+    }
+  }, [isVisible, fetchBlogs]);
 
   // Memoize Swiper configuration
    const swiperConfig = useMemo(() => ({
@@ -186,7 +197,7 @@ const Blog = () => {
   }
 
   return (
-    <div className="md:py-12 py-10">
+    <div ref={blogRef} className="md:py-12 py-10">
       <div className="sm:max-w-6xl max-w-[95%] mx-auto text-center">
         <h2 className="sm:text-[35px] text-[25px] pb-5 font-sans font-[600] text-[#333333]">
           Blog & News

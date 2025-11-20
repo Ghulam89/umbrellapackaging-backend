@@ -69,6 +69,14 @@ const productSchema = new Schema({
     type: String,
     enum: ["pending", "approved"],
     default: "pending",
-  },
+  }
 });
+
+productSchema.index({ slug: 1 }, { unique: true });
+productSchema.index({ brandId: 1, categoryId: 1 });
+productSchema.index({ categoryId: 1, createdAt: -1 });
+productSchema.index({ brandId: 1, createdAt: -1 });
+productSchema.index({ status: 1, createdAt: -1 });
+productSchema.index({ name: 1 });
+
 export const Products = mongoose.model("Products", productSchema);

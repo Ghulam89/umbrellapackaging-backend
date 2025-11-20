@@ -22,6 +22,7 @@ import PageMetadata from '../../components/common/PageMetadata';
 import InstantQuoteModal from '../../components/common/InstantQuoteModal';
 import goScreen from '../../assets/images/goScreen.webp';
 import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart';
+import { prefetchProduct, prefetchProductsBatch } from '../../utils/prefetchUtils';
 const SubCategory = ({ serverData, CategoryProducts }) => {
 
   console.log(serverData);
@@ -130,6 +131,18 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
       }
     }
   }, [slug, CategoryProducts]);
+
+  // Automatically prefetch all products when they load (for fast navigation) - OPTIMIZED
+  useEffect(() => {
+    if (allProducts && allProducts.length > 0) {
+      // Use optimized batch prefetching for faster loading
+      prefetchProductsBatch(allProducts, {
+        batchSize: 5, // Increased from 3 to 5 for faster prefetching
+        delayBetweenBatches: 50, // Reduced from 100ms to 50ms for faster loading
+        priority: true // Priority for faster loading
+      });
+    }
+  }, [allProducts]);
 
 
 
@@ -306,8 +319,27 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
             <div className=" grid sm:grid-cols-4 grid-cols-2  sm:gap-10 gap-4 mt-3.5">
 
               {allProducts?.map((item, index) => {
-                return <div className=' w-full'>
-                  <Link state={{ productSlug: item._id }} to={`/${item?.slug}`} >
+                // Prefetch product data on hover
+                const handleMouseEnter = () => {
+                  if (item?.slug) {
+                    prefetchProduct(item.slug);
+                  }
+                };
+
+                // Prefetch product data on mousedown (before click)
+                const handleMouseDown = () => {
+                  if (item?.slug) {
+                    prefetchProduct(item.slug);
+                  }
+                };
+
+                return <div className=' w-full' key={item._id || index}>
+                  <Link 
+                    state={{ productSlug: item._id }} 
+                    to={`/${item?.slug}`}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseDown={handleMouseDown}
+                  >
                     <div className="">
                       <div className="">
                         <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />

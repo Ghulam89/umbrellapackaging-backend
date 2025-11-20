@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import shopChoose from '../../assets/images/Industry-standard.png-2.webp';
 import PageMetadata from '../../components/common/PageMetadata'
+import { prefetchProduct, prefetchProductsBatch } from '../../utils/prefetchUtils'
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -78,6 +79,18 @@ const Shop = () => {
     setProducts([]);
     fetchProducts(1);
   }, [categoryId, searchQuery]);
+
+  // Automatically prefetch all products when they load (for fast navigation) - OPTIMIZED
+  useEffect(() => {
+    if (products && products.length > 0) {
+      // Use optimized batch prefetching for faster loading
+      prefetchProductsBatch(products, {
+        batchSize: 5, // Increased from 3 to 5 for faster prefetching
+        delayBetweenBatches: 50, // Reduced from 100ms to 50ms for faster loading
+        priority: true // Priority for faster loading
+      });
+    }
+  }, [products]);
 
   const handleLoadMore = () => {
     if (pagination.page < pagination.totalPages) {

@@ -134,4 +134,9 @@ const midcategorySchema = new Schema({
   },
 });
 
+midcategorySchema.index({ slug: 1 }, { unique: true });
+midcategorySchema.index({ title: 1 });
+midcategorySchema.index({ brandId: 1, status: 1 });
+midcategorySchema.index({ createdAt: -1 });
+
 export const MidCategory = mongoose.model("MidCategory", midcategorySchema);

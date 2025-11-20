@@ -50,4 +50,9 @@ const brandSchema = new Schema({
   },
 });
 
+brandSchema.index({ slug: 1 }, { unique: true });
+brandSchema.index({ name: 1 });
+brandSchema.index({ status: 1, createdAt: -1 });
+brandSchema.index({ createdAt: -1 });
+
 export const Brands = mongoose.model("Brands", brandSchema);

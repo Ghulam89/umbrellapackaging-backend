@@ -89,4 +89,9 @@ const requestQuoteSchema = new Schema({
   },
 });
 
+requestQuoteSchema.index({ email: 1, createdAt: -1 });
+requestQuoteSchema.index({ status: 1, createdAt: -1 });
+requestQuoteSchema.index({ phoneNumber: 1 });
+requestQuoteSchema.index({ pageUrl: 1 });
+
 export const RequestQuote = mongoose.model("RequestQuote", requestQuoteSchema);

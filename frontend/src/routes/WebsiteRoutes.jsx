@@ -25,15 +25,26 @@ import axios from "axios";
 import { BaseUrl } from "../utils/BaseUrl";
 import Dielines from "../pages/Dielines";
 import SuccessPage from "../pages/thankYouPage";
+import { getCachedProduct } from "../utils/prefetchUtils";
 
 function ProductDetailsWrapper({ initialProduct }) {
   const { slug } = useParams();
-  const [productData, setProductData] = useState(initialProduct || null);
+  // Check cache first before setting initial state
+  const cachedProduct = slug ? getCachedProduct(slug) : null;
+  const [productData, setProductData] = useState(initialProduct || cachedProduct || null);
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(!initialProduct && !!slug);
+  const [loading, setLoading] = useState(!initialProduct && !cachedProduct && !!slug);
 
   useEffect(() => {
     if (!initialProduct && slug) {
+      // Check cache first
+      const cached = getCachedProduct(slug);
+      if (cached) {
+        setProductData(cached);
+        setLoading(false);
+        return;
+      }
+
       let cancelled = false;
       setLoading(true);
       

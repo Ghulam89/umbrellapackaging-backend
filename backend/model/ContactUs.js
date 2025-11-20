@@ -47,4 +47,8 @@ const ContactUsSchema = new Schema({
   },
 });
 
+ContactUsSchema.index({ email: 1, createdAt: -1 });
+ContactUsSchema.index({ phoneNumber: 1 });
+ContactUsSchema.index({ pageUrl: 1 });
+
 export const ContactUs = mongoose.model("ContactUs", ContactUsSchema);
