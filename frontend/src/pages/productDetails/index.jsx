@@ -16,7 +16,7 @@ import { useDispatch } from 'react-redux'
 import { addToCart } from '../../store/productSlice'
 import { IoSearch } from 'react-icons/io5'
 import PageMetadata from '../../components/common/PageMetadata'
-import { prefetchProductsBatch } from '../../utils/prefetchUtils'
+import { prefetchProductsBatch, getCachedProduct } from '../../utils/prefetchUtils'
 
 import pd1 from '../../assets/images/pd1.webp';
 import pd2 from '../../assets/images/pd2.webp';
@@ -38,6 +38,7 @@ const ProductDetails = ({
   const dispatch = useDispatch()
   const [product, setProduct] = useState(serverData || null);
   const [relatedProduct, setRelatedProduct] = useState([])
+  const [loading, setLoading] = useState(false);
 
 
   const navigate = useNavigate();
@@ -355,29 +356,76 @@ const ProductDetails = ({
 
 
   const fetchProducts = async () => {
-    const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`)
-    setProduct(response?.data?.data)
+    setLoading(true);
+    try {
+      // Check cache first for instant loading
+      const cachedProduct = getCachedProduct(slug);
+      if (cachedProduct) {
+        setProduct(cachedProduct);
+        // Reset image carousel when product changes
+        setCurr(0);
+        setSelectedImage(null);
+        setCurrentIndex(0);
+        setLoading(false);
+        return;
+      }
+
+      const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`)
+      setProduct(response?.data?.data)
+      // Reset image carousel when product changes
+      setCurr(0);
+      setSelectedImage(null);
+      setCurrentIndex(0);
+    } catch (err) {
+      console.error('Error fetching product:', err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   const fetchRelatedProducts = async () => {
-    const response = await axios.get(`${BaseUrl}/products/related-products?slug=${slug}`)
-    setRelatedProduct(response?.data?.data)
-    
-    // Prefetch related products immediately for fast navigation
-    if (response?.data?.data?.relatedProducts && response.data.data.relatedProducts.length > 0) {
-      prefetchProductsBatch(response.data.data.relatedProducts, {
-        batchSize: 5,
-        delayBetweenBatches: 50,
-        priority: true // Priority for related products
-      });
+    try {
+      const response = await axios.get(`${BaseUrl}/products/related-products?slug=${slug}`)
+      setRelatedProduct(response?.data?.data)
+      
+      // Prefetch related products immediately for fast navigation
+      if (response?.data?.data?.relatedProducts && response.data.data.relatedProducts.length > 0) {
+        prefetchProductsBatch(response.data.data.relatedProducts, {
+          batchSize: 5,
+          delayBetweenBatches: 50,
+          priority: true // Priority for related products
+        });
+      }
+    } catch (err) {
+      console.error('Error fetching related products:', err);
     }
   }
 
   useEffect(() => {
-    if (!serverData) {
-      fetchProducts();
+    // Reset states when slug changes
+    setProduct(null);
+    setRelatedProduct([]);
+    setCurr(0);
+    setSelectedImage(null);
+    setCurrentIndex(0);
+    
+    // Check cache first for instant loading
+    const cachedProduct = getCachedProduct(slug);
+    if (cachedProduct) {
+      setProduct(cachedProduct);
+      fetchRelatedProducts();
+      return;
     }
-    fetchRelatedProducts();
+    
+    // If serverData is provided and matches current slug, use it
+    if (serverData && serverData.slug === slug) {
+      setProduct(serverData);
+      fetchRelatedProducts();
+    } else {
+      // Fetch new product when slug changes
+      fetchProducts();
+      fetchRelatedProducts();
+    }
   }, [slug])
 
 
@@ -1060,7 +1108,7 @@ const ProductDetails = ({
               <h3 className=" text-2xl font-semibold">RELATED PRODUCTS</h3>
             </div>
             <div className=' py-5'>
-              <CardSlider item={relatedProduct?.relatedProducts} />
+              <CardSlider item={relatedProduct?.relatedProducts} disableSelection={true} />
             </div>
 
 

@@ -14,6 +14,7 @@ import { BaseUrl } from '../../utils/BaseUrl';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { logo } from '../../assets';
+import { prefetchSubCategory } from '../../utils/prefetchUtils';
 import discover from '../../assets/images/discover.png'
 import american from '../../assets/images/emrican-expreess.png'
 import bankTranfer from '../../assets/images/ebank-transfer.png'
@@ -174,25 +175,60 @@ const images = [discover, american, bankTranfer, masterCard, paypal, wireTransfe
                             <strong className='  text-lg '>Useful Links</strong>
                             <ul className=' pt-3 leading-8'>
                                 <li>
-                                    <Link to={'/sub-category/custom-cardboard-boxes'} className='  text-[#2e2d2d]'>Cardboard Boxes</Link>
+                                    <Link 
+                                        to={'/sub-category/custom-cardboard-boxes'} 
+                                        className='  text-[#2e2d2d]'
+                                        onMouseEnter={() => prefetchSubCategory('custom-cardboard-boxes')}
+                                        onMouseDown={() => prefetchSubCategory('custom-cardboard-boxes', true)}
+                                    >Cardboard Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/custom-corrugated-boxes'} className='  text-[#2e2d2d]'>Corrugated Boxes</Link>
+                                    <Link 
+                                        to={'/sub-category/custom-corrugated-boxes'} 
+                                        className='  text-[#2e2d2d]'
+                                        onMouseEnter={() => prefetchSubCategory('custom-corrugated-boxes')}
+                                        onMouseDown={() => prefetchSubCategory('custom-corrugated-boxes', true)}
+                                    >Corrugated Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/kraft-packaging-boxes'} className='  text-[#2e2d2d]'>Karft Boxes</Link>
+                                    <Link 
+                                        to={'/sub-category/kraft-packaging-boxes'} 
+                                        className='  text-[#2e2d2d]'
+                                        onMouseEnter={() => prefetchSubCategory('kraft-packaging-boxes')}
+                                        onMouseDown={() => prefetchSubCategory('kraft-packaging-boxes', true)}
+                                    >Karft Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/custom-rigid-boxes'} className='  text-[#2e2d2d]'>Rigid Boxes</Link>
+                                    <Link 
+                                        to={'/sub-category/custom-rigid-boxes'} 
+                                        className='  text-[#2e2d2d]'
+                                        onMouseEnter={() => prefetchSubCategory('custom-rigid-boxes')}
+                                        onMouseDown={() => prefetchSubCategory('custom-rigid-boxes', true)}
+                                    >Rigid Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/custom-laminated-boxes'} className='  text-[#2e2d2d]'>Laminated Boxes</Link>
+                                    <Link 
+                                        to={'/sub-category/custom-laminated-boxes'} 
+                                        className='  text-[#2e2d2d]'
+                                        onMouseEnter={() => prefetchSubCategory('custom-laminated-boxes')}
+                                        onMouseDown={() => prefetchSubCategory('custom-laminated-boxes', true)}
+                                    >Laminated Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/custom-textured-boxes'} className='  text-[#2e2d2d]'>Textured Boxes</Link>
+                                    <Link 
+                                        to={'/sub-category/custom-textured-boxes'} 
+                                        className='  text-[#2e2d2d]'
+                                        onMouseEnter={() => prefetchSubCategory('custom-textured-boxes')}
+                                        onMouseDown={() => prefetchSubCategory('custom-textured-boxes', true)}
+                                    >Textured Boxes</Link>
                                 </li>
                                 <li>
-                                    <Link to={'/sub-category/cbd-packaging-boxes'} className='  text-[#2e2d2d] '>CBD Packaging</Link>
+                                    <Link 
+                                        to={'/sub-category/cbd-packaging-boxes'} 
+                                        className='  text-[#2e2d2d] '
+                                        onMouseEnter={() => prefetchSubCategory('cbd-packaging-boxes')}
+                                        onMouseDown={() => prefetchSubCategory('cbd-packaging-boxes', true)}
+                                    >CBD Packaging</Link>
                                 </li>
                             </ul>
                         </div>

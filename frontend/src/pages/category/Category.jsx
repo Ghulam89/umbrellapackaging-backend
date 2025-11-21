@@ -8,7 +8,8 @@ import CardSlider from "../../components/common/CardSlider";
 import CustomPackagingProduced from "../../components/CustomPackagingProduced";
 import PageMetadata from "../../components/common/PageMetadata";
 import InstantQuoteModal from "../../components/common/InstantQuoteModal";
-import { prefetchProduct, prefetchProductsBatch } from "../../utils/prefetchUtils";
+import { prefetchProduct, prefetchProductsBatch, prefetchSubCategory } from "../../utils/prefetchUtils";
+import { ProductSelectionProvider } from "../../components/common/ProductCard";
 const Category = ({ serverData }) => {
 
   console.log(serverData);
@@ -17,8 +18,10 @@ const Category = ({ serverData }) => {
   const navigate = useNavigate();
   const [categoryProduct, setCategoryProduct] = useState([]);
   const [categoryData, setCategoryData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const FetchCategory = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${BaseUrl}/brands/get?slug=${slug}`);
       if (!response?.data?.data) {
@@ -34,7 +37,9 @@ const Category = ({ serverData }) => {
       setCategoryProduct(response2?.data?.data?.categories);
     } catch (err) {
       // If there's an error or category not found, redirect to 404
-      navigate('/404')
+      // navigate('/404')
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,6 +98,7 @@ const Category = ({ serverData }) => {
   return (
 
     <>
+    <ProductSelectionProvider>
     {(categoryData || serverData) ? (
   <PageMetadata
     title={categoryData?.metaTitle || serverData?.metaTitle}
@@ -180,16 +186,62 @@ const Category = ({ serverData }) => {
 
 
       </Container>
-      {categoryProduct?.map((item, index) => {
+      
+      {/* Loading Skeletons */}
+      {loading && (
+        <>
+          {[1, 2, 3,4,5].map((skeletonIndex) => (
+            <div key={skeletonIndex} className="bg-[#EFF4FE] py-4">
+              <Container fullWidth={false} className=" sm:max-w-6xl max-w-[95%]  mx-auto">
+                <div className=" flex sm:flex-row flex-col gap-3  py-9 justify-between items-center">
+                  <div className="animate-pulse">
+                    <div className="bg-gray-300 rounded h-8 w-64 mb-2"></div>
+                  </div>
+                  <div className="animate-pulse">
+                    <div className="bg-gray-300 rounded h-10 w-48"></div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+                  {[1, 2, 3, 4].map((productIndex) => (
+                    <div key={productIndex} className="bg-[#f7f7f7] p-2 rounded-xl">
+                      <div className="animate-pulse">
+                        <div className="bg-gray-200 rounded-lg w-full h-48 mb-2"></div>
+                        <div className="bg-gray-200 rounded h-4 w-3/4 mx-auto mb-2"></div>
+                        <div className="bg-gray-200 rounded h-3 w-1/2 mx-auto"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Container>
+            </div>
+          ))}
+        </>
+      )}
+
+      {/* Actual Category Products */}
+      {!loading && categoryProduct?.map((item, index) => {
         return (
-          <div className="bg-[#EFF4FE] py-4">
+          <div key={item?._id || index} className="bg-[#EFF4FE] py-4">
             <Container fullWidth={false} className=" sm:max-w-6xl max-w-[95%]  mx-auto">
               <div className=" flex sm:flex-row flex-col gap-3  py-9 justify-between items-center">
                 <div>
                   <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333]">{item?.categoryName}</h2>
                 </div>
                 <div>
-                  <Link to={`/sub-category/${item?.categorySlug}`} className="" >
+                  <Link 
+                    to={`/sub-category/${item?.categorySlug}`} 
+                    className=""
+                    onMouseEnter={() => {
+                      if (item?.categorySlug) {
+                        prefetchSubCategory(item.categorySlug);
+                      }
+                    }}
+                    onMouseDown={() => {
+                      if (item?.categorySlug) {
+                        prefetchSubCategory(item.categorySlug, true);
+                      }
+                    }}
+                  >
                     <Button
 
                       label={`View All ${item?.categoryName}`}
@@ -260,6 +312,7 @@ const Category = ({ serverData }) => {
         <CustomPackagingProduced />
       </div>
    <InstantQuoteModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+    </ProductSelectionProvider>
     </>
 
   );

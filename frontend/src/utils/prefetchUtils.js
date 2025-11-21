@@ -6,6 +6,11 @@ const productCache = new Map();
 const pendingRequests = new Map();
 const CACHE_SIZE = 100; // Increased from 50 to 100
 
+// Cache for SubCategory data
+const subCategoryCache = new Map();
+const pendingSubCategoryRequests = new Map();
+const SUBCATEGORY_CACHE_SIZE = 50;
+
 /**
  * Prefetch product data by slug - optimized for speed
  * @param {string} slug - Product slug
@@ -140,5 +145,107 @@ export const prefetchProductsBatch = async (products = [], options = {}) => {
       prefetchProducts(batch, priority);
     }, delayBetweenBatches * Math.floor(i / batchSize));
   }
+};
+
+/**
+ * Prefetch SubCategory data by slug - optimized for speed
+ * @param {string} slug - SubCategory slug
+ * @param {boolean} priority - If true, fetch immediately without delay
+ * @returns {Promise} - Promise that resolves with SubCategory data
+ */
+export const prefetchSubCategory = async (slug, priority = false) => {
+  if (!slug) return null;
+
+  // Return cached data if available (instant return)
+  if (subCategoryCache.has(slug)) {
+    return subCategoryCache.get(slug);
+  }
+
+  // Return pending request if already in progress (avoid duplicate calls)
+  if (pendingSubCategoryRequests.has(slug)) {
+    return pendingSubCategoryRequests.get(slug);
+  }
+
+  // Create new request with optimized timeout
+  const requestPromise = axios
+    .get(`${BaseUrl}/redis/category/get?slug=${slug}`, {
+      timeout: 10000, // 10 second timeout
+      ...(priority && { priority: true }) // Browser hint for priority
+    })
+    .then((response) => {
+      const subCategoryData = response?.data?.data || null;
+      if (subCategoryData) {
+        // Cache the data (keep last 50 subcategories)
+        subCategoryCache.set(slug, subCategoryData);
+        
+        // Limit cache size to prevent memory issues
+        if (subCategoryCache.size > SUBCATEGORY_CACHE_SIZE) {
+          // Remove oldest entry (LRU-like behavior)
+          const firstKey = subCategoryCache.keys().next().value;
+          subCategoryCache.delete(firstKey);
+        }
+
+        // Prefetch products for this subcategory if we have the category ID
+        if (subCategoryData._id) {
+          // Prefetch first page of products for this subcategory
+          axios
+            .get(`${BaseUrl}/products/categoryProducts/${subCategoryData._id}?page=1`, {
+              timeout: 10000,
+              ...(priority && { priority: true })
+            })
+            .then((productResponse) => {
+              const products = productResponse?.data?.data || [];
+              if (products.length > 0) {
+                // Prefetch all products from first page
+                const productSlugs = products
+                  .filter((p) => p?.slug)
+                  .map((p) => p.slug);
+                if (productSlugs.length > 0) {
+                  prefetchProducts(productSlugs, priority);
+                }
+              }
+            })
+            .catch(() => {
+              // Silently fail for prefetch
+            });
+        }
+      }
+      
+      // Remove from pending requests
+      pendingSubCategoryRequests.delete(slug);
+      
+      return subCategoryData;
+    })
+    .catch((error) => {
+      // Remove from pending requests on error
+      pendingSubCategoryRequests.delete(slug);
+      // Silently fail for prefetch - don't spam console
+      if (error.code !== 'ECONNABORTED') {
+        console.error('SubCategory prefetch error:', error.message);
+      }
+      return null;
+    });
+
+  // Store pending request
+  pendingSubCategoryRequests.set(slug, requestPromise);
+
+  return requestPromise;
+};
+
+/**
+ * Get cached SubCategory data
+ * @param {string} slug - SubCategory slug
+ * @returns {Object|null} - Cached SubCategory data or null
+ */
+export const getCachedSubCategory = (slug) => {
+  return subCategoryCache.get(slug) || null;
+};
+
+/**
+ * Clear SubCategory cache (optional utility)
+ */
+export const clearSubCategoryCache = () => {
+  subCategoryCache.clear();
+  pendingSubCategoryRequests.clear();
 };
 

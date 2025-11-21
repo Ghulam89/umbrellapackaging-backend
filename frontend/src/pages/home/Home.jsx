@@ -15,7 +15,9 @@ import ImportanceCustomPackaging from '../../components/ImportanceCustomPackagin
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
 import { goScreen, Hero1, logo } from '../../assets'
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useEffect } from 'react'
+import { prefetchSubCategory, prefetchProducts } from '../../utils/prefetchUtils'
+import axios from 'axios'
 
 // Lazy load components below the fold for faster initial page load
 const Blog = lazy(() => import('../../components/blog/Blog'))
@@ -65,6 +67,52 @@ const FAQPlaceholder = () => (
 )
 
 export const Home = React.memo(() => {
+  // Prefetch data on home page load for faster navigation
+  useEffect(() => {
+    // Prefetch subcategories from Hero buttons (priority for user experience)
+    const heroSubCategories = [
+      'fashion-apparel-packaging-boxes',
+      'food-packaging-boxes',
+      'cbd-packaging-boxes',
+      'custom-cardboard-boxes'
+    ];
+    
+    // Prefetch all hero subcategories in parallel with priority
+    heroSubCategories.forEach(slug => {
+      prefetchSubCategory(slug, true); // true = priority
+    });
+
+    // Prefetch kraft-packaging-boxes from PackagingBanner
+    prefetchSubCategory('kraft-packaging-boxes', true);
+
+    // Prefetch popular products from first page (non-blocking, lower priority)
+    // This helps when users navigate to product pages
+    const prefetchPopularProducts = async () => {
+      try {
+        // Small delay to not block initial page render
+        setTimeout(async () => {
+          const response = await axios.get(`${BaseUrl}/products/getAll?page=1&perPage=10`, {
+            timeout: 8000
+          });
+          const products = response?.data?.data || [];
+          if (products.length > 0) {
+            // Extract slugs and prefetch first 5 popular products
+            const productSlugs = products
+              .slice(0, 5)
+              .filter(p => p?.slug)
+              .map(p => p.slug);
+            if (productSlugs.length > 0) {
+              prefetchProducts(productSlugs, false); // false = lower priority
+            }
+          }
+        }, 500); // Delay to not block initial render
+      } catch (error) {
+        // Silently fail - prefetch is optional
+      }
+    };
+
+    prefetchPopularProducts();
+  }, []); // Run only once on mount
 
   const metadata = {
     title: "Affordable, High-Quality Custom Packaging Boxes – Wholesale | Umbrella Custom Packaging",

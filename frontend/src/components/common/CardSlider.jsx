@@ -7,7 +7,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import ProductCard from "./ProductCard";
 
-const CardSlider = ({ item, index }) => {
+const CardSlider = ({ item, index, disableSelection = false }) => {
   const [isAutoPlay, setIsAutoPlay] = useState(true);
 
   const handleScroll = () => {
@@ -58,7 +58,7 @@ const CardSlider = ({ item, index }) => {
           {item?.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="bg-[#f7f7f7] p-2 rounded-xl max-w-6xl mx-auto">
-                <ProductCard data={item} />
+                <ProductCard data={item} disableSelection={disableSelection} />
               </div>
             </SwiperSlide>
           ))}

@@ -3,6 +3,7 @@ import Button from "../common/Button";
 import InstantQuoteModal from "../common/InstantQuoteModal";
 import { Link } from "react-router-dom";
 import { Hero1, Icon1, Icon2, Icon3, Icon4, Icon5, Icon6 } from "../../assets";
+import { prefetchSubCategory } from "../../utils/prefetchUtils";
 const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -17,25 +18,41 @@ const Hero = () => {
           </div>
           <div className="  hidden sm:block">
             <div className=" flex  mt-7 gap-2 flex-wrap items-center">
-              <Link to={'/sub-category/fashion-apparel-packaging-boxes'}>
+              <Link 
+                to={'/sub-category/fashion-apparel-packaging-boxes'}
+                onMouseEnter={() => prefetchSubCategory('fashion-apparel-packaging-boxes')}
+                onMouseDown={() => prefetchSubCategory('fashion-apparel-packaging-boxes', true)}
+              >
                 <Button
                   label={"Apparel Boxes"}
                   className="   py-2 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white "
                 />
               </Link>
-              <Link to={'/sub-category/food-packaging-boxes'}>
+              <Link 
+                to={'/sub-category/food-packaging-boxes'}
+                onMouseEnter={() => prefetchSubCategory('food-packaging-boxes')}
+                onMouseDown={() => prefetchSubCategory('food-packaging-boxes', true)}
+              >
                 <Button
                   label={"Food Boxes"}
                   className=" py-2 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"
                 />
               </Link>
-              <Link to={'/sub-category/cbd-packaging-boxes'}>
+              <Link 
+                to={'/sub-category/cbd-packaging-boxes'}
+                onMouseEnter={() => prefetchSubCategory('cbd-packaging-boxes')}
+                onMouseDown={() => prefetchSubCategory('cbd-packaging-boxes', true)}
+              >
                 <Button
                   label={"CBD Boxes"}
                   className="   py-2 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"
                 />
               </Link>
-              <Link to={'/sub-category/custom-cardboard-boxes'}>
+              <Link 
+                to={'/sub-category/custom-cardboard-boxes'}
+                onMouseEnter={() => prefetchSubCategory('custom-cardboard-boxes')}
+                onMouseDown={() => prefetchSubCategory('custom-cardboard-boxes', true)}
+              >
                 <Button
                   label={"Cardboard Boxes"}
                   className="  py-2 border border-[#4440E6] hover:bg-[#4440E6] hover:text-white"

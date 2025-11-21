@@ -5,6 +5,7 @@ import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 import BrandsData from "../../api/BrandsData";
 import { logo } from "../../assets";
+import { prefetchSubCategory } from "../../utils/prefetchUtils";
 
 const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -139,6 +140,16 @@ const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
                     onClick={handleCategoryLeave}
                     to={`/sub-category/${submenu.slug}`}
                     className="flex font-semibold text-[#333333] capitalize gap-1 items-center transition-colors"
+                    onMouseEnter={() => {
+                      if (submenu?.slug) {
+                        prefetchSubCategory(submenu.slug);
+                      }
+                    }}
+                    onMouseDown={() => {
+                      if (submenu?.slug) {
+                        prefetchSubCategory(submenu.slug, true);
+                      }
+                    }}
                   >
                     <img src={`${BaseUrl}/${submenu?.icon}`} alt="" className="w-8" />{" "}
                     {submenu.title}
@@ -220,6 +231,16 @@ const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
                               to={`/sub-category/${submenu.slug}`}
                               className="text-sm text-[#333333] font-medium flex items-center py-2 px-4 transition-colors hover:bg-gray-100"
                               onClick={handleLinkClick}
+                              onMouseEnter={() => {
+                                if (submenu?.slug) {
+                                  prefetchSubCategory(submenu.slug);
+                                }
+                              }}
+                              onMouseDown={() => {
+                                if (submenu?.slug) {
+                                  prefetchSubCategory(submenu.slug, true);
+                                }
+                              }}
                             >
                               <img src={`${BaseUrl}/${submenu?.icon}`} alt="" className="w-6 h-6 mr-2 object-contain" />
                               {submenu.title}

@@ -22,7 +22,7 @@ import PageMetadata from '../../components/common/PageMetadata';
 import InstantQuoteModal from '../../components/common/InstantQuoteModal';
 import goScreen from '../../assets/images/goScreen.webp';
 import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart';
-import { prefetchProduct, prefetchProductsBatch } from '../../utils/prefetchUtils';
+import { prefetchProduct, prefetchProductsBatch, prefetchSubCategory, getCachedSubCategory } from '../../utils/prefetchUtils';
 const SubCategory = ({ serverData, CategoryProducts }) => {
 
   console.log(serverData);
@@ -33,7 +33,10 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState(new Set());
 
 
 
@@ -87,7 +90,14 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
 
   const fetchProduct = async (page = 1) => {
-
+    // Only set main loading for first page
+    if (page === 1) {
+      setLoading(true);
+      setLoadingProducts(Array(8).fill(null)); // 8 loading skeletons
+    } else {
+      // For subsequent pages, use loadingMore
+      setLoadingMore(true);
+    }
 
     try {
       const response = await axios.get(`${BaseUrl}/redis/category/get?slug=${slug}`);
@@ -99,6 +109,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
       );
       if (page === 1) {
         setAllProducts(response2?.data?.data);
+        setLoadingProducts([]);
       } else {
         // Prevent duplicates by checking if product already exists
         setAllProducts(prev => {
@@ -111,13 +122,30 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
       setTotalPages(response2?.data?.totalPages);
 
     } catch (err) {
-
+      if (page === 1) {
+        setLoadingProducts([]);
+      }
+    } finally {
+      if (page === 1) {
+        setLoading(false);
+      } else {
+        setLoadingMore(false);
+      }
     }
 
   };
 
   useEffect(() => {
     if (slug) {
+      // Check cache first for faster loading
+      const cachedData = getCachedSubCategory(slug);
+      if (cachedData) {
+        setCategoryData(cachedData);
+      }
+
+      // Prefetch SubCategory data for faster navigation
+      prefetchSubCategory(slug, true);
+
       // If we have server-side data, use it initially
       if (CategoryProducts && CategoryProducts.length > 0) {
         setAllProducts(CategoryProducts);
@@ -148,7 +176,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
   const loadMoreProducts = () => {
     const nextPage = currentPage + 1;
-    if (nextPage <= totalPages) {
+    if (nextPage <= totalPages && !loadingMore && !loading) {
       fetchProduct(nextPage);
     }
   };
@@ -316,50 +344,84 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
             </p>
 
+           
             <div className=" grid sm:grid-cols-4 grid-cols-2  sm:gap-10 gap-4 mt-3.5">
 
-              {allProducts?.map((item, index) => {
-                // Prefetch product data on hover
-                const handleMouseEnter = () => {
-                  if (item?.slug) {
-                    prefetchProduct(item.slug);
-                  }
-                };
-
-                // Prefetch product data on mousedown (before click)
-                const handleMouseDown = () => {
-                  if (item?.slug) {
-                    prefetchProduct(item.slug);
-                  }
-                };
-
-                return <div className=' w-full' key={item._id || index}>
-                  <Link 
-                    state={{ productSlug: item._id }} 
-                    to={`/${item?.slug}`}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseDown={handleMouseDown}
-                  >
-                    <div className="">
-                      <div className="">
-                        <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
-                      </div>
-
-
-                      <h2 className="  sm:text-base text-sm font-semibold text-[#333333]  text-center  uppercase sm:py-5 py-2">{item?.name}</h2>
-                    </div>
-                  </Link>
+              {/* Loading Skeletons */}
+              {loading && loadingProducts.length > 0 && loadingProducts.map((_, index) => (
+                <div className=' w-full' key={`loading-${index}`}>
+                  <div className="animate-pulse">
+                    <div className="bg-gray-200 rounded-lg w-full sm:h-62 h-48 mb-2"></div>
+                    <div className="bg-gray-200 rounded h-4 w-3/4 mx-auto mb-2"></div>
+                    <div className="bg-gray-200 rounded h-3 w-1/2 mx-auto"></div>
+                  </div>
                 </div>
-              })}
+              ))}
+
+              {/* Actual Products - Show even when loading more */}
+              {allProducts?.map((item, index) => {
+                  // Prefetch product data on hover
+                  const handleMouseEnter = () => {
+                    if (item?.slug) {
+                      prefetchProduct(item.slug);
+                    }
+                  };
+
+                  // Prefetch product data on mousedown (before click)
+                  const handleMouseDown = () => {
+                    if (item?.slug) {
+                      prefetchProduct(item.slug);
+                    }
+                  };
+
+                  const isSelected = selectedProducts.has(item._id);
+
+                  const handleProductClick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSelectedProducts(prev => {
+                      const newSet = new Set(prev);
+                      if (newSet.has(item._id)) {
+                        newSet.delete(item._id);
+                      } else {
+                        newSet.add(item._id);
+                      }
+                      return newSet;
+                    });
+                  };
+
+                  return (
+                    <div 
+                      className={`w-full cursor-pointer transition-all ${isSelected ? 'ring-4 ring-[#4440E6] rounded-lg p-1' : ''}`}
+                      key={item._id || index}
+                      onClick={handleProductClick}
+                    >
+                      <Link 
+                        state={{ productSlug: item._id }} 
+                        to={`/${item?.slug}`}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseDown={handleMouseDown}
+                        className="block"
+                      >
+                        <div className="">
+                          <div className="">
+                            <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
+                          </div>
+                          <h2 className="  sm:text-base text-sm font-semibold text-[#333333]  text-center  uppercase sm:py-5 py-2">{item?.name}</h2>
+                        </div>
+                      </Link>
+                    </div>
+                  );
+                })}
 
             </div>
             {currentPage < totalPages && (
               <div className="flex justify-center mt-6">
                 <Button
-                  label={loading ? "Loading..." : "Explore More"}
+                  label={loadingMore ? "Loading..." : "Explore More"}
                   className="bg-[#4440E6] text-white"
                   onClick={loadMoreProducts}
-                  disabled={loading}
+                  disabled={loadingMore || loading}
                 />
               </div>
             )}
