@@ -66,7 +66,7 @@ const ImportanceCustomPackaging = React.memo(() => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <p className="mt-4 text-gray-600">{error}</p>
-              <button 
+              <button
                 onClick={fetchBanner}
                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
@@ -83,33 +83,33 @@ const ImportanceCustomPackaging = React.memo(() => {
     <div className="py-8 bg-white">
       <div className="container mx-auto px-4 sm:px-0 max-w-6xl">
         <div className='text-center sm:pb-6 pb-3'>
-          
+
 
           <h2 className="sm:text-[40px] sm:pb-10 pb-0 sm:pt-4 pt-0 text-[25px] flex md:flex-row flex-col justify-center sm:gap-1 gap-0 leading-9 font-sans font-[600] text-[#333333]">
-  <p className=' sm:text-[40px] text-[25px]'>What Is Custom Packaging?</p>
-  <p className='m-0 sm:text-[40px] text-[25px] text-[#4440E6]' style={{color:'#4440E6'}} >A Complete Guide</p>
-</h2>
+            <p className=' sm:text-[40px] text-[25px]'>What Is Custom Packaging?</p>
+            <p className='m-0 sm:text-[40px] text-[25px] text-[#4440E6]' style={{ color: '#4440E6' }} >A Complete Guide</p>
+          </h2>
         </div>
-        
+
         <div className="flex flex-col lg:flex-row gap-8 blog_content banner_content items-center">
-          <div 
-            dangerouslySetInnerHTML={{ __html: banner?.description }} 
+          <div
+            dangerouslySetInnerHTML={{ __html: banner?.description }}
             className="w-full lg:w-1/2 bg-gray-50 h-[430px] rounded-xl p-4 overflow-y-auto"
           />
-          
+
           <div className="w-full relative lg:w-1/2">
             {banner?.image ? (
               <>
-                <img 
-                  src={`${BaseUrl}/${banner.image}`} 
-                  alt="Custom packaging example" 
+                <img
+                  src={`${BaseUrl}/${banner.image}`}
+                  alt="Custom packaging example"
                   className="w-full h-auto rounded-xl shadow-md object-cover"
                   loading="lazy"
                 />
-                
+
                 {banner?.videoLink && (
-                  <div 
-                    onClick={() => openImageViewer(banner.videoLink)} 
+                  <div
+                    onClick={() => openImageViewer(banner.videoLink)}
                     className="absolute border-[#FF931E] text-[#FF931E] p-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-4 rounded-full cursor-pointer hover:bg-orange-50 transition-colors"
                   >
                     <svg width={50} className='fill-current' viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
@@ -139,13 +139,13 @@ const ImportanceCustomPackaging = React.memo(() => {
           </div>
 
           <div className="w-full max-w-4xl aspect-video">
-            
 
-             <iframe
-                     src={banner.videoLink}
-                    className="w-full h-full rounded-lg"
-                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
-                  ></iframe>
+
+            <iframe
+              src={banner.videoLink}
+              className="w-full h-full rounded-lg"
+              title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
+            ></iframe>
           </div>
         </div>
       )}
