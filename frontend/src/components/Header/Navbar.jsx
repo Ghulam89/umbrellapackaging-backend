@@ -7,7 +7,7 @@ import AddReviews from "../CustomerReviews/AddReviews";
 import Input from "../common/Input";
 import GetQuoteModal from "../common/GetQuoteModal";
 import { BaseUrl } from "../../utils/BaseUrl";
-import { logo } from "../../assets";
+import { logo, pngLogo } from "../../assets";
 
 const Navbar = () => {
   const [menu, setMenu] = useState(false);
@@ -74,7 +74,7 @@ const Navbar = () => {
       <div className="sm:max-w-6xl relative max-w-[95%] mx-auto">
         <div className="flex space-x-5 w-full justify-between h-20 items-center">
           <Link to={`/`} aria-label="Visit Umbrella Packaging">
-            <img src={logo} alt="" className="sm:w-[135px] w-[135px]" />
+            <img src={pngLogo} alt="" className="sm:w-[135px] w-[135px]" />
           </Link>
           <div className="w-lg sm:relative search-container" ref={searchRef}>
             <Input
