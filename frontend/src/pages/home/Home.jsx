@@ -133,7 +133,7 @@ export const Home = React.memo(() => {
   "name": "Umbrella Custom Packaging",
   "hasMap": "https://www.google.com/maps/place/Umbrella+Custom+Packaging+USA/@34.0304757,-118.4009978,17z/data=!3m2!4b1!5s0x80c2bbd3055d51a3:0x68496cbd465819b1!4m6!3m5!1s0x80c2bbbf80eec803:0x8425555061bf7fe8!8m2!3d34.0304757!4d-118.4009978!16s%2Fg%2F11smvg80n4?entry=ttu&g_ep=EgoyMDI1MDcxMy4wIKXMDSoASAFQAw%3D%3D",
   "url": "https://umbrellapackaging.com",
-  "logo": `${BaseUrl}${pngLogo}`,
+  "logo": `${BaseUrl}/umbrella-logo.png`,
   "image": `${BaseUrl}${Hero1}`,
   "telephone": "+1-747-247-0456",
   "description": "Get high-quality custom packaging boxes at wholesale prices. We offer affordable packaging for businesses of all sizes. Enjoy bulk discounts, free design support, and fast, reliable shipping. Order now for unmatched prices!",
