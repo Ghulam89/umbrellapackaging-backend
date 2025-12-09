@@ -353,7 +353,7 @@ if (isProduction) {
     // Don't crash the server, but log the error
   }
 } else {
-  // Development mode - use Vite
+  // Development mode - use Vite with no-cache headers
   try {
     const { createServer } = await import('vite');
     vite = await createServer({
@@ -362,6 +362,19 @@ if (isProduction) {
       base,
       root: path.join(__dirname, '../frontend'),
     });
+    
+    // Add no-cache headers for development mode to prevent browser caching
+    app.use((req, res, next) => {
+      if (!isProduction) {
+        // Prevent caching of all resources in development
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        res.setHeader('Surrogate-Control', 'no-store');
+      }
+      next();
+    });
+    
     app.use(vite.middlewares);
   } catch (error) {
     console.error('Failed to start Vite:', error);
@@ -490,6 +503,13 @@ app.use('*', async (req, res, next) => {
         headers: { 'Content-Type': 'text/html' },
         expiry: Date.now() + CACHE_TTL
       });
+    }
+    
+    // Set no-cache headers for development mode
+    if (!isProduction) {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
     }
     
     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);

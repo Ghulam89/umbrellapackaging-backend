@@ -16,7 +16,12 @@ export default defineConfig({
   server: {
     allowedHosts: ["umbrellapackaging.com", "www.umbrellapackaging.com"],
     strictPort: true,
-    
+    // Prevent browser caching in development mode
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    },
   },
 
   ssr: {
