@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import CategoryCard from "../common/CategoryCard";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
+import { useIntersectionObserver } from "../../utils/useIntersectionObserver";
 
  const SkeletonLoader = React.memo(() => (
     <div className="w-full bg-white rounded-lg overflow-hidden animate-pulse">
@@ -16,12 +17,21 @@ import { BaseUrl } from "../../utils/BaseUrl";
 
 const CustomPackaging =React.memo(() => {
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const fetchData = async () => {
+  const [loading, setLoading] = useState(false);
+  
+  // Use Intersection Observer to defer API call until component is visible
+  const [componentRef, isVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '200px', // Start loading 200px before visible
+    triggerOnce: true
+  });
+
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${BaseUrl}/redis/category/getAll?categories=Rigid Boxes,Retail Boxes,Subscription Boxes,Custom Display Boxes​,Apparel and Fashion Boxes,Candle Boxes,Bakery Boxes,Cardboard boxes,CBD Boxes,Chocolate Boxes,Cosmetics and Beauty Boxes,Food Boxes,Gift Boxes,Jewelry Boxes,Kraft Packaging,Magnetic Closure Boxes,Mailer Boxes,Pillow Boxes, `
+        `${BaseUrl}/redis/category/getAll?categories=Rigid Boxes,Retail Boxes,Subscription Boxes,Custom Display Boxes​,Apparel and Fashion Boxes,Candle Boxes,Bakery Boxes,Cardboard boxes,CBD Boxes,Chocolate Boxes,Cosmetics and Beauty Boxes,Food Boxes,Gift Boxes,Jewelry Boxes,Kraft Packaging,Magnetic Closure Boxes,Mailer Boxes,Pillow Boxes, `,
+        { timeout: 5000 }
       );
       setCategories(response?.data?.data || []);
     } catch (error) {
@@ -29,11 +39,14 @@ const CustomPackaging =React.memo(() => {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchData();
   }, []);
+
+  // Only fetch when component is visible
+  useEffect(() => {
+    if (isVisible && categories.length === 0 && !loading) {
+      fetchData();
+    }
+  }, [isVisible, fetchData, categories.length, loading]);
 
  const skeletons = useMemo(
     () => Array.from({ length: 6 }).map((_, index) => <SkeletonLoader key={index} />),
@@ -43,7 +56,7 @@ const CustomPackaging =React.memo(() => {
 
 
   return (
-    <div className="sm:max-w-6xl max-w-[95%] pt-2 mx-auto">
+    <div ref={componentRef} className="sm:max-w-6xl max-w-[95%] pt-2 mx-auto">
       <div className="bg-[#F7F7F7] text-center my-7 py-4 sm:px-5 px-2 rounded-md w-full">
         <h1 className="sm:text-[35px] text-[25px] font-sans font-[600] text-[#333333]">
           Discover Our Custom Packaging Variety
@@ -55,7 +68,7 @@ const CustomPackaging =React.memo(() => {
         </p>
 
         <div className="grid sm:grid-cols-3 grid-cols-2 mx-auto gap-5 mt-3.5 justify-between">
-             {loading
+             {loading || (!isVisible && categories.length === 0)
             ? skeletons
             : categories.length > 0
             ? categories.map((item) => (

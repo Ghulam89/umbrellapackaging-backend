@@ -87,31 +87,34 @@ export const Home = React.memo(() => {
 
     // Prefetch popular products from first page (non-blocking, lower priority)
     // This helps when users navigate to product pages
+    // Use requestIdleCallback for non-critical prefetching
     const prefetchPopularProducts = async () => {
       try {
-        // Small delay to not block initial page render
-        setTimeout(async () => {
-          const response = await axios.get(`${BaseUrl}/products/getAll?page=1&perPage=10`, {
-            timeout: 8000
-          });
-          const products = response?.data?.data || [];
-          if (products.length > 0) {
-            // Extract slugs and prefetch first 5 popular products
-            const productSlugs = products
-              .slice(0, 5)
-              .filter(p => p?.slug)
-              .map(p => p.slug);
-            if (productSlugs.length > 0) {
-              prefetchProducts(productSlugs, false); // false = lower priority
-            }
+        const response = await axios.get(`${BaseUrl}/products/getAll?page=1&perPage=10`, {
+          timeout: 5000
+        });
+        const products = response?.data?.data || [];
+        if (products.length > 0) {
+          // Extract slugs and prefetch first 5 popular products
+          const productSlugs = products
+            .slice(0, 5)
+            .filter(p => p?.slug)
+            .map(p => p.slug);
+          if (productSlugs.length > 0) {
+            prefetchProducts(productSlugs, false); // false = lower priority
           }
-        }, 500); // Delay to not block initial render
+        }
       } catch (error) {
         // Silently fail - prefetch is optional
       }
     };
 
-    prefetchPopularProducts();
+    // Use requestIdleCallback if available, otherwise setTimeout with minimal delay
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(prefetchPopularProducts, { timeout: 2000 });
+    } else {
+      setTimeout(prefetchPopularProducts, 100);
+    }
   }, []); // Run only once on mount
 
   const metadata = {

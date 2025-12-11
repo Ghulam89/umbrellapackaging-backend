@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
+import { useIntersectionObserver } from '../../utils/useIntersectionObserver';
 
 const ImportanceCustomPackaging = React.memo(() => {
   const [banner, setBanner] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Use Intersection Observer to defer API call until component is visible
+  const [componentRef, isVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '200px', // Start loading 200px before visible
+    triggerOnce: true
+  });
 
   const closeImageViewer = () => {
     setIsViewerOpen(false);
@@ -22,10 +30,12 @@ const ImportanceCustomPackaging = React.memo(() => {
     document.body.style.overflow = 'hidden';
   };
 
-  const fetchBanner = async () => {
+  const fetchBanner = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BaseUrl}/banner/getAll`);
+      const response = await axios.get(`${BaseUrl}/banner/getAll`, {
+        timeout: 5000
+      });
       const data = response?.data?.data?.[0] || {};
       setBanner(data);
       setError(null);
@@ -35,31 +45,35 @@ const ImportanceCustomPackaging = React.memo(() => {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchBanner();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="py-8 bg-white">
-        <div className="container mx-auto px-4 max-w-6xl">
+  // Only fetch when component is visible
+  useEffect(() => {
+    if (isVisible && !banner._id && !loading) {
+      fetchBanner();
+    }
+  }, [isVisible, fetchBanner, banner._id, loading]);
+
+  return (
+    <div ref={componentRef} className="py-8 bg-white">
+      <div className="container mx-auto px-4 sm:px-0 max-w-6xl">
+        <div className='text-center sm:pb-6 pb-3'>
+
+
+          <h2 className="sm:text-[40px] sm:pb-10 pb-0 sm:pt-4 pt-0 text-[25px] flex md:flex-row flex-col justify-center sm:gap-1 gap-0 leading-9 font-sans font-[600] text-[#333333]">
+            <p className=' sm:text-[40px] text-[25px]'>What Is Custom Packaging?</p>
+            <p className='m-0 sm:text-[40px] text-[25px] text-[#4440E6]' style={{ color: '#4440E6' }} >A Complete Guide</p>
+          </h2>
+        </div>
+
+        {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
               <p className="mt-4 text-gray-600">Loading content...</p>
             </div>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="py-8 bg-white">
-        <div className="container mx-auto px-4 max-w-6xl">
+        ) : error ? (
           <div className="flex justify-center items-center h-64">
             <div className="text-center">
               <svg className="mx-auto h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -74,31 +88,15 @@ const ImportanceCustomPackaging = React.memo(() => {
               </button>
             </div>
           </div>
-        </div>
-      </div>
-    );
-  }
+        ) : (
+          <div className="flex flex-col lg:flex-row gap-8 blog_content banner_content items-center">
+            <div
+              dangerouslySetInnerHTML={{ __html: banner?.description }}
+              className="w-full lg:w-1/2 bg-gray-50 h-[430px] rounded-xl p-4 overflow-y-auto"
+            />
 
-  return (
-    <div className="py-8 bg-white">
-      <div className="container mx-auto px-4 sm:px-0 max-w-6xl">
-        <div className='text-center sm:pb-6 pb-3'>
-
-
-          <h2 className="sm:text-[40px] sm:pb-10 pb-0 sm:pt-4 pt-0 text-[25px] flex md:flex-row flex-col justify-center sm:gap-1 gap-0 leading-9 font-sans font-[600] text-[#333333]">
-            <p className=' sm:text-[40px] text-[25px]'>What Is Custom Packaging?</p>
-            <p className='m-0 sm:text-[40px] text-[25px] text-[#4440E6]' style={{ color: '#4440E6' }} >A Complete Guide</p>
-          </h2>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-8 blog_content banner_content items-center">
-          <div
-            dangerouslySetInnerHTML={{ __html: banner?.description }}
-            className="w-full lg:w-1/2 bg-gray-50 h-[430px] rounded-xl p-4 overflow-y-auto"
-          />
-
-          <div className="w-full relative lg:w-1/2">
-            {banner?.image ? (
+            <div className="w-full relative lg:w-1/2">
+              {banner?.image ? (
               <>
                 <img
                   src={`${BaseUrl}/${banner.image}`}
@@ -125,6 +123,7 @@ const ImportanceCustomPackaging = React.memo(() => {
             )}
           </div>
         </div>
+        )}
       </div>
 
       {isViewerOpen && banner?.videoLink && (

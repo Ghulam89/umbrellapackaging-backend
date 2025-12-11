@@ -11,6 +11,7 @@ import AddReviews from "./AddReviews";
 import axios from "axios";
 import { BaseUrl } from "../../utils/BaseUrl";
 import { review } from "../../assets";
+import { useIntersectionObserver } from "../../utils/useIntersectionObserver";
 
 // ==================== Star rating ====================
 const StarRating = React.memo(({ rating }) => (
@@ -64,8 +65,15 @@ const CustomerReviews = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [testimonials, setTestimonials] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Use Intersection Observer to defer API call until component is visible
+  const [componentRef, isVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '200px', // Start loading 200px before visible
+    triggerOnce: true
+  });
 
   const backgroundStyle = useMemo(
     () => ({
@@ -85,7 +93,9 @@ const CustomerReviews = () => {
   const fetchReviews = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${BaseUrl}/rating/getAll`);
+      const response = await axios.get(`${BaseUrl}/rating/getAll`, {
+        timeout: 5000
+      });
       setTestimonials(response?.data?.data || []);
       setError(null);
     } catch (err) {
@@ -95,6 +105,13 @@ const CustomerReviews = () => {
       setLoading(false);
     }
   }, []);
+
+  // Only fetch when component is visible
+  useEffect(() => {
+    if (isVisible && testimonials.length === 0 && !loading) {
+      fetchReviews();
+    }
+  }, [isVisible, fetchReviews, testimonials.length, loading]);
 
   useEffect(() => {
     let ticking = false;
@@ -108,13 +125,12 @@ const CustomerReviews = () => {
       }
     };
 
-    window.addEventListener("scroll", onScroll);
-    fetchReviews();
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [fetchReviews, handleScroll]);
+  }, [handleScroll]);
 
   const swiperConfig = useMemo(
     () => ({
@@ -148,7 +164,7 @@ const CustomerReviews = () => {
   );
 
   return (
-    <div className="py-12" style={backgroundStyle}>
+    <div ref={componentRef} className="py-12" style={backgroundStyle}>
       <div className="sm:max-w-6xl max-w-[95%] mx-auto text-center">
         <h2 className="sm:text-[35px] text-[25px] leading-9 pb-4 font-sans font-[600] text-[#333333]">
           Customer Reviews
