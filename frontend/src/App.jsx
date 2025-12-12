@@ -2,11 +2,13 @@
 import { useLocation, useRoutes } from 'react-router-dom';
 import WebsiteRoutes from './routes/WebsiteRoutes';
 import { ToastContainer } from 'react-toastify';
-import Footer from './components/Footer/Footer';
 import TopNav from './components/Header/TopNav';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, lazy } from 'react';
 import Navbar from './components/Header/Navbar';
 import WhatsAppFloat from './components/SocialMedia/WhatsAppModal';
+
+// Lazy load Footer since it's at the bottom of the page
+const Footer = lazy(() => import('./components/Footer/Footer'));
 function App({ serverData, CategoryProducts }) {
   const location = useLocation();
   const [currentUrl, setCurrentUrl] = useState('');
@@ -33,7 +35,9 @@ function App({ serverData, CategoryProducts }) {
          <Suspense fallback={<div className="page-loader" />}>
            {element}
          </Suspense>
-       <Footer />
+       <Suspense fallback={null}>
+         <Footer />
+       </Suspense>
     </>
   );
 }
