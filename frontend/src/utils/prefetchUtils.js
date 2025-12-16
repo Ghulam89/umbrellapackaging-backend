@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from './axiosInstance';
 import { BaseUrl } from './BaseUrl';
 
 // In-memory cache for prefetched product data - increased size for better caching
@@ -30,10 +30,11 @@ export const prefetchProduct = async (slug, priority = false) => {
     return pendingRequests.get(slug);
   }
 
-  // Create new request with optimized timeout
-  const requestPromise = axios
-    .get(`${BaseUrl}/products/get?slug=${slug}`, {
-      timeout: 10000, // 10 second timeout
+  // Create new request with optimized timeout using axiosInstance
+  const requestPromise = axiosInstance
+    .get('/products/get', {
+      params: { slug },
+      timeout: 6000, // 6 second timeout for faster failure
       ...(priority && { priority: true }) // Browser hint for priority
     })
     .then((response) => {
@@ -166,10 +167,11 @@ export const prefetchSubCategory = async (slug, priority = false) => {
     return pendingSubCategoryRequests.get(slug);
   }
 
-  // Create new request with optimized timeout
-  const requestPromise = axios
-    .get(`${BaseUrl}/redis/category/get?slug=${slug}`, {
-      timeout: 10000, // 10 second timeout
+  // Create new request with optimized timeout using axiosInstance
+  const requestPromise = axiosInstance
+    .get('/redis/category/get', {
+      params: { slug },
+      timeout: 6000, // 6 second timeout for faster failure
       ...(priority && { priority: true }) // Browser hint for priority
     })
     .then((response) => {
@@ -188,9 +190,10 @@ export const prefetchSubCategory = async (slug, priority = false) => {
         // Prefetch products for this subcategory if we have the category ID
         if (subCategoryData._id) {
           // Prefetch first page of products for this subcategory
-          axios
-            .get(`${BaseUrl}/products/categoryProducts/${subCategoryData._id}?page=1`, {
-              timeout: 10000,
+          axiosInstance
+            .get(`/products/categoryProducts/${subCategoryData._id}`, {
+              params: { page: 1 },
+              timeout: 6000,
               ...(priority && { priority: true })
             })
             .then((productResponse) => {

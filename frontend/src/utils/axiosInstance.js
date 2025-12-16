@@ -4,14 +4,17 @@ import { BaseUrl } from './BaseUrl';
 // Create a centralized axios instance with optimized configuration
 const axiosInstance = axios.create({
   baseURL: BaseUrl,
-  timeout: 8000, // 8 second timeout (reduced from 10s for faster failure)
+  timeout: 6000, // 6 second timeout for faster failure detection
   headers: {
     'Accept': 'application/json',
+    'Accept-Encoding': 'gzip, deflate, br', // Enable compression
+    'Connection': 'keep-alive', // HTTP/1.1 keep-alive for connection reuse
   },
   // Max redirects
   maxRedirects: 5,
   // Validate status
   validateStatus: (status) => status >= 200 && status < 300,
+  // Browser automatically handles HTTP/2 multiplexing
 });
 
 // Request interceptor for logging and optimization
@@ -25,7 +28,7 @@ axiosInstance.interceptors.request.use(
       config.headers['Content-Type'] = 'application/json';
     }
     
-    // Set priority hint for critical requests
+    // Set priority hint for critical requests (browser will handle this)
     if (config.priority) {
       // Browser will handle priority hints automatically
       delete config.priority; // Remove custom property before sending
