@@ -21,7 +21,7 @@ import Shop from "../pages/shop";
 import SubCategory from "../pages/subCategory/SubCategory";
 import TargetPrice from "../pages/targetPrice";
 import TermsAndConditions from "../pages/TermsAndConditions/TermsAndConditions";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { BaseUrl } from "../utils/BaseUrl";
 import Dielines from "../pages/Dielines";
 import SuccessPage from "../pages/thankYouPage";
@@ -50,7 +50,9 @@ function ProductDetailsWrapper({ initialProduct }) {
       
       (async () => {
         try {
-          const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
+          const response = await axiosInstance.get('/products/get', {
+            params: { slug }
+          });
           if (!cancelled) {
             setProductData(response?.data?.data || null);
             setError(false);

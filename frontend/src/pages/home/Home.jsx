@@ -4,7 +4,7 @@ import PageMetadata from '../../components/common/PageMetadata'
 import { goScreen, Hero1, logo, pngLogo } from '../../assets'
 import React, { lazy, Suspense, useEffect } from 'react'
 import { prefetchSubCategory, prefetchProducts } from '../../utils/prefetchUtils'
-import axios from 'axios'
+import axiosInstance from '../../utils/axiosInstance'
 
 // Lazy load components below the fold for faster initial page load
 // Only Hero loads immediately (above the fold)
@@ -96,8 +96,10 @@ export const Home = React.memo(() => {
     // Use requestIdleCallback for non-critical prefetching
     const prefetchPopularProducts = async () => {
       try {
-        const response = await axios.get(`${BaseUrl}/products/getAll?page=1&perPage=10`, {
-          timeout: 5000
+        // Use axiosInstance with optimized timeout
+        const response = await axiosInstance.get('/products/getAll', {
+          params: { page: 1, perPage: 10 },
+          timeout: 6000, // 6 second timeout for prefetch
         });
         const products = response?.data?.data || [];
         if (products.length > 0) {

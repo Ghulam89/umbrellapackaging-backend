@@ -8,7 +8,7 @@ import CardSlider from '../../components/common/CardSlider'
 import Tabs from '../../components/common/Tabs'
 import FAQ from '../../components/FAQ/FAQ'
 import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart'
-import axios from 'axios'
+import axiosInstance from '../../utils/axiosInstance'
 import { BaseUrl } from '../../utils/BaseUrl'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -185,7 +185,11 @@ const ProductDetails = ({
         formDataToSend.append(key, formData[key]);
       }
 
-      const response = await axios.post(`${BaseUrl}/requestQuote/create`, formDataToSend);
+      const response = await axiosInstance.post('/requestQuote/create', formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       if (response.data.status === 'success') {
         // toast.success(response.data.message)
@@ -370,7 +374,9 @@ const ProductDetails = ({
         return;
       }
 
-      const response = await axios.get(`${BaseUrl}/products/get?slug=${slug}`)
+      const response = await axiosInstance.get('/products/get', {
+        params: { slug }
+      })
       setProduct(response?.data?.data)
       // Reset image carousel when product changes
       setCurr(0);
@@ -385,7 +391,9 @@ const ProductDetails = ({
 
   const fetchRelatedProducts = async () => {
     try {
-      const response = await axios.get(`${BaseUrl}/products/related-products?slug=${slug}`)
+      const response = await axiosInstance.get('/products/related-products', {
+        params: { slug }
+      })
       setRelatedProduct(response?.data?.data)
       
       // Prefetch related products immediately for fast navigation
