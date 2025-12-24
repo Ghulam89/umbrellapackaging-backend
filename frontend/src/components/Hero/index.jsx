@@ -89,13 +89,12 @@ const Hero = () => {
 
           <img 
             src={Hero1} 
-            className="w-full" 
-            decoding="async" 
+            className="w-full h-auto"
+            decoding="async"
             loading="eager"
             fetchPriority="high"
-            alt="Umbrella Custom Packaging Hero" 
-            width="768"
-            height="499"
+            alt="Umbrella Custom Packaging Hero"
+           
           />
         </div>
         <div className=" block sm:hidden">
