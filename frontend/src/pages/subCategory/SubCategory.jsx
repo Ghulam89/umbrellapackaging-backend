@@ -394,13 +394,13 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                     <div 
                       className={`w-full cursor-pointer transition-all ${isSelected ? 'ring-4 ring-[#4440E6] rounded-lg p-1' : ''}`}
                       key={item._id || index}
-                      onClick={handleProductClick}
+                      // onClick={handleProductClick}
                     >
                       <Link 
                         state={{ productSlug: item._id }} 
                         to={`/${item?.slug}`}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseDown={handleMouseDown}
+                        // onMouseEnter={handleMouseEnter}
+                        // onMouseDown={handleMouseDown}
                         className="block"
                       >
                         <div className="">

@@ -36,7 +36,7 @@ function TemplateSlider() {
             <img 
               src={slide.image} 
               alt={slide.alt}
-              className="swiper-lazy rounded-[8px] w-full h-auto object-cover"
+              className="swiper-lazy rounded-[8px] w-full h-auto"
             />
           </SwiperSlide>
         ))}
