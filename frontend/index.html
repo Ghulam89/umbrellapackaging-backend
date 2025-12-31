@@ -4,11 +4,16 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="https://umbrellapackaging.com/src/assets/images/favicon.png" fetchpriority="high" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
   <!-- Prevent caching in development - Auto cache busting -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
+  <!-- iOS Safari specific meta tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="format-detection" content="telephone=no" />
+  <!-- Prevent iOS Safari from auto-formatting phone numbers -->
   <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
   <link href="/src/index.css" rel="stylesheet">
   <!-- Preconnect for faster external requests -->

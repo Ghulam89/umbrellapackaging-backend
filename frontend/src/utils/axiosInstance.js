@@ -1,13 +1,20 @@
 import axios from 'axios';
 import { BaseUrl } from './BaseUrl';
 
+// Detect mobile device for better timeout handling
+const isMobileDevice = () => {
+  if (typeof window === 'undefined') return false;
+  return /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+         (window.innerWidth <= 768);
+};
+
 // Create a centralized axios instance with optimized configuration
 const axiosInstance = axios.create({
   baseURL: BaseUrl,
-  timeout: 6000, // 6 second timeout for faster failure detection
+  timeout: 15000, // Default timeout (will be adjusted per request for mobile)
   headers: {
     'Accept': 'application/json',
-    'Accept-Encoding': 'gzip, deflate, br', // Enable compression
+    // Removed Accept-Encoding as browser handles this automatically and can cause issues on some mobile browsers
     'Connection': 'keep-alive', // HTTP/1.1 keep-alive for connection reuse
   },
   // Max redirects
@@ -22,6 +29,11 @@ axiosInstance.interceptors.request.use(
   (config) => {
     // Add timestamp for performance tracking
     config.metadata = { startTime: Date.now() };
+    
+    // Set timeout dynamically based on device type (if not already set)
+    if (!config.timeout) {
+      config.timeout = isMobileDevice() ? 15000 : 10000;
+    }
     
     // Set Content-Type for JSON requests (but not for FormData)
     if (!config.headers['Content-Type'] && !(config.data instanceof FormData)) {
@@ -53,15 +65,33 @@ axiosInstance.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+    
     // Handle timeout errors specifically
     if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
       console.error(`Request timeout: ${error.config?.url}`);
+      
+      // Retry logic for timeout errors (only once, and only if not already retried)
+      if (!originalRequest._retry && originalRequest.method === 'get') {
+        originalRequest._retry = true;
+        // Increase timeout for retry
+        originalRequest.timeout = isMobileDevice() ? 20000 : 15000;
+        return axiosInstance(originalRequest);
+      }
     }
     
-    // Handle network errors
+    // Handle network errors (no internet connection, CORS issues, etc.)
     if (error.code === 'ERR_NETWORK' || !error.response) {
       console.error(`Network error: ${error.config?.url}`);
+      
+      // Retry logic for network errors (only once, and only if not already retried)
+      if (!originalRequest._retry && originalRequest.method === 'get') {
+        originalRequest._retry = true;
+        // Wait a bit before retrying on mobile
+        await new Promise(resolve => setTimeout(resolve, isMobileDevice() ? 1000 : 500));
+        return axiosInstance(originalRequest);
+      }
     }
     
     return Promise.reject(error);
