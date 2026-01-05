@@ -20,6 +20,28 @@ export async function render(url) {
   let serverData = null;
   let CategoryProducts = null;
 
+  // List of static routes that should not be treated as product slugs
+  const staticRoutes = [
+    '/thank-you-page',
+    '/about-us',
+    '/contact-us',
+    '/blogs',
+    '/shop',
+    '/cart',
+    '/checkout',
+    '/privacy-policy',
+    '/terms-and-conditions',
+    '/shipping-policy',
+    '/returns-refunds',
+    '/reviews',
+    '/dielines',
+    '/get-custom-quote',
+    '/target-price',
+    '/faqs',
+    '/portfolio',
+    '/404'
+  ];
+
   try {
     if (baseUrl.startsWith("/category/")) {
       // Handle category route
@@ -40,8 +62,8 @@ export async function render(url) {
         CategoryProducts = productData?.data;
       }
 
-    } else if (baseUrl.split("/").length === 2 && baseUrl !== "/") {
-      // Handle product route
+    } else if (baseUrl.split("/").length === 2 && baseUrl !== "/" && !staticRoutes.includes(baseUrl)) {
+      // Handle product route - only if it's not a static route
       const slug = baseUrl.split("/")[1];
       const { data } = await axios.get(`${BaseUrl}/products/get?slug=${slug}`);
       serverData = data?.data;

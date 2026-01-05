@@ -70,7 +70,7 @@ const InstantQuoteModal = ({ isModalOpen, setIsModalOpen, closeModal }) => {
 
         if(response?.data?.status==="success"){
         //  toast.success(response?.data?.message)
-         navigate('/thank-your-page')
+         navigate('/thank-you-page')
         }else{
           toast.error(response?.data?.message)
         }

@@ -62,6 +62,7 @@ export const createInstantQuote = catchAsyncError(async (req, res, next) => {
 
     const newInstantQuote = await InstantQuote.create(quoteData);
 
+    // Send customer email first
     const mailOptions = {
       from:EMAIL,
       to: data?.email,
@@ -69,19 +70,46 @@ export const createInstantQuote = catchAsyncError(async (req, res, next) => {
       html: customerTemplate(data?.name)
     };
 
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log('Customer email sent successfully');
+    } catch (error) {
+      console.error('Error sending customer email:', error);
+    }
+
+    // Try to send admin email with customer email as sender
     const adminMailOptions = {
       from:`${data?.name} <${data?.email}>`,
+      replyTo: data?.email,
       to:EMAIL,
       subject: `${data?.name} <${data?.email}> | ${EMAIL}`,
       html: instantTemplate(quoteData)
     };
 
     try {
-      await transporter.sendMail(mailOptions);
       await transporter.sendMail(adminMailOptions);
-      console.log('Email sent successfully');
+      console.log('Admin email sent successfully with customer email as sender');
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error('Error sending admin email with customer email:', error);
+      console.error('Error code:', error.code, 'Response code:', error.responseCode);
+      
+      // If sending with customer email fails (EENVELOPE, 553, EAUTH, 535), use fallback
+      if (error.code === 'EENVELOPE' || error.code === 'EAUTH' || 
+          error.responseCode === 553 || error.responseCode === 535) {
+        try {
+          const fallbackAdminMailOptions = {
+            from: `${data?.name} via Umbrella <${EMAIL}>`,
+            replyTo: `${data?.name} <${data?.email}>`,
+            to: EMAIL,
+            subject: `${data?.name} <${data?.email}> | ${EMAIL}`,
+            html: instantTemplate(quoteData)
+          };
+          await transporter.sendMail(fallbackAdminMailOptions);
+          console.log('Admin email sent with fallback method (authenticated email)');
+        } catch (fallbackError) {
+          console.error('Fallback email also failed:', fallbackError);
+        }
+      }
     }
 
     res.status(201).json({
