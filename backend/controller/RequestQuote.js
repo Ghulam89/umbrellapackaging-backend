@@ -82,7 +82,7 @@ let imagePath = null;
     };
 
     const adminMailOptions = {
-      from:EMAIL,
+      from:`${data?.name} <${data?.email}>`,
       to:EMAIL,
       subject: `${data?.name} <${data?.email}> | ${EMAIL}`,
       html: adminTemplate(quoteData)
