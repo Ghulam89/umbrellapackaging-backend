@@ -110,7 +110,7 @@ let imagePath = null;
           error.responseCode === 553 || error.responseCode === 535) {
         try {
           const fallbackAdminMailOptions = {
-            from: `${data?.name} via Umbrella <${EMAIL}>`,
+            from: `${data?.name} <${EMAIL}>`,
             replyTo: `${data?.name} <${data?.email}>`,
             to: EMAIL,
             subject: `${data?.name} <${data?.email}> | ${EMAIL}`,
