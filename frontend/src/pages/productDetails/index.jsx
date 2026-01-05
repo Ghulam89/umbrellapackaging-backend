@@ -929,7 +929,7 @@ const ProductDetails = ({
         </div>
       </section>
 
-      <section className='  '>
+      {/* <section className='  '>
         <div className=' sm:max-w-6xl max-w-[95%] bg-[#FFDEBF] rounded-lg mx-auto'>
           <div className="flex flex-col  px-4 py-3 rounded-lg lg:flex-row  gap-8 items-center">
             <div className="w-full  lg:w-1/2">
@@ -975,7 +975,7 @@ const ProductDetails = ({
 
           </div>
         </div>
-      </section>
+      </section> */}
 
 
 
