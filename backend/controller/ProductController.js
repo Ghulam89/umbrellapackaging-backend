@@ -50,17 +50,17 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
     actualPrice,
     size,
     description,
-    bannerTitle,
-    bannerContent,
+    // bannerTitle,
+    // bannerContent,
     brandId,
     categoryId,
-    bannerImageAltText
+    // bannerImageAltText
   } = req.body;
 
-  if (!req.files || !req.files['images'] || !req.files['bannerImage']) {
+  if (!req.files || !req.files['images']) {
     return res.status(400).json({
       status: "fail",
-      message: "Both product images (field name: 'images') and banner image (field name: 'bannerImage') are required",
+      message: "product images (field name: 'images')  are required",
     });
   }
 
@@ -76,12 +76,12 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
         }
       });
     }
-    if (req.files['bannerImage']) {
-      const bannerPath = req.files['bannerImage'][0].path;
-      if (fs.existsSync(bannerPath)) {
-        fs.unlinkSync(bannerPath);
-      }
-    }
+    // if (req.files['bannerImage']) {
+    //   const bannerPath = req.files['bannerImage'][0].path;
+    //   if (fs.existsSync(bannerPath)) {
+    //     fs.unlinkSync(bannerPath);
+    //   }
+    // }
 
     return res.status(409).json({
       status: "fail",
@@ -99,11 +99,11 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
       altText: formatFileName(image.originalname)
     }));
 
-    const bannerImageFile = Array.isArray(req.files['bannerImage'])
-      ? req.files['bannerImage'][0]
-      : req.files['bannerImage'];
+    // const bannerImageFile = Array.isArray(req.files['bannerImage'])
+    //   ? req.files['bannerImage'][0]
+    //   : req.files['bannerImage'];
 
-    const bannerPath = `images/${bannerImageFile.filename}`.replace(/\\/g, '/');
+    // const bannerPath = `images/${bannerImageFile.filename}`.replace(/\\/g, '/');
 
     const productData = {
       name,
@@ -115,11 +115,11 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
       actualPrice,
       size,
       description,
-      bannerTitle,
-      bannerContent,
+      // bannerTitle,
+      // bannerContent,
       images,
-      bannerImage: bannerPath,
-      bannerImageAltText,
+      // bannerImage: bannerPath,
+      // bannerImageAltText,
       brandId,
       categoryId,
     };
@@ -137,12 +137,12 @@ export const createProducts = catchAsyncError(async (req, res, next) => {
         fs.unlinkSync(path.join(__dirname, '..', image.path));
       });
     }
-    if (req.files['bannerImage']) {
-      const bannerImageFile = Array.isArray(req.files['bannerImage'])
-        ? req.files['bannerImage'][0]
-        : req.files['bannerImage'];
-      fs.unlinkSync(path.join(__dirname, '..', bannerImageFile.path));
-    }
+    // if (req.files['bannerImage']) {
+    //   const bannerImageFile = Array.isArray(req.files['bannerImage'])
+    //     ? req.files['bannerImage'][0]
+    //     : req.files['bannerImage'];
+    //   fs.unlinkSync(path.join(__dirname, '..', bannerImageFile.path));
+    // }
     return next(error);
   }
 });
@@ -389,7 +389,7 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
       ...req.body,
       // Remove image-related fields that we'll handle separately
       images: undefined,
-      bannerImage: undefined,
+      // bannerImage: undefined,
       existingImages: undefined,
       description: req.body.description
     };
@@ -426,14 +426,13 @@ export const updateProducts = catchAsyncError(async (req, res, next) => {
     }
 
     // Handle banner image updates
-    if (req.files && req.files['bannerImage']) {
-      const bannerImageFile = req.files['bannerImage'][0] || req.files['bannerImage'];
-      updateData.bannerImage = `images/${bannerImageFile.filename}`.replace(/\\/g, '/');
-      updateData.bannerImageAltText = req.body.bannerImageAltText || formatFileName(bannerImageFile.originalname);
-    } else if (req.body.bannerImageAltText) {
-      // Only update alt text if banner image wasn't changed
-      updateData.bannerImageAltText = req.body.bannerImageAltText;
-    }
+    // if (req.files && req.files['bannerImage']) {
+    //   const bannerImageFile = req.files['bannerImage'][0] || req.files['bannerImage'];
+    //   updateData.bannerImage = `images/${bannerImageFile.filename}`.replace(/\\/g, '/');
+    //   updateData.bannerImageAltText = req.body.bannerImageAltText || formatFileName(bannerImageFile.originalname);
+    // } else if (req.body.bannerImageAltText) {
+    //   updateData.bannerImageAltText = req.body.bannerImageAltText;
+    // }
 
     // Perform the update
     const updatedProduct = await Products.findByIdAndUpdate(
