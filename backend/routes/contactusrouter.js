@@ -9,6 +9,7 @@ const ContactusRouter = express.Router();
 
 ContactusRouter.route("/create").post(uploadContactUsImages, create);
 ContactusRouter.route("/getAll").get(getAllContact);
+ContactusRouter.route("/get").get(getAllContact);
 ContactusRouter.route("/delete/:id").delete(deleteContactById);
 
 

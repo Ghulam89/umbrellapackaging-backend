@@ -67,13 +67,42 @@ export const create = catchAsyncError(async (req, res, next) => {
 // Get All Contact
 export const getAllContact = catchAsyncError(async (req, res, next) => {
   try {
-    const contacts = await ContactUs.find();
+    const page = parseInt(req.query.page, 10) || 1;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = (page - 1) * limit;
+    const searchQuery = req.query.search || '';
+
+    // Build filter for search
+    const filter = {};
+    if (searchQuery) {
+      filter.$or = [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { email: { $regex: searchQuery, $options: 'i' } },
+        { phoneNumber: { $regex: searchQuery, $options: 'i' } },
+        { companyName: { $regex: searchQuery, $options: 'i' } },
+        { message: { $regex: searchQuery, $options: 'i' } },
+      ];
+    }
+
+    const [contacts, totalContacts] = await Promise.all([
+      ContactUs.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      ContactUs.countDocuments(filter)
+    ]);
+
+    const totalPages = Math.ceil(totalContacts / limit);
+
     res.status(200).json({
       status: "success",
       data: contacts,
+      totalPages: totalPages,
+      currentPage: page,
+      totalContacts: totalContacts,
     });
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Error fetching contacts:", error);
     res.status(500).json({
       status: "fail",
       error: "Internal Server Error",

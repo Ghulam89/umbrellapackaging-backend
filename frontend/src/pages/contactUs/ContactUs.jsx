@@ -12,9 +12,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import PageMetadata from '../../components/common/PageMetadata';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function ContactUs() {
+  const navigate = useNavigate();
+  
   // Form validation schema
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -67,6 +69,8 @@ function ContactUs() {
         if (response.status === 200) {
           toast.success('Your message has been sent successfully!');
           resetForm();
+          // Redirect to thank you page
+          navigate('/thank-you-page');
         } else {
           throw new Error('Failed to submit form');
         }
