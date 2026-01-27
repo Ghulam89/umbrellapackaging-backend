@@ -5,6 +5,9 @@ import { ContactUs } from "../model/ContactUs.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { detect } from 'detect-browser';
+import { getClientIP } from "../utils/ipDetection.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -12,28 +15,47 @@ export const create = catchAsyncError(async (req, res, next) => {
   const data = req.body;
   
   try {
+    let imagePath = null;
     
-    const imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    // Handle optional image upload
+    if (req.files && req.files.image && req.files.image[0]) {
+      imagePath = `images/${req.files.image[0].filename}`.replace(/\\/g, '/');
+    }
+
+    // Get client IP
+    const clientIp = getClientIP(req);
+
+    // Detect browser/device info
+    const browserInfo = detect(req.headers['user-agent']);
+    const deviceInfo = browserInfo
+      ? `${browserInfo.name} ${browserInfo.version} on ${browserInfo.os}`
+      : 'Unknown device';
+
+    // Get pageUrl from request body or referer header
+    const pageUrl = data?.pageUrl || req.headers.referer || req.headers.origin || '';
+
     const contactData = {
-      image: imagePath,
-      name: data?.name,
-      email: data?.email,
-      phoneNumber: data?.phoneNumber,
-      companyName: data?.companyName,
-      message: data?.message,
-      pageUrl: data?.pageUrl,
+      image: imagePath || '',
+      name: data?.name || '',
+      email: data?.email || '',
+      phoneNumber: data?.phoneNumber || '',
+      companyName: data?.companyName || '',
+      message: data?.message || '',
+      pageUrl: pageUrl,
+      device: deviceInfo,
+      ip: clientIp || '',
     };
 
     const newContact = await ContactUs.create(contactData);
 
-
-    res.status(201).json({
+    res.status(200).json({
       status: "success",
       message: "Your request has been sent to our team successfully",
       data: newContact,
     });
   } catch (error) {
- 
+    console.error('Error creating contact:', error);
+    return next(error);
   }
 });
 

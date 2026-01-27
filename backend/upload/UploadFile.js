@@ -67,4 +67,8 @@ export const uploadRequestQuoteImages = upload.fields([
     { name: 'image', maxCount:1},
 ]);
 
+export const uploadContactUsImages = upload.fields([
+    { name: 'image', maxCount:1},
+]);
+
 export const uploadEditorImage = upload.single('image');

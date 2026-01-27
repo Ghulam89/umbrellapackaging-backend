@@ -22,7 +22,7 @@ const ContactUsSchema = new Schema({
   },
   image: {
     type: String,
-    require: true,
+    require: false,
   },
   message: {
     type: String,

@@ -55,6 +55,9 @@ function ContactUs() {
           }
         });
 
+        // Add pageUrl from current window location
+        formData.append('pageUrl', window.location.href);
+
         const response = await axios.post(`${BaseUrl}/contactus/create`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -242,7 +245,7 @@ function ContactUs() {
                    
                 <h2 className='text-3xl font-medium text-[#111111]'>Email</h2>
                    </Link>
-                <p className=' pt-1'>info@umbrellapackaging.com</p>
+                <p className=' pt-1'>sales@umbrellapackaging.com</p>
               </div>
             </div>
           </div>
