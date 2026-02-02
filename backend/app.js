@@ -66,7 +66,12 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:8000', 'http://localhost:3000', 'https://umbrellapackaging.com','http://31.97.14.21:3000'],
+  origin: [
+    'http://localhost:3000',      // Admin panel (localhost)
+    'http://localhost:5174',     // Frontend (Vite dev server)
+    'http://31.97.14.21:3000',    // Admin panel (IP-based)
+    'https://umbrellapackaging.com' // Production frontend
+  ],
   credentials: true,
 }));
 app.use(express.json());
