@@ -66,7 +66,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:8000', 'http://localhost:3000', 'https://umbrellapackaging.com'],
+  origin: ['http://localhost:8000', 'http://localhost:3000', 'https://umbrellapackaging.com','http://31.97.14.21:3000'],
   credentials: true,
 }));
 app.use(express.json());
