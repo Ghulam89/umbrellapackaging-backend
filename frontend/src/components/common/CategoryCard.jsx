@@ -7,7 +7,7 @@ const CategoryCard = ({ data }) => {
     data?.imageAltText?.trim()
       ? data.imageAltText
       : data?.title
-        ? `${data.title} category illustration`
+        ? `${data.title}`
         : "Category illustration";
 
   return (
@@ -15,7 +15,7 @@ const CategoryCard = ({ data }) => {
       <div>
         <div>
           <img
-            src={data?.image ? `${BaseUrl}/${data.image}` : ""}
+            src={data?.image ? `${data.image}` : ""}
             alt={altText}
             className="w-full sm:h-62 h-auto object-cover overflow-hidden rounded-lg"
             aria-label="Visit Umbrella Packaging"
