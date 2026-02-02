@@ -65,7 +65,48 @@ app.use(express.static("static"));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Middleware
-app.use(cors());
+// CORS configuration to allow admin panel and frontend
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, or curl)
+    if (!origin) return callback(null, true);
+    
+    // List of allowed origins
+    const allowedOrigins = [
+      'http://31.97.14.21:3000',  // Admin panel
+      'http://localhost:3000',     // Local admin panel
+      'https://umbrellapackaging.com',  // Production frontend
+      // 'http://localhost:5173',     // Local frontend dev
+      // 'http://localhost:5174',     // Alternative local frontend
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Allow all origins for now - change to false in production if needed
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-Requested-With', 
+    'Accept', 
+    'Origin',
+    'Access-Control-Request-Method',
+    'Access-Control-Request-Headers'
+  ],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 86400, // 24 hours
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+
+// Explicit OPTIONS handler for all routes (backup in case CORS middleware doesn't catch it)
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
