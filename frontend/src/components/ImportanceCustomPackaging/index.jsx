@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import { useIntersectionObserver } from '../../utils/useIntersectionObserver';
-
+import thumbnail from '../../assets/images/thumbnail-for-umbrella.webp';
 const ImportanceCustomPackaging = React.memo(({ initialBannerData }) => {
   const [banner, setBanner] = useState(initialBannerData || {});
   const [selectedImage, setSelectedImage] = useState(null);
@@ -66,29 +66,8 @@ const ImportanceCustomPackaging = React.memo(({ initialBannerData }) => {
           </h2>
         </div>
 
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="text-center">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-              <p className="mt-4 text-gray-600">Loading content...</p>
-            </div>
-          </div>
-        ) : error ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="text-center">
-              <svg className="mx-auto h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p className="mt-4 text-gray-600">{error}</p>
-              <button
-                onClick={fetchBanner}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Try Again
-              </button>
-            </div>
-          </div>
-        ) : (
+      
+      
           <div className="flex flex-col lg:flex-row gap-8 blog_content banner_content items-center">
             <div
               dangerouslySetInnerHTML={{ __html: banner?.description }}
@@ -96,16 +75,13 @@ const ImportanceCustomPackaging = React.memo(({ initialBannerData }) => {
             />
 
             <div className="w-full relative lg:w-1/2">
-              {banner?.image ? (
-              <>
+            
                 <img
-                  src={`${BaseUrl}/${banner.image}`}
-                  alt="Custom packaging example"
+                  src={thumbnail}
+                  alt="Thumbnail for umbrella"
                   className="w-full h-auto rounded-xl shadow-md object-cover"
                   loading="lazy"
                 />
-
-                {banner?.videoLink && (
                   <div
                     onClick={() => openImageViewer(banner.videoLink)}
                     className="absolute border-[#FF931E] text-[#FF931E] p-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-4 rounded-full cursor-pointer hover:bg-orange-50 transition-colors"
@@ -114,19 +90,12 @@ const ImportanceCustomPackaging = React.memo(({ initialBannerData }) => {
                       <path d="M371.7 238l-176-107c-15.8-8.8-35.7 2.5-35.7 21v208c0 18.4 19.8 29.8 35.7 21l176-101c16.4-9.1 16.4-32.8 0-42zM504 256C504 119 393 8 256 8S8 119 8 256s111 248 248 248 248-111 248-248zm-448 0c0-110.5 89.5-200 200-200s200 89.5 200 200-89.5 200-200 200S56 366.5 56 256z"></path>
                     </svg>
                   </div>
-                )}
-              </>
-            ) : (
-              <div className="w-full h-64 bg-gray-200 rounded-xl flex items-center justify-center">
-                <span className="text-gray-500">No image available</span>
-              </div>
-            )}
           </div>
         </div>
-        )}
+        
       </div>
 
-      {isViewerOpen && banner?.videoLink && (
+      {isViewerOpen &&  (
         <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] bg-opacity-90 z-50 flex items-center justify-center p-4">
           <div className='absolute top-4 right-4'>
             <button
@@ -141,7 +110,7 @@ const ImportanceCustomPackaging = React.memo(({ initialBannerData }) => {
 
 
             <iframe
-              src={banner.videoLink}
+              src={'https://www.youtube.com/embed/J8zff7KH9vA?si=cWHQDxq_ptDjSz2Z'}
               className="w-full h-full rounded-lg"
               title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
             ></iframe>
