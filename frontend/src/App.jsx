@@ -9,14 +9,14 @@ import WhatsAppFloat from './components/SocialMedia/WhatsAppModal';
 
 // Lazy load Footer since it's at the bottom of the page
 const Footer = lazy(() => import('./components/Footer/Footer'));
-function App({ serverData, CategoryProducts }) {
+function App({ serverData, CategoryProducts, bannerData }) {
   const location = useLocation();
   const [currentUrl, setCurrentUrl] = useState('');
  useEffect(() => {
   window.scrollTo({ top: 0, behavior: "instant" });
   setCurrentUrl(window.location.origin + location.pathname + location.search);
 }, [location]);
-  const routes = WebsiteRoutes({ serverData, CategoryProducts })
+  const routes = WebsiteRoutes({ serverData, CategoryProducts, bannerData })
   const element = useRoutes(routes);
   return (
     <>

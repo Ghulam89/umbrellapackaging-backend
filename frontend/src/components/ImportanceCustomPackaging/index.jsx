@@ -3,8 +3,8 @@ import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import { useIntersectionObserver } from '../../utils/useIntersectionObserver';
 
-const ImportanceCustomPackaging = React.memo(() => {
-  const [banner, setBanner] = useState({});
+const ImportanceCustomPackaging = React.memo(({ initialBannerData }) => {
+  const [banner, setBanner] = useState(initialBannerData || {});
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -47,12 +47,12 @@ const ImportanceCustomPackaging = React.memo(() => {
     }
   }, []);
 
-  // Only fetch when component is visible
+  // Only fetch when component is visible and if we don't have initial data
   useEffect(() => {
-    if (isVisible && !banner._id && !loading) {
+    if (isVisible && !banner._id && !loading && !initialBannerData) {
       fetchBanner();
     }
-  }, [isVisible, fetchBanner, banner._id, loading]);
+  }, [isVisible, fetchBanner, banner._id, loading, initialBannerData]);
 
   return (
     <div ref={componentRef} className="py-8 bg-white">

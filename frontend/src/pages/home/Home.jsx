@@ -72,7 +72,13 @@ const FAQPlaceholder = () => (
   </div>
 )
 
-export const Home = React.memo(() => {
+export const Home = React.memo(({ bannerData: propBannerData }) => {
+  // Get bannerData from server data if available
+  const serverBannerData = typeof window !== 'undefined' && window.__SERVER_DATA__?.bannerData 
+    ? window.__SERVER_DATA__.bannerData 
+    : propBannerData;
+  const bannerData = serverBannerData || propBannerData;
+
   // Prefetch data on home page load for faster navigation
   useEffect(() => {
     // Prefetch subcategories from Hero buttons (priority for user experience)
@@ -259,7 +265,7 @@ export const Home = React.memo(() => {
           <InspirationPackaging />
         </Suspense>
         <Suspense fallback={<ComponentPlaceholder />}>
-          <ImportanceCustomPackaging />
+          <ImportanceCustomPackaging initialBannerData={bannerData} />
         </Suspense>
         
         {/* Below the fold - lazy load for faster initial render */}

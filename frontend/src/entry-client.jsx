@@ -8,6 +8,7 @@ import App from "./App";
 import "./index.css";
 const serverData = window.__SERVER_DATA__ || null;
 const categoryProducts = window.__CATEGORY_PRODUCTS__ || null;
+const bannerData = serverData?.bannerData || null;
 
 const rootElement = document.getElementById("root");
 
@@ -16,7 +17,7 @@ const app = (
     <HelmetProvider>
       <Provider store={store}>
         <BrowserRouter>
-          <App serverData={serverData} CategoryProducts={categoryProducts} />
+          <App serverData={serverData} CategoryProducts={categoryProducts} bannerData={bannerData} />
         </BrowserRouter>
       </Provider>
     </HelmetProvider>
