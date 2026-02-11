@@ -1,15 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/autoplay';
-import { Pagination, Autoplay } from 'swiper/modules';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Icon10, Icon11, Icon12, Icon7, Icon8, Icon9 } from '../../assets';
 
 const CustomPackagingApart = () => {
-
-    const [isMounted, setIsMounted] = useState(false);
-
+  const [slidesToShow, setSlidesToShow] = useState(1);
+  const sliderRef = useRef(null);
+  const animationRef = useRef(null);
+  const isPausedRef = useRef(false);
+  const translateXRef = useRef(0);
 
   const data = useMemo(() => [
     {
@@ -50,32 +47,89 @@ const CustomPackagingApart = () => {
     }
   ], []);
 
-  const swiperConfig = useMemo(() => ({
-    slidesPerView: 1,
-    spaceBetween: 10,
-    speed: 2000,
-    autoplay: {
-      delay: 0,
-      disableOnInteraction: false,
-    },
-    loop: true,
-    breakpoints: {
-      640: {
-        slidesPerView: 2,
-        spaceBetween: 20,
-      },
-      768: {
-        slidesPerView: 3,
-        spaceBetween: 40,
-      },
-      1024: {
-        slidesPerView: 4,
-        spaceBetween: 50,
-      },
-    },
-    modules: [Pagination, Autoplay],
-  }), []);
- 
+  // Duplicate data for seamless infinite loop
+  const infiniteData = useMemo(() => [...data, ...data, ...data], [data]);
+
+  // Calculate slides to show based on screen size
+  useEffect(() => {
+    const updateSlidesToShow = () => {
+      const width = window.innerWidth;
+      if (width >= 1024) {
+        setSlidesToShow(4);
+      } else if (width >= 768) {
+        setSlidesToShow(3);
+      } else if (width >= 640) {
+        setSlidesToShow(2);
+      } else {
+        setSlidesToShow(1);
+      }
+    };
+
+    updateSlidesToShow();
+    window.addEventListener('resize', updateSlidesToShow);
+    return () => window.removeEventListener('resize', updateSlidesToShow);
+  }, []);
+
+  // Continuous smooth scrolling animation
+  useEffect(() => {
+    const animate = () => {
+      if (!sliderRef.current || isPausedRef.current) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      const containerWidth = sliderRef.current.parentElement?.offsetWidth || 0;
+      if (containerWidth === 0) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      const gap = slidesToShow === 4 ? 40 : slidesToShow === 3 ? 30 : slidesToShow === 2 ? 20 : 8;
+      const slideWidth = (containerWidth - (slidesToShow - 1) * gap - 24) / slidesToShow;
+      const slideDistance = slideWidth + gap;
+      const totalWidth = data.length * slideDistance;
+
+      // Move continuously - smooth scrolling without delay
+      translateXRef.current -= 1; // Adjust speed here (lower = slower, higher = faster)
+
+      // Reset position when we've scrolled one full set for seamless infinite loop
+      if (Math.abs(translateXRef.current) >= totalWidth) {
+        translateXRef.current += totalWidth;
+      }
+
+      if (sliderRef.current) {
+        sliderRef.current.style.transform = `translateX(${translateXRef.current}px)`;
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [data.length, slidesToShow]);
+
+  // Pause on hover
+  const handleMouseEnter = () => {
+    isPausedRef.current = true;
+  };
+
+  const handleMouseLeave = () => {
+    isPausedRef.current = false;
+  };
+
+  // Calculate slide width for rendering
+  const getSlideWidth = () => {
+    if (!sliderRef.current?.parentElement) return 'auto';
+    const containerWidth = sliderRef.current.parentElement.offsetWidth;
+    const gap = slidesToShow === 4 ? 40 : slidesToShow === 3 ? 30 : slidesToShow === 2 ? 20 : 8;
+    return (containerWidth - (slidesToShow - 1) * gap - 24) / slidesToShow;
+  };
+
   return (
     <div className="sm:max-w-6xl my-6 max-w-[95%] mx-auto">
       <div className="text-center pb-3">
@@ -83,32 +137,48 @@ const CustomPackagingApart = () => {
           Your Packaging Partner: What Sets Umbrella Custom Packaging Apart
         </h2>
         
-        <div className='rounded-lg p-3 h-64 flex justify-center items-center bg-[#eff4fe]'>
-          <Swiper {...swiperConfig} className="mySwiper"
-            updateOnWindowResize={false}
-           
-            resizeObserver={false}>
-            {data.map((item) => (
-              <SwiperSlide key={item.id}>
-                <div className="text-center px-2">
+        <div 
+          className='rounded-lg p-3 h-64 bg-[#eff4fe] overflow-hidden relative'
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div 
+            ref={sliderRef}
+            className="flex"
+            style={{
+              gap: slidesToShow === 4 ? '40px' : slidesToShow === 3 ? '30px' : slidesToShow === 2 ? '20px' : '8px',
+            }}
+          >
+            {infiniteData.map((item, index) => {
+              const slideWidth = getSlideWidth();
+              
+              return (
+                <div 
+                  key={`${item.id}-${index}`}
+                  className="flex-shrink-0 text-center px-2"
+                  style={{
+                    width: typeof slideWidth === 'number' ? `${slideWidth}px` : 'auto',
+                    minWidth: typeof slideWidth === 'number' ? `${slideWidth}px` : 'auto',
+                  }}
+                >
                   <img 
                     src={item.icon} 
                     alt={item.title}
                     width={80} 
                     height={80}
-                    className='mx-auto'
+                    className='mx-auto transition-transform duration-300 hover:scale-110'
                     loading="lazy"
                   />
-                  <strong className="font-[600] text-[#111111] block mt-2">
+                  <strong className="font-[600] text-[#111111] block mt-2 text-sm sm:text-base">
                     {item.title}
                   </strong>
-                  <p className="m-0 text-[16px] mt-1">
+                  <p className="m-0 text-[14px] sm:text-[16px] mt-1 text-gray-700">
                     {item.description}
                   </p>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
