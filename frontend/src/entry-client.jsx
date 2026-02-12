@@ -11,7 +11,6 @@ const categoryProducts = window.__CATEGORY_PRODUCTS__ || null;
 const bannerData = serverData?.bannerData || null;
 
 const rootElement = document.getElementById("root");
-
 const app = (
   <StrictMode>
     <HelmetProvider>
