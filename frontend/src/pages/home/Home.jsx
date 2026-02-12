@@ -228,53 +228,53 @@ export const Home = React.memo(({ bannerData: propBannerData }) => {
         <Hero />
         
         {/* Lazy load components below the fold for faster initial page load */}
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <CustomPackaging />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <CustomBoxMaterial />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <GetPriceQuote />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <SpecialPackaging />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <CustomPackagingApart />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <TemplateToDesign />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <ProductionUnits />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <CustomPackagingProduced />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <PackagingBanner url="/sub-category/kraft-packaging-boxes" title={'Order Kraft Packaging For Sustainable Future.'} subTitle={"Go Green with Umbrella Custom Packaging Go For Kraft Packaging"} bgImage={goScreen} />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <WeFulfil />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <CustomerReviews />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <InspirationPackaging />
-        </Suspense>
-        <Suspense fallback={<ComponentPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <ImportanceCustomPackaging initialBannerData={bannerData} />
-        </Suspense>
+        {/* </Suspense> */}
         
         {/* Below the fold - lazy load for faster initial render */}
-        <Suspense fallback={<BlogPlaceholder />}>
+        {/* <Suspense fallback={<BlogPlaceholder />}> */}
           <Blog />
-        </Suspense>
-        <Suspense fallback={<FAQPlaceholder />}>
+        {/* </Suspense> */}
+        {/* <Suspense fallback={<FAQPlaceholder />}> */}
           <FAQ />
-        </Suspense>
+        {/* </Suspense> */}
       </main>
     </>
   )
