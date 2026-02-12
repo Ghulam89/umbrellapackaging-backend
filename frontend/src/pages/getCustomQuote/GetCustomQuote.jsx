@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 function GetCustomQuote({title,icon,answer}) {
 const [accordionBox,setAccordionBox] = useState(false)
-console.log(accordionBox);
 
 const toggleAccordionBox = ()=>setAccordionBox(prev => !prev)
   return (

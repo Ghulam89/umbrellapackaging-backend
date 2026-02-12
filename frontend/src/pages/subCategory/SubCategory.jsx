@@ -24,9 +24,6 @@ import goScreen from '../../assets/images/goScreen.webp';
 import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart';
 import { prefetchProduct, prefetchProductsBatch, prefetchSubCategory, getCachedSubCategory } from '../../utils/prefetchUtils';
 const SubCategory = ({ serverData, CategoryProducts }) => {
-
-  console.log(serverData);
-
   const { slug } = useParams();
   const [categoryData, setCategoryData] = useState(null)
   const [currentPage, setCurrentPage] = useState(1);

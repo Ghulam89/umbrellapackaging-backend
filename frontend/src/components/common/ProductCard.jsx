@@ -40,7 +40,6 @@ const ProductCard = ({data, disableSelection = false}) => {
   const { selectedProducts, toggleProduct } = useProductSelection();
   const isSelected = selectedProducts.has(data?._id);
 
-  console.log(data)
   const handleMouseEnter = () => {
     if (data?.slug) {
       prefetchProduct(data.slug);

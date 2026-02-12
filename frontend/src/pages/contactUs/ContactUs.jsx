@@ -41,8 +41,6 @@ function ContactUs() {
 
     validationSchema,
     onSubmit: async (values, { resetForm, setSubmitting }) => {
-      console.log(values);
-
       try {
         const formData = new FormData();
         Object.keys(values).forEach(key => {

@@ -2,75 +2,26 @@ import Hero from '../../components/Hero'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
 import { goScreen, Hero1, logo, pngLogo } from '../../assets'
-import React, { lazy, Suspense, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { prefetchSubCategory, prefetchProducts } from '../../utils/prefetchUtils'
 import axiosInstance from '../../utils/axiosInstance'
 
-// Lazy load components below the fold for faster initial page load
-// Only Hero loads immediately (above the fold)
-const CustomPackaging = lazy(() => import('../../components/customPackaging'))
-const CustomBoxMaterial = lazy(() => import('../../components/CustomBoxMaterial/CustomBoxMaterial'))
-const GetPriceQuote = lazy(() => import('../../components/GetPriceQuote/GetPriceQuote'))
-const SpecialPackaging = lazy(() => import('../../components/SpecialPackaging/SpecialPackaging'))
-const CustomPackagingApart = lazy(() => import('../../components/CustomPackagingApart/CustomPackagingApart'))
-const TemplateToDesign = lazy(() => import('../../components/TemplateToDesign/TemplateToDesign'))
-const ProductionUnits = lazy(() => import('../../components/ProductionUnits/ProductionUnits'))
-const CustomPackagingProduced = lazy(() => import('../../components/CustomPackagingProduced'))
-const PackagingBanner = lazy(() => import('../../components/common/PackagingBanner'))
-const WeFulfil = lazy(() => import('../../components/WeFulfil/WeFulfil'))
-const CustomerReviews = lazy(() => import('../../components/CustomerReviews'))
-const InspirationPackaging = lazy(() => import('../../components/InspirationPackaging'))
-const ImportanceCustomPackaging = lazy(() => import('../../components/ImportanceCustomPackaging'))
-const Blog = lazy(() => import('../../components/blog/Blog'))
-const FAQ = lazy(() => import('../../components/FAQ/FAQ'))
-
-// Lightweight loading placeholder component
-const ComponentPlaceholder = ({ height = "h-64" }) => (
-  <div className={`w-full ${height} bg-gray-100 animate-pulse rounded-lg`}></div>
-)
-
-// Loading placeholders
-const BlogPlaceholder = () => (
-  <div className="md:py-12 py-10">
-    <div className="sm:max-w-6xl max-w-[95%] mx-auto text-center">
-      <h2 className="sm:text-[35px] text-[25px] pb-5 font-sans font-[600] text-[#333333]">
-        Blog & News
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-white rounded-lg overflow-hidden shadow-md animate-pulse">
-            <div className="h-48 bg-gray-300"></div>
-            <div className="p-4">
-              <div className="h-6 bg-gray-300 rounded mb-2"></div>
-              <div className="h-4 bg-gray-300 rounded w-3/4 mb-4"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-)
-
-const FAQPlaceholder = () => (
-  <div className="bg-gray-100 py-12">
-    <div className="sm:max-w-6xl max-w-[95%] mx-auto">
-      <div className="text-center mb-8">
-        <h2 className="sm:text-[35px] text-[25px] font-sans font-[600] text-[#333333]">
-          Frequently Asked Questions
-        </h2>
-      </div>
-      <div className="space-y-4">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-white rounded-lg p-4 animate-pulse">
-            <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
-            <div className="h-4 bg-gray-300 rounded w-full"></div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-)
+// Import components directly for SSR compatibility
+import CustomPackaging from '../../components/customPackaging'
+import CustomBoxMaterial from '../../components/CustomBoxMaterial/CustomBoxMaterial'
+import GetPriceQuote from '../../components/GetPriceQuote/GetPriceQuote'
+import SpecialPackaging from '../../components/SpecialPackaging/SpecialPackaging'
+import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart'
+import TemplateToDesign from '../../components/TemplateToDesign/TemplateToDesign'
+import ProductionUnits from '../../components/ProductionUnits/ProductionUnits'
+import CustomPackagingProduced from '../../components/CustomPackagingProduced'
+import PackagingBanner from '../../components/common/PackagingBanner'
+import WeFulfil from '../../components/WeFulfil/WeFulfil'
+import CustomerReviews from '../../components/CustomerReviews'
+import InspirationPackaging from '../../components/InspirationPackaging'
+import ImportanceCustomPackaging from '../../components/ImportanceCustomPackaging'
+import Blog from '../../components/blog/Blog'
+import FAQ from '../../components/FAQ/FAQ'
 
 export const Home = React.memo(({ bannerData: propBannerData }) => {
   // Get bannerData from server data if available
@@ -224,57 +175,28 @@ export const Home = React.memo(({ bannerData: propBannerData }) => {
       <PageMetadata {...metadata} />
 
       <main>
-        {/* Above the fold - load immediately */}
+       
         <Hero />
-        
-        {/* Lazy load components below the fold for faster initial page load */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
-          <CustomPackaging />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
+       <CustomPackaging />
           <CustomBoxMaterial />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <GetPriceQuote />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <SpecialPackaging />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <CustomPackagingApart />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <TemplateToDesign />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <ProductionUnits />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <CustomPackagingProduced />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <PackagingBanner url="/sub-category/kraft-packaging-boxes" title={'Order Kraft Packaging For Sustainable Future.'} subTitle={"Go Green with Umbrella Custom Packaging Go For Kraft Packaging"} bgImage={goScreen} />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
           <WeFulfil />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
+       
           <CustomerReviews />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
-          <InspirationPackaging />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<ComponentPlaceholder />}> */}
-          <ImportanceCustomPackaging initialBannerData={bannerData} />
-        {/* </Suspense> */}
         
-        {/* Below the fold - lazy load for faster initial render */}
-        {/* <Suspense fallback={<BlogPlaceholder />}> */}
+          <InspirationPackaging />
+        
+          <ImportanceCustomPackaging initialBannerData={bannerData} />
+     
           <Blog />
-        {/* </Suspense> */}
-        {/* <Suspense fallback={<FAQPlaceholder />}> */}
           <FAQ />
-        {/* </Suspense> */}
+     
       </main>
     </>
   )

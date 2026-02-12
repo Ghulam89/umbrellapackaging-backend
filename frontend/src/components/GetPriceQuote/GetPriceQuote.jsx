@@ -32,7 +32,6 @@ const navigate = useNavigate();
   };
 
   const [formData, setFormData] = useState(initialFormState);
-   console.log(formData);
    
   const validateStep1 = () => {
     return (

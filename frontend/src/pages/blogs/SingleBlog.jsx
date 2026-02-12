@@ -9,20 +9,10 @@ import PageMetadata from '../../components/common/PageMetadata';
 import GetQuoteModal from '../../components/common/GetQuoteModal';
 
 function SingleBlog({ serverData }) {
-
-
-    console.log(serverData);
-
-   
     const { slug } = useParams();
     const navigate = useNavigate();
     const [singleBlog, setSingleBlog] = useState(serverData || {});
     const [blogs, setBlogs] = useState([])
-
-
-     console.log(singleBlog);
-    
-    
     const fetchBlogs = async () => {
         try {
             const response = await axios.get(`${BaseUrl}/blog/get?slug=${slug}`);
@@ -110,8 +100,6 @@ useEffect(() => {
 
     
     const faqSchema = generateFaqSchema();
-
-    console.log(singleBlog);
 
     const [IsModalOpen,setIsModalOpen] = useState(false);
 

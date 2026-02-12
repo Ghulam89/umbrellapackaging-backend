@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 function PortfolioCard({ img1, img2 }) {
   const [image, setImage] = useState(img1)
-  console.log(image, 'image1');
   const [hover, setHover] = useState(false)
 
   return (

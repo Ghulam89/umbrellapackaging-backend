@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, lazy, Suspense } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -8,9 +8,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { BaseUrl } from "../../utils/BaseUrl";
 import axios from "axios";
 import { useIntersectionObserver } from "../../utils/useIntersectionObserver";
-
-// Lazy load the BlogCard component
-const BlogCard = lazy(() => import("../common/BlogCard"));
+import BlogCard from "../common/BlogCard";
 
 // Skeleton loader for blog cards
 const BlogCardSkeleton = () => (
@@ -188,9 +186,7 @@ const Blog = () => {
               <Swiper {...swiperConfig}>
                 {blog.map((testimonial, index) => (
                   <SwiperSlide key={testimonial._id} className="mb-8">
-                    <Suspense fallback={<BlogCardSkeleton />}>
-                      <BlogCard data={testimonial} />
-                    </Suspense>
+                    <BlogCard data={testimonial} />
                   </SwiperSlide>
                 ))}
               </Swiper>

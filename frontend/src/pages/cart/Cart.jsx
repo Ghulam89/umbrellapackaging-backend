@@ -10,7 +10,6 @@ const Cart = () => {
 
   const { productData: cartItems } = useSelector((state) => state.product);
 
-  console.log(cartItems);
   const dispatch = useDispatch()
 
 

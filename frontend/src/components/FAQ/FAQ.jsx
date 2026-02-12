@@ -1,12 +1,11 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../common/Button';
 import axios from 'axios';
 import { BaseUrl } from '../../utils/BaseUrl';
 import { Link } from 'react-router-dom';
 import { faq } from '../../assets';
 import { useIntersectionObserver } from '../../utils/useIntersectionObserver';
-
-const Accordion = lazy(() => import('../common/Accordion'));
+import Accordion from '../common/Accordion';
 
 const AccordionLoading = React.memo(() => (
   <div className="animate-pulse mb-4">
@@ -167,7 +166,6 @@ const FAQ = React.memo(() => {
               <div className="flex sm:flex-row flex-col justify-between sm:gap-5 gap-0">
                 <div className="sm:w-6/12 w-full">
                   <div className="mt-12">
-                    {/* <Suspense fallback={<div>Loading...</div>}> */}
                       {accordions.slice(0, Math.ceil(accordions.length / 2)).map((accordion) => (
                         <Accordion
                           key={accordion._id}
@@ -179,12 +177,10 @@ const FAQ = React.memo(() => {
                           customKey={accordion.customKey}
                         />
                       ))}
-                    {/* </Suspense> */}
                   </div>
                 </div>
                 <div className="sm:w-6/12 w-full">
                   <div className="sm:mt-12 mt-0">
-                    {/* <Suspense fallback={<div>Loading...</div>}> */}
                       {accordions.slice(Math.ceil(accordions.length / 2)).map((accordion) => (
                         <Accordion
                           key={accordion._id}
@@ -196,7 +192,6 @@ const FAQ = React.memo(() => {
                           customKey={accordion.customKey}
                         />
                       ))}
-                    {/* </Suspense> */}
                   </div>
                 </div>
               </div>
