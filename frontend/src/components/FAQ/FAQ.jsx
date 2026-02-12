@@ -167,7 +167,7 @@ const FAQ = React.memo(() => {
               <div className="flex sm:flex-row flex-col justify-between sm:gap-5 gap-0">
                 <div className="sm:w-6/12 w-full">
                   <div className="mt-12">
-                    <Suspense fallback={<div>Loading...</div>}>
+                    {/* <Suspense fallback={<div>Loading...</div>}> */}
                       {accordions.slice(0, Math.ceil(accordions.length / 2)).map((accordion) => (
                         <Accordion
                           key={accordion._id}
@@ -179,12 +179,12 @@ const FAQ = React.memo(() => {
                           customKey={accordion.customKey}
                         />
                       ))}
-                    </Suspense>
+                    {/* </Suspense> */}
                   </div>
                 </div>
                 <div className="sm:w-6/12 w-full">
                   <div className="sm:mt-12 mt-0">
-                    <Suspense fallback={<div>Loading...</div>}>
+                    {/* <Suspense fallback={<div>Loading...</div>}> */}
                       {accordions.slice(Math.ceil(accordions.length / 2)).map((accordion) => (
                         <Accordion
                           key={accordion._id}
@@ -196,7 +196,7 @@ const FAQ = React.memo(() => {
                           customKey={accordion.customKey}
                         />
                       ))}
-                    </Suspense>
+                    {/* </Suspense> */}
                   </div>
                 </div>
               </div>

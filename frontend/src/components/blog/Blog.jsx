@@ -174,31 +174,12 @@ const Blog = () => {
           Blog & News
         </h2>
         <div className="w-full mx-auto">
-          {/* Loading state */}
           {(loading || (!isVisible && blog.length === 0)) && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 3 }).map((_, index) => (
                 <BlogCardSkeleton key={index} />
               ))}
             </div>
-          )}
-
-          {/* Error state */}
-          {error && !loading && blog.length === 0 && (
-            <div>
-              <div className="text-red-500 mb-4">{error}</div>
-              <button 
-                onClick={fetchBlogs}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Try Again
-              </button>
-            </div>
-          )}
-
-          {/* Empty state */}
-          {!loading && !error && blog.length === 0 && isVisible && (
-            <div className="text-gray-500">No blogs available at the moment.</div>
           )}
 
           {/* Blog content */}
