@@ -32,12 +32,12 @@ function App({ serverData, CategoryProducts, bannerData }) {
           <TopNav />
           <Navbar />
            {/* sds */}
-         <Suspense fallback={<div className="page-loader" />}>
+         {/* <Suspense fallback={<div className="page-loader" />}> */}
            {element}
-         </Suspense>
-       <Suspense fallback={null}>
+         {/* </Suspense> */}
+       {/* <Suspense fallback={null}> */}
          <Footer />
-       </Suspense>
+       {/* </Suspense> */}
     </>
   );
 }
