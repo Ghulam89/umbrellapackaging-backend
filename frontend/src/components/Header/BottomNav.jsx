@@ -10,17 +10,17 @@ import { prefetchSubCategory } from "../../utils/prefetchUtils";
 const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
-  const [allCategories, setAllCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState(BrandsData);
   const [mobileSubmenu, setMobileSubmenu] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
     // Load categories immediately but don't block rendering
     // Use fallback data first, then update when API responds
-    setAllCategories(BrandsData);
-    setCategoriesLoaded(true); // Allow menu to work with fallback data
-    setIsLoading(false);
+    // setAllCategories(BrandsData);
+    // setCategoriesLoaded(true); // Allow menu to work with fallback data
+    // setIsLoading(false);
     
     // API call commented out temporarily - using static BrandsData only
     // const fetchCategories = async () => {
@@ -44,8 +44,8 @@ const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
     // setTimeout(() => {
     //   fetchCategories();
     // }, 100);
-  }, [setCategoriesLoaded]);
-
+  }, []);
+  // setCategoriesLoaded
   useEffect(() => {
     setHoveredCategory(null);
     setSelectedCategory(null);
@@ -183,11 +183,11 @@ const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
         </div>
         
         <div className=" overflow-y-auto pb-20">
-          {isLoading ? (
+          {/* {isLoading ? (
             <div className="flex justify-center items-center h-32">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#4440E6]"></div>
             </div>
-          ) : (
+          ) : ( */}
             <ul className="flex flex-col">
               <li className="border-b border-gray-200">
                 <NavLink 
@@ -295,7 +295,7 @@ const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
                 </NavLink>
               </li>
             </ul>
-          )}
+          {/* )} */}
         </div>
       </div>
     </div>
