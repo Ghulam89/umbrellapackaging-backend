@@ -15,14 +15,12 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
-  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+  const [categoriesLoaded, setCategoriesLoaded] = useState(true); // Static data - always loaded
   const searchRef = useRef(null);
 
   const OpenMenu = () => {
-    // Only open menu if categories are loaded
-    if (categoriesLoaded) {
-      setMenu(!menu);
-    }
+    // Static data is always available, no need to check
+    setMenu(!menu);
   };
 
   const handleSearch = async (e) => {
