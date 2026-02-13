@@ -55,6 +55,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1500,
     minify: 'esbuild', // Faster than terser
     cssMinify: 'esbuild',
+    cssCodeSplit: true, // Split CSS per chunk for better parallel loading
     rollupOptions: {
       output: {
         manualChunks: (id) => {
