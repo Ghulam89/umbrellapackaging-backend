@@ -2,18 +2,7 @@ import React, { useState, useEffect } from "react";
 import Tabs from "../common/Tabs";
 import CustomBoxCard from "../common/CustomBoxCard";
 import { Box1, Box2, Box3, Box4, Box5, Box6, Box7 } from "../../assets";
-
-// Preload critical images to prevent layout shifts
-const preloadImages = (imageUrls) => {
-  imageUrls.forEach(url => {
-    const img = new Image();
-    img.src = url;
-  });
-};
-
 const CustomBoxMaterial = () => {
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  
   const customBox = [
     {
       id: 1,
@@ -23,7 +12,7 @@ const CustomBoxMaterial = () => {
         "Rigid boxes are like super strong and unbreakable homes for extraordinary things. The manufacturers make these boxes using special materials to keep toys, makeup, and nice things protected. Additionally, people use printed rigid boxes to make things look extra special by painting them with cool colors and designs.",
       image: Box1,
       buttonUrl: "#",
-      width: 450,  // Added explicit dimensions
+      width: 450,
       height: 300,
     },
     {
@@ -97,20 +86,6 @@ const CustomBoxMaterial = () => {
       height: 300,
     },
   ];
-
-  // Preload images on component mount
-  useEffect(() => {
-    const imageUrls = customBox.map(box => box.image);
-    preloadImages(imageUrls);
-    
-    // Set a small timeout to allow images to start loading
-    const timer = setTimeout(() => {
-      setImagesLoaded(true);
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, []);
-
   const data = customBox.map((box) => ({
     title: box.title,
     content: <CustomBoxCard {...box} />,
@@ -126,19 +101,12 @@ const CustomBoxMaterial = () => {
           Let's explore the Types of Materials for Your Unique Packaging.
         </p>
       </div>
-      
-      {/* Add a loading placeholder to prevent layout shift */}
-      {!imagesLoaded && (
-        <div className="my-10 min-h-[400px] flex items-center justify-center">
-          <div className="animate-pulse bg-gray-200 rounded-lg w-full h-full max-h-[400px]"></div>
-        </div>
-      )}
-      
-      <div className="my-10" style={{ display: imagesLoaded ? 'block' : 'none' }}>
-        <Tabs 
-          defaultTab={"Rigid Boxes"} 
-          className={'border-[#F7F7F7] border'} 
-          tabs={data} 
+
+      <div className="my-10">
+        <Tabs
+          defaultTab={"Rigid Boxes"}
+          className={'border-[#F7F7F7] border'}
+          tabs={data}
         />
       </div>
     </div>
