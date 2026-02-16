@@ -113,7 +113,7 @@ function TableOfContent({ content }) {
     };
 
     return (
-        <div className='sticky z-40 top-5'>
+        <div className=''>
             <div className='bg-white rounded-lg border shadow overflow-hidden'>
                 <div 
                     className='flex items-center justify-between p-4 cursor-pointer'

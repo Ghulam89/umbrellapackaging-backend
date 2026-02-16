@@ -66,6 +66,10 @@ h6 {
   padding-bottom: 10px !important;
 }
 
+.blog_content span{
+  font-size:unset;
+}
+
 .blog_content ul,
 .blog_content ol {
   list-style-type: disc; /* or decimal for <ol> */
