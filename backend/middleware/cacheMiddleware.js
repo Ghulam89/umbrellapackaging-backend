@@ -11,13 +11,31 @@ const shouldSkip = () => false;
 const routeTtl = (req) => {
   const p = req.path || req.originalUrl || '';
   if (p.startsWith('/category/get')) {
-    return parseInt(process.env.CATEGORY_CACHE_TTL || '1', 10);
+    return parseInt(process.env.CATEGORY_CACHE_TTL || '300', 10);
   }
   if (p.startsWith('/blog/get') || p.startsWith('/blog/getAll')) {
     return parseInt(process.env.BLOG_CACHE_TTL || '1', 10);
   }
-  if (p.startsWith('/products/get') || p.startsWith('/products/categoryProducts')) {
-    return parseInt(process.env.PRODUCT_CACHE_TTL || '1', 10);
+  if (p.startsWith('/products/get') || p.startsWith('/products/categoryProducts') || p.startsWith('/products/getAll')) {
+    return parseInt(process.env.PRODUCT_CACHE_TTL || '120', 10);
+  }
+  if (p.startsWith('/brands/get') || p.startsWith('/brands/getAll')) {
+    return parseInt(process.env.BRAND_CACHE_TTL || '5', 10);
+  }
+  if (p.startsWith('/faq/get') || p.startsWith('/faq/getAll')) {
+    return parseInt(process.env.FAQ_CACHE_TTL || '300', 10);
+  }
+  if (p.startsWith('/banner/get') || p.startsWith('/banner/getAll')) {
+    return parseInt(process.env.BANNER_CACHE_TTL || '600', 10);
+  }
+  if (p.startsWith('/rating/get') || p.startsWith('/rating/getAll') || p.startsWith('/rating/getOverall')) {
+    return parseInt(process.env.RATING_CACHE_TTL || '120', 10);
+  }
+  if (p.startsWith('/subcategory/get') || p.startsWith('/subcategory/getAll')) {
+    return parseInt(process.env.SUBCATEGORY_CACHE_TTL || '300', 10);
+  }
+  if (p.startsWith('/products/search')) {
+    return parseInt(process.env.SEARCH_CACHE_TTL || '30', 10);
   }
   return ttl;
 };

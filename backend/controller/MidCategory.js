@@ -174,6 +174,7 @@ export const getCategoryById = async (req, res, next) => {
       query = query.select(selectFields.join(' '));
     }
 
+    query = query.lean();
     const data = await query.exec();
 
     if (!data) {

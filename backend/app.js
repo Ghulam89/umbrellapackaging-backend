@@ -22,6 +22,7 @@ import instantQuoteRouter from "./routes/InstantQuote.js";
 import sitemapRouter from "./routes/sitemapRouter.js";
 import { apiCacheMiddleware } from "./middleware/cacheMiddleware.js";
 import NodeCache from "node-cache";
+import compression from "compression";
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -62,6 +63,7 @@ if (cluster.isPrimary) {
 // Connect to database
 connectDB();
 const app = express();
+app.set('trust proxy', 1);
 app.use(express.static("static"));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
@@ -77,6 +79,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(compression());
 
 app.use(apiCacheMiddleware);
 
@@ -397,11 +400,24 @@ const ssrCache = new NodeCache({
 
 // Function to generate cache key from request
 function getCacheKey(req) {
-  return req.originalUrl;
+  return req.path || req.originalUrl;
 }
 
 function getSsrTTL(req) {
-  return parseInt(process.env.SSR_CACHE_TTL || process.env.SSR_CATEGORY_TTL || '1', 10);
+  const p = req.path || req.originalUrl || '';
+  if (p === '/' || p === '') {
+    return parseInt(process.env.SSR_HOME_TTL || '60', 10);
+  }
+  if (p.startsWith('/sub-category/')) {
+    return parseInt(process.env.SSR_SUBCATEGORY_TTL || '300', 10);
+  }
+  if (p.startsWith('/category/')) {
+    return parseInt(process.env.SSR_CATEGORY_TTL || '300', 10);
+  }
+  if (p.startsWith('/blog/')) {
+    return parseInt(process.env.SSR_BLOG_TTL || '180', 10);
+  }
+  return parseInt(process.env.SSR_CACHE_TTL || '120', 10);
 }
 
 app.use('*', async (req, res, next) => {
@@ -463,7 +479,7 @@ app.use('*', async (req, res, next) => {
     }
     
     renderPromise = render(url);
-    const timeoutMs = 1000;
+    const timeoutMs = 3000;
     const timeoutPromise = new Promise((_, reject) => 
       setTimeout(() => reject(new Error('SSR timeout')), timeoutMs)
     );
@@ -479,7 +495,7 @@ app.use('*', async (req, res, next) => {
       .replace('<!--app-html-->', rendered.html || '')
       .replace(
         '<!--server-data-->', 
-        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})}</script>`
+        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)}</script>`
       );
     
     if (res.statusCode === 200) {
@@ -506,7 +522,7 @@ app.use('*', async (req, res, next) => {
             const htmlBg = template
               .replace('<!--app-head-->', `\n${bgRendered.helmet?.title || ''}\n${bgRendered.helmet?.meta || ''}\n${bgRendered.helmet?.link || ''}\n${bgRendered.helmet?.script || ''}\n`)
               .replace('<!--app-html-->', bgRendered.html || '')
-              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(bgRendered.serverData || {})}</script>`);
+              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(bgRendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(bgRendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(bgRendered.homePageData || null)}</script>`);
             const headersBg = {
               'Content-Type': 'text/html',
               'Cache-Control': `public, max-age=${ssrTtl}`
@@ -520,7 +536,7 @@ app.use('*', async (req, res, next) => {
         const fallbackHtml = template
           .replace('<!--app-head-->', '')
           .replace('<!--app-html-->', '<div id="app"></div>')
-          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = {}</script>');
+          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null</script>');
         
         res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);
       } else {

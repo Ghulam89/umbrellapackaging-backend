@@ -356,7 +356,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
               ))}
 
               {/* Actual Products - Show even when loading more */}
-              {allProducts?.map((item, index) => {
+              {allProducts?.filter(p => p?.slug)?.map((item, index) => {
                   // Prefetch product data on hover
                   const handleMouseEnter = () => {
                     if (item?.slug) {
@@ -395,14 +395,14 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                     >
                       <Link 
                         state={{ productSlug: item._id }} 
-                        to={`/${item?.slug}`}
-                        // onMouseEnter={handleMouseEnter}
-                        // onMouseDown={handleMouseDown}
+                        to={`/${item.slug}`}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseDown={handleMouseDown}
                         className="block"
                       >
                         <div className="">
                           <div className="">
-                            <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
+                            <img loading="lazy" src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
                           </div>
                           <h2 className="  sm:text-base text-sm font-semibold text-[#333333]  text-center  uppercase sm:py-5 py-2">{item?.name}</h2>
                         </div>

@@ -64,7 +64,11 @@ const NavigationButtons = () => (
 const CustomerReviews = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [testimonials, setTestimonials] = useState([]);
+  const [testimonials, setTestimonials] = useState(
+    typeof window !== "undefined" && window.__HOME_CACHE__?.ratings
+      ? window.__HOME_CACHE__.ratings
+      : []
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -96,7 +100,16 @@ const CustomerReviews = () => {
       const response = await axios.get(`${BaseUrl}/rating/getAll`, {
         timeout: 5000
       });
-      setTestimonials(response?.data?.data || []);
+      const data = response?.data?.data || [];
+      setTestimonials(data);
+      try {
+        const existing = typeof window !== "undefined" ? window.__HOME_CACHE__ || {} : {};
+        const updated = { ...existing, ratings: data };
+        if (typeof window !== "undefined" && window.localStorage) {
+          localStorage.setItem("HOME_CACHE_V1", JSON.stringify({ timestamp: Date.now(), data: updated }));
+          window.__HOME_CACHE__ = updated;
+        }
+      } catch {}
       setError(null);
     } catch (err) {
       setError("Failed to fetch reviews. Please try again later.");

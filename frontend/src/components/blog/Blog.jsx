@@ -24,7 +24,11 @@ const BlogCardSkeleton = () => (
 
 const Blog = () => {
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [blog, setBlog] = useState([]);
+  const [blog, setBlog] = useState(
+    typeof window !== "undefined" && window.__HOME_CACHE__?.blogs
+      ? window.__HOME_CACHE__.blogs
+      : []
+  );
   const [loading, setLoading] = useState(false); // Start with false, will be true when fetching
   const [error, setError] = useState(null);
   const [visibleSlides, setVisibleSlides] = useState(1); // Track visible slides for lazy loading
@@ -88,7 +92,16 @@ const Blog = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${BaseUrl}/blog/getAll`);
-      setBlog(response?.data?.data || []);
+      const data = response?.data?.data || [];
+      setBlog(data);
+      try {
+        const existing = typeof window !== "undefined" ? window.__HOME_CACHE__ || {} : {};
+        const updated = { ...existing, blogs: data };
+        if (typeof window !== "undefined" && window.localStorage) {
+          localStorage.setItem("HOME_CACHE_V1", JSON.stringify({ timestamp: Date.now(), data: updated }));
+          window.__HOME_CACHE__ = updated;
+        }
+      } catch {}
     } catch (err) {
       console.error("Error fetching blogs:", err);
       setError("Failed to load blogs. Please try again later.");

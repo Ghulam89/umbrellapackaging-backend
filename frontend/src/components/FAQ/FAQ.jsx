@@ -16,7 +16,15 @@ const AccordionLoading = React.memo(() => (
 ));
 
 const FAQ = React.memo(() => {
-  const [accordions, setAccordions] = useState([
+  const initialFaqs = typeof window !== "undefined" && window.__HOME_CACHE__?.faqs
+    ? window.__HOME_CACHE__.faqs.map((faq, index) => ({
+        ...faq,
+        key: faq._id,
+        isOpen: false,
+        customKey: index < 9 ? `0${index + 1}` : `${index + 1}`
+      }))
+    : null;
+  const [accordions, setAccordions] = useState(initialFaqs || [
     {
     "_id": "6878f39c8bbf42ef2173dd3f",
     "question": "Do you offer Free Samples?",
