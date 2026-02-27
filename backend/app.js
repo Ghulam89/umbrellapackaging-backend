@@ -423,6 +423,9 @@ function getSsrTTL(req) {
 app.use('*', async (req, res, next) => {
   const startTime = Date.now();
   const url = req.originalUrl;
+  if (url === '/undefined') {
+    return res.redirect(302, '/404');
+  }
   const ssrTtl = getSsrTTL(req);
   const segs = url.split('/').filter(Boolean);
   const isProductLike = (segs.length === 1 && url !== '/');
@@ -535,8 +538,8 @@ app.use('*', async (req, res, next) => {
       if (template) {
         const fallbackHtml = template
           .replace('<!--app-head-->', '')
-          .replace('<!--app-html-->', '<div id="app"></div>')
-          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null</script>');
+          .replace('<!--app-html-->', '')
+          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;</script>');
         
         res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);
       } else {
