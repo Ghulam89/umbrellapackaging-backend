@@ -21,14 +21,7 @@ export const registerAdmin = catchAsyncError(async (req, res, next) => {
       "somesecretsecret",
       { expiresIn: "30d" }
     );
-    // await redisClient.set(`user:${user._id}`, JSON.stringify(user), 'EX', 3600); // Cache for 1 hour
-
-    // // Send Kafka event
-    // await producer.connect();
-    // await producer.send({
-    //   topic: 'user-events',
-    //   messages: [{ value: JSON.stringify({ action: 'create', user }) }],
-    // });
+;
     res.status(200).json({
       status: "success",
       message: "New Admin Created successfully",
@@ -72,14 +65,9 @@ export const loginAdmin = catchAsyncError(async (req, res, next) => {
 // get Admin by id
 export const getAdminById = async (req, res, next) => {
   const userId = req.params.id;
-  // console.log('user id ====', req?.user?.userId)
   try {
-    // const cachedUser = await redisClient.get(`user:${userId}`);
-    // if (cachedUser) {
-    //   return res.json(JSON.parse(cachedUser)); // Return cached user
-    // }
+    
     const data = await Admin.findById(userId);
-    // await redisClient.set(`user:${userId}`, JSON.stringify(data), "EX", 3600);
     res.json({
       status: "success",
       data: data,
@@ -100,17 +88,7 @@ export const UpdateProfile = catchAsyncError(async (req, res, next) => {
   if (!updatedUser) {
     return res.status(404).json({ message: "Admin not found" });
   }
-  // await redisClient.set(
-  //   `user:${userId}`,
-  //   JSON.stringify(updatedUser),
-  //   "EX",
-  //   3600
-  // );
-  // await producer.connect();
-  // await producer.send({
-  //   topic: "user-events",
-  //   messages: [{ value: JSON.stringify({ action: "update", updatedUser }) }],
-  // });
+  
   res.status(200).json({
     status: "success",
     data: updatedUser,
@@ -142,12 +120,7 @@ export const deleteCustomerById = async (req, res, next) => {
     if (!delCustomer) {
       return res.json({ status: "fail", message: "Admin not Found" });
     }
-    // await redisClient.del(`user:${id}`);
-    // await producer.connect();
-    // await producer.send({
-    //   topic: 'user-events',
-    //   messages: [{ value: JSON.stringify({ action: 'delete', id }) }],
-    // });
+   
     res.json({
       status: "success",
       message: "Admin deleted successfully!",

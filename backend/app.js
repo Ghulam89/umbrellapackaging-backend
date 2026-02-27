@@ -20,7 +20,8 @@ import subscribeRouter from "./routes/SubscribeRouter.js";
 import requestQuoteRouter from "./routes/RequestQuote.js";
 import instantQuoteRouter from "./routes/InstantQuote.js";
 import sitemapRouter from "./routes/sitemapRouter.js";
-import { REDIS, redisClient }  from './redis_APIS/redis.js';
+import { apiCacheMiddleware } from "./middleware/cacheMiddleware.js";
+import NodeCache from "node-cache";
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -77,26 +78,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-   
-// const redisClient = redis.createClient({
-//         socket: {
-//         host: "31.97.14.21",
-//         port: 6379,
-//     },
-//     username: "umbrella",
-//     password: "umbrella123",
-// });
-
-// redisClient.connect()
-//     .then(() => console.log("Connected to Redis"))
-//     .catch(err => console.error("Redis connection error:", err));
-
-
-
-
-app.use("/redis", REDIS);
-
+app.use(apiCacheMiddleware);
 
 // Backend API routes
 app.use("/brands", brandRouter);
@@ -405,40 +387,30 @@ if (isProduction) {
   }
 }
 
-// Cache for rendered pages with LRU strategy
-const ssrCache = new Map();
-const CACHE_TTL = 1000 * 60 * 5; // 5 minutes cache
-const MAX_CACHE_SIZE = 100; // Limit cache size to prevent memory issues
+// SSR cache using node-cache
+const SSR_CACHE_TTL = parseInt(process.env.SSR_CACHE_TTL || '300', 10);
+const ssrCache = new NodeCache({
+  stdTTL: SSR_CACHE_TTL,
+  useClones: false,
+  checkperiod: Math.max(60, Math.floor(SSR_CACHE_TTL / 2)),
+});
 
 // Function to generate cache key from request
 function getCacheKey(req) {
   return req.originalUrl;
 }
 
-// Function to clean up cache periodically
-function cleanCache() {
-  const now = Date.now();
-  for (const [key, value] of ssrCache.entries()) {
-    if (value.expiry < now) {
-      ssrCache.delete(key);
-    }
-  }
-  
-  // Enforce size limit
-  if (ssrCache.size > MAX_CACHE_SIZE) {
-    const entries = Array.from(ssrCache.entries());
-    // Remove oldest entries (first in the array)
-    for (let i = 0; i < entries.length - MAX_CACHE_SIZE; i++) {
-      ssrCache.delete(entries[i][0]);
-    }
-  }
+function getSsrTTL(req) {
+  return parseInt(process.env.SSR_CACHE_TTL || process.env.SSR_CATEGORY_TTL || '1', 10);
 }
-
-setInterval(cleanCache, 60000);
 
 app.use('*', async (req, res, next) => {
   const startTime = Date.now();
   const url = req.originalUrl;
+  const ssrTtl = getSsrTTL(req);
+  const segs = url.split('/').filter(Boolean);
+  const isProductLike = (segs.length === 1 && url !== '/');
+  const fastRoute = (url === '/' || url.startsWith('/sub-category/') || url.startsWith('/category/') || url.startsWith('/blog/') || isProductLike);
   
   if (url.startsWith('/api/') || 
       url.startsWith('/_vite') || 
@@ -454,14 +426,18 @@ app.use('*', async (req, res, next) => {
   const cacheKey = getCacheKey(req);
   const cached = ssrCache.get(cacheKey);
   
-  if (cached && cached.expiry > Date.now()) {
-    res.set(cached.headers).status(200).send(cached.html);
+  if (cached) {
+    res.set(cached.headers);
+    res.set('X-SSR-Cache', 'HIT');
+    res.set('X-SSR-Cache-TTL', String(ssrTtl));
+    res.status(200).send(cached.html);
     console.log(`SSR Cache hit for ${url}: ${Date.now() - startTime}ms`);
     return;
   }
   
   let template, render;
   let rendered = { html: '', helmet: {}, serverData: {} };
+  let renderPromise;
   
   try {
     if (!isProduction && vite) {
@@ -486,9 +462,10 @@ app.use('*', async (req, res, next) => {
      
     }
     
-    const renderPromise = render(url);
+    renderPromise = render(url);
+    const timeoutMs = 1000;
     const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('SSR timeout')), 2000)
+      setTimeout(() => reject(new Error('SSR timeout')), timeoutMs)
     );
     
     // Race between render and timeout
@@ -505,19 +482,15 @@ app.use('*', async (req, res, next) => {
         `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || {})}</script>`
       );
     
-    if (isProduction && res.statusCode === 200) {
-      ssrCache.set(cacheKey, {
-        html,
-        headers: { 'Content-Type': 'text/html' },
-        expiry: Date.now() + CACHE_TTL
-      });
-    }
-    
-    // Set no-cache headers for development mode
-    if (!isProduction) {
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
+    if (res.statusCode === 200) {
+      const headers = { 
+        'Content-Type': 'text/html',
+        'Cache-Control': `public, max-age=${ssrTtl}`
+      };
+      ssrCache.set(cacheKey, { html, headers }, ssrTtl);
+      res.set(headers);
+      res.set('X-SSR-Cache', 'MISS');
+      res.set('X-SSR-Cache-TTL', String(ssrTtl));
     }
     
     res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
@@ -526,6 +499,22 @@ app.use('*', async (req, res, next) => {
   } catch (e) {
     if (e.message === 'SSR timeout') {
       console.error(`SSR timeout for ${url}: ${Date.now() - startTime}ms`);
+      
+      if (renderPromise && template) {
+        renderPromise
+          .then((bgRendered) => {
+            const htmlBg = template
+              .replace('<!--app-head-->', `\n${bgRendered.helmet?.title || ''}\n${bgRendered.helmet?.meta || ''}\n${bgRendered.helmet?.link || ''}\n${bgRendered.helmet?.script || ''}\n`)
+              .replace('<!--app-html-->', bgRendered.html || '')
+              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(bgRendered.serverData || {})}</script>`);
+            const headersBg = {
+              'Content-Type': 'text/html',
+              'Cache-Control': `public, max-age=${ssrTtl}`
+            };
+            ssrCache.set(cacheKey, { html: htmlBg, headers: headersBg }, ssrTtl);
+          })
+          .catch(() => {});
+      }
       
       if (template) {
         const fallbackHtml = template

@@ -54,14 +54,22 @@ export async function render(url) {
     } else if (baseUrl.startsWith("/sub-category/")) {
       // Handle sub-category route
       const slug = baseUrl.split("/")[2];
-      const { data } = await axios.get(`${BaseUrl}/redis/category/get?slug=${slug}`);
-      serverData = data?.data;
+      {
+        const catPromise = axios
+          .get(`${BaseUrl}/category/get?slug=${slug}`, { timeout: 1500 })
+          .then((res) => res?.data?.data)
+          .catch(() => null);
+        const catTimeout = new Promise((resolve) => setTimeout(() => resolve(null), 1500));
+        serverData = await Promise.race([catPromise, catTimeout]);
+      }
 
       if (serverData?._id) {
-        const { data: productData } = await axios.get(
-          `${BaseUrl}/products/categoryProducts/${serverData._id}`
-        );
-        CategoryProducts = productData?.data;
+        const prodPromise = axios
+          .get(`${BaseUrl}/products/categoryProducts/${serverData._id}`, { timeout: 2000 })
+          .then((res) => res?.data?.data)
+          .catch(() => null);
+        const prodTimeout = new Promise((resolve) => setTimeout(() => resolve(null), 2000));
+        CategoryProducts = await Promise.race([prodPromise, prodTimeout]);
       }
 
     } else if (baseUrl.split("/").length === 2 && baseUrl !== "/" && !staticRoutes.includes(baseUrl)) {
@@ -73,21 +81,23 @@ export async function render(url) {
     } else if (baseUrl.startsWith("/blog/")) {
       // Handle blog route
       const slug = baseUrl.split("/")[2];
-      const { data } = await axios.get(`${BaseUrl}/blog/get?slug=${slug}`);
-      serverData = data?.data;
+      {
+        const blogPromise = axios
+          .get(`${BaseUrl}/blog/get?slug=${slug}`, { timeout: 1500 })
+          .then((res) => res?.data?.data)
+          .catch(() => null);
+        const blogTimeout = new Promise((resolve) => setTimeout(() => resolve(null), 1500));
+        serverData = await Promise.race([blogPromise, blogTimeout]);
+      }
     }
 
-    // Fetch banner data for home page (for SEO and view-source visibility)
     if (baseUrl === "/" || baseUrl === "") {
-      try {
-        const { data: bannerResponse } = await axios.get(`${BaseUrl}/banner/getAll`, {
-          timeout: 3000
-        });
-        bannerData = bannerResponse?.data?.[0] || null;
-      } catch (bannerErr) {
-        // Silently fail - banner is not critical for SSR
-        console.error('Banner fetch error:', bannerErr.message);
-      }
+      const bannerPromise = axios
+        .get(`${BaseUrl}/banner/getAll`, { timeout: 1000 })
+        .then((res) => res?.data?.data?.[0] || null)
+        .catch(() => null);
+      const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(null), 1000));
+      bannerData = await Promise.race([bannerPromise, timeoutPromise]);
     }
   } catch (err) {
     // On error → noindex meta

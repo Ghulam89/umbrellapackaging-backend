@@ -1,5 +1,5 @@
 import { TOKEN_KEY } from "../config/index.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { catchAsyncError } from "../middleware/catchAsyncError.js";
 import { User } from "../model/User.js";
 import jwt from "jsonwebtoken";
@@ -100,12 +100,8 @@ export const getUserById = async (req, res, next) => {
   const userId = req.params.id;
   // console.log('user id ====', req?.user?.userId)
   try {
-    // const cachedUser = await redisClient.get(`user:${userId}`);
-    // if (cachedUser) {
-    //   return res.json(JSON.parse(cachedUser)); // Return cached user
-    // }
+   
     const data = await User.findById(userId);
-    // await redisClient.set(`user:${userId}`, JSON.stringify(data), 'EX', 3600);
     res.json({
       status: 200,
       data: data,
@@ -210,12 +206,7 @@ export const deleteCustomerById = async (req, res, next) => {
     if (!delCustomer) {
       return res.json({ status: "fail", message: "Customer not Found" });
     }
-    // await redisClient.del(`user:${id}`);
-    // await producer.connect();
-    // await producer.send({
-    //   topic: 'user-events',
-    //   messages: [{ value: JSON.stringify({ action: 'delete', id }) }],
-    // });
+   
     res.json({
       status: "success",
       message: "User deleted successfully!",
