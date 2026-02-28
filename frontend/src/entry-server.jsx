@@ -70,10 +70,11 @@ export async function render(url) {
       // Handle home page - fetch multiple data sources
       ssrLog("SSR: Fetching home page data...");
       try {
-        const [productsRes, faqRes, bannerRes] = await Promise.allSettled([
+        const [productsRes, faqRes, bannerRes, brandsRes] = await Promise.allSettled([
           ssrClient.get("/products/getAll?page=1&perPage=8"),
           ssrClient.get("/faq/getAll"),
           ssrClient.get("/banner/getAll"),
+          ssrClient.get("/brands/getAll?all=true"),
         ]);
 
         ssrLog(
@@ -108,7 +109,9 @@ export async function render(url) {
           banner: bannerRes.status === 'fulfilled' && bannerRes.value?.data?.data?.[0]
             ? bannerRes.value.data.data[0]
             : null,
-          brands: []
+          brands: brandsRes.status === 'fulfilled'
+            ? brandsRes.value?.data?.data || []
+            : []
         };
 
         ssrLog("SSR: Home page data prepared:", {

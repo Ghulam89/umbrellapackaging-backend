@@ -78,7 +78,7 @@ function ProductDetailsWrapper({ initialProduct }) {
 const MemoProductDetailsWrapper = React.memo(ProductDetailsWrapper);
 
 export default function useWebsiteRoutes(serverData, CategoryProducts, bannerData) {
-  const sharedServer = serverData?.serverData ?? null;
+  const sharedServer = serverData?.serverData ?? serverData ?? null;
   const initialProduct = sharedServer ?? null;
 
   const routes = useMemo(() => [

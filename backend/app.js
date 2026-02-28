@@ -29,7 +29,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // SSR/Frontend imports
 import fs from 'node:fs/promises';
-import sharp from 'sharp';
 
 const numCPUs = os.cpus().length;
 const isProduction = process.env.NODE_ENV === 'production';
@@ -66,43 +65,7 @@ connectDB();
 const app = express();
 app.set('trust proxy', 1);
 app.use(express.static("static"));
-// On-demand responsive variant generator for images
-app.use('/images', async (req, res, next) => {
-  try {
-    const imagesDir = path.join(__dirname, 'images');
-    const match = req.path.match(/^(.*)_((small|medium|large))\.webp$/i);
-    if (!match) return next();
-    const baseName = path.basename(match[1]); // original without extension
-    const variant = match[2];
-    const requestedPath = path.join(imagesDir, `${baseName}_${variant}.webp`);
-    const existsRequested = await fs.access(requestedPath).then(() => true).catch(() => false);
-    if (existsRequested) return next();
-    const candidates = [
-      path.join(imagesDir, `${baseName}.webp`),
-      path.join(imagesDir, `${baseName}.png`),
-      path.join(imagesDir, `${baseName}.jpg`),
-      path.join(imagesDir, `${baseName}.jpeg`),
-    ];
-    let original = null;
-    for (const c of candidates) {
-      const ok = await fs.access(c).then(() => true).catch(() => false);
-      if (ok) { original = c; break; }
-    }
-    if (!original) return next();
-    const sizeMap = { small: [640, 480], medium: [1024, 768], large: [1440, 900] };
-    const [w, h] = sizeMap[variant] || [1024, 768];
-    await sharp(original).resize(w, h, { fit: 'inside', withoutEnlargement: true }).webp({ quality: variant === 'large' ? 95 : variant === 'medium' ? 92 : 90 }).toFile(requestedPath);
-    return res.sendFile(requestedPath);
-  } catch {
-    return next();
-  }
-});
-app.use('/images', express.static(path.join(__dirname, 'images'), {
-  maxAge: '30d',
-  immutable: true,
-  etag: true,
-  cacheControl: true
-}));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Middleware
 app.use(cors({
@@ -118,28 +81,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 
-async function ensureStaticVariants(files = []) {
-  try {
-    const imagesDir = path.join(__dirname, 'images');
-    for (const file of files) {
-      const base = file.replace(/\.[^/.]+$/, '');
-      const smallOut = path.join(imagesDir, `${base}_small.webp`);
-      const mediumOut = path.join(imagesDir, `${base}_medium.webp`);
-      const largeOut = path.join(imagesDir, `${base}_large.webp`);
-      const existsSmall = await fs.access(smallOut).then(() => true).catch(() => false);
-      const existsMedium = await fs.access(mediumOut).then(() => true).catch(() => false);
-      const existsLarge = await fs.access(largeOut).then(() => true).catch(() => false);
-      if (existsSmall && existsMedium && existsLarge) continue;
-      const src = path.join(__dirname, '../frontend/src/assets/images', file);
-      const srcExists = await fs.access(src).then(() => true).catch(() => false);
-      if (!srcExists) continue;
-      await sharp(src).resize(640, 480, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 90 }).toFile(smallOut);
-      await sharp(src).resize(1024, 768, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 92 }).toFile(mediumOut);
-      await sharp(src).resize(1440, 900, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 95 }).toFile(largeOut);
-    }
-  } catch {}
-}
-ensureStaticVariants(['web-banner.webp', 'goScreen.webp']);
 app.use(apiCacheMiddleware);
 
 // Backend API routes
@@ -457,12 +398,9 @@ const ssrCache = new NodeCache({
   checkperiod: Math.max(60, Math.floor(SSR_CACHE_TTL / 2)),
 });
 
-// Function to generate cache key from request - normalized absolute path only
+// Function to generate cache key from request
 function getCacheKey(req) {
-  const raw = req.originalUrl || req.url || req.path || '';
-  const noQuery = raw.split('?')[0] || '';
-  const trimmed = (noQuery.length > 1 && noQuery.endsWith('/')) ? noQuery.slice(0, -1) : noQuery;
-  return trimmed || '/';
+  return req.path || req.originalUrl;
 }
 
 function getSsrTTL(req) {
@@ -471,13 +409,13 @@ function getSsrTTL(req) {
     return parseInt(process.env.SSR_HOME_TTL || '60', 10);
   }
   if (p.startsWith('/sub-category/')) {
-    return parseInt(process.env.SSR_SUBCATEGORY_TTL || '1800', 10);
+    return parseInt(process.env.SSR_SUBCATEGORY_TTL || '300', 10);
   }
   if (p.startsWith('/category/')) {
-    return parseInt(process.env.SSR_CATEGORY_TTL || '1800', 10);
+    return parseInt(process.env.SSR_CATEGORY_TTL || '300', 10);
   }
   if (p.startsWith('/blog/')) {
-    return parseInt(process.env.SSR_BLOG_TTL || '1800', 10);
+    return parseInt(process.env.SSR_BLOG_TTL || '180', 10);
   }
   return parseInt(process.env.SSR_CACHE_TTL || '120', 10);
 }
@@ -543,11 +481,8 @@ app.use('*', async (req, res, next) => {
      
     }
     
-    if (typeof render !== 'function') {
-      throw new Error('SSR render unavailable');
-    }
     renderPromise = render(url);
-    const timeoutMs = 3000;
+    const timeoutMs = 8000;
     const timeoutPromise = new Promise((_, reject) => 
       setTimeout(() => reject(new Error('SSR timeout')), timeoutMs)
     );
@@ -555,28 +490,38 @@ app.use('*', async (req, res, next) => {
     // Race between render and timeout
     rendered = await Promise.race([renderPromise, timeoutPromise]);
     
-    // Minify payload for client bootstrapping
-    let lightProducts = null;
-    try {
-      if (Array.isArray(rendered.CategoryProducts)) {
-        lightProducts = rendered.CategoryProducts.map((p) => ({
-          _id: p?._id,
-          slug: p?.slug,
-          name: p?.name,
-          images: Array.isArray(p?.images) && p.images[0]?.url ? [{ url: p.images[0].url }] : []
-        }));
-      }
-    } catch (_) {}
-    
+    const origin = `${req.protocol}://${req.get('host')}`;
+    const segs2 = (url || '').split('/').filter(Boolean);
+    const slugGuess = segs2[segs2.length - 1] || '';
+    const humanize = (s) => s.replace(/-/g, ' ').replace(/\s+/g, ' ').trim().replace(/\b\w/g, c => c.toUpperCase());
+    const defaultTitle =
+      url === '/' ? 'Umbrella Custom Packaging' :
+      url.startsWith('/category/') ? `${humanize(slugGuess)} | Umbrella Custom Packaging` :
+      url.startsWith('/sub-category/') ? `${humanize(slugGuess)} | Umbrella Custom Packaging` :
+      url.startsWith('/blog/') ? `${humanize(slugGuess)} | Umbrella Custom Packaging` :
+      `${humanize(slugGuess)} | Umbrella Custom Packaging`;
+    const defaultCanonical = `${origin}${url}`;
+    const defaultHead = [
+      `<title>${defaultTitle}</title>`,
+      `<meta name="description" content="">`,
+      `<meta name="robots" content="index,follow">`,
+      `<link rel="canonical" href="${defaultCanonical}">`,
+      `<meta property="og:type" content="website">`,
+      `<meta property="og:url" content="${defaultCanonical}">`,
+      `<meta property="og:title" content="${defaultTitle}">`,
+      `<meta property="og:site_name" content="Umbrella Custom Packaging">`,
+      `<meta property="og:locale" content="en_US">`,
+      `<meta name="twitter:card" content="summary_large_image">`,
+      `<meta name="twitter:title" content="${defaultTitle}">`
+    ].join('\n');
+    const helmetHead = `\n${rendered.helmet?.title || ''}\n${rendered.helmet?.meta || ''}\n${rendered.helmet?.link || ''}\n${rendered.helmet?.script || ''}\n`;
+    const finalHead = helmetHead.trim().length > 0 ? helmetHead : defaultHead;
     const html = template
-      .replace(
-        '<!--app-head-->',
-        `\n${rendered.helmet?.title || ''}\n${rendered.helmet?.meta || ''}\n${rendered.helmet?.link || ''}\n${rendered.helmet?.script || ''}\n`
-      )
+      .replace('<!--app-head-->', finalHead)
       .replace('<!--app-html-->', rendered.html || '')
       .replace(
         '<!--server-data-->', 
-        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(lightProducts)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)}</script>`
+        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)}</script>`
       );
     
     if (res.statusCode === 200) {
@@ -614,41 +559,42 @@ app.use('*', async (req, res, next) => {
       }
       
       if (template) {
+        const originFb = `${req.protocol}://${req.get('host')}`;
+        const segsFb = (url || '').split('/').filter(Boolean);
+        const slugFb = segsFb[segsFb.length - 1] || '';
+        const humanizeFb = (s) => s.replace(/-/g, ' ').replace(/\s+/g, ' ').trim().replace(/\b\w/g, c => c.toUpperCase());
+        const defaultTitleFb =
+          url === '/' ? 'Umbrella Custom Packaging' :
+          url.startsWith('/category/') ? `${humanizeFb(slugFb)} | Umbrella Custom Packaging` :
+          url.startsWith('/sub-category/') ? `${humanizeFb(slugFb)} | Umbrella Custom Packaging` :
+          url.startsWith('/blog/') ? `${humanizeFb(slugFb)} | Umbrella Custom Packaging` :
+          `${humanizeFb(slugFb)} | Umbrella Custom Packaging`;
+        const defaultCanonicalFb = `${originFb}${url}`;
+        const defaultHeadFb = [
+          `<title>${defaultTitleFb}</title>`,
+          `<meta name="description" content="">`,
+          `<meta name="robots" content="index,follow">`,
+          `<link rel="canonical" href="${defaultCanonicalFb}">`,
+          `<meta property="og:type" content="website">`,
+          `<meta property="og:url" content="${defaultCanonicalFb}">`,
+          `<meta property="og:title" content="${defaultTitleFb}">`,
+          `<meta property="og:site_name" content="Umbrella Custom Packaging">`,
+          `<meta property="og:locale" content="en_US">`,
+          `<meta name="twitter:card" content="summary_large_image">`,
+          `<meta name="twitter:title" content="${defaultTitleFb}">`
+        ].join('\n');
         const fallbackHtml = template
-          .replace('<!--app-head-->', '')
+          .replace('<!--app-head-->', defaultHeadFb)
           .replace('<!--app-html-->', '')
           .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;</script>');
-        try {
-          const headersFallback = {
-            'Content-Type': 'text/html',
-            'Cache-Control': `public, max-age=${ssrTtl}`
-          };
-          ssrCache.set(cacheKey, { html: fallbackHtml, headers: headersFallback }, ssrTtl);
-          res.set('X-SSR-Cache', 'MISS');
-          res.set('X-SSR-Cache-TTL', String(ssrTtl));
-        } catch (_) {}
+        
         res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);
       } else {
         
       }
     } else {
       console.error('SSR Error:', e.stack);
-      try {
-        const raw = await fs.readFile(path.join(__dirname, '../frontend/index.html'), 'utf-8');
-        const html = raw.replace('<!--app-head-->', '').replace('<!--app-html-->', '').replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;</script>');
-        try {
-          const headersFallback = {
-            'Content-Type': 'text/html',
-            'Cache-Control': `public, max-age=${ssrTtl}`
-          };
-          ssrCache.set(cacheKey, { html, headers: headersFallback }, ssrTtl);
-          res.set('X-SSR-Cache', 'MISS');
-          res.set('X-SSR-Cache-TTL', String(ssrTtl));
-        } catch (_) {}
-        res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
-      } catch {
-        res.status(500).send('SSR failed');
-      }
+     
     }
   }
 });
