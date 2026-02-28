@@ -23,8 +23,9 @@ const Category = ({ serverData }) => {
     try {
       const response = await axios.get(`${BaseUrl}/brands/get?slug=${slug}`);
       if (!response?.data?.data) {
-        navigate('/404')
-        return
+        // Do not redirect immediately; keep SSR/serverData if present
+        setCategoryData((prev) => prev || null);
+        return;
       }
       setCategoryData(response?.data?.data);
 
@@ -34,7 +35,7 @@ const Category = ({ serverData }) => {
       setCategoryProduct(response2?.data?.data?.categories || []);
     } catch (err) {
       console.error("Error fetching category:", err);
-      // navigate('/404')
+      // Avoid redirect on transient errors; keep existing data
     } finally {
       setLoading(false);
     }

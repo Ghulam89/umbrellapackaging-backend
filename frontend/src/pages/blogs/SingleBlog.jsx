@@ -15,16 +15,15 @@ function SingleBlog({ serverData }) {
     const [blogs, setBlogs] = useState([])
     const fetchBlogs = async () => {
         try {
-            const response = await axios.get(`${BaseUrl}/blog/get?slug=${slug}`);
-            if (!response?.data?.data) {
-                // Blog not found, redirect to 404
-                navigate('/404')
-                return
-            }
-            setSingleBlog(response?.data?.data);
+        const response = await axios.get(`${BaseUrl}/blog/get?slug=${slug}`);
+        if (!response?.data?.data) {
+          // Avoid redirect on first load; keep SSR data if present
+          setSingleBlog((prev) => prev || {});
+          return;
+        }
+        setSingleBlog(response?.data?.data);
         } catch (error) {
-            // If there's an error or blog not found, redirect to 404
-            navigate('/404')
+        // Avoid redirect on transient errors; keep existing data
         }
     };
 
