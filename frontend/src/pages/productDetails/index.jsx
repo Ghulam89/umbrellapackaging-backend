@@ -522,21 +522,19 @@ const ProductDetails = ({
     <>
 
 
-    {product ? (
-  <PageMetadata
-    title={product?.metaTitle}
-    description={product?.metaDescription || ""}
-    keywords={product?.keywords || ""}
-    ogUrl={`${BaseUrl}/category/${slug}`}
-    ogImage={`${BaseUrl}/${serverData?.images?.[0]?.url || ""}`}
+    <PageMetadata
+    title={product?.metaTitle || serverData?.metaTitle || `${slug.replace(/-/g,' ').replace(/\s+/g,' ').trim()} | Umbrella Custom Packaging`}
+    description={product?.metaDescription || serverData?.metaDescription || ""}
+    keywords={product?.keywords || serverData?.keywords || ""}
+    ogUrl={`${BaseUrl}/${slug}`}
+    ogImage={`${BaseUrl}/${(product?.images?.[0]?.url || serverData?.images?.[0]?.url) || ""}`}
     ogImageWidth="1200"
     ogImageHeight="630"
     canonicalUrl={`${BaseUrl}/${slug}`}
     breadcrumbSchema={breadcrumbSchema}
     productSchema={productSchema}
-    robots={product?.robots || serverData?.robots}
+    robots={product?.robots || serverData?.robots || "index,follow"}
   />
-) : null}
 
 
       <section className='py-8'>
