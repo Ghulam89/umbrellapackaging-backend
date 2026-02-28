@@ -10,7 +10,7 @@ const SpecialCard = ({images}) => {
         index === 0 ? "sm:col-span-1 col-span-2" : "col-span-1"
       } hover:-translate-y-3 transform transition duration-300 ease-in-out`}
     >
-      <img src={image} alt="" className="rounded-lg w-full" />
+      <img src={image} alt="" className="rounded-lg w-full" loading="lazy" decoding="async" />
     </div>
   ))}
 </div>

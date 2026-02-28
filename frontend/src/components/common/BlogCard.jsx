@@ -18,11 +18,28 @@ const BlogCard = ({ data }) => {
         <div className="p-3 rounded-[10px] h-96 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
           {/* Blog Image */}
           <div className="w-full h-40 overflow-hidden rounded-[10px]">
-            <img
-              src={`${BaseUrl}/${data?.image}`}
-              alt={data?.title}
-              className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
-            />
+            <picture>
+              <source
+                srcSet={`${BaseUrl}/images/${data?.image?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_small.webp`}
+                media="(max-width: 640px)"
+                type="image/webp"
+              />
+              <source
+                srcSet={`${BaseUrl}/images/${data?.image?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_medium.webp`}
+                media="(max-width: 1024px)"
+                type="image/webp"
+              />
+              <source
+                srcSet={`${BaseUrl}/images/${data?.image?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_large.webp`}
+                media="(min-width: 1025px)"
+                type="image/webp"
+              />
+              <img
+                src={`${BaseUrl}/${data?.image}`}
+                alt={data?.title}
+                className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
+              />
+            </picture>
           </div>
 
           {/* Blog Content */}

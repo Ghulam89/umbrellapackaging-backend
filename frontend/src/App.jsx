@@ -16,7 +16,7 @@ function App({ serverData, CategoryProducts, bannerData }) {
     setCurrentUrl(window.location.origin + location.pathname + location.search);
   }, [location]);
 
-  const routes = WebsiteRoutes({ serverData, CategoryProducts, bannerData });
+  const routes = WebsiteRoutes(serverData, CategoryProducts, bannerData);
   const element = useRoutes(routes);
 
   return (

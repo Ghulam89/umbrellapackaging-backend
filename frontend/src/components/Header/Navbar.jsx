@@ -100,12 +100,29 @@ const Navbar = () => {
                         >
                           <div className="bg-[#F7F7F7] p-3 rounded-xl hover:shadow-md transition-all h-full">
                             <div className="aspect-square mb-2">
-                              <img
-                                loading="lazy"
-                                src={`${BaseUrl}/${product?.images?.[0]?.url}`}
-                                alt={product.name}
-                                className="w-full h-full object-contain rounded-xl"
-                              />
+                              <picture>
+                                <source
+                                  srcSet={`${BaseUrl}/images/${product?.images?.[0]?.url?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_small.webp`}
+                                  media="(max-width: 640px)"
+                                  type="image/webp"
+                                />
+                                <source
+                                  srcSet={`${BaseUrl}/images/${product?.images?.[0]?.url?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_medium.webp`}
+                                  media="(max-width: 1024px)"
+                                  type="image/webp"
+                                />
+                                <source
+                                  srcSet={`${BaseUrl}/images/${product?.images?.[0]?.url?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_large.webp`}
+                                  media="(min-width: 1025px)"
+                                  type="image/webp"
+                                />
+                                <img
+                                  loading="lazy"
+                                  src={`${BaseUrl}/${product?.images?.[0]?.url}`}
+                                  alt={product.name}
+                                  className="w-full h-full object-contain rounded-xl"
+                                />
+                              </picture>
                             </div>
                             <h6 className="text-center font-semibold text-[#333] line-clamp-2">
                               {product?.name}

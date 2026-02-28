@@ -3,6 +3,7 @@ import Button from "../common/Button";
 import InstantQuoteModal from "../common/InstantQuoteModal";
 import { Link } from "react-router-dom";
 import { Hero1, Icon1, Icon2, Icon3, Icon4, Icon5, Icon6 } from "../../assets";
+import { BaseUrl } from "../../utils/BaseUrl";
 import { prefetchSubCategory } from "../../utils/prefetchUtils";
 const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,16 +87,34 @@ const Hero = () => {
         </div>
 
         <div className=" sm:w-6/12 w-full">
-
-          <img 
-            src={Hero1} 
-            className="w-full h-auto"
-            decoding="async"
-            loading="eager"
-            fetchPriority="high"
-            alt="Umbrella Custom Packaging Hero"
-           
-          />
+ 
+          <picture>
+            <source
+              srcSet={`${BaseUrl}/images/web-banner_small.webp`}
+              media="(max-width: 640px)"
+              type="image/webp"
+            />
+            <source
+              srcSet={`${BaseUrl}/images/web-banner_medium.webp`}
+              media="(max-width: 1024px)"
+              type="image/webp"
+            />
+            <source
+              srcSet={`${BaseUrl}/images/web-banner_large.webp`}
+              media="(min-width: 1025px)"
+              type="image/webp"
+            />
+            <img 
+              src={Hero1}
+              className="w-full h-auto"
+              decoding="async"
+              loading="eager"
+              fetchPriority="high"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+              alt="Umbrella Custom Packaging Hero"
+              onError={(e) => { e.currentTarget.src = Hero1; }}
+            />
+          </picture>
         </div>
         <div className=" block sm:hidden">
           <strong className=" sm:text-[38px] text-[20px] text-[#333333]  font-medium font-sans">Umbrella Custom Packaging</strong>
