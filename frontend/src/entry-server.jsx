@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import React from "react";
 import { renderToPipeableStream } from "react-dom/server";
 import { PassThrough } from "stream";
 import { StaticRouter } from "react-router-dom/server";
@@ -217,15 +217,13 @@ export async function render(url) {
       });
 
       const { pipe, abort } = renderToPipeableStream(
-        <StrictMode>
-          <HelmetProvider context={helmetContext}>
-            <Provider store={store}>
-              <StaticRouter location={normalizedUrl}>
-                <App serverData={serverData} CategoryProducts={CategoryProducts} homePageData={homePageData} />
-              </StaticRouter>
-            </Provider>
-          </HelmetProvider>
-        </StrictMode>,
+        <HelmetProvider context={helmetContext}>
+          <Provider store={store}>
+            <StaticRouter location={normalizedUrl}>
+              <App serverData={serverData} CategoryProducts={CategoryProducts} homePageData={homePageData} />
+            </StaticRouter>
+          </Provider>
+        </HelmetProvider>,
         {
           onAllReady() {
             pipe(stream);

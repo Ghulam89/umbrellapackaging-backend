@@ -165,13 +165,16 @@ const CustomerReviews = () => {
         clickable: true,
       },
       spaceBetween: 30,
-      slidesPerView: "auto",
-      centeredSlides: true,
+      slidesPerView: 1,
+      centeredSlides: false,
       breakpoints: {
         640: { slidesPerView: 1 },
         768: { slidesPerView: 1 },
         1024: { slidesPerView: 1 },
       },
+      watchSlidesProgress: false,
+      resizeObserver: false,
+      updateOnWindowResize: true,
     }),
     [isAutoPlay, testimonials.length]
   );

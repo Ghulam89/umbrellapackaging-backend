@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { hydrateRoot, createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
@@ -46,16 +45,46 @@ window.__HOME_CACHE__ = homeCacheData || null;
 const homePageData = window.__HOME_PAGE_DATA__ || homeCacheData || null;
 
 const rootElement = document.getElementById("root");
+// Guard: if current route is home but SSR provided non-home data, clear SSR HTML to avoid flicker
+try {
+  if (rootElement && isHome && serverData) {
+    rootElement.innerHTML = "";
+  }
+  // Canonical mismatch guard: if SSR canonical doesn't match current URL, clear SSR HTML
+  const canonicalEl = document.querySelector('link[rel="canonical"]');
+  const currentCanonical = `${window.location.origin}${window.location.pathname}`;
+  if (rootElement && canonicalEl && canonicalEl.href && canonicalEl.href !== currentCanonical) {
+    rootElement.innerHTML = "";
+  }
+  // Route-type mismatch guard via SSR flag
+  const expectedRouteType = (p) => {
+    if (p === '/') return 'home';
+    if (p.startsWith('/category/')) return 'category';
+    if (p.startsWith('/sub-category/')) return 'subcategory';
+    if (p.startsWith('/blog/')) return 'blog';
+    return 'product';
+  };
+  const ssrRoute = rootElement?.getAttribute('data-ssr-route') || null;
+  const currentRoute = expectedRouteType(window.location.pathname || '/');
+  if (rootElement && ssrRoute && ssrRoute !== currentRoute) {
+    rootElement.innerHTML = "";
+  }
+  // Dynamic route must have serverData; if missing, clear SSR to avoid wrong initial paint
+  const p = window.location.pathname || '/';
+  const needsServerData = (p.startsWith('/category/') || p.startsWith('/sub-category/') || p.startsWith('/blog/') || (!p.startsWith('/category/') && !p.startsWith('/sub-category/') && !p.startsWith('/blog/') && p !== '/'));
+  if (rootElement && needsServerData && !serverData) {
+    rootElement.innerHTML = "";
+  }
+} catch {}
+const initialServerData = isHome ? null : serverData;
 const app = (
-  <StrictMode>
-    <HelmetProvider>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App serverData={serverData} CategoryProducts={categoryProducts} bannerData={bannerData} homePageData={homePageData} />
-        </BrowserRouter>
-      </Provider>
-    </HelmetProvider>
-  </StrictMode>
+  <HelmetProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App serverData={initialServerData} CategoryProducts={categoryProducts} bannerData={bannerData} homePageData={homePageData} />
+      </BrowserRouter>
+    </Provider>
+  </HelmetProvider>
 );
 
 if (rootElement && rootElement.hasChildNodes()) {

@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
+.swiper, .swiper-wrapper, .swiper-slide {
+  will-change: transform;
+}
+.swiper-wrapper {
+  transform: translateZ(0);
+}
+.blog_content, .faq_content {
+  content-visibility: auto;
+  contain: layout paint;
+}
+
+.route-transition {
+  will-change: opacity, transform;
+}
+.route-fade {
+  animation: route-fade-in 250ms ease both;
+}
+@keyframes route-fade-in {
+  from { opacity: 0.01; }
+  to { opacity: 1; }
+}
+.route-slide {
+  animation: route-slide-in 300ms ease both;
+}
+@keyframes route-slide-in {
+  from { opacity: 0.01; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 
 body::-webkit-scrollbar {

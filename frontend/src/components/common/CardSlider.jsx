@@ -12,14 +12,23 @@ const CardSlider = ({ item, index, disableSelection = false }) => {
 
   const handleScroll = () => {
     const scrollPosition = window.scrollY;
-  
     setIsAutoPlay(scrollPosition < 50); 
   };
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
@@ -37,7 +46,7 @@ const CardSlider = ({ item, index, disableSelection = false }) => {
           }
           loop={true}
           spaceBetween={30}
-          slidesPerView="auto"
+          slidesPerView={1}
           breakpoints={{
             640: { slidesPerView: 2 },
             768: { slidesPerView: 3 },
@@ -54,6 +63,9 @@ const CardSlider = ({ item, index, disableSelection = false }) => {
          
           speed={800}
           grabCursor={true}
+          watchSlidesProgress={false}
+          resizeObserver={false}
+          updateOnWindowResize={true}
         >
           {item?.map((item) => (
             <SwiperSlide key={item.id}>

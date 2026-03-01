@@ -69,13 +69,21 @@ const Blog = () => {
 
   // Update visible slides based on window width
   useEffect(() => {
+    let ticking = false;
     const updateVisibleSlides = () => {
-      if (window.innerWidth >= 1024) {
-        setVisibleSlides(3);
-      } else if (window.innerWidth >= 768) {
-        setVisibleSlides(2);
-      } else {
-        setVisibleSlides(1);
+      const apply = () => {
+        if (window.innerWidth >= 1024) {
+          setVisibleSlides(3);
+        } else if (window.innerWidth >= 768) {
+          setVisibleSlides(2);
+        } else {
+          setVisibleSlides(1);
+        }
+        ticking = false;
+      };
+      if (!ticking) {
+        requestAnimationFrame(apply);
+        ticking = true;
       }
     };
 
@@ -155,7 +163,7 @@ const Blog = () => {
       prevEl: ".blog-custom-prev",
     },
     spaceBetween: 30,
-    slidesPerView: "auto",
+    slidesPerView: 1,
     breakpoints: {
       640: { slidesPerView: 1 },
       768: { slidesPerView: 2 },
@@ -166,6 +174,9 @@ const Blog = () => {
       loadPrevNext: true,
       loadPrevNextAmount: visibleSlides + 1, // Load one extra slide on each side
     },
+    watchSlidesProgress: false,
+    resizeObserver: false,
+    updateOnWindowResize: true
   }), [isAutoPlay, visibleSlides]);
 
   // Function to determine if a slide should be loaded

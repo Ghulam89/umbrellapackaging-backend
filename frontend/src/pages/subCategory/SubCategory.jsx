@@ -262,22 +262,20 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                   </Link>
                 </li>
                 <li className=' text-sm text-[#4440E6]  whitespace-nowrap capitalize'>
-                  <Link to={`/category/${categoryData?.brandId?.slug}`} >
-                    / {categoryData?.brandId?.name}
-
+                  <Link to={`/category/${categoryData?.brandId?.slug || serverData?.brandId?.slug || ''}`} >
+                    / {(categoryData?.brandId?.name || serverData?.brandId?.name || '').toString()}
                   </Link>
-
                 </li>
                 <li className=' text-sm text-[#767676] whitespace-nowrap'>
-                  / {categoryData?.title}
+                  / {(categoryData?.title || serverData?.title || slug?.replace(/-/g,' ').replace(/\s+/g,' ').trim()).toString()}
                 </li>
               </ul>
               <div className=" sm:pt-3 pt-1">
                 <h1 className=" font-bold text-gray-900 sm:text-3xl text-xl font-sans pt-4 pb-6">
-                  {categoryData?.subTitle}
+                  {categoryData?.subTitle || serverData?.subTitle || categoryData?.title || serverData?.title || slug?.replace(/-/g,' ').replace(/\s+/g,' ').trim()}
                 </h1>
                 <div className=' overflow-y-auto h-44'>
-                  <p dangerouslySetInnerHTML={{ __html: categoryData?.description }}
+                  <p dangerouslySetInnerHTML={{ __html: categoryData?.description || serverData?.description || '' }}
                     className="text-sm leading-6 font-sans ">
 
                   </p>
@@ -314,9 +312,9 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
             {/* Fixed version */}
             <div className="w-full  lg:w-1/2">
               {
-                categoryData?.image ? <img
-                  src={`${BaseUrl}/${categoryData?.image}`}
-                  alt={categoryData?.imageAltText}
+                (categoryData?.image || serverData?.image) ? <img
+                  src={`${BaseUrl}/${categoryData?.image || serverData?.image}`}
+                  alt={(categoryData?.imageAltText || serverData?.imageAltText || '')}
                   className="w-full h-auto rounded-xl shadow-md object-cover"
                   loading="lazy"
                 /> : null

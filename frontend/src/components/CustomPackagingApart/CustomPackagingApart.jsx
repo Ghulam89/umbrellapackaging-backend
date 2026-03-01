@@ -7,6 +7,7 @@ const CustomPackagingApart = () => {
   const animationRef = useRef(null);
   const isPausedRef = useRef(false);
   const translateXRef = useRef(0);
+  const containerWidthRef = useRef(0);
 
   const data = useMemo(() => [
     {
@@ -52,22 +53,33 @@ const CustomPackagingApart = () => {
 
   // Calculate slides to show based on screen size
   useEffect(() => {
-    const updateSlidesToShow = () => {
-      const width = window.innerWidth;
-      if (width >= 1024) {
-        setSlidesToShow(4);
-      } else if (width >= 768) {
-        setSlidesToShow(3);
-      } else if (width >= 640) {
-        setSlidesToShow(2);
-      } else {
-        setSlidesToShow(1);
+    let ticking = false;
+    const updateMetrics = () => {
+      const apply = () => {
+        const width = window.innerWidth;
+        if (width >= 1024) {
+          setSlidesToShow(4);
+        } else if (width >= 768) {
+          setSlidesToShow(3);
+        } else if (width >= 640) {
+          setSlidesToShow(2);
+        } else {
+          setSlidesToShow(1);
+        }
+        if (sliderRef.current?.parentElement) {
+          containerWidthRef.current = sliderRef.current.parentElement.offsetWidth || 0;
+        }
+        ticking = false;
+      };
+      if (!ticking) {
+        requestAnimationFrame(apply);
+        ticking = true;
       }
     };
 
-    updateSlidesToShow();
-    window.addEventListener('resize', updateSlidesToShow);
-    return () => window.removeEventListener('resize', updateSlidesToShow);
+    updateMetrics();
+    window.addEventListener('resize', updateMetrics, { passive: true });
+    return () => window.removeEventListener('resize', updateMetrics);
   }, []);
 
   // Continuous smooth scrolling animation
@@ -78,7 +90,7 @@ const CustomPackagingApart = () => {
         return;
       }
 
-      const containerWidth = sliderRef.current.parentElement?.offsetWidth || 0;
+      const containerWidth = containerWidthRef.current || 0;
       if (containerWidth === 0) {
         animationRef.current = requestAnimationFrame(animate);
         return;
@@ -124,8 +136,8 @@ const CustomPackagingApart = () => {
 
   // Calculate slide width for rendering
   const getSlideWidth = () => {
-    if (!sliderRef.current?.parentElement) return 'auto';
-    const containerWidth = sliderRef.current.parentElement.offsetWidth;
+    const containerWidth = containerWidthRef.current;
+    if (!containerWidth) return 'auto';
     const gap = slidesToShow === 4 ? 40 : slidesToShow === 3 ? 30 : slidesToShow === 2 ? 20 : 8;
     return (containerWidth - (slidesToShow - 1) * gap - 24) / slidesToShow;
   };

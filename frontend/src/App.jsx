@@ -10,6 +10,11 @@ import Footer from './components/Footer/Footer';
 function App({ serverData, CategoryProducts, bannerData }) {
   const location = useLocation();
   const [currentUrl, setCurrentUrl] = useState('');
+  const getTransitionClass = (p) => {
+    if (p.startsWith('/sub-category/') || p.startsWith('/category/')) return 'route-transition route-slide';
+    if (p.startsWith('/blog/') || p === '/') return 'route-transition route-fade';
+    return 'route-transition route-fade';
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -31,7 +36,9 @@ function App({ serverData, CategoryProducts, bannerData }) {
       />
       <TopNav />
       <Navbar />
-      {element}
+      <div key={location.pathname} className={getTransitionClass(location.pathname)}>
+        {element}
+      </div>
       <Footer />
     </>
   );

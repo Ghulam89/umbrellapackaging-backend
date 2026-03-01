@@ -390,12 +390,13 @@ if (isProduction) {
   }
 }
 
-// SSR cache using node-cache
-const SSR_CACHE_TTL = parseInt(process.env.SSR_CACHE_TTL || '300', 10);
+// SSR cache using node-cache with stale-while-revalidate strategy
+const SSR_FRESH_TTL = parseInt(process.env.SSR_FRESH_TTL || '120', 10);
+const SSR_STALE_TTL = parseInt(process.env.SSR_STALE_TTL || '600', 10);
 const ssrCache = new NodeCache({
-  stdTTL: SSR_CACHE_TTL,
+  stdTTL: SSR_STALE_TTL,
   useClones: false,
-  checkperiod: Math.max(60, Math.floor(SSR_CACHE_TTL / 2)),
+  checkperiod: Math.max(60, Math.floor(SSR_STALE_TTL / 2)),
 });
 
 // Function to generate cache key from request
@@ -441,16 +442,70 @@ app.use('*', async (req, res, next) => {
     const newUrl = url.slice(0, -1);
     return res.redirect(301, newUrl);
   }
-  // Check cache first
+  // Check cache first (serve stale while revalidating)
   const cacheKey = getCacheKey(req);
   const cached = ssrCache.get(cacheKey);
   
   if (cached) {
-    res.set(cached.headers);
-    res.set('X-SSR-Cache', 'HIT');
+    const isFresh = (Date.now() - (cached.cachedAt || 0)) <= (SSR_FRESH_TTL * 1000);
+    const headers = {
+      'Content-Type': 'text/html',
+      'Cache-Control': `public, max-age=${SSR_FRESH_TTL}, stale-while-revalidate=${Math.max(SSR_STALE_TTL - SSR_FRESH_TTL, 0)}`
+    };
+    res.set(headers);
+    res.set('X-SSR-Cache', isFresh ? 'HIT' : 'STALE');
     res.set('X-SSR-Cache-TTL', String(ssrTtl));
     res.status(200).send(cached.html);
-    console.log(`SSR Cache hit for ${url}: ${Date.now() - startTime}ms`);
+    console.log(`SSR Cache ${isFresh ? 'hit' : 'stale'} for ${url}: ${Date.now() - startTime}ms`);
+    if (!isFresh) {
+      try {
+        // Background revalidation
+        const revalidated = await (isProduction && productionRender ? productionRender(url) : vite ? (await vite.ssrLoadModule('../frontend/src/entry-server.jsx')).render(url) : null);
+        if (revalidated) {
+          const originBg = `${req.protocol}://${req.get('host')}`;
+          const segsBg = (url || '').split('/').filter(Boolean);
+          const slugGuessBg = segsBg[segsBg.length - 1] || '';
+          const humanizeBg = (s) => s.replace(/-/g, ' ').replace(/\s+/g, ' ').trim().replace(/\b\w/g, c => c.toUpperCase());
+          const defaultTitleBg =
+            url === '/' ? 'Umbrella Custom Packaging' :
+            url.startsWith('/category/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
+            url.startsWith('/sub-category/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
+            url.startsWith('/blog/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
+            `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging`;
+          const defaultCanonicalBg = `${originBg}${url}`;
+          const defaultHeadBg = [
+            `<title>${defaultTitleBg}</title>`,
+            `<meta name="description" content="">`,
+            `<meta name="robots" content="index,follow">`,
+            `<link rel="canonical" href="${defaultCanonicalBg}">`,
+            `<meta property="og:type" content="website">`,
+            `<meta property="og:url" content="${defaultCanonicalBg}">`,
+            `<meta property="og:title" content="${defaultTitleBg}">`,
+            `<meta property="og:site_name" content="Umbrella Custom Packaging">`,
+            `<meta property="og:locale" content="en_US">`,
+            `<meta name="twitter:card" content="summary_large_image">`,
+            `<meta name="twitter:title" content="${defaultTitleBg}">`
+          ].join('\n');
+          const helmetHeadBg = `\n${revalidated.helmet?.title || ''}\n${revalidated.helmet?.meta || ''}\n${revalidated.helmet?.link || ''}\n${revalidated.helmet?.script || ''}\n`;
+          const finalHeadBg = helmetHeadBg.trim().length > 0 ? helmetHeadBg : defaultHeadBg;
+          const templateBg = !isProduction && vite
+            ? await vite.transformIndexHtml(url, await fs.readFile(path.join(__dirname, '../frontend/index.html'), 'utf-8'))
+            : productionTemplate;
+          if (templateBg) {
+            const routeTypeBg = url === '/' ? 'home' :
+              url.startsWith('/category/') ? 'category' :
+              url.startsWith('/sub-category/') ? 'subcategory' :
+              url.startsWith('/blog/') ? 'blog' : 'product';
+            const htmlBg = templateBg
+              .replace('<!--app-head-->', finalHeadBg)
+              .replace('<!--app-html-->', revalidated.html || '')
+              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(revalidated.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(revalidated.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(revalidated.homePageData || null)}</script>`)
+              .replace('id="root"', `id="root" data-ssr-route="${routeTypeBg}"`);
+            ssrCache.set(cacheKey, { html: htmlBg, cachedAt: Date.now() }, SSR_STALE_TTL);
+          }
+        }
+      } catch (_) {}
+    }
     return;
   }
   
@@ -516,20 +571,25 @@ app.use('*', async (req, res, next) => {
     ].join('\n');
     const helmetHead = `\n${rendered.helmet?.title || ''}\n${rendered.helmet?.meta || ''}\n${rendered.helmet?.link || ''}\n${rendered.helmet?.script || ''}\n`;
     const finalHead = helmetHead.trim().length > 0 ? helmetHead : defaultHead;
+    const routeType = url === '/' ? 'home' :
+      url.startsWith('/category/') ? 'category' :
+      url.startsWith('/sub-category/') ? 'subcategory' :
+      url.startsWith('/blog/') ? 'blog' : 'product';
     const html = template
       .replace('<!--app-head-->', finalHead)
       .replace('<!--app-html-->', rendered.html || '')
       .replace(
         '<!--server-data-->', 
         `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)}</script>`
-      );
+      )
+      .replace('id="root"', `id="root" data-ssr-route="${routeType}"`);
     
     if (res.statusCode === 200) {
       const headers = { 
         'Content-Type': 'text/html',
-        'Cache-Control': `public, max-age=${ssrTtl}`
+        'Cache-Control': `public, max-age=${SSR_FRESH_TTL}, stale-while-revalidate=${Math.max(SSR_STALE_TTL - SSR_FRESH_TTL, 0)}`
       };
-      ssrCache.set(cacheKey, { html, headers }, ssrTtl);
+      ssrCache.set(cacheKey, { html, cachedAt: Date.now() }, SSR_STALE_TTL);
       res.set(headers);
       res.set('X-SSR-Cache', 'MISS');
       res.set('X-SSR-Cache-TTL', String(ssrTtl));
@@ -586,7 +646,8 @@ app.use('*', async (req, res, next) => {
         const fallbackHtml = template
           .replace('<!--app-head-->', defaultHeadFb)
           .replace('<!--app-html-->', '')
-          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;</script>');
+          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;</script>')
+          .replace('id="root"', `id="root" data-ssr-route="${url === '/' ? 'home' : url.startsWith('/category/') ? 'category' : url.startsWith('/sub-category/') ? 'subcategory' : url.startsWith('/blog/') ? 'blog' : 'product'}"`);
         
         res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);
       } else {
