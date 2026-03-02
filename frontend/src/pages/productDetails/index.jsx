@@ -846,7 +846,7 @@ const ProductDetails = ({
                   >
                     <option value="">Select Add-Ons</option>
                     <option value={'Foiling'}>Foiling</option>
-                    <option value={'Spot UV'}>Spot UV</option>
+                    <option selected></option>
                     <option value={'Embossing'}>Embossing</option>
                     <option value={'Debossing'}>Debossing</option>
                     <option value={'handles'}>handles</option>

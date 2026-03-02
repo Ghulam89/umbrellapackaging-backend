@@ -89,47 +89,27 @@ const Navbar = () => {
                   </div>
                 ) : searchResults.length > 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4 p-4">
-                    {searchResults
-                      .filter((p) => !!p?.slug)
-                      .map((product) => (
-                        <Link
-                          key={product._id}
-                          to={`/${product.slug}`}
-                          onClick={handleResultClick}
-                          className="block"
-                        >
-                          <div className="bg-[#F7F7F7] p-3 rounded-xl hover:shadow-md transition-all h-full">
-                            <div className="aspect-square mb-2">
-                              <picture>
-                                <source
-                                  srcSet={`${BaseUrl}/images/${product?.images?.[0]?.url?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_small.webp`}
-                                  media="(max-width: 640px)"
-                                  type="image/webp"
-                                />
-                                <source
-                                  srcSet={`${BaseUrl}/images/${product?.images?.[0]?.url?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_medium.webp`}
-                                  media="(max-width: 1024px)"
-                                  type="image/webp"
-                                />
-                                <source
-                                  srcSet={`${BaseUrl}/images/${product?.images?.[0]?.url?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_large.webp`}
-                                  media="(min-width: 1025px)"
-                                  type="image/webp"
-                                />
-                                <img
-                                  loading="lazy"
-                                  src={`${BaseUrl}/${product?.images?.[0]?.url}`}
-                                  alt={product.name}
-                                  className="w-full h-full object-contain rounded-xl"
-                                />
-                              </picture>
-                            </div>
-                            <h6 className="text-center font-semibold text-[#333] line-clamp-2">
-                              {product?.name}
-                            </h6>
+                    {searchResults.map((product) => (
+                      <Link
+                        key={product._id}
+                        to={`/${product.slug}`}
+                        onClick={handleResultClick}
+                        className="block"
+                      >
+                        <div className="bg-[#F7F7F7] p-3 rounded-xl hover:shadow-md transition-all h-full">
+                          <div className="aspect-square mb-2">
+                            <img
+                              src={`${BaseUrl}/${product?.images?.[0]?.url}`}
+                              alt={product.name}
+                              className="w-full h-full object-contain rounded-xl"
+                            />
                           </div>
-                        </Link>
-                      ))}
+                          <h6 className="text-center font-semibold text-[#333] line-clamp-2">
+                            {product?.name}
+                          </h6>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
                 ) : (
                   <div className="p-4 text-center text-gray-500">

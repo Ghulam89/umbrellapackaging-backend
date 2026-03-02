@@ -235,17 +235,17 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
   return (
     <>
 
-     <PageMetadata
-    title={categoryData?.metaTitle || serverData?.metaTitle || `${slug.replace(/-/g,' ').replace(/\s+/g,' ').trim()} | Umbrella Custom Packaging`}
+  <PageMetadata
+    title={categoryData?.metaTitle || serverData?.metaTitle}
     description={categoryData?.metaDescription || serverData?.metaDescription || ""}
     keywords={categoryData?.keywords || serverData?.keywords || ""}
-    ogUrl={`${BaseUrl}/sub-category/${slug}`}
-    ogImage={`${BaseUrl}/${(categoryData?.image || serverData?.image) || ""}`}
+    ogUrl={`${BaseUrl}/category/${slug}`}
+    ogImage={`${BaseUrl}/${serverData?.image}`}
     ogImageWidth="1200"
     ogImageHeight="630"
     canonicalUrl={`${BaseUrl}/sub-category/${slug}`}
     breadcrumbSchema={breadcrumbSchema}
-    robots={categoryData?.robots || serverData?.robots || "index,follow"}
+    robots={categoryData?.robots || serverData?.robots}
     itemListSchema={itemListSchema}
   />
 
@@ -262,20 +262,22 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                   </Link>
                 </li>
                 <li className=' text-sm text-[#4440E6]  whitespace-nowrap capitalize'>
-                  <Link to={`/category/${categoryData?.brandId?.slug || serverData?.brandId?.slug || ''}`} >
-                    / {(categoryData?.brandId?.name || serverData?.brandId?.name || '').toString()}
+                  <Link to={`/category/${categoryData?.brandId?.slug}`} >
+                    / {categoryData?.brandId?.name}
+
                   </Link>
+
                 </li>
                 <li className=' text-sm text-[#767676] whitespace-nowrap'>
-                  / {(categoryData?.title || serverData?.title || slug?.replace(/-/g,' ').replace(/\s+/g,' ').trim()).toString()}
+                  / {categoryData?.title}
                 </li>
               </ul>
               <div className=" sm:pt-3 pt-1">
                 <h1 className=" font-bold text-gray-900 sm:text-3xl text-xl font-sans pt-4 pb-6">
-                  {categoryData?.subTitle || serverData?.subTitle || categoryData?.title || serverData?.title || slug?.replace(/-/g,' ').replace(/\s+/g,' ').trim()}
+                  {categoryData?.subTitle}
                 </h1>
                 <div className=' overflow-y-auto h-44'>
-                  <p dangerouslySetInnerHTML={{ __html: categoryData?.description || serverData?.description || '' }}
+                  <p dangerouslySetInnerHTML={{ __html: categoryData?.description }}
                     className="text-sm leading-6 font-sans ">
 
                   </p>
@@ -312,9 +314,9 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
             {/* Fixed version */}
             <div className="w-full  lg:w-1/2">
               {
-                (categoryData?.image || serverData?.image) ? <img
-                  src={`${BaseUrl}/${categoryData?.image || serverData?.image}`}
-                  alt={(categoryData?.imageAltText || serverData?.imageAltText || '')}
+                categoryData?.image ? <img
+                  src={`${BaseUrl}/${categoryData?.image}`}
+                  alt={categoryData?.imageAltText}
                   className="w-full h-auto rounded-xl shadow-md object-cover"
                   loading="lazy"
                 /> : null
@@ -352,7 +354,7 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
               ))}
 
               {/* Actual Products - Show even when loading more */}
-              {allProducts?.filter(p => p?.slug)?.map((item, index) => {
+              {allProducts?.map((item, index) => {
                   // Prefetch product data on hover
                   const handleMouseEnter = () => {
                     if (item?.slug) {
@@ -391,14 +393,14 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                     >
                       <Link 
                         state={{ productSlug: item._id }} 
-                        to={`/${item.slug}`}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseDown={handleMouseDown}
+                        to={`/${item?.slug}`}
+                        // onMouseEnter={handleMouseEnter}
+                        // onMouseDown={handleMouseDown}
                         className="block"
                       >
                         <div className="">
                           <div className="">
-                            <img loading="lazy" src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
+                            <img src={`${BaseUrl}/${item?.images?.[0]?.url}`} alt={item?.images?.[0]?.altText} className=" w-full sm:h-62 h-auto object-cover overflow-hidden  rounded-lg" />
                           </div>
                           <h2 className="  sm:text-base text-sm font-semibold text-[#333333]  text-center  uppercase sm:py-5 py-2">{item?.name}</h2>
                         </div>
