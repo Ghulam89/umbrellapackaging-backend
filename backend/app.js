@@ -487,6 +487,16 @@ app.use('*', async (req, res, next) => {
     // Race between render and timeout
     rendered = await Promise.race([renderPromise, timeoutPromise]);
     
+    // Determine SSR route type for client-side mismatch guard
+    const routeType = (() => {
+      const p = req.path || req.originalUrl || '';
+      if (p === '/' || p === '') return 'home';
+      if (p.startsWith('/category/')) return 'category';
+      if (p.startsWith('/sub-category/')) return 'subcategory';
+      if (p.startsWith('/blog/')) return 'blog';
+      return 'product';
+    })();
+
     const html = template
       .replace(
         '<!--app-head-->',
@@ -496,7 +506,8 @@ app.use('*', async (req, res, next) => {
       .replace(
         '<!--server-data-->', 
         `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)}</script>`
-      );
+      )
+      .replace('<div id="root">', `<div id="root" data-ssr-route="${routeType}">`);
     
     if (res.statusCode === 200) {
       const headers = { 
@@ -519,10 +530,19 @@ app.use('*', async (req, res, next) => {
       if (renderPromise && template) {
         renderPromise
           .then((bgRendered) => {
+            const routeTypeBg = (() => {
+              const p = req.path || req.originalUrl || '';
+              if (p === '/' || p === '') return 'home';
+              if (p.startsWith('/category/')) return 'category';
+              if (p.startsWith('/sub-category/')) return 'subcategory';
+              if (p.startsWith('/blog/')) return 'blog';
+              return 'product';
+            })();
             const htmlBg = template
               .replace('<!--app-head-->', `\n${bgRendered.helmet?.title || ''}\n${bgRendered.helmet?.meta || ''}\n${bgRendered.helmet?.link || ''}\n${bgRendered.helmet?.script || ''}\n`)
               .replace('<!--app-html-->', bgRendered.html || '')
-              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(bgRendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(bgRendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(bgRendered.homePageData || null)}</script>`);
+              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(bgRendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(bgRendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(bgRendered.homePageData || null)}</script>`)
+              .replace('<div id="root">', `<div id="root" data-ssr-route="${routeTypeBg}">`);
             const headersBg = {
               'Content-Type': 'text/html',
               'Cache-Control': `public, max-age=${ssrTtl}`
@@ -533,10 +553,19 @@ app.use('*', async (req, res, next) => {
       }
       
       if (template) {
+        const routeTypeFallback = (() => {
+          const p = req.path || req.originalUrl || '';
+          if (p === '/' || p === '') return 'home';
+          if (p.startsWith('/category/')) return 'category';
+          if (p.startsWith('/sub-category/')) return 'subcategory';
+          if (p.startsWith('/blog/')) return 'blog';
+          return 'product';
+        })();
         const fallbackHtml = template
           .replace('<!--app-head-->', '')
           .replace('<!--app-html-->', '<div id="app"></div>')
-          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null</script>');
+          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null</script>')
+          .replace('<div id="root">', `<div id="root" data-ssr-route="${routeTypeFallback}">`);
         
         res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);
       } else {

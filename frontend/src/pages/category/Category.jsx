@@ -89,8 +89,8 @@ const Category = ({ serverData }) => {
 
   return (
     <>
-
-     
+      <ProductSelectionProvider>
+        {(categoryData || serverData) ? (
           <PageMetadata
             title={categoryData?.metaTitle || serverData?.metaTitle}
             description={categoryData?.metaDescription || serverData?.metaDescription}
@@ -103,11 +103,8 @@ const Category = ({ serverData }) => {
             breadcrumbSchema={breadcrumbSchema}
             robots={categoryData?.robots || serverData?.robots}
           />
-     
+        ) : null}
 
-
-      <ProductSelectionProvider>
-       
         <Container>
           <div style={{ backgroundColor: categoryData?.bgColor }} className="flex sm:max-w-6xl max-w-[95%] gap-4 mx-auto sm:flex-row items-center flex-col my-3.5 sm:p-8 p-4 rounded-md w-full">
             <div className="sm:w-7/12 w-full">
