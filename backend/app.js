@@ -390,12 +390,13 @@ if (isProduction) {
   }
 }
 
-// SSR cache using node-cache
-const SSR_CACHE_TTL = parseInt(process.env.SSR_CACHE_TTL || '300', 10);
+// SSR cache using node-cache with stale-while-revalidate strategy
+const SSR_FRESH_TTL = parseInt(process.env.SSR_FRESH_TTL || '120', 10);
+const SSR_STALE_TTL = parseInt(process.env.SSR_STALE_TTL || '600', 10);
 const ssrCache = new NodeCache({
-  stdTTL: SSR_CACHE_TTL,
+  stdTTL: SSR_STALE_TTL,
   useClones: false,
-  checkperiod: Math.max(60, Math.floor(SSR_CACHE_TTL / 2)),
+  checkperiod: Math.max(60, Math.floor(SSR_STALE_TTL / 2)),
 });
 
 // Function to generate cache key from request
@@ -423,6 +424,9 @@ function getSsrTTL(req) {
 app.use('*', async (req, res, next) => {
   const startTime = Date.now();
   const url = req.originalUrl;
+  if (url === '/undefined') {
+    return res.redirect(302, '/404');
+  }
   const ssrTtl = getSsrTTL(req);
   const segs = url.split('/').filter(Boolean);
   const isProductLike = (segs.length === 1 && url !== '/');
@@ -438,16 +442,70 @@ app.use('*', async (req, res, next) => {
     const newUrl = url.slice(0, -1);
     return res.redirect(301, newUrl);
   }
-  // Check cache first
+  // Check cache first (serve stale while revalidating)
   const cacheKey = getCacheKey(req);
   const cached = ssrCache.get(cacheKey);
   
   if (cached) {
-    res.set(cached.headers);
-    res.set('X-SSR-Cache', 'HIT');
+    const isFresh = (Date.now() - (cached.cachedAt || 0)) <= (SSR_FRESH_TTL * 1000);
+    const headers = {
+      'Content-Type': 'text/html',
+      'Cache-Control': `public, max-age=${SSR_FRESH_TTL}, stale-while-revalidate=${Math.max(SSR_STALE_TTL - SSR_FRESH_TTL, 0)}`
+    };
+    res.set(headers);
+    res.set('X-SSR-Cache', isFresh ? 'HIT' : 'STALE');
     res.set('X-SSR-Cache-TTL', String(ssrTtl));
     res.status(200).send(cached.html);
-    console.log(`SSR Cache hit for ${url}: ${Date.now() - startTime}ms`);
+    console.log(`SSR Cache ${isFresh ? 'hit' : 'stale'} for ${url}: ${Date.now() - startTime}ms`);
+    if (!isFresh) {
+      try {
+        // Background revalidation
+        const revalidated = await (isProduction && productionRender ? productionRender(url) : vite ? (await vite.ssrLoadModule('../frontend/src/entry-server.jsx')).render(url) : null);
+        if (revalidated) {
+          const originBg = `${req.protocol}://${req.get('host')}`;
+          const segsBg = (url || '').split('/').filter(Boolean);
+          const slugGuessBg = segsBg[segsBg.length - 1] || '';
+          const humanizeBg = (s) => s.replace(/-/g, ' ').replace(/\s+/g, ' ').trim().replace(/\b\w/g, c => c.toUpperCase());
+          const defaultTitleBg =
+            url === '/' ? 'Umbrella Custom Packaging' :
+            url.startsWith('/category/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
+            url.startsWith('/sub-category/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
+            url.startsWith('/blog/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
+            `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging`;
+          const defaultCanonicalBg = `${originBg}${url}`;
+          const defaultHeadBg = [
+            `<title>${defaultTitleBg}</title>`,
+            `<meta name="description" content="">`,
+            `<meta name="robots" content="index,follow">`,
+            `<link rel="canonical" href="${defaultCanonicalBg}">`,
+            `<meta property="og:type" content="website">`,
+            `<meta property="og:url" content="${defaultCanonicalBg}">`,
+            `<meta property="og:title" content="${defaultTitleBg}">`,
+            `<meta property="og:site_name" content="Umbrella Custom Packaging">`,
+            `<meta property="og:locale" content="en_US">`,
+            `<meta name="twitter:card" content="summary_large_image">`,
+            `<meta name="twitter:title" content="${defaultTitleBg}">`
+          ].join('\n');
+          const helmetHeadBg = `\n${revalidated.helmet?.title || ''}\n${revalidated.helmet?.meta || ''}\n${revalidated.helmet?.link || ''}\n${revalidated.helmet?.script || ''}\n`;
+          const finalHeadBg = helmetHeadBg.trim().length > 0 ? helmetHeadBg : defaultHeadBg;
+          const templateBg = !isProduction && vite
+            ? await vite.transformIndexHtml(url, await fs.readFile(path.join(__dirname, '../frontend/index.html'), 'utf-8'))
+            : productionTemplate;
+          if (templateBg) {
+            const routeTypeBg = url === '/' ? 'home' :
+              url.startsWith('/category/') ? 'category' :
+              url.startsWith('/sub-category/') ? 'subcategory' :
+              url.startsWith('/blog/') ? 'blog' : 'product';
+            const htmlBg = templateBg
+              .replace('<!--app-head-->', finalHeadBg)
+              .replace('<!--app-html-->', revalidated.html || '')
+              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(revalidated.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(revalidated.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(revalidated.homePageData || null)};(function(){try{var r=document.getElementById('root');var s=r?r.getAttribute('data-ssr-route'):null;var p=window.location.pathname||'/';var c=(p==='/'?'home':(p.indexOf('/category/')===0?'category':(p.indexOf('/sub-category/')===0?'subcategory':(p.indexOf('/blog/')===0?'blog':'product'))));var needs=(p!=='/'&&(p.indexOf('/category/')===0||p.indexOf('/sub-category/')===0||p.indexOf('/blog/')===0||c==='product'));if(r&&((s&&s!==c)||(needs&&!window.__SERVER_DATA__))){r.innerHTML='';}}catch(e){}})();</script>`)
+              .replace('id="root"', `id="root" data-ssr-route="${routeTypeBg}"`);
+            ssrCache.set(cacheKey, { html: htmlBg, cachedAt: Date.now() }, SSR_STALE_TTL);
+          }
+        }
+      } catch (_) {}
+    }
     return;
   }
   
@@ -479,7 +537,7 @@ app.use('*', async (req, res, next) => {
     }
     
     renderPromise = render(url);
-    const timeoutMs = 3000;
+    const timeoutMs = 8000;
     const timeoutPromise = new Promise((_, reject) => 
       setTimeout(() => reject(new Error('SSR timeout')), timeoutMs)
     );
@@ -487,34 +545,51 @@ app.use('*', async (req, res, next) => {
     // Race between render and timeout
     rendered = await Promise.race([renderPromise, timeoutPromise]);
     
-    // Determine SSR route type for client-side mismatch guard
-    const routeType = (() => {
-      const p = req.path || req.originalUrl || '';
-      if (p === '/' || p === '') return 'home';
-      if (p.startsWith('/category/')) return 'category';
-      if (p.startsWith('/sub-category/')) return 'subcategory';
-      if (p.startsWith('/blog/')) return 'blog';
-      return 'product';
-    })();
-
+    const origin = `${req.protocol}://${req.get('host')}`;
+    const segs2 = (url || '').split('/').filter(Boolean);
+    const slugGuess = segs2[segs2.length - 1] || '';
+    const humanize = (s) => s.replace(/-/g, ' ').replace(/\s+/g, ' ').trim().replace(/\b\w/g, c => c.toUpperCase());
+    const defaultTitle =
+      url === '/' ? 'Umbrella Custom Packaging' :
+      url.startsWith('/category/') ? `${humanize(slugGuess)} | Umbrella Custom Packaging` :
+      url.startsWith('/sub-category/') ? `${humanize(slugGuess)} | Umbrella Custom Packaging` :
+      url.startsWith('/blog/') ? `${humanize(slugGuess)} | Umbrella Custom Packaging` :
+      `${humanize(slugGuess)} | Umbrella Custom Packaging`;
+    const defaultCanonical = `${origin}${url}`;
+    const defaultHead = [
+      `<title>${defaultTitle}</title>`,
+      `<meta name="description" content="">`,
+      `<meta name="robots" content="index,follow">`,
+      `<link rel="canonical" href="${defaultCanonical}">`,
+      `<meta property="og:type" content="website">`,
+      `<meta property="og:url" content="${defaultCanonical}">`,
+      `<meta property="og:title" content="${defaultTitle}">`,
+      `<meta property="og:site_name" content="Umbrella Custom Packaging">`,
+      `<meta property="og:locale" content="en_US">`,
+      `<meta name="twitter:card" content="summary_large_image">`,
+      `<meta name="twitter:title" content="${defaultTitle}">`
+    ].join('\n');
+    const helmetHead = `\n${rendered.helmet?.title || ''}\n${rendered.helmet?.meta || ''}\n${rendered.helmet?.link || ''}\n${rendered.helmet?.script || ''}\n`;
+    const finalHead = helmetHead.trim().length > 0 ? helmetHead : defaultHead;
+    const routeType = url === '/' ? 'home' :
+      url.startsWith('/category/') ? 'category' :
+      url.startsWith('/sub-category/') ? 'subcategory' :
+      url.startsWith('/blog/') ? 'blog' : 'product';
     const html = template
-      .replace(
-        '<!--app-head-->',
-        `\n${rendered.helmet?.title || ''}\n${rendered.helmet?.meta || ''}\n${rendered.helmet?.link || ''}\n${rendered.helmet?.script || ''}\n`
-      )
+      .replace('<!--app-head-->', finalHead)
       .replace('<!--app-html-->', rendered.html || '')
       .replace(
         '<!--server-data-->', 
-        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)}</script>`
+        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)};(function(){try{var r=document.getElementById('root');var s=r?r.getAttribute('data-ssr-route'):null;var p=window.location.pathname||'/';var c=(p==='/'?'home':(p.indexOf('/category/')===0?'category':(p.indexOf('/sub-category/')===0?'subcategory':(p.indexOf('/blog/')===0?'blog':'product'))));var needs=(p!=='/'&&(p.indexOf('/category/')===0||p.indexOf('/sub-category/')===0||p.indexOf('/blog/')===0||c==='product'));if(r&&((s&&s!==c)||(needs&&!window.__SERVER_DATA__))){r.innerHTML='';}}catch(e){}})();</script>`
       )
-      .replace('<div id="root">', `<div id="root" data-ssr-route="${routeType}">`);
+      .replace('id="root"', `id="root" data-ssr-route="${routeType}"`);
     
     if (res.statusCode === 200) {
       const headers = { 
         'Content-Type': 'text/html',
-        'Cache-Control': `public, max-age=${ssrTtl}`
+        'Cache-Control': `public, max-age=${SSR_FRESH_TTL}, stale-while-revalidate=${Math.max(SSR_STALE_TTL - SSR_FRESH_TTL, 0)}`
       };
-      ssrCache.set(cacheKey, { html, headers }, ssrTtl);
+      ssrCache.set(cacheKey, { html, cachedAt: Date.now() }, SSR_STALE_TTL);
       res.set(headers);
       res.set('X-SSR-Cache', 'MISS');
       res.set('X-SSR-Cache-TTL', String(ssrTtl));
@@ -530,19 +605,10 @@ app.use('*', async (req, res, next) => {
       if (renderPromise && template) {
         renderPromise
           .then((bgRendered) => {
-            const routeTypeBg = (() => {
-              const p = req.path || req.originalUrl || '';
-              if (p === '/' || p === '') return 'home';
-              if (p.startsWith('/category/')) return 'category';
-              if (p.startsWith('/sub-category/')) return 'subcategory';
-              if (p.startsWith('/blog/')) return 'blog';
-              return 'product';
-            })();
             const htmlBg = template
               .replace('<!--app-head-->', `\n${bgRendered.helmet?.title || ''}\n${bgRendered.helmet?.meta || ''}\n${bgRendered.helmet?.link || ''}\n${bgRendered.helmet?.script || ''}\n`)
               .replace('<!--app-html-->', bgRendered.html || '')
-              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(bgRendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(bgRendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(bgRendered.homePageData || null)}</script>`)
-              .replace('<div id="root">', `<div id="root" data-ssr-route="${routeTypeBg}">`);
+              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(bgRendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(bgRendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(bgRendered.homePageData || null)}</script>`);
             const headersBg = {
               'Content-Type': 'text/html',
               'Cache-Control': `public, max-age=${ssrTtl}`
@@ -553,19 +619,35 @@ app.use('*', async (req, res, next) => {
       }
       
       if (template) {
-        const routeTypeFallback = (() => {
-          const p = req.path || req.originalUrl || '';
-          if (p === '/' || p === '') return 'home';
-          if (p.startsWith('/category/')) return 'category';
-          if (p.startsWith('/sub-category/')) return 'subcategory';
-          if (p.startsWith('/blog/')) return 'blog';
-          return 'product';
-        })();
+        const originFb = `${req.protocol}://${req.get('host')}`;
+        const segsFb = (url || '').split('/').filter(Boolean);
+        const slugFb = segsFb[segsFb.length - 1] || '';
+        const humanizeFb = (s) => s.replace(/-/g, ' ').replace(/\s+/g, ' ').trim().replace(/\b\w/g, c => c.toUpperCase());
+        const defaultTitleFb =
+          url === '/' ? 'Umbrella Custom Packaging' :
+          url.startsWith('/category/') ? `${humanizeFb(slugFb)} | Umbrella Custom Packaging` :
+          url.startsWith('/sub-category/') ? `${humanizeFb(slugFb)} | Umbrella Custom Packaging` :
+          url.startsWith('/blog/') ? `${humanizeFb(slugFb)} | Umbrella Custom Packaging` :
+          `${humanizeFb(slugFb)} | Umbrella Custom Packaging`;
+        const defaultCanonicalFb = `${originFb}${url}`;
+        const defaultHeadFb = [
+          `<title>${defaultTitleFb}</title>`,
+          `<meta name="description" content="">`,
+          `<meta name="robots" content="index,follow">`,
+          `<link rel="canonical" href="${defaultCanonicalFb}">`,
+          `<meta property="og:type" content="website">`,
+          `<meta property="og:url" content="${defaultCanonicalFb}">`,
+          `<meta property="og:title" content="${defaultTitleFb}">`,
+          `<meta property="og:site_name" content="Umbrella Custom Packaging">`,
+          `<meta property="og:locale" content="en_US">`,
+          `<meta name="twitter:card" content="summary_large_image">`,
+          `<meta name="twitter:title" content="${defaultTitleFb}">`
+        ].join('\n');
         const fallbackHtml = template
-          .replace('<!--app-head-->', '')
-          .replace('<!--app-html-->', '<div id="app"></div>')
-          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null</script>')
-          .replace('<div id="root">', `<div id="root" data-ssr-route="${routeTypeFallback}">`);
+          .replace('<!--app-head-->', defaultHeadFb)
+          .replace('<!--app-html-->', '')
+          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;(function(){try{var r=document.getElementById(\'root\');var s=r?r.getAttribute(\'data-ssr-route\'):null;var p=window.location.pathname||\'/\';var c=(p===\'/\'?\'home\':(p.indexOf(\'/category/\')===0?\'category\':(p.indexOf(\'/sub-category/\')===0?\'subcategory\':(p.indexOf(\'/blog/\')===0?\'blog\':\'product\'))));var needs=(p!==\'/\'&&(p.indexOf(\'/category/\')===0||p.indexOf(\'/sub-category/\')===0||p.indexOf(\'/blog/\')===0||c===\'product\'));if(r&&((s&&s!==c)||(needs&&!window.__SERVER_DATA__))){r.innerHTML=\'\';}}catch(e){}})();</script>')
+          .replace('id="root"', `id="root" data-ssr-route="${url === '/' ? 'home' : url.startsWith('/category/') ? 'category' : url.startsWith('/sub-category/') ? 'subcategory' : url.startsWith('/blog/') ? 'blog' : 'product'}"`);
         
         res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);
       } else {
