@@ -314,15 +314,12 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
             {/* Image */}
             {/* Fixed version */}
             <div className="w-full  lg:w-1/2">
-              {
-                categoryData?.image ? <img
+               <img
                   src={`${BaseUrl}/${categoryData?.image}`}
                   alt={categoryData?.imageAltText}
                   className="w-full h-auto rounded-xl shadow-md object-cover"
-                  loading="lazy"
-                /> : null
-
-              }
+                 
+                /> 
 
 
             </div>

@@ -4,6 +4,7 @@ import os from "os";
 import { connectDB } from "./config/database.js";
 import ErrorMiddleware from "./middleware/Error.js";
 import cors from "cors";
+import NodeCache from "node-cache";
 import bannerRouter from "./routes/bannerRoute.js";
 import ContactusRouter from "./routes/contactusrouter.js";
 import blogRouter from "./routes/blogRouter.js";
@@ -21,19 +22,17 @@ import requestQuoteRouter from "./routes/RequestQuote.js";
 import instantQuoteRouter from "./routes/InstantQuote.js";
 import sitemapRouter from "./routes/sitemapRouter.js";
 import { apiCacheMiddleware } from "./middleware/cacheMiddleware.js";
-import NodeCache from "node-cache";
 import compression from "compression";
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// SSR/Frontend imports
 import fs from 'node:fs/promises';
 
 const numCPUs = os.cpus().length;
 const isProduction = process.env.NODE_ENV === 'production';
 
-if (cluster.isPrimary) {
+if (isProduction && cluster.isPrimary) {
   console.log(`Primary ${process.pid} is running`);
   console.log(`Forking server for ${numCPUs} CPUs`);
 
@@ -64,18 +63,26 @@ if (cluster.isPrimary) {
 connectDB();
 const app = express();
 app.set('trust proxy', 1);
-app.use(express.static("static"));
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.disable('x-powered-by');
+app.use(express.static("static", { maxAge: isProduction ? '7d' : 0, etag: true }));
+app.use('/images', express.static(path.join(__dirname, 'images'), { maxAge: isProduction ? '7d' : 0, etag: true }));
 
 // Middleware
+const allowedOrigins = new Set([
+  'http://localhost:3000',
+  'http://localhost:5174',
+  'http://31.97.14.21:3000',
+  'https://umbrellapackaging.com'
+]);
 app.use(cors({
-  origin: [
-    'http://localhost:3000',      // Admin panel (localhost)
-    'http://localhost:5174',     // Frontend (Vite dev server)
-    'http://31.97.14.21:3000',    // Admin panel (IP-based)
-    'https://umbrellapackaging.com' // Production frontend
-  ],
-  credentials: true,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.has(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+  credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -109,161 +116,159 @@ app.get("/apis", async (req, res) => {
 
 
 // ================= URL Redirects =================
-// Category redirects
-app.get('/box-by-industry/', (req, res) => res.redirect(301, '/category/box-by-industry'));
-app.get('/shapes-styles/', (req, res) => res.redirect(301, '/category/shapes-styles'));
-app.get('/boxes-by-material/', (req, res) => res.redirect(301, '/category/boxes-by-material'));
-app.get('/custom-labels-and-stickers/', (req, res) => res.redirect(301, '/category/custom-labels-and-stickers'));
-
-// Sub-category redirects
-app.get('/fashion-apparel-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/fashion-apparel-packaging-boxes'));
-app.get('/custom-auto-lock-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-auto-lock-boxes'));
-app.get('/automotive-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/automotive-packaging-boxes'));
-app.get('/bakery-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/bakery-packaging-boxes'));
-app.get('/beverage-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/beverage-packaging-boxes'));
-app.get('/custom-bookend-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-bookend-boxes'));
-app.get('/custom-burger-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-burger-boxes'));
-app.get('/custom-bux-board-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-bux-board-boxes'));
-app.get('/custom-cake-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-cake-boxes'));
-app.get('/candle-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/candle-packaging-boxes'));
-app.get('/candy-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/candy-packaging-boxes'));
-app.get('/custom-cardboard-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-cardboard-boxes'));
-app.get('/cbd-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/cbd-packaging-boxes'));
-app.get('/cereal-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/cereal-packaging-boxes'));
-app.get('/custom-child-resistant-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-child-resistant-boxes'));
-app.get('/chocolate-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/chocolate-packaging-boxes'));
-app.get('/custom-cigarette-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-cigarette-boxes'));
-app.get('/custom-coated-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-coated-boxes'));
-app.get('/coffee-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/coffee-packaging-boxes'));
-app.get('/custom-corrugated-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-corrugated-boxes'));
-app.get('/cosmetics-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/cosmetics-packaging-boxes'));
-app.get('/custom-blister-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-blister-boxes'));
-app.get('/custom-bottle-neckers/', (req, res) => res.redirect(301, '/sub-category/custom-bottle-neckers'));
-app.get('/custom-packaging-brochures/', (req, res) => res.redirect(301, '/sub-category/custom-packaging-brochures'));
-app.get('/custom-display-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-display-packaging-boxes'));
-app.get('/custom-envelopes/', (req, res) => res.redirect(301, '/sub-category/custom-envelopes'));
-app.get('/custom-foil-packaging/', (req, res) => res.redirect(301, '/sub-category/custom-foil-packaging'));
-app.get('/custom-hang-tags/', (req, res) => res.redirect(301, '/sub-category/custom-hang-tags'));
-app.get('/custom-insert-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-insert-boxes'));
-app.get('/custom-note-pads/', (req, res) => res.redirect(301, '/sub-category/custom-note-pads'));
-app.get('/custom-paper-cups/', (req, res) => res.redirect(301, '/sub-category/custom-paper-cups'));
-app.get('/custom-round-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-round-boxes'));
-app.get('/custom-table-tents/', (req, res) => res.redirect(301, '/sub-category/custom-table-tents'));
-app.get('/custom-trays-packaging/', (req, res) => res.redirect(301, '/sub-category/custom-trays-packaging'));
-app.get('/custom-dispenser-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-dispenser-boxes'));
-app.get('/display-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/display-packaging-boxes'));
-app.get('/custom-drawer-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-drawer-boxes'));
-app.get('/e-commerce-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/e-commerce-packaging-boxes'));
-app.get('/electronics-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/electronics-packaging-boxes'));
-app.get('/custom-face-mask-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-face-mask-boxes'));
-app.get('/food-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/food-packaging-boxes'));
-app.get('/fragrance-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/fragrance-packaging-boxes'));
-app.get('/custom-fries-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-fries-boxes'));
-app.get('/custom-gable-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-gable-boxes'));
-app.get('/game-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/game-packaging-boxes'));
-app.get('/gift-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/gift-packaging-boxes'));
-app.get('/custom-gloves-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-gloves-boxes'));
-app.get('/custom-hang-tab-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-hang-tab-boxes'));
-app.get('/health-care-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/health-care-packaging-boxes'));
-app.get('/custom-heart-shaped-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-heart-shaped-boxes'));
-app.get('/custom-hexagonal-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-hexagonal-boxes'));
-app.get('/holiday-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/holiday-packaging-boxes'));
-app.get('/jewelry-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/jewelry-packaging-boxes'));
-app.get('/kraft-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/kraft-packaging-boxes'));
-app.get('/custom-laminated-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-laminated-boxes'));
-app.get('/custom-linen-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-linen-boxes'));
-app.get('/liquor-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/liquor-packaging-boxes'));
-app.get('/custom-magnetic-closure-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-magnetic-closure-boxes'));
-app.get('/custom-mailer-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-mailer-packaging-boxes'));
-app.get('/match-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/match-packaging-boxes'));
-app.get('/mylar-bags-packaging/', (req, res) => res.redirect(301, '/sub-category/mylar-bags-packaging'));
-app.get('/custom-paper-bags/', (req, res) => res.redirect(301, '/sub-category/custom-paper-bags'));
-app.get('/pet-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/pet-packaging-boxes'));
-app.get('/custom-pillow-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-pillow-boxes'));
-app.get('/pizza-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/pizza-packaging-boxes'));
-app.get('/custom-popcorn-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-popcorn-boxes'));
-app.get('/pre-roll-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/pre-roll-packaging-boxes'));
-app.get('/presentation-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/presentation-packaging-boxes'));
-app.get('/custom-pyramid-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-pyramid-boxes'));
-app.get('/retail-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/retail-packaging-boxes'));
-app.get('/custom-rigid-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-rigid-boxes'));
-app.get('/shipping-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/shipping-packaging-boxes'));
-app.get('/custom-shoe-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-shoe-boxes'));
-app.get('/custom-sleeve-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-sleeve-boxes'));
-app.get('/soap-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/soap-packaging-boxes'));
-app.get('/stationery-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/stationery-packaging-boxes'));
-app.get('/sticker-labels-others/', (req, res) => res.redirect(301, '/sub-category/sticker-labels-others'));
-app.get('/subscription-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/subscription-packaging-boxes'));
-app.get('/custom-suitcase-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-suitcase-boxes'));
-app.get('/custom-takeout-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-takeout-boxes'));
-app.get('/tea-packaging-boxes/', (req, res) => res.redirect(301, '/sub-category/tea-packaging-boxes'));
-app.get('/custom-textured-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-textured-boxes'));
-app.get('/custom-triangular-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-triangular-boxes'));
-app.get('/custom-tuck-end-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-tuck-end-boxes'));
-app.get('/custom-two-piece-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-two-piece-boxes'));
-app.get('/custom-window-boxes/', (req, res) => res.redirect(301, '/sub-category/custom-window-boxes'));
-
-// Blog redirects
-app.get('/varnish-coating-in-packaging-printing/', (req, res) => res.redirect(301, '/blog/varnish-coating-in-packaging-printing'));
-app.get('/what-is-corrugated-packaging/', (req, res) => res.redirect(301, '/blog/what-is-corrugated-packaging'));
-app.get('/what-is-spot-uv-printing/', (req, res) => res.redirect(301, '/blog/what-is-spot-uv-printing'));
-app.get('/soft-touch-coating-vs-soft-touch-lamination/', (req, res) => res.redirect(301, '/blog/soft-touch-coating-vs-soft-touch-lamination'));
-app.get('/how-to-measure-box-dimensions/', (req, res) => res.redirect(301, '/blog/how-to-measure-box-dimensions'));
-app.get('/digital-vs-offset-printing-for-packaging/', (req, res) => res.redirect(301, '/blog/digital-vs-offset-printing-for-packaging'));
-app.get('/how-to-seal-mylar-bags/', (req, res) => res.redirect(301, '/blog/how-to-seal-mylar-bags'));
-app.get('/what-is-cosmetic-packaging/', (req, res) => res.redirect(301, '/blog/what-is-cosmetic-packaging'));
-app.get('/what-is-foil-stamping/', (req, res) => res.redirect(301, '/blog/what-is-foil-stamping'));
-app.get('/how-to-make-candle-boxes/', (req, res) => res.redirect(301, '/blog/how-to-make-candle-boxes'));
-app.get('/what-is-hemp-packaging/', (req, res) => res.redirect(301, '/blog/what-is-hemp-packaging'));
-app.get('/what-is-kraft-paper-made-of/', (req, res) => res.redirect(301, '/blog/what-is-kraft-paper-made-of'));
-app.get('/box-templates/', (req, res) => res.redirect(301, '/blog/box-templates'));
-app.get('/process-of-making-soap-packaging-boxes/', (req, res) => res.redirect(301, '/blog/process-of-making-soap-packaging-boxes'));
-app.get('/what-is-uv-coating-in-printing/', (req, res) => res.redirect(301, '/blog/what-is-uv-coating-in-printing'));
-app.get('/manufacturers-cardboard-boxes/', (req, res) => res.redirect(301, '/blog/manufacturers-cardboard-boxes'));
-app.get('/everything-about-cereal-box-packaging/', (req, res) => res.redirect(301, '/blog/everything-about-cereal-box-packaging'));
-app.get('/understanding-carton-packaging/', (req, res) => res.redirect(301, '/blog/understanding-carton-packaging'));
-app.get('/die-cutting-in-printing/', (req, res) => res.redirect(301, '/blog/die-cutting-in-printing'));
-app.get('/christmas-eve-box/', (req, res) => res.redirect(301, '/blog/christmas-eve-box'));
-app.get('/what-is-cmyk-in-printing/', (req, res) => res.redirect(301, '/blog/what-is-cmyk-in-printing'));
-app.get('/difference-between-embossed-and-debossed/', (req, res) => res.redirect(301, '/blog/difference-between-embossed-and-debossed'));
-app.get('/what-is-pr-packaging/', (req, res) => res.redirect(301, '/blog/what-is-pr-packaging'));
-app.get('/how-much-is-a-quarter-of-weed/', (req, res) => res.redirect(301, '/blog/how-much-is-a-quarter-of-weed'));
-app.get('/frustration-free-packaging/', (req, res) => res.redirect(301, '/blog/frustration-free-packaging'));
-app.get('/choosing-the-right-packaging-material/', (req, res) => res.redirect(301, '/blog/choosing-the-right-packaging-material'));
-app.get('/what-is-aqueous-coating-in-packaging-printing/', (req, res) => res.redirect(301, '/blog/what-is-aqueous-coating-in-packaging-printing'));
-app.get('/what-are-packaging-inserts/', (req, res) => res.redirect(301, '/blog/what-are-packaging-inserts'));
-app.get('/discreet-packaging/', (req, res) => res.redirect(301, '/blog/discreet-packaging'));
-app.get('/standard-mylar-bag-thicknesses/', (req, res) => res.redirect(301, '/blog/standard-mylar-bag-thicknesses'));
-app.get('/gloss-vs-matte-lamination/', (req, res) => res.redirect(301, '/blog/gloss-vs-matte-lamination'));
-app.get('/how-many-cigarettes-in-a-pack/', (req, res) => res.redirect(301, '/blog/how-many-cigarettes-in-a-pack'));
-
-// Old URL redirects
-app.get('/boxes-by-style/other-styles/fries-boxes/french-fry-boxes/', (req, res) => res.redirect(301, '/french-fries-boxes'));
-app.get('/boxes-by-style/major-styles/magnetic-closure-boxes/magnetic-closure-boxes-with-inserts', (req, res) => res.redirect(301, '/magnetic-closure-boxes-with-inserts/'));
-app.get('/boxes-by-industry/cbd/cigar-boxes/', (req, res) => res.redirect(301, '/cigar-boxes/'));
-app.get('/boxes-by-style/major-styles/cigarette-boxes/', (req, res) => res.redirect(301, '/cigarette-boxes'));
-app.get('/boxes-by-industry/food-boxes/chocolate-boxes/', (req, res) => res.redirect(301, '/chocolate-boxes'));
-app.get('/boxes-by-industry/cosmetic-boxes/lipstick-boxes/', (req, res) => res.redirect(301, '/lipstick-boxes'));
-app.get('/boxes-by-industry/cosmetic-boxes/shampoo-boxes/', (req, res) => res.redirect(301, '/shampoo-boxes'));
-app.get('/boxes-by-industry/cbd/vape-pen-boxes/', (req, res) => res.redirect(301, '/vape-pen-boxes'));
-app.get('/boxes-by-industry/cbd/cannabis-seed-boxes/', (req, res) => res.redirect(301, '/cannabis-seed-boxes'));
-app.get('/boxes-by-style/other-styles/fries-boxes/', (req, res) => res.redirect(301, '/fries-boxes'));
-app.get('/boxes-by-industry/cosmetic-boxes/eyelash-boxes/', (req, res) => res.redirect(301, '/eyelash-boxes'));
-app.get('/boxes-by-material/laminated-boxes/matte-laminated-boxes/', (req, res) => res.redirect(301, '/matte-laminated-boxes'));
-app.get('/boxes-by-style/major-styles/magnetic-closure-boxes/', (req, res) => res.redirect(301, '/magnetic-closure-boxes'));
-app.get('/boxes-by-industry/cake-boxes/window-cake-boxes/', (req, res) => res.redirect(301, '/window-cake-boxes'));
-app.get('/boxes-by-material/custom-foil-boxes/gold-foil-boxes/', (req, res) => res.redirect(301, '/gold-foil-boxes'));
-app.get('/boxes-by-material/laminated-boxes/soft-touch-laminated-boxes/', (req, res) => res.redirect(301, '/soft-touch-laminated-boxes'));
-app.get('/boxes-by-style/two-piece-boxes/cardboard-two-piece-boxes/', (req, res) => res.redirect(301, '/cardboard-two-piece-boxes'));
-app.get('/boxes-by-style/other-styles/paper-bags/kraft-paper-bags/', (req, res) => res.redirect(301, '/kraft-paper-bags'));
-app.get('/boxes-by-style/other-styles/gloves-boxes/surgical-gloves-boxes/', (req, res) => res.redirect(301, '/surgical-gloves-boxes'));
-app.get('/boxes-by-material/custom-cardboard-boxes/offset-printed-cardboard-boxes/', (req, res) => res.redirect(301, '/offset-printed-cardboard-boxes'));
-app.get('/boxes-by-industry/cosmetic-boxes/perfume-boxes/luxury-perfume-boxes/', (req, res) => res.redirect(301, '/luxury-perfume-boxes'));
-app.get('/boxes-by-industry/cosmetic-boxes/soap-boxes/pillow-soap-boxes/', (req, res) => res.redirect(301, '/pillow-soap-boxes'));
-app.get('/boxes-by-style/other-styles/shoe-boxes/window-shoe-boxes/', (req, res) => res.redirect(301, '/window-shoe-boxes'));
-app.get('/boxes-by-industry/cosmetic-boxes/soap-boxes/holster-soap-boxes/', (req, res) => res.redirect(301, '/holster-soap-boxes'));
-app.get('/boxes-by-style/major-styles/display-boxes/counter-display-boxes/', (req, res) => res.redirect(301, '/counter-display-boxes'));
-app.get('/boxes-by-style/major-styles/tuck-end-boxes/reverse-tuck-boxes/', (req, res) => res.redirect(301, '/reverse-tuck-boxes'));
+const redirects = [
+  ['/box-by-industry/', '/category/box-by-industry'],
+  ['/shapes-styles/', '/category/shapes-styles'],
+  ['/boxes-by-material/', '/category/boxes-by-material'],
+  ['/custom-labels-and-stickers/', '/category/custom-labels-and-stickers'],
+  ['/fashion-apparel-packaging-boxes/', '/sub-category/fashion-apparel-packaging-boxes'],
+  ['/custom-auto-lock-boxes/', '/sub-category/custom-auto-lock-boxes'],
+  ['/automotive-packaging-boxes/', '/sub-category/automotive-packaging-boxes'],
+  ['/bakery-packaging-boxes/', '/sub-category/bakery-packaging-boxes'],
+  ['/beverage-packaging-boxes/', '/sub-category/beverage-packaging-boxes'],
+  ['/custom-bookend-boxes/', '/sub-category/custom-bookend-boxes'],
+  ['/custom-burger-boxes/', '/sub-category/custom-burger-boxes'],
+  ['/custom-bux-board-boxes/', '/sub-category/custom-bux-board-boxes'],
+  ['/custom-cake-boxes/', '/sub-category/custom-cake-boxes'],
+  ['/candle-packaging-boxes/', '/sub-category/candle-packaging-boxes'],
+  ['/candy-packaging-boxes/', '/sub-category/candy-packaging-boxes'],
+  ['/custom-cardboard-boxes/', '/sub-category/custom-cardboard-boxes'],
+  ['/cbd-packaging-boxes/', '/sub-category/cbd-packaging-boxes'],
+  ['/cereal-packaging-boxes/', '/sub-category/cereal-packaging-boxes'],
+  ['/custom-child-resistant-boxes/', '/sub-category/custom-child-resistant-boxes'],
+  ['/chocolate-packaging-boxes/', '/sub-category/chocolate-packaging-boxes'],
+  ['/custom-cigarette-boxes/', '/sub-category/custom-cigarette-boxes'],
+  ['/custom-coated-boxes/', '/sub-category/custom-coated-boxes'],
+  ['/coffee-packaging-boxes/', '/sub-category/coffee-packaging-boxes'],
+  ['/custom-corrugated-boxes/', '/sub-category/custom-corrugated-boxes'],
+  ['/cosmetics-packaging-boxes/', '/sub-category/cosmetics-packaging-boxes'],
+  ['/custom-blister-boxes/', '/sub-category/custom-blister-boxes'],
+  ['/custom-bottle-neckers/', '/sub-category/custom-bottle-neckers'],
+  ['/custom-packaging-brochures/', '/sub-category/custom-packaging-brochures'],
+  ['/custom-display-packaging-boxes/', '/sub-category/custom-display-packaging-boxes'],
+  ['/custom-envelopes/', '/sub-category/custom-envelopes'],
+  ['/custom-foil-packaging/', '/sub-category/custom-foil-packaging'],
+  ['/custom-hang-tags/', '/sub-category/custom-hang-tags'],
+  ['/custom-insert-boxes/', '/sub-category/custom-insert-boxes'],
+  ['/custom-note-pads/', '/sub-category/custom-note-pads'],
+  ['/custom-paper-cups/', '/sub-category/custom-paper-cups'],
+  ['/custom-round-boxes/', '/sub-category/custom-round-boxes'],
+  ['/custom-table-tents/', '/sub-category/custom-table-tents'],
+  ['/custom-trays-packaging/', '/sub-category/custom-trays-packaging'],
+  ['/custom-dispenser-boxes/', '/sub-category/custom-dispenser-boxes'],
+  ['/display-packaging-boxes/', '/sub-category/display-packaging-boxes'],
+  ['/custom-drawer-boxes/', '/sub-category/custom-drawer-boxes'],
+  ['/e-commerce-packaging-boxes/', '/sub-category/e-commerce-packaging-boxes'],
+  ['/electronics-packaging-boxes/', '/sub-category/electronics-packaging-boxes'],
+  ['/custom-face-mask-boxes/', '/sub-category/custom-face-mask-boxes'],
+  ['/food-packaging-boxes/', '/sub-category/food-packaging-boxes'],
+  ['/fragrance-packaging-boxes/', '/sub-category/fragrance-packaging-boxes'],
+  ['/custom-fries-boxes/', '/sub-category/custom-fries-boxes'],
+  ['/custom-gable-boxes/', '/sub-category/custom-gable-boxes'],
+  ['/game-packaging-boxes/', '/sub-category/game-packaging-boxes'],
+  ['/gift-packaging-boxes/', '/sub-category/gift-packaging-boxes'],
+  ['/custom-gloves-boxes/', '/sub-category/custom-gloves-boxes'],
+  ['/custom-hang-tab-boxes/', '/sub-category/custom-hang-tab-boxes'],
+  ['/health-care-packaging-boxes/', '/sub-category/health-care-packaging-boxes'],
+  ['/custom-heart-shaped-boxes/', '/sub-category/custom-heart-shaped-boxes'],
+  ['/custom-hexagonal-boxes/', '/sub-category/custom-hexagonal-boxes'],
+  ['/holiday-packaging-boxes/', '/sub-category/holiday-packaging-boxes'],
+  ['/jewelry-packaging-boxes/', '/sub-category/jewelry-packaging-boxes'],
+  ['/kraft-packaging-boxes/', '/sub-category/kraft-packaging-boxes'],
+  ['/custom-laminated-boxes/', '/sub-category/custom-laminated-boxes'],
+  ['/custom-linen-boxes/', '/sub-category/custom-linen-boxes'],
+  ['/liquor-packaging-boxes/', '/sub-category/liquor-packaging-boxes'],
+  ['/custom-magnetic-closure-boxes/', '/sub-category/custom-magnetic-closure-boxes'],
+  ['/custom-mailer-packaging-boxes/', '/sub-category/custom-mailer-packaging-boxes'],
+  ['/match-packaging-boxes/', '/sub-category/match-packaging-boxes'],
+  ['/mylar-bags-packaging/', '/sub-category/mylar-bags-packaging'],
+  ['/custom-paper-bags/', '/sub-category/custom-paper-bags'],
+  ['/pet-packaging-boxes/', '/sub-category/pet-packaging-boxes'],
+  ['/custom-pillow-boxes/', '/sub-category/custom-pillow-boxes'],
+  ['/pizza-packaging-boxes/', '/sub-category/pizza-packaging-boxes'],
+  ['/custom-popcorn-boxes/', '/sub-category/custom-popcorn-boxes'],
+  ['/pre-roll-packaging-boxes/', '/sub-category/pre-roll-packaging-boxes'],
+  ['/presentation-packaging-boxes/', '/sub-category/presentation-packaging-boxes'],
+  ['/custom-pyramid-boxes/', '/sub-category/custom-pyramid-boxes'],
+  ['/retail-packaging-boxes/', '/sub-category/retail-packaging-boxes'],
+  ['/custom-rigid-boxes/', '/sub-category/custom-rigid-boxes'],
+  ['/shipping-packaging-boxes/', '/sub-category/shipping-packaging-boxes'],
+  ['/custom-shoe-boxes/', '/sub-category/custom-shoe-boxes'],
+  ['/custom-sleeve-boxes/', '/sub-category/custom-sleeve-boxes'],
+  ['/soap-packaging-boxes/', '/sub-category/soap-packaging-boxes'],
+  ['/stationery-packaging-boxes/', '/sub-category/stationery-packaging-boxes'],
+  ['/sticker-labels-others/', '/sub-category/sticker-labels-others'],
+  ['/subscription-packaging-boxes/', '/sub-category/subscription-packaging-boxes'],
+  ['/custom-suitcase-boxes/', '/sub-category/custom-suitcase-boxes'],
+  ['/custom-takeout-boxes/', '/sub-category/custom-takeout-boxes'],
+  ['/tea-packaging-boxes/', '/sub-category/tea-packaging-boxes'],
+  ['/custom-textured-boxes/', '/sub-category/custom-textured-boxes'],
+  ['/custom-triangular-boxes/', '/sub-category/custom-triangular-boxes'],
+  ['/custom-tuck-end-boxes/', '/sub-category/custom-tuck-end-boxes'],
+  ['/custom-two-piece-boxes/', '/sub-category/custom-two-piece-boxes'],
+  ['/custom-window-boxes/', '/sub-category/custom-window-boxes'],
+  ['/varnish-coating-in-packaging-printing/', '/blog/varnish-coating-in-packaging-printing'],
+  ['/what-is-corrugated-packaging/', '/blog/what-is-corrugated-packaging'],
+  ['/what-is-spot-uv-printing/', '/blog/what-is-spot-uv-printing'],
+  ['/soft-touch-coating-vs-soft-touch-lamination/', '/blog/soft-touch-coating-vs-soft-touch-lamination'],
+  ['/how-to-measure-box-dimensions/', '/blog/how-to-measure-box-dimensions'],
+  ['/digital-vs-offset-printing-for-packaging/', '/blog/digital-vs-offset-printing-for-packaging'],
+  ['/how-to-seal-mylar-bags/', '/blog/how-to-seal-mylar-bags'],
+  ['/what-is-cosmetic-packaging/', '/blog/what-is-cosmetic-packaging'],
+  ['/what-is-foil-stamping/', '/blog/what-is-foil-stamping'],
+  ['/how-to-make-candle-boxes/', '/blog/how-to-make-candle-boxes'],
+  ['/what-is-hemp-packaging/', '/blog/what-is-hemp-packaging'],
+  ['/what-is-kraft-paper-made-of/', '/blog/what-is-kraft-paper-made-of'],
+  ['/box-templates/', '/blog/box-templates'],
+  ['/process-of-making-soap-packaging-boxes/', '/blog/process-of-making-soap-packaging-boxes'],
+  ['/what-is-uv-coating-in-printing/', '/blog/what-is-uv-coating-in-printing'],
+  ['/manufacturers-cardboard-boxes/', '/blog/manufacturers-cardboard-boxes'],
+  ['/everything-about-cereal-box-packaging/', '/blog/everything-about-cereal-box-packaging'],
+  ['/understanding-carton-packaging/', '/blog/understanding-carton-packaging'],
+  ['/die-cutting-in-printing/', '/blog/die-cutting-in-printing'],
+  ['/christmas-eve-box/', '/blog/christmas-eve-box'],
+  ['/what-is-cmyk-in-printing/', '/blog/what-is-cmyk-in-printing'],
+  ['/difference-between-embossed-and-debossed/', '/blog/difference-between-embossed-and-debossed'],
+  ['/what-is-pr-packaging/', '/blog/what-is-pr-packaging'],
+  ['/how-much-is-a-quarter-of-weed/', '/blog/how-much-is-a-quarter-of-weed'],
+  ['/frustration-free-packaging/', '/blog/frustration-free-packaging'],
+  ['/choosing-the-right-packaging-material/', '/blog/choosing-the-right-packaging-material'],
+  ['/what-is-aqueous-coating-in-packaging-printing/', '/blog/what-is-aqueous-coating-in-packaging-printing'],
+  ['/what-are-packaging-inserts/', '/blog/what-are-packaging-inserts'],
+  ['/discreet-packaging/', '/blog/discreet-packaging'],
+  ['/standard-mylar-bag-thicknesses/', '/blog/standard-mylar-bag-thicknesses'],
+  ['/gloss-vs-matte-lamination/', '/blog/gloss-vs-matte-lamination'],
+  ['/how-many-cigarettes-in-a-pack/', '/blog/how-many-cigarettes-in-a-pack'],
+  ['/boxes-by-style/other-styles/fries-boxes/french-fry-boxes/', '/french-fries-boxes'],
+  ['/boxes-by-style/major-styles/magnetic-closure-boxes/magnetic-closure-boxes-with-inserts', '/magnetic-closure-boxes-with-inserts/'],
+  ['/boxes-by-industry/cbd/cigar-boxes/', '/cigar-boxes/'],
+  ['/boxes-by-style/major-styles/cigarette-boxes/', '/cigarette-boxes'],
+  ['/boxes-by-industry/food-boxes/chocolate-boxes/', '/chocolate-boxes'],
+  ['/boxes-by-industry/cosmetic-boxes/lipstick-boxes/', '/lipstick-boxes'],
+  ['/boxes-by-industry/cosmetic-boxes/shampoo-boxes/', '/shampoo-boxes'],
+  ['/boxes-by-industry/cbd/vape-pen-boxes/', '/vape-pen-boxes'],
+  ['/boxes-by-industry/cbd/cannabis-seed-boxes/', '/cannabis-seed-boxes'],
+  ['/boxes-by-style/other-styles/fries-boxes/', '/fries-boxes'],
+  ['/boxes-by-industry/cosmetic-boxes/eyelash-boxes/', '/eyelash-boxes'],
+  ['/boxes-by-material/laminated-boxes/matte-laminated-boxes/', '/matte-laminated-boxes'],
+  ['/boxes-by-style/major-styles/magnetic-closure-boxes/', '/magnetic-closure-boxes'],
+  ['/boxes-by-industry/cake-boxes/window-cake-boxes/', '/window-cake-boxes'],
+  ['/boxes-by-material/custom-foil-boxes/gold-foil-boxes/', '/gold-foil-boxes'],
+  ['/boxes-by-material/laminated-boxes/soft-touch-laminated-boxes/', '/soft-touch-laminated-boxes'],
+  ['/boxes-by-style/two-piece-boxes/cardboard-two-piece-boxes/', '/cardboard-two-piece-boxes'],
+  ['/boxes-by-style/other-styles/paper-bags/kraft-paper-bags/', '/kraft-paper-bags'],
+  ['/boxes-by-style/other-styles/gloves-boxes/surgical-gloves-boxes/', '/surgical-gloves-boxes'],
+  ['/boxes-by-material/custom-cardboard-boxes/offset-printed-cardboard-boxes/', '/offset-printed-cardboard-boxes'],
+  ['/boxes-by-industry/cosmetic-boxes/perfume-boxes/luxury-perfume-boxes/', '/luxury-perfume-boxes'],
+  ['/boxes-by-industry/cosmetic-boxes/soap-boxes/pillow-soap-boxes/', '/pillow-soap-boxes'],
+  ['/boxes-by-style/other-styles/shoe-boxes/window-shoe-boxes/', '/window-shoe-boxes'],
+  ['/boxes-by-industry/cosmetic-boxes/soap-boxes/holster-soap-boxes/', '/holster-soap-boxes'],
+  ['/boxes-by-style/major-styles/display-boxes/counter-display-boxes/', '/counter-display-boxes'],
+  ['/boxes-by-style/major-styles/tuck-end-boxes/reverse-tuck-boxes/', '/reverse-tuck-boxes']
+];
+redirects.forEach(([from, to]) => {
+  app.get(from, (req, res) => res.redirect(301, to));
+});
 app.get('/boxes-by-style/other-styles/child-resistant-boxes/rigid-child-resistant-boxes/', (req, res) => res.redirect(301, '/rigid-child-resistant-boxes'));
 app.get('/boxes-by-material/custom-cardboard-boxes/', (req, res) => res.redirect(301, '/custom-cardboard-boxes'));
 app.get('/boxes-by-industry/other/pillow-boxes/', (req, res) => res.redirect(301, '/custom-pillow-boxes'));
@@ -401,7 +406,8 @@ const ssrCache = new NodeCache({
 
 // Function to generate cache key from request
 function getCacheKey(req) {
-  return req.path || req.originalUrl;
+  const u = req.originalUrl || req.url || '/';
+  return u.split('?')[0];
 }
 
 function getSsrTTL(req) {
@@ -453,59 +459,11 @@ app.use('*', async (req, res, next) => {
       'Cache-Control': `public, max-age=${SSR_FRESH_TTL}, stale-while-revalidate=${Math.max(SSR_STALE_TTL - SSR_FRESH_TTL, 0)}`
     };
     res.set(headers);
+    res.set('X-SSR-Route', (url === '/' ? 'home' : (url.startsWith('/category/') ? 'category' : (url.startsWith('/sub-category/') ? 'subcategory' : (url.startsWith('/blog/') ? 'blog' : 'product')))));
     res.set('X-SSR-Cache', isFresh ? 'HIT' : 'STALE');
     res.set('X-SSR-Cache-TTL', String(ssrTtl));
     res.status(200).send(cached.html);
     console.log(`SSR Cache ${isFresh ? 'hit' : 'stale'} for ${url}: ${Date.now() - startTime}ms`);
-    if (!isFresh) {
-      try {
-        // Background revalidation
-        const revalidated = await (isProduction && productionRender ? productionRender(url) : vite ? (await vite.ssrLoadModule('../frontend/src/entry-server.jsx')).render(url) : null);
-        if (revalidated) {
-          const originBg = `${req.protocol}://${req.get('host')}`;
-          const segsBg = (url || '').split('/').filter(Boolean);
-          const slugGuessBg = segsBg[segsBg.length - 1] || '';
-          const humanizeBg = (s) => s.replace(/-/g, ' ').replace(/\s+/g, ' ').trim().replace(/\b\w/g, c => c.toUpperCase());
-          const defaultTitleBg =
-            url === '/' ? 'Umbrella Custom Packaging' :
-            url.startsWith('/category/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
-            url.startsWith('/sub-category/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
-            url.startsWith('/blog/') ? `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging` :
-            `${humanizeBg(slugGuessBg)} | Umbrella Custom Packaging`;
-          const defaultCanonicalBg = `${originBg}${url}`;
-          const defaultHeadBg = [
-            `<title>${defaultTitleBg}</title>`,
-            `<meta name="description" content="">`,
-            `<meta name="robots" content="index,follow">`,
-            `<link rel="canonical" href="${defaultCanonicalBg}">`,
-            `<meta property="og:type" content="website">`,
-            `<meta property="og:url" content="${defaultCanonicalBg}">`,
-            `<meta property="og:title" content="${defaultTitleBg}">`,
-            `<meta property="og:site_name" content="Umbrella Custom Packaging">`,
-            `<meta property="og:locale" content="en_US">`,
-            `<meta name="twitter:card" content="summary_large_image">`,
-            `<meta name="twitter:title" content="${defaultTitleBg}">`
-          ].join('\n');
-          const helmetHeadBg = `\n${revalidated.helmet?.title || ''}\n${revalidated.helmet?.meta || ''}\n${revalidated.helmet?.link || ''}\n${revalidated.helmet?.script || ''}\n`;
-          const finalHeadBg = helmetHeadBg.trim().length > 0 ? helmetHeadBg : defaultHeadBg;
-          const templateBg = !isProduction && vite
-            ? await vite.transformIndexHtml(url, await fs.readFile(path.join(__dirname, '../frontend/index.html'), 'utf-8'))
-            : productionTemplate;
-          if (templateBg) {
-            const routeTypeBg = url === '/' ? 'home' :
-              url.startsWith('/category/') ? 'category' :
-              url.startsWith('/sub-category/') ? 'subcategory' :
-              url.startsWith('/blog/') ? 'blog' : 'product';
-            const htmlBg = templateBg
-              .replace('<!--app-head-->', finalHeadBg)
-              .replace('<!--app-html-->', revalidated.html || '')
-              .replace('<!--server-data-->', `<script>window.__SERVER_DATA__ = ${JSON.stringify(revalidated.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(revalidated.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(revalidated.homePageData || null)};(function(){try{var r=document.getElementById('root');var s=r?r.getAttribute('data-ssr-route'):null;var p=window.location.pathname||'/';var c=(p==='/'?'home':(p.indexOf('/category/')===0?'category':(p.indexOf('/sub-category/')===0?'subcategory':(p.indexOf('/blog/')===0?'blog':'product'))));var needs=(p!=='/'&&(p.indexOf('/category/')===0||p.indexOf('/sub-category/')===0||p.indexOf('/blog/')===0||c==='product'));if(r&&((s&&s!==c)||(needs&&!window.__SERVER_DATA__))){r.innerHTML='';}}catch(e){}})();</script>`)
-              .replace('id="root"', `id="root" data-ssr-route="${routeTypeBg}"`);
-            ssrCache.set(cacheKey, { html: htmlBg, cachedAt: Date.now() }, SSR_STALE_TTL);
-          }
-        }
-      } catch (_) {}
-    }
     return;
   }
   
@@ -580,7 +538,7 @@ app.use('*', async (req, res, next) => {
       .replace('<!--app-html-->', rendered.html || '')
       .replace(
         '<!--server-data-->', 
-        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)};(function(){try{var r=document.getElementById('root');var s=r?r.getAttribute('data-ssr-route'):null;var p=window.location.pathname||'/';var c=(p==='/'?'home':(p.indexOf('/category/')===0?'category':(p.indexOf('/sub-category/')===0?'subcategory':(p.indexOf('/blog/')===0?'blog':'product'))));var needs=(p!=='/'&&(p.indexOf('/category/')===0||p.indexOf('/sub-category/')===0||p.indexOf('/blog/')===0||c==='product'));if(r&&((s&&s!==c)||(needs&&!window.__SERVER_DATA__))){r.innerHTML='';}}catch(e){}})();</script>`
+        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)};(function(){try{var r=document.getElementById('root');var s=r?r.getAttribute('data-ssr-route'):null;var p=window.location.pathname||'/';var c=(p==='/'?'home':(p.indexOf('/category/')===0?'category':(p.indexOf('/sub-category/')===0?'subcategory':(p.indexOf('/blog/')===0?'blog':'product'))));if(r&&s&&s!==c){r.setAttribute('data-ssr-route', c);} }catch(e){}})();</script>`
       )
       .replace('id="root"', `id="root" data-ssr-route="${routeType}"`);
     
@@ -591,6 +549,7 @@ app.use('*', async (req, res, next) => {
       };
       ssrCache.set(cacheKey, { html, cachedAt: Date.now() }, SSR_STALE_TTL);
       res.set(headers);
+      res.set('X-SSR-Route', routeType);
       res.set('X-SSR-Cache', 'MISS');
       res.set('X-SSR-Cache-TTL', String(ssrTtl));
     }
@@ -646,7 +605,7 @@ app.use('*', async (req, res, next) => {
         const fallbackHtml = template
           .replace('<!--app-head-->', defaultHeadFb)
           .replace('<!--app-html-->', '')
-          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;(function(){try{var r=document.getElementById(\'root\');var s=r?r.getAttribute(\'data-ssr-route\'):null;var p=window.location.pathname||\'/\';var c=(p===\'/\'?\'home\':(p.indexOf(\'/category/\')===0?\'category\':(p.indexOf(\'/sub-category/\')===0?\'subcategory\':(p.indexOf(\'/blog/\')===0?\'blog\':\'product\'))));var needs=(p!==\'/\'&&(p.indexOf(\'/category/\')===0||p.indexOf(\'/sub-category/\')===0||p.indexOf(\'/blog/\')===0||c===\'product\'));if(r&&((s&&s!==c)||(needs&&!window.__SERVER_DATA__))){r.innerHTML=\'\';}}catch(e){}})();</script>')
+          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;(function(){try{var r=document.getElementById(\'root\');var s=r?r.getAttribute(\'data-ssr-route\'):null;var p=window.location.pathname||\'/\';var c=(p===\'/\'?\'home\':(p.indexOf(\'/category/\')===0?\'category\':(p.indexOf(\'/sub-category/\')===0?\'subcategory\':(p.indexOf(\'/blog/\')===0?\'blog\':\'product\'))));if(r&&s&&s!==c){r.setAttribute(\'data-ssr-route\', c);} }catch(e){}})();</script>')
           .replace('id="root"', `id="root" data-ssr-route="${url === '/' ? 'home' : url.startsWith('/category/') ? 'category' : url.startsWith('/sub-category/') ? 'subcategory' : url.startsWith('/blog/') ? 'blog' : 'product'}"`);
         
         res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);
