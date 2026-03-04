@@ -317,6 +317,9 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
                <img
                   src={`${BaseUrl}/${categoryData?.image}`}
                   alt={categoryData?.imageAltText}
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
                   className="w-full h-auto rounded-xl shadow-md object-cover"
                  
                 /> 

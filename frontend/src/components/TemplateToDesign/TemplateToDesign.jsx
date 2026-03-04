@@ -10,7 +10,7 @@ const TemplateToDesign = () => {
         <div className=" flex gap-4 sm:flex-row items-center flex-col justify-between">
           <div className="  sm:w-6/12 w-full">
                       <h2 className="sm:text-[35px] text-[25px]     font-sans   font-[600] text-[#333333] ">
-Need Box Template to design?</h2>
+Need a Box Template to design?</h2>
             <p className=" text-[14px] leading-6 text-[#333333] pt-2.5">
               Get a quick template file from us, where you can put your design and save some good time. You can also send us the artwork to input in a template and send it your way for your vision.
             </p>

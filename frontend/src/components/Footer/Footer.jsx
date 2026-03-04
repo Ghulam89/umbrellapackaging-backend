@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom'
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoCallOutline, IoLocationOutline } from 'react-icons/io5';
@@ -23,9 +23,12 @@ import paypal from '../../assets/images/paypal.png'
 import wireTransfer from '../../assets/images/wire-transfer.png'
 import maestro from '../../assets/images/mastro.png'
 import visa from '../../assets/images/visa.png'
+import { useIntersectionObserver } from '../../utils/useIntersectionObserver';
 
 const Footer = () => {
 const images = [discover, american, bankTranfer, masterCard, paypal, wireTransfer, maestro, visa]
+const LazyPartners = lazy(() => import('./Partners'));
+const [partnersRef, showPartners] = useIntersectionObserver({ threshold: 0.1, rootMargin: '200px', triggerOnce: true });
 
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
@@ -66,7 +69,7 @@ const images = [discover, american, bankTranfer, masterCard, paypal, wireTransfe
                     <div className=' flex sm:flex-row   flex-col border-b gap-1.5 border-gray-500 justify-between pb-10 sm:pt-10 pt-0'>
                         <div className=' sm:w-4/12 w-12/12'>
                             <Link to={'/'} aria-label="Visit Umbrella Packaging">
-                                <img src={logo} alt='' className=' w-36' />
+                                <img src={logo} alt='' loading="lazy" decoding="async" className=' w-36' />
                             </Link>
 
                             <p className=' text-[#213554] pt-1.5'>We offer Packaging Boxes delivered to your door. Secure, professional, and affordable, our custom made packaging boxes are guaranteed to protect and transport your valuable items. Our devoted team is always there to serve you.</p>
@@ -125,21 +128,23 @@ const images = [discover, american, bankTranfer, masterCard, paypal, wireTransfe
                         </div>
                     </div>
                     <div className=' sm:pt-8 sm:gap-12  gap-7  pt-4 grid md:grid-cols-5 grid-cols-2'>
-                         <div className="col-span-2 order-4 md:order-1">
-                            <Partners />
+                         <div className="col-span-2 order-4 md:order-1" ref={partnersRef}>
+                            <Suspense fallback={<div className="h-24" />}>
+                              {showPartners ? <LazyPartners /> : null}
+                            </Suspense>
                             <div className=' bg-white h-56  rounded-md flex   justify-center w-full items-center' >
                                 <div className=' grid   py-5 grid-cols-2 gap-6 w-full'>
                                     <Link to={'https://www.google.com/search?q=Umbrella+Packaging&sca_esv=595745443&rlz=1C1CHBD_enPK1075PK1075&sxsrf=AM9HkKnBl0W9ivYXDrDVqm1eeUaJMzvaUQ%3A1704396144882&ei=cAWXZdq9NZDii-gPp4yrgAE&ved=0ahUKEwjatZa2usSDAxUQ8QIHHSfGChAQ4dUDCBA&uact=5&oq=Umbrella+Packaging&gs_lp=Egxnd3Mtd2l6LXNlcnAiElVtYnJlbGxhIFBhY2thZ2luZzIHECMYsAIYJzIHECMYsAIYJzIHECMYsAIYJzIHEAAYgAQYDTIHEAAYgAQYDTIGEAAYHhgNMggQABgFGB4YDTIIEAAYBRgeGA0yCBAAGAgYHhgNMggQABgIGB4YDUiZQVDqBVjyPnACeAGQAQCYAb8DoAGrEKoBBTMtNS4xuAEDyAEA-AEBwgIKEAAYRxjWBBiwA8ICChAAGAgYHhgNGA_CAgsQABiABBiKBRiGA8ICBBAjGCfCAgoQIxiABBiKBRgnwgIGEAAYBxgewgIFEAAYgATCAgQQABgewgIGEAAYBRgewgIGEAAYCBge4gMEGAAgQYgGAZAGCA&sclient=gws-wiz-serp'} className=' flex justify-center w-full items-center' aria-label="Visit Umbrella Packaging in Google">
-                                        <img src={google} alt='' className=' w-28' />
+                                        <img src={google} alt='' loading="lazy" decoding="async" className=' w-28' />
                                     </Link>
                                     <Link to={'https://www.trustindex.io/reviews/www.umbrellapackaging.com?lang=ko'} className=' flex justify-center items-center' aria-label="Visit Umbrella Packaging in Trustindex">
-                                        <img src={trust} alt='' className=' w-36' />
+                                        <img src={trust} alt='' loading="lazy" decoding="async" className=' w-36' />
                                     </Link>
                                     <Link to={'https://www.trustpilot.com/review/umbrellapackaging.com?utm_medium=trustbox&utm_source=MicroReviewCount'} className=' flex justify-center items-center' aria-label="Visit Umbrella Packaging in Trustpilot">
-                                        <img src={trustpilot} alt='' className=' w-36' />
+                                        <img src={trustpilot} alt='' loading="lazy" decoding="async" className=' w-36' />
                                     </Link>
                                     <Link to={'https://www.sitejabber.com/reviews/umbrellapackaging.com'} className=' flex justify-center items-center' aria-label="Visit Umbrella Packaging in Sitejabber">
-                                        <img src={sitejabber} alt='' className=' w-36' />
+                                        <img src={sitejabber} alt='' loading="lazy" decoding="async" className=' w-36' />
                                     </Link>
                                 </div>
 
@@ -293,10 +298,9 @@ const images = [discover, american, bankTranfer, masterCard, paypal, wireTransfe
                             <div className=' flex sm:flex-row items-center flex-col  justify-between'>
                                  <div className=' flex gap-2  flex-wrap justify-center items-center'>
           {images.map((image, index) => (
-            <div key={index} >
-
-              <img src={image} width={50} alt=""  className={`transition-all duration-300 ease-in-out`} /></div>
-
+            <div key={index}>
+              <img src={image} width={50} alt="" loading="lazy" decoding="async" className="transition-all duration-300 ease-in-out" />
+            </div>
           ))}
 
 

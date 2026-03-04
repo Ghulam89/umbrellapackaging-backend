@@ -81,7 +81,7 @@ const Partners = () => {
         {data?.map((item) => (
             <SwiperSlide key={item.id}>
                 <div className="text-center flex w-28 justify-center items-center">
-                <img src={item.icon} alt=""    className=' mx-auto  w-32' />
+                <img src={item.icon} alt="" loading="lazy" decoding="async" className=' mx-auto  w-32' />
                
                 </div>
             </SwiperSlide>

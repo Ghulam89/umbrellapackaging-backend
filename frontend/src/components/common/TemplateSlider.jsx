@@ -216,7 +216,7 @@ function TemplateSlider() {
             }}
             className={`w-2 h-2 rounded-full transition-all duration-200 ${
               (currentIndex % slides.length) === index
-                ? 'bg-[#4440E6] w-8'
+                ? 'bg-[#4440E6] w-6'
                 : 'bg-gray-300 hover:bg-gray-400'
             }`}
             aria-label={`Go to slide ${index + 1}`}

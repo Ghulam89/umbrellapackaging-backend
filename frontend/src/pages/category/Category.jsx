@@ -149,6 +149,10 @@ const Category = ({ serverData }) => {
                 <img
                   src={`${BaseUrl}/${categoryData?.bannerImage}`}
                   className="w-full"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+
                   alt={categoryData?.bannerAltText}
                 /> : null
               }
