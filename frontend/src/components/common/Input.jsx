@@ -4,6 +4,7 @@ const Input = ({
   label,
   placeholder,
   name,
+  id,
   type,
   className,
   onChange,
@@ -16,7 +17,7 @@ const Input = ({
   return (
     <div className=" relative  ">
       <label
-        htmlFor="first_name"
+        htmlFor={id || name}
         className="  pb-1 flex  text-[#333333] text-sm font-medium   text-textColor"
       >
         {label}
@@ -28,7 +29,7 @@ const Input = ({
         onChange={onChange}
         placeholder={placeholder}
         name={name}
-        id={name}
+        id={id || name}
         type={type}
         required={required}
         className={`  outline-none bg-lightGray  p-1.5  text-textColor placeholder:text-gray-400 placeholder:text-sm   ${className}`}

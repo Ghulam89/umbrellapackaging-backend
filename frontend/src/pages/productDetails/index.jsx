@@ -877,6 +877,7 @@ const ProductDetails = ({
                   <Input
                     type="file"
                     name="image"
+                    id="design_upload"
                     onChange={handleChange}
                     className="border w-full bg-white rounded-lg border-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#4440E6] file:text-white hover:file:bg-[#3a36c7]"
                     accept=".png,.pdf,.jpg,.jpeg,.webp"
