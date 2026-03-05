@@ -110,6 +110,8 @@ const Hero = () => {
               decoding="async"
               loading="eager"
               fetchPriority="high"
+              width="1500"
+              height="975"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
               alt="Umbrella Custom Packaging Hero"
               onError={(e) => { e.currentTarget.src = Hero1; }}

@@ -19,10 +19,11 @@
   <!-- Preconnect for faster external requests -->
   <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
   <!-- Preload critical resources for faster initial load -->
-  <link rel="preload" href="/src/assets/fonts/helvetica-light-587ebe5a59211.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" as="image" href="src/assets/images/web-banner.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="/images/web-banner_large.webp" imagesrcset="/images/web-banner_small.webp 640w, /images/web-banner_medium.webp 1024w, /images/web-banner_large.webp 1500w" imagesizes="100vw" fetchpriority="high">
   <link rel="dns-prefetch" href="https://umbrellapackaging.com">
   <link rel="preconnect" href="https://umbrellapackaging.com" crossorigin>
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="preconnect" href="https://embed.tawk.to" crossorigin>
   <!-- Google Tag Manager -->
   <script defer fetchpriority="low">(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
@@ -39,7 +40,7 @@
 
 <body>
   <div id="root"><!--app-html--></div>
-  <script type="module" src="/src/entry-client.jsx" defer fetchpriority="high"></script>
+  <script type="module" src="/src/entry-client.jsx" defer></script>
   <!-- End Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTQHTB2V" height="0" width="0"
       style="display:none;visibility:hidden"></iframe></noscript>
