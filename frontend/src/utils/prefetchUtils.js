@@ -10,6 +10,31 @@ const CACHE_SIZE = 100; // Increased from 50 to 100
 const subCategoryCache = new Map();
 const pendingSubCategoryRequests = new Map();
 const SUBCATEGORY_CACHE_SIZE = 50;
+const subCategoryProductsCache = new Map();
+const PERSIST_TTL_MS = 10 * 60 * 1000;
+
+const persistSet = (key, value) => {
+  try {
+    const payload = { value, ts: Date.now() };
+    localStorage.setItem(key, JSON.stringify(payload));
+  } catch {}
+};
+
+const persistGet = (key) => {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const payload = JSON.parse(raw);
+    if (!payload || typeof payload !== 'object') return null;
+    if (Date.now() - payload.ts > PERSIST_TTL_MS) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return payload.value;
+  } catch {
+    return null;
+  }
+};
 
 /**
  * Prefetch product data by slug - optimized for speed
@@ -179,6 +204,7 @@ export const prefetchSubCategory = async (slug, priority = false) => {
       if (subCategoryData) {
         // Cache the data (keep last 50 subcategories)
         subCategoryCache.set(slug, subCategoryData);
+        persistSet(`subcat:${slug}`, subCategoryData);
         
         // Limit cache size to prevent memory issues
         if (subCategoryCache.size > SUBCATEGORY_CACHE_SIZE) {
@@ -199,6 +225,10 @@ export const prefetchSubCategory = async (slug, priority = false) => {
             .then((productResponse) => {
               const products = productResponse?.data?.data || [];
               if (products.length > 0) {
+                const currentPage = productResponse?.data?.currentPage || 1;
+                const totalPages = productResponse?.data?.totalPages || 1;
+                subCategoryProductsCache.set(slug, { products, currentPage, totalPages });
+                persistSet(`subcatProducts:${slug}`, { products, currentPage, totalPages });
                 // Prefetch all products from first page
                 const productSlugs = products
                   .filter((p) => p?.slug)
@@ -250,5 +280,23 @@ export const getCachedSubCategory = (slug) => {
 export const clearSubCategoryCache = () => {
   subCategoryCache.clear();
   pendingSubCategoryRequests.clear();
+};
+
+export const getCachedSubCategoryProducts = (slug) => {
+  const data = subCategoryProductsCache.get(slug);
+  if (!data) return null;
+  return data;
+};
+
+export const clearSubCategoryProductsCache = () => {
+  subCategoryProductsCache.clear();
+}
+
+export const getPersistedSubCategory = (slug) => {
+  return persistGet(`subcat:${slug}`);
+};
+
+export const getPersistedSubCategoryProducts = (slug) => {
+  return persistGet(`subcatProducts:${slug}`);
 };
 

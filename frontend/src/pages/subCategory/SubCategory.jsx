@@ -22,7 +22,7 @@ import PageMetadata from '../../components/common/PageMetadata';
 import InstantQuoteModal from '../../components/common/InstantQuoteModal';
 import goScreen from '../../assets/images/goScreen.webp';
 import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPackagingApart';
-import { prefetchProduct, prefetchProductsBatch, prefetchSubCategory, getCachedSubCategory } from '../../utils/prefetchUtils';
+import { prefetchProduct, prefetchProductsBatch, prefetchSubCategory, getCachedSubCategory, getCachedSubCategoryProducts, getPersistedSubCategory, getPersistedSubCategoryProducts } from '../../utils/prefetchUtils';
 const SubCategory = ({ serverData, CategoryProducts }) => {
   const { slug } = useParams();
   const [categoryData, setCategoryData] = useState(null)
@@ -89,8 +89,10 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
   const fetchProduct = async (page = 1) => {
     // Only set main loading for first page
     if (page === 1) {
-      setLoading(true);
-      setLoadingProducts(Array(8).fill(null)); // 8 loading skeletons
+      if (allProducts.length === 0) {
+        setLoading(true);
+        setLoadingProducts(Array(8).fill(null));
+      }
     } else {
       // For subsequent pages, use loadingMore
       setLoadingMore(true);
@@ -134,10 +136,31 @@ const SubCategory = ({ serverData, CategoryProducts }) => {
 
   useEffect(() => {
     if (slug) {
-      // Check cache first for faster loading
+      const persistedData = getPersistedSubCategory(slug);
+      if (persistedData) {
+        setCategoryData(persistedData);
+      }
       const cachedData = getCachedSubCategory(slug);
       if (cachedData) {
         setCategoryData(cachedData);
+      }
+
+      const persistedProductsData = getPersistedSubCategoryProducts(slug);
+      if (persistedProductsData && Array.isArray(persistedProductsData.products) && persistedProductsData.products.length > 0) {
+        setAllProducts(persistedProductsData.products);
+        setCurrentPage(persistedProductsData.currentPage || 1);
+        setTotalPages(persistedProductsData.totalPages || 1);
+        setLoading(false);
+        setLoadingProducts([]);
+      }
+
+      const cachedProductsData = getCachedSubCategoryProducts(slug);
+      if (cachedProductsData && Array.isArray(cachedProductsData.products) && cachedProductsData.products.length > 0) {
+        setAllProducts(cachedProductsData.products);
+        setCurrentPage(cachedProductsData.currentPage || 1);
+        setTotalPages(cachedProductsData.totalPages || 1);
+        setLoading(false);
+        setLoadingProducts([]);
       }
 
       // Prefetch SubCategory data for faster navigation

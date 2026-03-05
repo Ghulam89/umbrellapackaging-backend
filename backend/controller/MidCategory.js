@@ -3,6 +3,7 @@ import { MidCategory } from "../model/MidCategory.js";
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { Products } from "../model/Product.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -416,3 +417,56 @@ export const getAllSubCategoriesForSitemap = async () => {
         return [];
     }
 };
+
+export const getCategoryPageData = catchAsyncError(async (req, res, next) => {
+  const { id, slug } = req.query;
+  const page = parseInt(req.query.page, 10) || 1;
+  const perPage = parseInt(req.query.perPage, 10) || 12;
+  const skip = (page - 1) * perPage;
+  try {
+    let category;
+    if (id) {
+      category = await MidCategory.findById(id).populate('brandId').lean();
+    } else if (slug) {
+      category = await MidCategory.findOne({ slug }).populate('brandId').lean();
+    }
+    if (!category) {
+      return res.status(404).json({
+        status: "fail",
+        error: "Category not found",
+      });
+    }
+    const queryConditions = {
+      $or: [
+        { category: category._id },
+        { midCategory: category._id },
+        { categoryId: category._id }
+      ]
+    };
+    const products = await Products.find(queryConditions)
+      .skip(skip)
+      .limit(perPage)
+      .lean();
+    const totalProducts = await Products.countDocuments(queryConditions);
+    const totalPages = Math.ceil(totalProducts / perPage);
+    return res.status(200).json({
+      status: "success",
+      data: {
+        category,
+        products,
+        pagination: {
+          currentPage: page,
+          perPage,
+          totalPages,
+          totalProducts
+        }
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      status: "fail",
+      error: "Internal Server Error",
+    });
+  }
+});

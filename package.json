@@ -1,15 +1,26 @@
 {
   "private": true,
-  "workspaces": ["backend", "frontend"],
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
     "dev": "npm run dev:backend",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "start:frontend": "cd frontend && npm run build",
     "start": "cd backend && npm start",
-    "build": "cd frontend && npm run build"
+    "build": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "build:all": "concurrently -n FE,BE -c green,blue \"npm run build\" \"npm run build:backend\"",
+    "optimize-images": "node scripts/optimize-images.js",
+    "optimize-backend": "cd backend && npm run optimize-images",
+    "optimize-all": "concurrently -n FE,BE -c green,blue \"npm run optimize-images\" \"npm run optimize-backend\""
   },
   "devDependencies": {
     "concurrently": "^9.2.0"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }

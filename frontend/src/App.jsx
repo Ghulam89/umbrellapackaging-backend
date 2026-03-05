@@ -36,7 +36,8 @@ function App({ serverData, CategoryProducts, bannerData }) {
       />
       <TopNav />
       <Navbar />
-      <div key={location.pathname} className={getTransitionClass(location.pathname)}>
+      {/* className={getTransitionClass(location.pathname)} */}
+      <div key={location.pathname} >
         {element}
       </div>
       <Footer />

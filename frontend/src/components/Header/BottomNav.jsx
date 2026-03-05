@@ -83,7 +83,11 @@ const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
               className="relative group"
             >
               <NavLink
-                onClick={handleCategoryLeave}
+                onClick={(e) => {
+                  if (!(e.ctrlKey || e.metaKey || e.button === 1)) {
+                    handleCategoryLeave();
+                  }
+                }}
                 to={`/category/${category?.slug}`}
                 className="flex items-center gap-1 text-[#333333] uppercase py-2.5 text-sm font-medium transition-colors"
               >
@@ -128,7 +132,11 @@ const BottomNav = React.memo(({ Menu, OpenMenu, setCategoriesLoaded }) => {
                 {selectedCategory.map((submenu, index) => (
                   <NavLink
                     key={submenu._id || index}
-                    onClick={handleCategoryLeave}
+                    onClick={(e) => {
+                      if (!(e.ctrlKey || e.metaKey || e.button === 1)) {
+                        handleCategoryLeave();
+                      }
+                    }}
                     to={`/sub-category/${submenu.slug}`}
                     className="flex font-semibold text-[#333333] capitalize gap-1 items-center transition-colors"
                     onMouseEnter={() => {

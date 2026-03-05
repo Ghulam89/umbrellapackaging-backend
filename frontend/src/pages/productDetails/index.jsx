@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { TfiAngleLeft, TfiAngleRight } from 'react-icons/tfi'
 import Input from '../../components/common/Input'
 import Button from '../../components/common/Button'
@@ -1125,8 +1126,8 @@ const ProductDetails = ({
       </div>
 
 
-      {isViewerOpen && selectedImage && (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] bg-opacity-90 z-50 flex items-center justify-center p-4">
+      {isViewerOpen && selectedImage && createPortal(
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] bg-opacity-90 z-[100000] flex items-center justify-center p-4">
           <div className='absolute top-4 right-4'>
             <button
               onClick={closeImageViewer}
@@ -1164,7 +1165,8 @@ const ProductDetails = ({
           <div className="absolute bottom-4 text-white">
             {currentIndex + 1} / {product?.images.length}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )

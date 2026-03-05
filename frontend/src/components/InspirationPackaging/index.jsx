@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Button from "../common/Button";
 import { Link } from "react-router-dom";
 import { gallery1, gallery2, gallery3, gallery4, gallery5, gallery6, gallery7, gallery8, gallery9 } from "../../assets";
@@ -133,8 +134,8 @@ const InspirationPackaging = () => {
 
             {/* Image Viewer Modal */}
             
-                  {isViewerOpen && selectedImage && (
-                    <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] bg-opacity-90 z-50 flex items-center justify-center p-4">
+                  {isViewerOpen && selectedImage && createPortal(
+                    <div className="fixed inset-0 bg-[rgba(0,0,0,0.8)] bg-opacity-90 z-[100000] flex items-center justify-center p-4">
                       <div className='absolute top-4 right-4'>
                         <button
                           onClick={closeImageViewer}
@@ -172,7 +173,8 @@ const InspirationPackaging = () => {
                       <div className="absolute bottom-4 text-white">
                         {currentIndex + 1} / {images.length}
                       </div>
-                    </div>
+                    </div>,
+                    document.body
                   )}
         </div>
     );

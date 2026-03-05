@@ -28,6 +28,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import fs from 'node:fs/promises';
+import fsSync from 'fs';
+import helmet from 'helmet';
+import { strictCreateLimiter } from "./middleware/rateLimit.js";
 
 const numCPUs = os.cpus().length;
 const isProduction = process.env.NODE_ENV === 'production';
@@ -64,8 +67,8 @@ connectDB();
 const app = express();
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
-app.use(express.static("static", { maxAge: isProduction ? '7d' : 0, etag: true }));
-app.use('/images', express.static(path.join(__dirname, 'images'), { maxAge: isProduction ? '7d' : 0, etag: true }));
+app.use(express.static("static", { maxAge: isProduction ? '30d' : 0, etag: true }));
+app.use('/images', express.static(path.join(__dirname, 'images'), { maxAge: isProduction ? '30d' : 0, etag: true }));
 
 // Middleware
 const allowedOrigins = new Set([
@@ -84,6 +87,7 @@ app.use(cors({
   },
   credentials: true
 }));
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
@@ -104,8 +108,8 @@ app.use("/products", productRouter);
 app.use("/checkout", checkoutRouter);
 app.use("/rating", ratingRoute);
 app.use("/subscribe", subscribeRouter);
-app.use("/requestQuote", requestQuoteRouter);
-app.use("/instantQuote", instantQuoteRouter);
+app.use("/requestQuote", strictCreateLimiter, requestQuoteRouter);
+app.use("/instantQuote", strictCreateLimiter, instantQuoteRouter);
 app.use("/", sitemapRouter);
 
 // Simple API test route
@@ -322,19 +326,19 @@ app.get('/soap-packaging/', (req, res) => res.redirect(301, '/process-of-making-
 app.use(ErrorMiddleware);
 
 // ================= SSR/Frontend optimization =================
-// const isProduction = process.env.NODE_ENV === 'production';
 const base = process.env.BASE || '/';
 
 // Cache for production template and render function
 let productionTemplate = '';
 let productionRender = null;
 let vite = null;
+const projectRoot = fsSync.existsSync(path.join(__dirname, '../frontend')) ? path.join(__dirname, '..') : path.join(__dirname, '..', '..');
 
 // Preload production assets in production mode
 if (isProduction) {
   try {
-    const templatePath = path.join(__dirname, '../frontend/dist/client/index.html');
-    const serverEntryPath = path.join(__dirname, '../frontend/dist/server/entry-server.js');
+    const templatePath = path.join(projectRoot, 'frontend/dist/client/index.html');
+    const serverEntryPath = path.join(projectRoot, 'frontend/dist/server/entry-server.js');
     
     // Load assets in parallel
     const [template, serverModule] = await Promise.all([
@@ -358,7 +362,7 @@ if (isProduction) {
       server: { middlewareMode: true },
       appType: 'custom',
       base,
-      root: path.join(__dirname, '../frontend'),
+      root: path.join(projectRoot, 'frontend'),
     });
     
     // Add no-cache headers for development mode to prevent browser caching
@@ -385,7 +389,7 @@ if (isProduction) {
     const compression = (await import('compression')).default;
     const sirv = (await import('sirv')).default;
     app.use(compression());
-    app.use(base, sirv(path.join(__dirname, '../frontend/dist/client'), {
+    app.use(base, sirv(path.join(projectRoot, 'frontend/dist/client'), {
       extensions: [],
       maxAge: 31536000, // 1 year
       immutable: true
