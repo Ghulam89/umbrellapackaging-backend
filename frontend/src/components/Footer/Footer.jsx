@@ -1,4 +1,4 @@
-import React, { memo, useState, lazy, Suspense } from 'react';
+import React, { memo, useState, Suspense } from 'react';
 import { Link } from 'react-router-dom'
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoCallOutline, IoLocationOutline } from 'react-icons/io5';
@@ -27,7 +27,6 @@ import { useIntersectionObserver } from '../../utils/useIntersectionObserver';
 
 const Footer = () => {
 const images = [discover, american, bankTranfer, masterCard, paypal, wireTransfer, maestro, visa]
-const LazyPartners = lazy(() => import('./Partners'));
 const [partnersRef, showPartners] = useIntersectionObserver({ threshold: 0.1, rootMargin: '200px', triggerOnce: true });
 
     const [email, setEmail] = useState('');
@@ -130,7 +129,7 @@ const [partnersRef, showPartners] = useIntersectionObserver({ threshold: 0.1, ro
                     <div className=' sm:pt-8 sm:gap-12  gap-7  pt-4 grid md:grid-cols-5 grid-cols-2'>
                          <div className="col-span-2 order-4 md:order-1" ref={partnersRef}>
                             <Suspense fallback={<div className="h-24" />}>
-                              {showPartners ? <LazyPartners /> : null}
+                              {showPartners ? <Partners /> : null}
                             </Suspense>
                             <div className=' bg-white h-56  rounded-md flex   justify-center w-full items-center' >
                                 <div className=' grid   py-5 grid-cols-2 gap-6 w-full'>

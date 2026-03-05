@@ -542,7 +542,7 @@ app.use('*', async (req, res, next) => {
       .replace('<!--app-html-->', rendered.html || '')
       .replace(
         '<!--server-data-->', 
-        `<script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)};(function(){try{var r=document.getElementById('root');var s=r?r.getAttribute('data-ssr-route'):null;var p=window.location.pathname||'/';var c=(p==='/'?'home':(p.indexOf('/category/')===0?'category':(p.indexOf('/sub-category/')===0?'subcategory':(p.indexOf('/blog/')===0?'blog':'product'))));if(r&&s&&s!==c){r.setAttribute('data-ssr-route', c);} }catch(e){}})();</script>`
+        `<style>#root.hydration-pending{pointer-events:none}</style><script>window.__SERVER_DATA__ = ${JSON.stringify(rendered.serverData || null)};window.__CATEGORY_PRODUCTS__ = ${JSON.stringify(rendered.CategoryProducts || null)};window.__HOME_PAGE_DATA__ = ${JSON.stringify(rendered.homePageData || null)};window.__SSR_COMPLETE__=true;(function(){try{var r=document.getElementById('root');if(r){r.classList.add('hydration-pending');}var s=r?r.getAttribute('data-ssr-route'):null;var p=window.location.pathname||'/';var c=(p==='/'?'home':(p.indexOf('/category/')===0?'category':(p.indexOf('/sub-category/')===0?'subcategory':(p.indexOf('/blog/')===0?'blog':'product'))));if(r&&s&&s!==c){r.setAttribute('data-ssr-route', c);} }catch(e){}})();</script>`
       )
       .replace('id="root"', `id="root" data-ssr-route="${routeType}"`);
     
@@ -609,7 +609,7 @@ app.use('*', async (req, res, next) => {
         const fallbackHtml = template
           .replace('<!--app-head-->', defaultHeadFb)
           .replace('<!--app-html-->', '')
-          .replace('<!--server-data-->', '<script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;(function(){try{var r=document.getElementById(\'root\');var s=r?r.getAttribute(\'data-ssr-route\'):null;var p=window.location.pathname||\'/\';var c=(p===\'/\'?\'home\':(p.indexOf(\'/category/\')===0?\'category\':(p.indexOf(\'/sub-category/\')===0?\'subcategory\':(p.indexOf(\'/blog/\')===0?\'blog\':\'product\'))));if(r&&s&&s!==c){r.setAttribute(\'data-ssr-route\', c);} }catch(e){}})();</script>')
+          .replace('<!--server-data-->', '<style>#root.hydration-pending{pointer-events:none}</style><script>window.__SERVER_DATA__ = null;window.__CATEGORY_PRODUCTS__ = null;window.__HOME_PAGE_DATA__ = null;window.__SSR_COMPLETE__=false;(function(){try{var r=document.getElementById(\'root\');if(r){r.classList.add(\'hydration-pending\');}var s=r?r.getAttribute(\'data-ssr-route\'):null;var p=window.location.pathname||\'/\';var c=(p===\'/\'?\'home\':(p.indexOf(\'/category/\')===0?\'category\':(p.indexOf(\'/sub-category/\')===0?\'subcategory\':(p.indexOf(\'/blog/\')===0?\'blog\':\'product\'))));if(r&&s&&s!==c){r.setAttribute(\'data-ssr-route\', c);} }catch(e){}})();</script>')
           .replace('id="root"', `id="root" data-ssr-route="${url === '/' ? 'home' : url.startsWith('/category/') ? 'category' : url.startsWith('/sub-category/') ? 'subcategory' : url.startsWith('/blog/') ? 'blog' : 'product'}"`);
         
         res.status(200).set({ 'Content-Type': 'text/html' }).send(fallbackHtml);

@@ -2,7 +2,7 @@ import Hero from '../../components/Hero'
 import { BaseUrl } from '../../utils/BaseUrl'
 import PageMetadata from '../../components/common/PageMetadata'
 import { goScreen, Hero1, logo, pngLogo } from '../../assets'
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import { prefetchSubCategory, prefetchProducts } from '../../utils/prefetchUtils'
 import axiosInstance from '../../utils/axiosInstance'
 
@@ -17,10 +17,10 @@ import ProductionUnits from '../../components/ProductionUnits/ProductionUnits'
 import CustomPackagingProduced from '../../components/CustomPackagingProduced'
 import PackagingBanner from '../../components/common/PackagingBanner'
 import WeFulfil from '../../components/WeFulfil/WeFulfil'
-import CustomerReviews from '../../components/CustomerReviews'
-import InspirationPackaging from '../../components/InspirationPackaging'
+const CustomerReviews = React.lazy(() => import('../../components/CustomerReviews'))
+const InspirationPackaging = React.lazy(() => import('../../components/InspirationPackaging'))
 import ImportanceCustomPackaging from '../../components/ImportanceCustomPackaging'
-import Blog from '../../components/blog/Blog'
+const Blog = React.lazy(() => import('../../components/blog/Blog'))
 import FAQ from '../../components/FAQ/FAQ'
 
 export const Home = React.memo(({ bannerData: propBannerData }) => {
@@ -187,14 +187,17 @@ export const Home = React.memo(({ bannerData: propBannerData }) => {
           <CustomPackagingProduced />
           <PackagingBanner url="/sub-category/kraft-packaging-boxes" title={'Order Kraft Packaging For Sustainable Future.'} subTitle={"Go Green with Umbrella Custom Packaging Go For Kraft Packaging"} bgImage={goScreen} />
           <WeFulfil />
-       
-          <CustomerReviews />
-        
-          <InspirationPackaging />
-        
+          <Suspense fallback={null}>
+            <CustomerReviews />
+          </Suspense>
+          <Suspense fallback={null}>
+            <InspirationPackaging />
+          </Suspense>
           <ImportanceCustomPackaging initialBannerData={bannerData} />
      
-          <Blog />
+          <Suspense fallback={null}>
+            <Blog />
+          </Suspense>
           <FAQ />
      
       </main>
