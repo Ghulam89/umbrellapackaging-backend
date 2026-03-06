@@ -84,7 +84,7 @@ const initialServerData = isHome ? null : serverData;
 const app = (
   <HelmetProvider>
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <App serverData={initialServerData} CategoryProducts={categoryProducts} bannerData={bannerData} homePageData={homePageData} />
       </BrowserRouter>
     </Provider>

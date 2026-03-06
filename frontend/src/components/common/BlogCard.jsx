@@ -11,6 +11,10 @@ const stripHtml = (html) => {
 
 const BlogCard = ({ data }) => {
   const previewText = stripHtml(data?.content).slice(0, 150) + "...";
+  const base =
+    typeof data?.image === "string"
+      ? data.image.split("/").pop()?.replace(/\.[^/.]+$/, "")
+      : null;
 
   return (
     <div className="group relative">
@@ -18,28 +22,13 @@ const BlogCard = ({ data }) => {
         <div className="p-3 rounded-[10px] h-96 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
           {/* Blog Image */}
           <div className="w-full h-40 overflow-hidden rounded-[10px]">
-            <picture>
-              <source
-                srcSet={`${BaseUrl}/images/${data?.image?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_small.webp`}
-                media="(max-width: 640px)"
-                type="image/webp"
-              />
-              <source
-                srcSet={`${BaseUrl}/images/${data?.image?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_medium.webp`}
-                media="(max-width: 1024px)"
-                type="image/webp"
-              />
-              <source
-                srcSet={`${BaseUrl}/images/${data?.image?.split('/').pop()?.replace(/\.[^/.]+$/, '')}_large.webp`}
-                media="(min-width: 1025px)"
-                type="image/webp"
-              />
-              <img
-                src={`${BaseUrl}/${data?.image}`}
-                alt={data?.title}
-                className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
-              />
-            </picture>
+            <img
+              src={`${BaseUrl}/${data?.image}`}
+              alt={data?.title}
+              className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
 
           {/* Blog Content */}

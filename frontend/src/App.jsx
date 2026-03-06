@@ -17,8 +17,15 @@ function App({ serverData, CategoryProducts, bannerData }) {
   };
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-    setCurrentUrl(window.location.origin + location.pathname + location.search);
+    const schedule = () => {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      setCurrentUrl(window.location.origin + location.pathname + location.search);
+    };
+    if (typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(schedule);
+    } else {
+      setTimeout(schedule, 0);
+    }
   }, [location]);
 
   const routes = WebsiteRoutes(serverData, CategoryProducts, bannerData);

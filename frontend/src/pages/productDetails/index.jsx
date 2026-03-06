@@ -418,23 +418,18 @@ const ProductDetails = ({
     setSelectedImage(null);
     setCurrentIndex(0);
     
-    // Check cache first for instant loading
     const cachedProduct = getCachedProduct(slug);
     if (cachedProduct) {
       setProduct(cachedProduct);
       fetchRelatedProducts();
       return;
     }
-    
-    // If serverData is provided and matches current slug, use it
     if (serverData && serverData.slug === slug) {
       setProduct(serverData);
       fetchRelatedProducts();
-    } else {
-      // Fetch new product when slug changes
-      fetchProducts();
-      fetchRelatedProducts();
+      return;
     }
+    fetchRelatedProducts();
   }, [slug])
 
 

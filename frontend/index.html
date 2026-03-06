@@ -18,8 +18,8 @@
   <link href="/src/index.css" rel="stylesheet">
   <!-- Preconnect for faster external requests -->
   <meta name="google-site-verification" content="DqVOTjXSiiqW_9ss9esFDb9m5MMQOrSlVqBisT0mcOI" />
-  <!-- Preload critical resources for faster initial load -->
-  <link rel="preload" as="image" href="/images/web-banner_large.webp" imagesrcset="/images/web-banner_small.webp 640w, /images/web-banner_medium.webp 1024w, /images/web-banner_large.webp 1500w" imagesizes="100vw" fetchpriority="high">
+  <!-- Preload critical hero image (single candidate to avoid srcset parsing warnings) -->
+  <link rel="preload" as="image" href="/images/web-banner_large.webp" fetchpriority="high">
   <link rel="dns-prefetch" href="https://umbrellapackaging.com">
   <link rel="preconnect" href="https://umbrellapackaging.com" crossorigin>
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>

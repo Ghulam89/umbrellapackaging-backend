@@ -15,7 +15,6 @@ const axiosInstance = axios.create({
   headers: {
     'Accept': 'application/json',
     // Removed Accept-Encoding as browser handles this automatically and can cause issues on some mobile browsers
-    'Connection': 'keep-alive', // HTTP/1.1 keep-alive for connection reuse
   },
   // Max redirects
   maxRedirects: 5,

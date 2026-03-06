@@ -125,29 +125,27 @@ const Blog = () => {
     }
   }, [isVisible, fetchBlogs, loading, blog.length]);
 
-  // Fallback: If component is already visible on mount, fetch immediately
-  // Also fetch after a delay if intersection observer doesn't trigger (safety net)
+  // Fallback: If intersection observer doesn't trigger, schedule a low-priority fetch
   useEffect(() => {
-    // Check if component is already visible on mount
-    if (blogRef.current) {
-      const rect = blogRef.current.getBoundingClientRect();
-      const isInViewport = rect.top < window.innerHeight + 200 && rect.bottom > -200;
-      
-      if (isInViewport && !loading && blog.length === 0 && !error) {
-        // Component is already visible, fetch immediately
+    let cancelled = false;
+    const schedule = () => {
+      if (!cancelled && !loading && blog.length === 0 && !error && !isVisible) {
         fetchBlogs();
       }
+    };
+    if (typeof window !== "undefined" && window.requestIdleCallback) {
+      const id = window.requestIdleCallback(schedule, { timeout: 1500 });
+      return () => {
+        cancelled = true;
+        try { window.cancelIdleCallback && window.cancelIdleCallback(id); } catch {}
+      };
+    } else {
+      const t = setTimeout(schedule, 1500);
+      return () => {
+        cancelled = true;
+        clearTimeout(t);
+      };
     }
-
-    // Fallback: Fetch after 2 seconds if intersection observer doesn't trigger
-    const timer = setTimeout(() => {
-      if (!loading && blog.length === 0 && !error && !isVisible) {
-        // If still not visible after 2 seconds, fetch anyway as fallback
-        fetchBlogs();
-      }
-    }, 2000);
-
-    return () => clearTimeout(timer);
   }, []); // Only run once on mount
 
   // Memoize Swiper configuration
