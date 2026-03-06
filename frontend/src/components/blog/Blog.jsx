@@ -24,11 +24,7 @@ const BlogCardSkeleton = () => (
 
 const Blog = () => {
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [blog, setBlog] = useState(
-    typeof window !== "undefined" && window.__HOME_CACHE__?.blogs
-      ? window.__HOME_CACHE__.blogs
-      : []
-  );
+  const [blog, setBlog] = useState([]);
   const [loading, setLoading] = useState(false); // Start with false, will be true when fetching
   const [error, setError] = useState(null);
   const [visibleSlides, setVisibleSlides] = useState(1); // Track visible slides for lazy loading
@@ -116,6 +112,19 @@ const Blog = () => {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  // After mount, hydrate from cache if available (to avoid SSR/client mismatch)
+  useEffect(() => {
+    try {
+      const cached =
+        typeof window !== "undefined" && window.__HOME_CACHE__?.blogs
+          ? window.__HOME_CACHE__.blogs
+          : [];
+      if (cached.length > 0) {
+        setBlog(cached);
+      }
+    } catch {}
   }, []);
 
   // Only fetch blogs when component is visible (deferred loading)

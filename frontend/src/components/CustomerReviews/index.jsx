@@ -64,11 +64,7 @@ const NavigationButtons = () => (
 const CustomerReviews = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [testimonials, setTestimonials] = useState(
-    typeof window !== "undefined" && window.__HOME_CACHE__?.ratings
-      ? window.__HOME_CACHE__.ratings
-      : []
-  );
+  const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -126,6 +122,18 @@ const CustomerReviews = () => {
     }
   }, [isVisible, fetchReviews, testimonials.length, loading]);
 
+  // After mount, hydrate from cache if available (to avoid SSR/client mismatch)
+  useEffect(() => {
+    try {
+      const cached =
+        typeof window !== "undefined" && window.__HOME_CACHE__?.ratings
+          ? window.__HOME_CACHE__.ratings
+          : [];
+      if (cached.length > 0) {
+        setTestimonials(cached);
+      }
+    } catch {}
+  }, []);
   useEffect(() => {
     let ticking = false;
     const onScroll = () => {

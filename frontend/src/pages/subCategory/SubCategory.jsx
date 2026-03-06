@@ -25,65 +25,15 @@ import CustomPackagingApart from '../../components/CustomPackagingApart/CustomPa
 import { prefetchProduct, prefetchProductsBatch, prefetchSubCategory, getCachedSubCategory, getCachedSubCategoryProducts, getPersistedSubCategory, getPersistedSubCategoryProducts } from '../../utils/prefetchUtils';
 const SubCategory = ({ serverData, CategoryProducts }) => {
   const { slug } = useParams();
-  const [categoryData, setCategoryData] = useState(null)
+  const [categoryData, setCategoryData] = useState(serverData || null)
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [allProducts, setAllProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState(CategoryProducts || []);
   const [loading, setLoading] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loadingProducts, setLoadingProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState(new Set());
-
-
-
-  const data2 = [
-    {
-      id: 1,
-      icon: icon1,
-      title: 'No Minimum Order Qty',
-      description: 'Order as few as one custom unit to get started, with no minimum order quantity requirements.'
-
-    },
-    {
-      id: 2,
-      icon: icon2,
-      title: 'Free Design',
-      description: 'Avail professional design services without any added fees, ensuring your vision comes to life.'
-
-    },
-    {
-      id: 3,
-      icon: icon2,
-      title: 'Quickest Turnaround',
-      description: 'Avail professional design services without any added fees, ensuring your vision comes to life.'
-
-    },
-    {
-      id: 3,
-      icon: icon2,
-      title: 'Cheapest Prices',
-      description: 'Benefit from our regular discounted rates and get the best custom packaging at the lowest prices.'
-
-    },
-    {
-      id: 4,
-      icon: icon2,
-      title: 'Fee Shipping',
-      description: 'Enjoy free shipping services for stock and custom orders of packaging boxes at Umbrella Packaging.'
-
-    },
-
-    {
-      id: 3,
-      icon: icon2,
-      title: 'Quickest Turnaround',
-      description: 'Avail professional design services without any added fees, ensuring your vision comes to life.'
-
-    },
-
-
-  ]
 
 
   const fetchProduct = async (page = 1) => {
