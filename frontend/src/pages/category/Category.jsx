@@ -15,8 +15,8 @@ const Category = ({ serverData }) => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [categoryProduct, setCategoryProduct] = useState([]);
-  const [categoryData, setCategoryData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [categoryData, setCategoryData] = useState(serverData || null);
+  const [loading, setLoading] = useState(!serverData);
 
   const FetchCategory = async () => {
     setLoading(true);
@@ -28,11 +28,23 @@ const Category = ({ serverData }) => {
         return;
       }
       setCategoryData(response?.data?.data);
+      try {
+        localStorage.setItem(
+          `brand:${slug}`,
+          JSON.stringify({ timestamp: Date.now(), data: response?.data?.data })
+        );
+      } catch {}
 
       const response2 = await axios.get(
         `${BaseUrl}/products/categoryProducts/${response?.data?.data._id}/products-by-category`
       );
       setCategoryProduct(response2?.data?.data?.categories || []);
+      try {
+        localStorage.setItem(
+          `brandProducts:${slug}`,
+          JSON.stringify({ timestamp: Date.now(), data: response2?.data?.data?.categories || [] })
+        );
+      } catch {}
     } catch (err) {
       console.error("Error fetching category:", err);
       // Avoid redirect on transient errors; keep existing data
@@ -40,6 +52,28 @@ const Category = ({ serverData }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    try {
+      const ttl = 10 * 60 * 1000;
+      const rawBrand = localStorage.getItem(`brand:${slug}`);
+      if (rawBrand) {
+        const parsed = JSON.parse(rawBrand);
+        if (parsed?.timestamp && Date.now() - parsed.timestamp < ttl && parsed.data) {
+          setCategoryData((prev) => prev || parsed.data);
+          setLoading(false);
+        }
+      }
+      const rawProducts = localStorage.getItem(`brandProducts:${slug}`);
+      if (rawProducts) {
+        const parsed = JSON.parse(rawProducts);
+        if (parsed?.timestamp && Date.now() - parsed.timestamp < ttl && Array.isArray(parsed.data) && parsed.data.length > 0) {
+          setCategoryProduct((prev) => prev.length > 0 ? prev : parsed.data);
+          setLoading(false);
+        }
+      }
+    } catch {}
+  }, [slug]);
 
   useEffect(() => {
     FetchCategory();
